@@ -33,7 +33,7 @@ CALL GET_FILENAME ('Provide the name of the file containing the experimental dat
 
 WRITE(*,*) 'Minimum value of Q to be used in fit?'
 READ(*,*)  QMIN
-	  
+      
 CALL READ_SCATTER_FILE (INFIL1, QMIN, QCALC, ICALC, CNO)
 CALL READ_SCATTER_FILE (INFIL2, QMIN, QOBS, IOBS, XNO)
 
