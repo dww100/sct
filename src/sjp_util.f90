@@ -52,15 +52,15 @@ SUBROUTINE READ_SCATTER_FILE (FILENAME, QMIN, Q, I, NO)
 	IF (.NOT. FILEEXISTS) THEN
 	    WRITE(*,*) 'Specified file does not exist: ', FILENAME
 	    STOP
-    ELSE
-        OPEN(UNIT=UNIT_NO, FILE=FILENAME, STATUS='OLD', ACTION='READ')
-	    NO = 0
-	    DO 
-	    READ(UNIT_NO, *, IOSTAT=IERR) TMPQ, TMPI
-		    IF (IERR .LT. 0) THEN
-		        NO = NO - 1
-    		    EXIT
-    		ELSE IF (IERR .NE. 0) THEN
+	ELSE
+		OPEN(UNIT=UNIT_NO, FILE=FILENAME, STATUS='OLD', ACTION='READ')
+		NO = 1
+		DO 
+			READ(UNIT_NO, *, IOSTAT=IERR) TMPQ, TMPI
+			IF (IERR .LT. 0) THEN
+				NO = NO - 1
+				EXIT
+			ELSE IF (IERR .NE. 0) THEN
 		        WRITE(*,*) 'Abort: Error reading file: ', FILENAME
 		        STOP
 			ELSE IF (TMPQ .GE. QMIN) THEN
@@ -95,17 +95,17 @@ SUBROUTINE QRANGE_MATCH(QOBS, QCALC, ICALC, XNO, CNO, IMATCH, MNO)
 	DOUBLE PRECISION :: QMINDIFF, DELTAQ
 
 	! Find the last experimental Q value that overlaps with the modelled ones
-	MNO = -1
-	DO I = 0, (XNO - 1)
-		IF ( QOBS(I) .LE. QCALC(CNO-1) ) MNO = MNO + 1
+	MNO = 0
+	DO I = 1, (XNO)
+		IF ( QOBS(I) .LE. QCALC(CNO) ) MNO = MNO + 1
 	END DO
 
 	! Find the corresponding modelled Q values for each experimental one
 	! Store the corresponding I value in IMATCH
-	DO I = 0, MNO
+	DO I = 1, MNO
 		! Set initial Q minimum difference to a very big number
 		QMINDIFF = 1.0E+13
-		DO J = 0, (CNO - 1)
+		DO J = 0, (CNO)
 		    DELTAQ = ABS( QOBS(I) - QCALC(J) )
 		    IF ( DELTAQ .LT. QMINDIFF ) THEN
 		        QMINDIFF = DELTAQ
@@ -128,7 +128,7 @@ DOUBLE PRECISION FUNCTION AVERAGE_DATA (DATAIN, N)
 	DOUBLE PRECISION :: TOTAL
 	
 	TOTAL = 0
-	DO I = 0, N
+	DO I = 1, N
 	    TOTAL = TOTAL + DATAIN(I)
 	END DO
 	AVERAGE_DATA = TOTAL / N
@@ -159,7 +159,7 @@ DOUBLE PRECISION FUNCTION CALC_RFACTOR (QOBS, IOBS, IMATCH, N, QMIN, QMAX, CON, 
 		RFNUM = 0.
 		RFDEN = 0.
 			
-		DO NDX = 0, N
+		DO NDX = 1, N
 			IF (( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
 				RFNUM = RFNUM + ABS( ( IOBS(NDX) / CON ) - IMATCH(NDX) )
 				RFDEN = RFDEN + ABS( IOBS(NDX) / CON )
@@ -175,7 +175,7 @@ DOUBLE PRECISION FUNCTION CALC_RFACTOR (QOBS, IOBS, IMATCH, N, QMIN, QMAX, CON, 
 		IF (RFACTOR .LT. ORFAC) THEN
 		    CON = CON + DELTAC
 		ELSE	
-			DELTAC = DELTAC * -0.5
+			DELTAC = DELTAC * (-0.5)
 			CON = CON + DELTAC
 		ENDIF
 			
