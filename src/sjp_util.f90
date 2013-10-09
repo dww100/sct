@@ -136,11 +136,13 @@ DOUBLE PRECISION FUNCTION AVERAGE_DATA (DATAIN, N)
 
 END FUNCTION AVERAGE_DATA
     
-DOUBLE PRECISION FUNCTION CALC_RFACTOR (QOBS, IOBS, IMATCH, N, QMIN, QMAX, CON, VERBOSE)
+DOUBLE PRECISION FUNCTION CALC_RFACTOR (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, VERBOSE)
     
     ! Calculate the R factor comparing IOBS to IMATCH
+    ! Rfactor is used by analogy with crystallograpphy where:
+    ! R = sum (abs(F_expt - F_calc)) / sum (abs(F_expt))
     
-    DOUBLE PRECISION, DIMENSION(*), INTENT(IN) :: QOBS, IOBS, IMATCH
+    DOUBLE PRECISION, DIMENSION(*), INTENT(IN) :: QOBS, IOBS, ICALC
     INTEGER, INTENT(IN) :: N
     DOUBLE PRECISION, INTENT(IN) :: QMIN, QMAX
     DOUBLE PRECISION, INTENT(INOUT) :: CON
@@ -162,7 +164,7 @@ DOUBLE PRECISION FUNCTION CALC_RFACTOR (QOBS, IOBS, IMATCH, N, QMIN, QMAX, CON, 
             
         DO NDX = 1, N
             IF ( ( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
-                RFNUM = RFNUM + ABS( ( IOBS(NDX) / CON ) - IMATCH(NDX) )
+                RFNUM = RFNUM + ABS( ( IOBS(NDX) / CON ) - ICALC(NDX) )
                 RFDEN = RFDEN + ABS( IOBS(NDX) / CON )
             END IF
         END DO
