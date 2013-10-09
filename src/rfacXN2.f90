@@ -7,7 +7,7 @@ Program RfacXN
 ! the second experimental in origin.
 ! Minimimum and maximum Q values to consider must be provided.
 
-! Rfactor is used by analogy with crystallograpphy where:
+! Rfactor is used by analogy with crystallography where:
 ! R = sum (abs(F_expt - F_calc)) / sum (abs(F_expt))
 
 ! Original author: Stephen J. Perkins

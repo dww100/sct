@@ -139,7 +139,7 @@ END FUNCTION AVERAGE_DATA
 DOUBLE PRECISION FUNCTION CALC_RFACTOR (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, VERBOSE)
     
     ! Calculate the R factor comparing IOBS to IMATCH
-    ! Rfactor is used by analogy with crystallograpphy where:
+    ! Rfactor is used by analogy with crystallography where:
     ! R = sum (abs(F_expt - F_calc)) / sum (abs(F_expt))
     
     DOUBLE PRECISION, DIMENSION(*), INTENT(IN) :: QOBS, IOBS, ICALC
