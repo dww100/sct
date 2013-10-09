@@ -19,8 +19,10 @@ DOUBLE PRECISION    ICALC(1:512), IOBS(1:512), IMATCH(1:512)
 DOUBLE PRECISION    QCALC(1:512), QOBS(1:512)
 DOUBLE PRECISION    QMIN, AVIXPT, AVICAL, RFACTOR
 DOUBLE PRECISION    CON, QMAX
-CHARACTER*50    INFIL1, INFIL2, OUTFIL
+CHARACTER*60    INFIL1, INFIL2, OUTFIL
 LOGICAL VERBOSE
+
+INTEGER LOOP
 
 VERBOSE = .TRUE.
 
@@ -58,8 +60,8 @@ IF (VERBOSE) THEN
     WRITE(*,*) 'Mean Observed=', AVIXPT
     WRITE(*,*) 'Mean Calculated=', AVICAL
     WRITE(*,*) 'Initial Guess=', AVIXPT/AVICAL
-    WRITE(*,*) 'Max Xptl Q=', QOBS(XNO - 1)
-    WRITE(*,*) 'Max Calc Q=', QCALC(CNO - 1)
+    WRITE(*,*) 'Max Xptl Q=', QOBS(XNO)
+    WRITE(*,*) 'Max Calc Q=', QCALC(CNO)
 END IF
        
 WRITE(*,*) 'What is the maximum Q value to be used in the fit?'

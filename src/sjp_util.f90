@@ -131,6 +131,7 @@ DOUBLE PRECISION FUNCTION AVERAGE_DATA (DATAIN, N)
     DO I = 1, N
         TOTAL = TOTAL + DATAIN(I)
     END DO
+
     AVERAGE_DATA = TOTAL / N
 
 END FUNCTION AVERAGE_DATA
@@ -160,7 +161,7 @@ DOUBLE PRECISION FUNCTION CALC_RFACTOR (QOBS, IOBS, IMATCH, N, QMIN, QMAX, CON, 
         RFDEN = 0.
             
         DO NDX = 1, N
-            IF (( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
+            IF ( ( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
                 RFNUM = RFNUM + ABS( ( IOBS(NDX) / CON ) - IMATCH(NDX) )
                 RFDEN = RFDEN + ABS( IOBS(NDX) / CON )
             END IF
