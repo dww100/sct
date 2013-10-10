@@ -61,6 +61,7 @@ if (not args.header) :
 
     r_factor = sjp_util.calc_rfactor(expt_data[:,0], expt_data[:,1], matched_calc_I, matched_no, q_min, q_max, con, False)
 
+    # 1/con is the scaling factor needed to multiply experimental I values to compare with calculated data
     scale = 1.0 / con
 
     output_data = '{0:s}\t{1:s}\t{2:0.5f}\t{3:0.5f}\t{4:0.5f}\t{5:0.5f}'.format(args.calc_curve, args.expt_curve, q_min, q_max, scale, r_factor)
