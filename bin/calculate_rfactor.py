@@ -17,9 +17,8 @@ def parse_arguments():
     #Command line option parsing
     parser = argparse.ArgumentParser(description= 'Compute R factor from a comparison of two scattering surves.')
     parser.add_argument('-c','--calc', nargs='?', type=str, dest='calc_curve', help = 'Path to the input calculated curve', required=True)
-    parser.add_argument('-x','--expt', nargs='?', type=str, dest='expt_curve', help = 'Path to the input experimental curve', required=True)
-    parser.add_argument('-l','--qmin', nargs='?', type=float, dest='q_min', help = 'Minimum Q value to include in curve fitting', required=True)
-    parser.add_argument('-u','--qmax', nargs='?', type=float, dest='q_max', help = 'Maximum Q value to include in curve fitting', required=True)
+    parser.add_argument('-e','--expt', nargs='?', type=str, dest='expt_curve', help = 'Path to the input experimental curve', required=True)
+    parser.add_argument('-q','--qrange', nargs='2', type=str, dest='qrange', help = 'Minimum and maximum Q values used in curve fitting', required=True)
     parser.add_argument('-o','--outfile', nargs='?', type=str, dest='out_file', help = 'Path to the output file', required=False)
     
     args = parser.parse_args()
@@ -27,16 +26,18 @@ def parse_arguments():
 
 # Interpret command line arguments
 args = parse_arguments()
+q_min = args.qrange[0]
+q_max = args.qrange[1]
 
 # Load the data from the two input files
 calc_data = numpy.loadtxt(args.calc_curve)
 expt_data = numpy.loadtxt(args.expt_curve)
 
 # Filter inputs to retain only values for Q values between selected q_min and q_max
-idx=(calc_data[:,0] >= args.q_min) & (calc_data[:,0] <= args.q_max)
+idx=(calc_data[:,0] >= q_min) & (calc_data[:,0] <= q_max)
 calc_data = calc_data[idx]
 
-idx=(expt_data[:,0] >= args.q_min) & (expt_data[:,0] <= args.q_max)
+idx=(expt_data[:,0] >= q_min) & (expt_data[:,0] <= q_max)
 expt_data = expt_data[idx]
 
 # Create list of calculated I values matched to the nearest experimental Q value
@@ -55,10 +56,10 @@ calc_avg = numpy.mean( matched_calc_I[0:matched_no - 1] )
 # Initial guess of the concentration is the ratio of experimental and average intensities
 con = expt_avg / calc_avg
 
-r_factor = sjp_util.calc_rfactor(expt_data[:,0], expt_data[:,1], matched_calc_I, matched_no, args.q_min, args.q_max, con, False)
+r_factor = sjp_util.calc_rfactor(expt_data[:,0], expt_data[:,1], matched_calc_I, matched_no, q_min, q_max, con, False)
 
 if args.out_file == None:
     print r_factor
 else:
     with open(args.out_file, "a") as fle:
-        fle.write(args.calc_curve + " " + args.expt_curve + " " + str(args.q_min) + " " + str(args.q_max) + " " + str(r_factor))
+        fle.write(args.calc_curve + " " + args.expt_curve + " " + str(q_min) + " " + str(q_max) + " " + str(r_factor))
