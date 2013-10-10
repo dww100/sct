@@ -18,7 +18,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description= 'Compute R factor from a comparison of two scattering surves.')
     parser.add_argument('-c','--calc', nargs='?', type=str, dest='calc_curve', help = 'Path to the input calculated curve', required=True)
     parser.add_argument('-e','--expt', nargs='?', type=str, dest='expt_curve', help = 'Path to the input experimental curve', required=True)
-    parser.add_argument('-q','--qrange', nargs='2', type=str, dest='qrange', help = 'Minimum and maximum Q values used in curve fitting', required=True)
+    parser.add_argument('-q','--qrange', nargs=2, type=float, help = 'Minimum and maximum Q values used in curve fitting', required=True)
     parser.add_argument('-o','--outfile', nargs='?', type=str, dest='out_file', help = 'Path to the output file', required=False)
     
     args = parser.parse_args()
@@ -58,8 +58,12 @@ con = expt_avg / calc_avg
 
 r_factor = sjp_util.calc_rfactor(expt_data[:,0], expt_data[:,1], matched_calc_I, matched_no, q_min, q_max, con, False)
 
+scale = 1.0 / con
+
+output_data = '{0:s}\t{1:s}\t{2:0.5f}\t{3:0.5f}\t{4:0.5f}\t{5:0.5f}'.format(args.calc_curve, args.expt_curve, q_min, q_max, scale, r_factor)
+
 if args.out_file == None:
-    print r_factor
+    print output_data
 else:
     with open(args.out_file, "a") as fle:
-        fle.write(args.calc_curve + " " + args.expt_curve + " " + str(q_min) + " " + str(q_max) + " " + str(r_factor))
+        fle.write(output_data)
