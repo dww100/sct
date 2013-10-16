@@ -1,0 +1,208 @@
+# Datasets of volumes for amino acid residues and carbohydrate monosaccharides
+# Units = 10^{-3} nm^3
+---
+cohn1943:
+# citation: Cohn, E. J. & Edsall, J. T. (1943) in Proteins, amino acids and peptides, pp. 155-176 & 370-381, Reinhold Publ. Corp., New York.
+   ALA: 87.2
+   ARG: 181.3
+   ASN: 117.4
+   ASP: 114.6
+   CYS: 106.7
+   GLN: 142.4
+   GLU: 141.4
+   GLY: 60.6
+   HIS: 152.4
+   ILE: 168.9
+   LEU: 168.9
+   LYS: 174.3
+   MET: 163.1
+   PHE: 187.9
+   PRO: 122.4
+   SER: 91.0
+   THR: 117.4
+   TRP: 228.5
+   TYR: 192.1
+   VAL: 141.4
+   FUC: 164.3
+   GAL: 164.9
+   GLC: 164.9
+   MAN: 164.9
+   NAG: 224.5
+   NGA: 224.5
+   SIA: 281.2
+zamyatin1972:
+# citation: Zamyatnin, A. A. (1972) Progr. Biophys. Mol. Biol. 24, 109-123.
+   ALA: 88.3
+   ARG: 172.7
+   ASN: 117.3
+   ASP: 110.6
+   CYS: 108.1
+   GLN: 143.3
+   GLU: 137.8
+   GLY: 59.9
+   HIS: 152.5
+   ILE: 166.1
+   LEU: 166.1
+   LYS: 167.9
+   MET: 162.3
+   PHE: 189.2
+   PRO: 122.2
+   SER: 88.6
+   THR: 115.7
+   TRP: 226.9
+   TYR: 192.9
+   VAL: 139.4
+   FUC: 155.4
+   GAL: 162.2
+   GLC: 162.7
+   MAN: 161.9
+   NAG: 216.6
+   NGA: 227.5
+   SIA: 320.9
+zamyatin1984:
+# citation: Zamyatnin, A. A. (1984) Annu. Rev. Biophys. Bioeng. 13, 145-165.
+   ALA: 
+   ARG: 
+   ASN: 
+   ASP: 
+   CYS: 
+   GLN: 
+   GLU: 
+   GLY: 
+   HIS: 
+   ILE: 
+   LEU: 
+   LYS: 
+   MET: 
+   PHE: 
+   PRO: 
+   SER: 
+   THR: 
+   TRP: 
+   TYR: 
+   VAL: 
+   FUC: 
+   GAL: 
+   GLC: 
+   MAN: 
+   NAG: 
+   NGA: 
+   SIA: 
+chothia1975a:
+# citation: Chothia, C. (1975) Nature (Lond.) 254, 304-308.
+   ALA: 
+   ARG: 
+   ASN: 
+   ASP: 
+   CYS: 
+   GLN: 
+   GLU: 
+   GLY: 
+   HIS: 
+   ILE: 
+   LEU: 
+   LYS: 
+   MET: 
+   PHE: 
+   PRO: 
+   SER: 
+   THR: 
+   TRP: 
+   TYR: 
+   VAL: 
+   FUC: 
+   GAL: 
+   GLC: 
+   MAN: 
+   NAG: 
+   NGA: 
+   SIA: 
+perkins1986a:
+# citation: Perkins, S. J. (1986). Protein volumes and hydration effects: The calculations of partial specific volumes, neutron scattering matchpoints
+# and 280-nm absorption coefficients for proteins and glycoproteins from amino acid sequences. Eur. J. Biochem. 157, 169-180
+   ALA: 
+   ARG: 
+   ASN: 
+   ASP: 
+   CYS: 
+   GLN: 
+   GLU: 
+   GLY: 
+   HIS: 
+   ILE: 
+   LEU: 
+   LYS: 
+   MET: 
+   PHE: 
+   PRO: 
+   SER: 
+   THR: 
+   TRP: 
+   TYR: 
+   VAL: 
+   FUC: 
+   GAL: 
+   GLC: 
+   MAN: 
+   NAG: 
+   NGA: 
+   SIA: 
+chothia1975b:
+# citation: Chothia, C. & Janin, J. (1975) Nature (Lond.) 256, 705-708.
+   ALA: 
+   ARG: 
+   ASN: 
+   ASP: 
+   CYS: 
+   GLN: 
+   GLU: 
+   GLY: 
+   HIS: 
+   ILE: 
+   LEU: 
+   LYS: 
+   MET: 
+   PHE: 
+   PRO: 
+   SER: 
+   THR: 
+   TRP: 
+   TYR: 
+   VAL: 
+   FUC: 
+   GAL: 
+   GLC: 
+   MAN: 
+   NAG: 
+   NGA: 
+   SIA: 
+perkins1986b:
+# citation: Perkins, S. J. (1986). Protein volumes and hydration effects: The calculations of partial specific volumes, neutron scattering matchpoints
+# and 280-nm absorption coefficients for proteins and glycoproteins from amino acid sequences. Eur. J. Biochem. 157, 169-180
+   ALA: 
+   ARG: 
+   ASN: 
+   ASP: 
+   CYS: 
+   GLN: 
+   GLU: 
+   GLY: 
+   HIS: 
+   ILE: 
+   LEU: 
+   LYS: 
+   MET: 
+   PHE: 
+   PRO: 
+   SER: 
+   THR: 
+   TRP: 
+   TYR: 
+   VAL: 
+   FUC: 
+   GAL: 
+   GLC: 
+   MAN: 
+   NAG: 
+   NGA: 
+   SIA: 
