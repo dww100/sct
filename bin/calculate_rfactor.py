@@ -1,12 +1,13 @@
 #!/bin/env python
 
-# David W. Wright - 08 October 2013
 """Compute the R factor of a comparison between two scattering curves.
 This will usually be one calculated and one experimental data set.
 
 R factor is used by analogy with crystallography where:
 R = sum (abs(F_expt - F_calc)) / sum (abs(F_expt))
 """
+
+# David W. Wright - 08 October 2013
 
 import argparse
 import numpy
