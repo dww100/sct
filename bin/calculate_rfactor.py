@@ -93,15 +93,14 @@ def calculate_rfactor(target_data, source_data, q_min, q_max):
     con = expt_avg / calc_avg
 
     # Call fortran code to calculate the R factor
-    rfactor = sjp_util.calc_rfactor( expt_data[:,0], expt_data[:,1], 
+    rfactor = sjp_util.calc_rfactor( target_data[:,0], target_data[:,1], 
         matched_source_I, matched_no, q_min, q_max, con, False)
     
     # 1/con is the scaling factor needed to multiply experimental I values 
     # to compare with calculated data    
     return rfactor, 1.0/con
 
-
-if __name__ == "__main__":
+def main():
     # Interpret command line arguments
     args = parse_arguments()
 
@@ -132,3 +131,6 @@ if __name__ == "__main__":
         else:
             with open(args.out_file, "a") as fle:
                 fle.write(header)
+
+if __name__ == "__main__":
+    main()
