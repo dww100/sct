@@ -61,148 +61,148 @@ zamyatin1972:
    SIA: 320.9
 zamyatin1984:
 # citation: Zamyatnin, A. A. (1984) Annu. Rev. Biophys. Bioeng. 13, 145-165.
-   ALA: 
-   ARG: 
-   ASN: 
-   ASP: 
-   CYS: 
-   GLN: 
-   GLU: 
-   GLY: 
-   HIS: 
-   ILE: 
-   LEU: 
-   LYS: 
-   MET: 
-   PHE: 
-   PRO: 
-   SER: 
-   THR: 
-   TRP: 
-   TYR: 
-   VAL: 
-   FUC: 
-   GAL: 
-   GLC: 
-   MAN: 
-   NAG: 
-   NGA: 
-   SIA: 
+   ALA: 86.4
+   ARG: 197.3
+   ASN: 115.6
+   ASP: 108.5
+   CYS: 107.9
+   GLN: 141.9
+   GLU: 128.7
+   GLY: 57.8
+   HIS: 150.1
+   ILE: 164.6
+   LEU: 164.6
+   LYS: 166.2
+   MET: 161.0
+   PHE: 187.2
+   PRO: 120.6
+   SER: 86.2
+   THR: 113.5
+   TRP: 225.1
+   TYR: 190.5
+   VAL: 136.8
+   FUC: 155.4
+   GAL: 162.2
+   GLC: 162.7
+   MAN: 161.9
+   NAG: 216.6
+   NGA: 227.5
+   SIA: 320.9
 chothia1975a:
 # citation: Chothia, C. (1975) Nature (Lond.) 254, 304-308.
-   ALA: 
-   ARG: 
-   ASN: 
-   ASP: 
-   CYS: 
-   GLN: 
-   GLU: 
-   GLY: 
-   HIS: 
-   ILE: 
-   LEU: 
-   LYS: 
-   MET: 
-   PHE: 
-   PRO: 
-   SER: 
-   THR: 
-   TRP: 
-   TYR: 
-   VAL: 
-   FUC: 
-   GAL: 
-   GLC: 
-   MAN: 
-   NAG: 
-   NGA: 
-   SIA: 
+   ALA: 91.5
+   ARG: 202.1
+   ASN: 135.2
+   ASP: 124.5
+   CYS: 105.6
+   GLN: 161.1
+   GLU: 155.1
+   GLY: 66.4
+   HIS: 167.3
+   ILE: 168.8
+   LEU: 167.9
+   LYS: 171.3
+   MET: 170.8
+   PHE: 203.4
+   PRO: 129.3
+   SER: 99.1
+   THR: 122.1
+   TRP: 237.6
+   TYR: 203.6
+   VAL: 141.7
+   FUC: 160.8
+   GAL: 166.8
+   GLC: 171.9
+   MAN: 170.8
+   NAG: 222.0
+   NGA: 232.9
+   SIA: 326.3
 perkins1986a:
 # citation: Perkins, S. J. (1986). Protein volumes and hydration effects: The calculations of partial specific volumes, neutron scattering matchpoints
 # and 280-nm absorption coefficients for proteins and glycoproteins from amino acid sequences. Eur. J. Biochem. 157, 169-180
-   ALA: 
-   ARG: 
-   ASN: 
-   ASP: 
-   CYS: 
-   GLN: 
-   GLU: 
-   GLY: 
-   HIS: 
-   ILE: 
-   LEU: 
-   LYS: 
-   MET: 
-   PHE: 
-   PRO: 
-   SER: 
-   THR: 
-   TRP: 
-   TYR: 
-   VAL: 
-   FUC: 
-   GAL: 
-   GLC: 
-   MAN: 
-   NAG: 
-   NGA: 
-   SIA: 
+   ALA: 97.1
+   ARG: 192.9
+   ASN: 127.4
+   ASP: 125.3
+   CYS: 112.4
+   GLN: 147.3
+   GLU: 148.0
+   GLY: 68.2
+   HIS: 158.3
+   ILE: 170.1
+   LEU: 182.8
+   LYS: 184.5
+   MET: 176.0
+   PHE: 203.9
+   PRO: 129.0
+   SER: 103.3
+   THR: 129.0
+   TRP: 228.9
+   TYR: 202.3
+   VAL: 142.3
+   FUC: 160.8
+   GAL: 166.8
+   GLC: 171.9
+   MAN: 170.8
+   NAG: 222.0
+   NGA: 232.9
+   SIA: 326.3
 chothia1975b:
 # citation: Chothia, C. & Janin, J. (1975) Nature (Lond.) 256, 705-708.
-   ALA: 
-   ARG: 
-   ASN: 
-   ASP: 
-   CYS: 
-   GLN: 
-   GLU: 
-   GLY: 
-   HIS: 
-   ILE: 
-   LEU: 
-   LYS: 
-   MET: 
-   PHE: 
-   PRO: 
-   SER: 
-   THR: 
-   TRP: 
-   TYR: 
-   VAL: 
-   FUC: 
-   GAL: 
-   GLC: 
-   MAN: 
-   NAG: 
-   NGA: 
-   SIA: 
+   ALA: 92.1
+   ARG: 198.8
+   ASN: 123.8
+   ASP: 123.8
+   CYS: 107.9
+   GLN: 150.3
+   GLU: 150.3
+   GLY: 62.5
+   HIS: 172.9
+   ILE: 173.8
+   LEU: 173.8
+   LYS: 187.8
+   MET: 173.7
+   PHE: 182.5
+   PRO: 132.3
+   SER: 97.8
+   THR: 127.9
+   TRP: 236.6
+   TYR: 181.5
+   VAL: 147.3
+   FUC: 160.8
+   GAL: 167.3
+   GLC: 167.3
+   MAN: 163.3
+   NAG: 230.4
+   NGA: 230.4
+   SIA: 326.3
 perkins1986b:
 # citation: Perkins, S. J. (1986). Protein volumes and hydration effects: The calculations of partial specific volumes, neutron scattering matchpoints
 # and 280-nm absorption coefficients for proteins and glycoproteins from amino acid sequences. Eur. J. Biochem. 157, 169-180
-   ALA: 
-   ARG: 
-   ASN: 
-   ASP: 
-   CYS: 
-   GLN: 
-   GLU: 
-   GLY: 
-   HIS: 
-   ILE: 
-   LEU: 
-   LYS: 
-   MET: 
-   PHE: 
-   PRO: 
-   SER: 
-   THR: 
-   TRP: 
-   TYR: 
-   VAL: 
-   FUC: 
-   GAL: 
-   GLC: 
-   MAN: 
-   NAG: 
-   NGA: 
-   SIA: 
+   ALA: 87.8
+   ARG: 88.2
+   ASN: 120.1
+   ASP: 115.4
+   CYS: 105.4
+   GLN: 145.1
+   GLU: 140.9
+   GLY: 59.9
+   HIS: 156.3
+   ILE: 166.1
+   LEU: 168.0
+   LYS: 172.7
+   MET: 165.2
+   PHE: 189.7
+   PRO: 123.3
+   SER: 91.7
+   THR: 118.3
+   TRP: 227.9
+   TYR: 191.2
+   VAL: 138.8
+   FUC: 160.8
+   GAL: 166.8
+   GLC: 171.9
+   MAN: 170.8
+   NAG: 222.0
+   NGA: 232.9
+   SIA: 326.3
