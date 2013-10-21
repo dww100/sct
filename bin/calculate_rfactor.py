@@ -17,8 +17,8 @@ def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
 
     parser = argparse.ArgumentParser(
-        description = 'Compute R factor from a comparison of two scattering curves.'
-        )
+        description = 'Compute R factor from a comparison of two '
+                      'scattering curves.')
     parser.add_argument(
         '-c','--calc', nargs='?', type=str, dest='calc_curve', 
         help = 'Path to the input calculated curve', required=True)
@@ -55,15 +55,16 @@ def match_scatter_curves(target_data, source_data):
     the target set.
     """
 
-    # Create list of calculated I values matched to the nearest experimental Q value
+    # Create list of calculated I values matched to the nearest experimental Q
     # Remember that the arrays in python start at 0, those in Fortran at 1
     last_source = len( source_data )
     last_target = len( target_data )
 
-    # Initialize array to hold the calculated I values matched to experimental q values
+    # Initialize array to hold the calculated I values matched to 
+    # experimental Q values
     matched_I = numpy.zeros( last_target, dtype=float )
     
-    # Use the old fortran routine to match the data sets by q value
+    # Use the old fortran routine to match the data sets by Q value
     # matched_no is the number of datapoints which contain matched data
     matched_no = sjp_util.qrange_match(target_data[:,0], source_data[:,0], 
                                         source_data[:,1], last_target, 
@@ -116,8 +117,9 @@ def main():
 
         rfactor, scale = calculate_rfactor(expt_data, calc_data, q_min, q_max)
 
-        output_data = '{0:s}\t{1:s}\t{2:0.5f}\t{3:0.5f}\t{4:0.5f}\t{5:0.5f}\n'.format(
-            args.calc_curve, args.expt_curve, q_min, q_max, scale, rfactor)
+        output_data = '{0:s}\t{1:s}\t{2:0.5f}\t{3:0.5f}'
+        '\t{4:0.5f}\t{5:0.5f}\n'.format(
+        args.calc_curve, args.expt_curve, q_min, q_max, scale, rfactor)
 
         if args.out_file == None:
             print output_data
@@ -126,7 +128,9 @@ def main():
                 fle.write(output_data)
     else:
 
-        header = 'Calculated file\tExperimental file\tQ min\tQ max\tScaling factor\tR factor\n'
+        header = 'Calculated file\tExperimental file\tQ min'
+        '\tQ max\tScaling factor\tR factor\n'
+        
         if args.out_file == None:
             print header
         else:
