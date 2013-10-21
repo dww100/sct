@@ -1,0 +1,188 @@
+---
+# Scattering lengths for normal and dueterated residues.
+bH:
+   ALA: 1.6447
+   ARG: 3.4664
+   ASN: 3.4560
+   ASP: 3.8448
+   CYS: 2.3036
+   GLN: 3.3727
+   GLU: 3.7615
+   GLY: 1.7280
+   HIS: 4.3974
+   ILE: 1.3948
+   LEU: 1.3948
+   LYS: 1.5864
+   MET: 1.7628
+   PHE: 4.1385
+   PRO: 2.2265
+   SER: 2.2251
+   THR: 2.1418
+   TRP: 6.0345
+   TYR: 4.7189
+   VAL: 1.4781
+   FUC: 2.5702
+   GAL: 3.1506
+   GLC: 3.1506
+   MAN: 3.1506
+   NAG: 4.2982
+   NGA: 4.2982
+   SIA: 6.9121
+bD:
+   ALA: 2.6860
+   ARG: 9.7142
+   ASN: 6.5799
+   ASP: 4.8861
+   CYS: 3.3449
+   GLN: 6.4966
+   GLU: 4.8028
+   GLY: 2.7693
+   HIS: 7.5213
+   ILE: 2.4361
+   LEU: 2.4381
+   LYS: 5.7516
+   MET: 2.8041
+   PHE: 5.1798
+   PRO: 2.2265
+   SER: 4.3077
+   THR: 4.2244
+   TRP: 8.1171
+   TYR: 6.8015
+   VAL: 2.5194
+   FUC: 5.6941
+   GAL: 6.2745
+   GLC: 6.2745
+   MAN: 6.2745
+   NAG: 7.4221
+   NGA: 7.4221
+   SIA: 12.1186
+# Residue/monosaccharide masses
+mass:
+   ALA: 71.0
+   ARG: 56.0
+   ASN: 114.0
+   ASP: 115.0
+   CYS: 102.0
+   GLN: 128.0
+   GLU: 129.0
+   GLY: 57.0
+   HIS: 137.0
+   ILE: 113.0
+   LEU: 113.0
+   LYS: 128.0
+   MET: 131.0
+   PHE: 147.0
+   PRO: 97.0
+   SER: 87.0
+   THR: 101.0
+   TRP: 186.0
+   TYR: 163.0
+   VAL: 99.0
+   FUC: 146.0
+   GAL: 162.0
+   GLC: 162.0
+   MAN: 162.0
+   NAG: 203.0
+   NGA: 203.0
+   SIA: 290.0
+# Counts for each residue type
+no_electron:
+   ALA: 38.0
+   ARG: 85.0
+   ASN: 60.0
+   ASP: 63.0
+   CYS: 53.0
+   GLN: 68.0
+   GLU: 67.0
+   GLY: 30.0
+   HIS: 73.0
+   ILE: 62.0
+   LEU: 62.0
+   LYS: 71.0
+   MET: 70.0
+   PHE: 78.0
+   PRO: 52.0
+   SER: 46.0
+   THR: 54.0
+   TRP: 98.0
+   TYR: 86.0
+   VAL: 54.0
+   FUC: 78.0
+   GAL: 86.0
+   GLC: 86.0
+   MAN: 86.0
+   NAG: 108.0
+   NGA: 108.0
+   SIA: 153.0
+no_exchange_H:
+   ALA: 1
+   ARG: 6
+   ASN: 3
+   ASP: 1
+   CYS: 1
+   GLN: 3
+   GLU: 1
+   GLY: 1
+   HIS: 3
+   ILE: 1
+   LEU: 1
+   LYS: 4
+   MET: 1
+   PHE: 1
+   PRO: 0
+   SER: 2
+   THR: 2
+   TRP: 2
+   TYR: 2
+   VAL: 1
+   FUC: 3
+   GAL: 3
+   GLC: 3
+   MAN: 3
+   NAG: 3
+   NGA: 3
+   SIA: 5
+no_exchange_peptide_H:
+   ALA: 1
+   ARG: 1
+   ASN: 1
+   ASP: 1
+   CYS: 1
+   GLN: 1
+   GLU: 1
+   GLY: 1
+   HIS: 1
+   ILE: 1
+   LEU: 1
+   LYS: 1
+   MET: 1
+   PHE: 1
+   PRO: 0
+   SER: 1
+   THR: 1
+   TRP: 1
+   TYR: 1
+   VAL: 1
+   FUC: 0
+   GAL: 0
+   GLC: 0
+   MAN: 0
+   NAG: 0
+   NGA: 0
+   SIA: 0
+solvent:
+   # Calculate scattering densities for H20 and D2O
+   # Sum of scattering lengths divided by the free water volume
+   # Free water volume = 29.9 10^{-3} nm^3
+   
+   # -0.168/29.9
+   BHHO: -0.0056187290969899675
+   # 1.9146/29.9
+   BDDO: 0.06403344481605351
+   # Electron density for water
+   # 10/29.9
+   EHHO: 0.33444816053511706
+constants:
+   # Avagadro's no * (10^-8)^3
+   # The factor at the end is use to convert units from angstrom^3 to millilitres
+   avagadro: 0.6023
