@@ -173,15 +173,20 @@ no_exchange_peptide_H:
 solvent:
    # Calculate scattering densities for H20 and D2O
    # Sum of scattering lengths divided by the free water volume
-   # Free water volume = 29.9 10^{-3} nm^3
-   
+   # Free water volume = 29.9 x 10^{-3} nm^3
+   vol_free: 29.9
+   # Bound water volume = 24.5 x 10^{-3} nm^3
+   vol_bound: 24.5
    # -0.168/29.9
    BHHO: -0.0056187290969899675
+   BOH: 0.2062
    # 1.9146/29.9
    BDDO: 0.06403344481605351
+   BOD: 1.2475
    # Electron density for water
    # 10/29.9
    EHHO: 0.33444816053511706
+   
 constants:
    # Avagadro's no * (10^-8)^3
    # The factor at the end is use to convert units from angstrom^3 to millilitres
