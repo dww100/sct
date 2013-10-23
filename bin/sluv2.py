@@ -300,7 +300,7 @@ def sum_b(resids, resid_freqs, heavy_water):
 def sum_electrons(resids, resid_freqs):
     """Calculate the total number of elections in the selected residues"""
     electrons = 0
-    for resid in resid_freqs:
+    for resid in resids:
         electrons += params['no_electron'][resid] * resid_freqs[resid]    
 
     return electrons
