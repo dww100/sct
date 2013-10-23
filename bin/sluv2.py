@@ -94,7 +94,7 @@ def print_basic_description(resid_freqs):
 
     print "\n"
 
-    print_resid_data(non_polar, resid_freqs, vol_datasets)
+    print_resid_data(polar, resid_freqs, vol_datasets)
 
     title = create_volume_title("\n          ", " ", vol_datasets, 'carb')
     print title + "\n"
