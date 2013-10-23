@@ -1,4 +1,7 @@
 ---
+# General parameters used by sluv to calculate volumes and scattering 
+# properties of glycoproteins
+
 # Scattering lengths for normal and dueterated residues.
 bH:
    ALA: 1.6447
