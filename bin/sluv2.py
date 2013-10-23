@@ -352,7 +352,29 @@ def calc_mpt_scattering_density(match_point):
         ) / 100.0) + params['solvent']['BHHO']
         
     return scat_den
-      
+
+def classic_output(res_freq):
+
+    # Print frequencies and parameters for all residues
+    print_basic_description(res_freq)
+    
+    print "******************** TOTAL GLYCOPROTEIN ************************************************" 
+    print_summary_data(all_residues, res_freq)
+    print "******************** AA RESIDUES ONLY **************************************************"
+    print_summary_data(amino_acids, res_freq)
+    print "******************** NONPOLAR AA RESIDUES **********************************************" 
+    print_summary_data(non_polar, res_freq)
+    print "******************** POLAR AA RESIDUES *************************************************" 
+    print_summary_data(polar, res_freq)
+    print "******************** CARBOHYDRATE RESIDUES *********************************************"
+    print_summary_data(carbohydrate, res_freq)
+    
+    print "******************** EXCHANGEABLE PEPTIDE HYDROGENS ************************************"
+    print_exchange_data(res_freq,True)
+    print "******************** TOTAL OF EXCHANGEABLE HYDROGENS ***********************************"
+    print_exchange_data(res_freq,False)  
+         
+                  
 def main():
 
     args = parse_arguments()
@@ -364,24 +386,8 @@ def main():
     protein_file = file(args.input_file, 'r')
     protein_res_freq = yaml.load(protein_file)
 
-    # Print frequencies and parameters for all residues
-    print_basic_description(protein_res_freq)
-    
-    print "******************** TOTAL GLYCOPROTEIN ************************************************" 
-    print_summary_data(all_residues, protein_res_freq)
-    print "******************** AA RESIDUES ONLY **************************************************"
-    print_summary_data(amino_acids, protein_res_freq)
-    print "******************** NONPOLAR AA RESIDUES **********************************************" 
-    print_summary_data(non_polar, protein_res_freq)
-    print "******************** POLAR AA RESIDUES *************************************************" 
-    print_summary_data(polar, protein_res_freq)
-    print "******************** CARBOHYDRATE RESIDUES *********************************************"
-    print_summary_data(carbohydrate, protein_res_freq)
-    
-    print "******************** EXCHANGEABLE PEPTIDE HYDROGENS ************************************"
-    print_exchange_data(protein_res_freq,True)
-    print "******************** TOTAL OF EXCHANGEABLE HYDROGENS ***********************************"
-    print_exchange_data(protein_res_freq,True)
+    if args.mode == 'classic':
+        classic_output(protein_res_freq)
     
 
 if __name__ == "__main__":
