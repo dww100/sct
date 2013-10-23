@@ -60,7 +60,7 @@ def parse_arguments():
     parser.add_argument('-o','--output_file', nargs='?', type=str,  
         help = 'Path to the output file', default=None)
    
-    parser.add_argument('-m','--mode', choices = ['classic', 'model', 'auc'], 
+    parser.add_argument('-m','--mode', choices = ['classic', 'model', 'auc', 'project'], 
         default = 'classic', help = 'Type of analysis to run')
             
     args = parser.parse_args()
@@ -89,7 +89,7 @@ def print_basic_description(resid_freqs):
     # Sort the names of the volume datasets for output
     vol_datasets = sorted(res_vols.iterkeys())    
             
-    title = create_volume_title("\nRESID  TOT", " ", vol_datasets, 'aa')
+    title = create_volume_title("RESID  TOT", " ", vol_datasets, 'aa')
     title = title + "   MWT ELEC B(H2O) B(D2O)\n"
     print title
 
@@ -353,27 +353,43 @@ def calc_mpt_scattering_density(match_point):
         
     return scat_den
 
-def classic_output(res_freq):
+def classic_output(res_freqs):
 
     # Print frequencies and parameters for all residues
     print_basic_description(res_freq)
     
     print "******************** TOTAL GLYCOPROTEIN ************************************************" 
-    print_summary_data(all_residues, res_freq)
+    print_summary_data(all_residues, res_freqs)
     print "******************** AA RESIDUES ONLY **************************************************"
-    print_summary_data(amino_acids, res_freq)
+    print_summary_data(amino_acids, res_freqs)
     print "******************** NONPOLAR AA RESIDUES **********************************************" 
-    print_summary_data(non_polar, res_freq)
+    print_summary_data(non_polar, res_freqs)
     print "******************** POLAR AA RESIDUES *************************************************" 
-    print_summary_data(polar, res_freq)
+    print_summary_data(polar, res_freqs)
     print "******************** CARBOHYDRATE RESIDUES *********************************************"
-    print_summary_data(carbohydrate, res_freq)
+    print_summary_data(carbohydrate, res_freqs)
     
     print "******************** EXCHANGEABLE PEPTIDE HYDROGENS ************************************"
-    print_exchange_data(res_freq,True)
+    print_exchange_data(res_freqs,True)
     print "******************** TOTAL OF EXCHANGEABLE HYDROGENS ***********************************"
-    print_exchange_data(res_freq,False)  
-         
+    print_exchange_data(res_freqs,False)  
+
+def auc_output(res_freqs):
+    
+    mass = sum_mass(all_residues, res_freqs)
+    print "Molecular Weight: {0:7.0f}".format(mass)
+    
+    abs_coeffs = calc_absorption_coeffs(res_freqs, mass)
+    print "Absorption Coefficient x 1.03: {0:7.3f}".format(abs_coeffs[1])
+    
+    specific_vol = spec_volume(all_residues, res_freqs, 'perkins1986b')
+    print "Specific Volume (Perkins 1986 - Consensus): {0:7.4f}".format(specific_vol)
+    
+def modelling_output(res_freqs):
+    
+    volume = sum_volume(all_residues, res_freqs, 'chothia1975')
+    
+    print "Volume (Chothia 1975 - Crystal Structures): {0:7.0f}".format(volume)
                   
 def main():
 
@@ -388,6 +404,10 @@ def main():
 
     if args.mode == 'classic':
         classic_output(protein_res_freq)
+    if args.mode in ('project','auc'):
+        auc_output(protein_res_freq)
+    if args.mode in ('project','model'):
+        modelling_output(protein_res_freq)
     
 
 if __name__ == "__main__":
