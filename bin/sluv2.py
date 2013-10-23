@@ -126,6 +126,8 @@ def print_summary_data(resids, resid_freqs):
             
     mass = sum_mass(resids, resid_freqs)
     
+    whole = False
+    
     if len(resids) != len(all_residues):
         
         total_mass = sum_mass(all_residues, resid_freqs)
@@ -134,6 +136,8 @@ def print_summary_data(resids, resid_freqs):
             mass, frac_mass, no_res)
             
     else:
+        
+        whole = True
         
         print "Molecular Weight:\t{0:5.0f}".format(mass)
             
@@ -145,6 +149,18 @@ def print_summary_data(resids, resid_freqs):
         
     bH_tot = sum_b(resids, resid_freqs, False)        
     bD_tot = sum_b(resids, resid_freqs, True)
+    
+    if whole:
+        vol_diff, oh_diff = calc_hydration_effect(resid_freqs)
+
+        no_prot_res = sum_res_no(amino_acids, resid_freqs)        
+        hydra_per_res = oh_diff / no_prot_res
+        
+        hydra_delta = params['solvent']['vol_bound'] * oh_diff
+        
+        bH_tot_hydr = bH_tot + (bH_tot * oh_diff)
+        bD_tot_hydr = bD_tot + (bD_tot * oh_diff)
+    
     
     print "Total b in\t\t\tH2O:\t{0:8.3f}\tD2O:\t{1:8.3f}".format(bH_tot, bD_tot)
     print "Total b on M in\t\t\tH2O:\t{0:8.6f}\tD2O:\t{1:8.6f}".format(
@@ -170,6 +186,10 @@ def print_summary_data(resids, resid_freqs):
     scat_line = "Scattering Density at MPt\t"
     elect_line = "Electron Density\t\t"
     
+    if whole:
+        hyd_vol_line = "Volume\t\t\t\t"
+        hyd_match_line = "Match Point\t\t\t"
+        
     for dataset in vol_datasets:
             tot_volume = sum_volume(resids, resid_freqs, dataset)
             vol_line += ' {0:7.0f}'.format(tot_volume)
@@ -177,7 +197,7 @@ def print_summary_data(resids, resid_freqs):
             specific_volume = spec_volume(resids, resid_freqs, dataset)
             spec_v_line += ' {0:7.4f}'.format(specific_volume)
             
-            match_point = calc_match_point(resids, resid_freqs, dataset)
+            match_point =  calc_match_point(tot_volume, bH_tot, bD_tot)
             match_line += ' {0:7.2f}'.format(match_point)
             
             scat_density = calc_mpt_scattering_density(match_point)
@@ -186,30 +206,48 @@ def print_summary_data(resids, resid_freqs):
             elect_density = sum_electrons(resids, resid_freqs) / tot_volume
             elect_line  += ' {0:7.5f}'.format(elect_density)
             
+            if whole:
+                hydr_vol = tot_volume + hydra_delta
+                hyd_vol_line += ' {0:7.0f}'.format(hydr_vol)
+                hydr_match_point = calc_match_point(hydr_vol, bH_tot_hydr,bD_tot_hydr)
+                hyd_match_line += ' {0:7.2f}'.format(hydr_match_point)
+            
+            
     print vol_line
     print spec_v_line
     print match_line
     print scat_line
     print elect_line
+    
+    if whole:
+        print "********* HYDRATION OF TOTAL GLYCOPROTEIN BY OH GROUPS *********************************"
+        print "Difference in CHO75 and CON85 Volumes:\t{0:7.0f}".format(vol_diff)
+        print "Average H20 per Amino Acid Residue:\t{0:7.2f}".format(hydra_per_res)
+        print create_volume_title("\t\t\t\t","   ",vol_datasets,'aa')
+        print hyd_vol_line
+        print hyd_match_line
 
-def oh_hydration(resid_freqs):
+def calc_hydration_effect(resid_freqs):
 
     vol_chothia = sum_volume(all_residues, resid_freqs, 'chothia1975')
     vol_consensus = sum_volume(all_residues, resid_freqs, 'perkins1986b')
     volume_diff = vol_chothia - vol_consensus
     
-    water_binding_diff = params['solvent']['vol_free'] - params['solvent']['vol_bound']
+    water_bound_diff = params['solvent']['vol_free'] - params['solvent']['vol_bound']
     
-    oh_diff = volume_diff / water_binding_diff
+    oh_diff = volume_diff / water_bound_diff
 
-    bH_tot = sum_b(all_residues, resid_freqs, False)
-    bH_tot += bH_tot * oh_diff
-    bD_tot = sum_b(all_residues, resid_freqs, True) 
-    bD_tot += bD_tot * oh_diff
+#    bH_tot = sum_b(all_residues, resid_freqs, False)
+#    bH_tot += bH_tot * oh_diff
+#    bD_tot = sum_b(all_residues, resid_freqs, True) 
+#    bD_tot += bD_tot * oh_diff
     
-    
-                              
+#    delta_vol = params['solvent']['vol_bound'] * oh_diff
+
+    return volume_diff, oh_diff
+                                
 def sum_res_no(resids, resid_freqs):
+    """Get the total number of residues for given selection of residue names """
     no = 0
     for resid in resids:
         no += resid_freqs[resid]
@@ -250,7 +288,7 @@ def calc_absorption_coeffs(resid_freqs, mass):
     return [coeff, 1.03 * coeff, 1.06 * coeff]
 
 def sum_b(resids, resid_freqs, heavy_water):
-    
+    """Calculate total scattering length of selected residues"""
     b_tot = 0.0
     for resid in resids:
         if heavy_water:
@@ -261,18 +299,19 @@ def sum_b(resids, resid_freqs, heavy_water):
     return b_tot
 
 def sum_electrons(resids, resid_freqs):
-    
+    """Calculate the total number of elections in the selected residues"""
     electrons = 0
     for resid in resid_freqs:
         electrons += params['no_electron'][resid] * resid_freqs[resid]    
 
     return electrons
 
-def calc_match_point(resids, resid_freqs, vol_dataset):
+def calc_match_point(volume, bH_tot, bD_tot):
+#def calc_match_point(resids, resid_freqs, vol_dataset):
 
-    volume = sum_volume(resids, resid_freqs, vol_dataset)
-    bH_tot = sum_b(resids, resid_freqs, False)
-    bD_tot = sum_b(resids, resid_freqs, True)
+#    volume = sum_volume(resids, resid_freqs, vol_dataset)
+#    bH_tot = sum_b(resids, resid_freqs, False)
+#    bD_tot = sum_b(resids, resid_freqs, True)
     
     spec_bH = bH_tot / volume
     spec_bD = bD_tot / volume
