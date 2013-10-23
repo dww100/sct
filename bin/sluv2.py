@@ -220,8 +220,8 @@ def print_summary_data(resids, resid_freqs):
     
     if whole:
         print "********* HYDRATION OF TOTAL GLYCOPROTEIN BY OH GROUPS *********************************"
-        print "Difference in CHO75 and CON85 Volumes:\t{0:7.0f}".format(vol_diff)
-        print "Average H20 per Amino Acid Residue:\t{0:7.2f}".format(hydra_per_res)
+        print "Difference in CHO75 and CON85 Volumes:  {0:7.0f}  Total of equivalent bound H2O: {1:7.0f}".format(vol_diff, oh_diff)
+        print "Average H20 per AA Residue:  {0:7.2f}".format(hydra_per_res)
         print "Total b in      H2O:  {0:8.3f}  D2O:  {1:8.3f}".format(bH_tot_hydr, bD_tot_hydr)
         print create_volume_title("                             ","   ",vol_datasets,'aa')
         print hyd_vol_line
