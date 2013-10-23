@@ -18,6 +18,7 @@ and model fits. Biophysical Chemistry 93, 129–139
 """
 # David W Wright - 21/10/2013
 
+import sys
 import yaml
 import argparse
 
@@ -41,6 +42,8 @@ non_polar = ['ALA','CYS','GLY','ILE','LEU','MET','PHE','PRO','TRP','TYR','VAL']
 amino_acids = polar + non_polar
 carbohydrate = ['FUC','GAL','GLC','MAN','NAG','NGA','SIA']
 all_residues = amino_acids + carbohydrate
+
+bDH_diff = params['solvent']['BOD']-params['solvent']['BOH']
 
 def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
@@ -125,7 +128,9 @@ def print_summary_data(resids, resid_freqs):
         return
             
     mass = sum_mass(resids, resid_freqs)
-    
+    bH_tot = sum_b(resids, resid_freqs, False)        
+    bD_tot = sum_b(resids, resid_freqs, True)
+        
     whole = False
     
     if len(resids) != len(all_residues):
@@ -147,10 +152,6 @@ def print_summary_data(resids, resid_freqs):
         print "Absorption coefficient x 1.03:    {0:7.3f}".format(abs_coeffs[1])
         print "Absorption coefficient x 1.06:    {0:7.3f}".format(abs_coeffs[2])
         
-    bH_tot = sum_b(resids, resid_freqs, False)        
-    bD_tot = sum_b(resids, resid_freqs, True)
-    
-    if whole:
         vol_diff, oh_diff = calc_hydration_effect(resid_freqs)
 
         no_prot_res = sum_res_no(amino_acids, resid_freqs)        
@@ -226,6 +227,35 @@ def print_summary_data(resids, resid_freqs):
         print create_volume_title("                             ","   ",vol_datasets,'aa')
         print hyd_vol_line
         print hyd_match_line
+
+def print_exchange_data(resid_freqs,peptide_only):
+    """Print exchange data
+    TODO: make this message less totally redundant :)"""
+    
+    vol_datasets = sorted(res_vols.iterkeys())
+    print create_volume_title("                            ", "   ", vol_datasets, 'aa')
+    
+    bH_tot = sum_b(all_residues, resid_freqs, False)
+    
+    for ii in [x/10.0 for x in range(1, 11)]:
+        bD_tot = 0.0
+        for resid in all_residues:
+            if peptide_only:
+                bD_tot += params['bD'][resid] * resid_freqs[resid] - (
+                    params['no_exchange_peptide_H'][resid] * bDH_diff  * ii * resid_freqs[resid])
+            else:
+                bD_tot += params['bD'][resid] * resid_freqs[resid] - (
+                    params['no_exchange_H'][resid] * bDH_diff  * ii * resid_freqs[resid])
+            
+            line = "Exc {0:3.1f}  Tot b: {1:5.0f}  {2:5.0f}".format(ii, bH_tot, bD_tot)
+            
+            for dataset in vol_datasets:
+                tot_volume = sum_volume(all_residues, resid_freqs, dataset)    
+                match_point = calc_match_point(tot_volume, bH_tot, bD_tot)
+                line += ' {0:7.2f}'.format(match_point)
+
+        print line            
+            
 
 def calc_hydration_effect(resid_freqs):
 
@@ -326,7 +356,10 @@ def calc_mpt_scattering_density(match_point):
 def main():
 
     args = parse_arguments()
-        
+
+    if args.output_file != None:
+        sys.stdout = open(args.output_file,'w')
+   
     # Get amino acid/carbohydrate occurence ferquencies from file
     protein_file = file(args.input_file, 'r')
     protein_res_freq = yaml.load(protein_file)
@@ -336,18 +369,20 @@ def main():
     
     print "******************** TOTAL GLYCOPROTEIN ************************************************" 
     print_summary_data(all_residues, protein_res_freq)
-    print "********************* AA RESIDUES ONLY *************************************************"
+    print "******************** AA RESIDUES ONLY **************************************************"
     print_summary_data(amino_acids, protein_res_freq)
-    print "******************* NONPOLAR AA RESIDUES ***********************************************" 
+    print "******************** NONPOLAR AA RESIDUES **********************************************" 
     print_summary_data(non_polar, protein_res_freq)
     print "******************** POLAR AA RESIDUES *************************************************" 
     print_summary_data(polar, protein_res_freq)
-    print "****************** CARBOHYDRATE RESIDUES ***********************************************"
+    print "******************** CARBOHYDRATE RESIDUES *********************************************"
     print_summary_data(carbohydrate, protein_res_freq)
-         
-
-#    print "************* EXCHANGEABLE PEPTIDE HYDROGENS **************"
-
+    
+    print "******************** EXCHANGEABLE PEPTIDE HYDROGENS ************************************"
+    print_exchange_data(protein_res_freq,True)
+    print "******************** TOTAL OF EXCHANGEABLE HYDROGENS ***********************************"
+    print_exchange_data(protein_res_freq,True)
+    
 
 if __name__ == "__main__":
     main()
