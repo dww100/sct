@@ -355,8 +355,11 @@ def calc_mpt_scattering_density(match_point):
 
 def classic_output(res_freqs):
 
+    print "SLUV2 2013 by David W. Wright and Stephen J. Perkins"
+    print "based on SLUV written by Stephen J. Perkins shortly after the dawn of time.\n"
+
     # Print frequencies and parameters for all residues
-    print_basic_description(res_freq)
+    print_basic_description(res_freqs)
     
     print "******************** TOTAL GLYCOPROTEIN ************************************************" 
     print_summary_data(all_residues, res_freqs)
