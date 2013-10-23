@@ -132,20 +132,20 @@ def print_summary_data(resids, resid_freqs):
         
         total_mass = sum_mass(all_residues, resid_freqs)
         frac_mass = 100*mass/total_mass
-        print "Molecular Weight:\t{0:5.0f}\tFraction of Total:\t{1:3.2f}\tResidues:\t{2:4d}".format(
+        print "Molecular Weight:  {0:5.0f}  Fraction of Total:  {1:3.2f}  Residues:  {2:4d}".format(
             mass, frac_mass, no_res)
             
     else:
         
         whole = True
         
-        print "Molecular Weight:\t{0:5.0f}".format(mass)
+        print "Molecular Weight:  {0:5.0f}".format(mass)
             
         abs_coeffs = calc_absorption_coeffs(resid_freqs, mass)
     
-        print "Absorption coefficient (280 nM):\t{0:7.3f}".format(abs_coeffs[0])
-        print "Absorption coefficient x 1.03:\t\t{0:7.3f}".format(abs_coeffs[1])
-        print "Absorption coefficient x 1.06:\t\t{0:7.3f}".format(abs_coeffs[2])
+        print "Absorption coefficient (280 nM):  {0:7.3f}".format(abs_coeffs[0])
+        print "Absorption coefficient x 1.03:    {0:7.3f}".format(abs_coeffs[1])
+        print "Absorption coefficient x 1.06:    {0:7.3f}".format(abs_coeffs[2])
         
     bH_tot = sum_b(resids, resid_freqs, False)        
     bD_tot = sum_b(resids, resid_freqs, True)
@@ -162,11 +162,11 @@ def print_summary_data(resids, resid_freqs):
         bD_tot_hydr = bD_tot + (bD_tot * oh_diff)
     
     
-    print "Total b in\t\t\tH2O:\t{0:8.3f}\tD2O:\t{1:8.3f}".format(bH_tot, bD_tot)
-    print "Total b on M in\t\t\tH2O:\t{0:8.6f}\tD2O:\t{1:8.6f}".format(
+    print "Total b in      H2O:  {0:8.3f}  D2O:  {1:8.3f}".format(bH_tot, bD_tot)
+    print "Total b on M in H2O:  {0:8.6f}  D2O:  {1:8.6f}".format(
                 bH_tot/mass, bD_tot/mass)
     
-    print "Scattering density of water\tH2O:\t{0:7.6f}\tD2O:\t{1:7.6f}".format(
+    print "Scattering density of water H2O:  {0:7.6f}  D2O:  {1:7.6f}".format(
                 params['solvent']['BHHO'],params['solvent']['BDDO'])
                             
     total_electrons = sum_electrons(resids, resid_freqs)
@@ -178,17 +178,16 @@ def print_summary_data(resids, resid_freqs):
     # Sort the names of the volume datasets for output
     vol_datasets = sorted(res_vols.iterkeys())
 
-    print create_volume_title("\t\t\t\t","   ",vol_datasets,'aa')
-    
-    vol_line = "Volume\t\t\t\t"
-    spec_v_line = "Specific Volume\t\t\t"
-    match_line = "Match Point\t\t\t"
-    scat_line = "Scattering Density at MPt\t"
-    elect_line = "Electron Density\t\t"
+    print create_volume_title("                             ","   ",vol_datasets,'aa')
+    vol_line =    "Volume                       "
+    spec_v_line = "Specific Volume              "
+    match_line =  "Match Point                  "
+    scat_line =   "Scattering Density at MPt    "
+    elect_line =  "Electron Density             "
     
     if whole:
-        hyd_vol_line = "Volume\t\t\t\t"
-        hyd_match_line = "Match Point\t\t\t"
+        hyd_vol_line = "Volume                       "
+        hyd_match_line = "Match Point                  "
         
     for dataset in vol_datasets:
             tot_volume = sum_volume(resids, resid_freqs, dataset)
@@ -223,7 +222,7 @@ def print_summary_data(resids, resid_freqs):
         print "********* HYDRATION OF TOTAL GLYCOPROTEIN BY OH GROUPS *********************************"
         print "Difference in CHO75 and CON85 Volumes:\t{0:7.0f}".format(vol_diff)
         print "Average H20 per Amino Acid Residue:\t{0:7.2f}".format(hydra_per_res)
-        print create_volume_title("\t\t\t\t","   ",vol_datasets,'aa')
+        print create_volume_title("                             ","   ",vol_datasets,'aa')
         print hyd_vol_line
         print hyd_match_line
 
