@@ -158,8 +158,8 @@ def print_summary_data(resids, resid_freqs):
         
         hydra_delta = params['solvent']['vol_bound'] * oh_diff
         
-        bH_tot_hydr = bH_tot + (bH_tot * oh_diff)
-        bD_tot_hydr = bD_tot + (bD_tot * oh_diff)
+        bH_tot_hydr = bH_tot + (params['solvent']['BOH'] * oh_diff)
+        bD_tot_hydr = bD_tot + (params['solvent']['BOD'] * oh_diff)
     
     
     print "Total b in      H2O:  {0:8.3f}  D2O:  {1:8.3f}".format(bH_tot, bD_tot)
@@ -222,6 +222,7 @@ def print_summary_data(resids, resid_freqs):
         print "********* HYDRATION OF TOTAL GLYCOPROTEIN BY OH GROUPS *********************************"
         print "Difference in CHO75 and CON85 Volumes:\t{0:7.0f}".format(vol_diff)
         print "Average H20 per Amino Acid Residue:\t{0:7.2f}".format(hydra_per_res)
+        print "Total b in      H2O:  {0:8.3f}  D2O:  {1:8.3f}".format(bH_tot_hydr, bD_tot_hydr)
         print create_volume_title("                             ","   ",vol_datasets,'aa')
         print hyd_vol_line
         print hyd_match_line
@@ -235,13 +236,6 @@ def calc_hydration_effect(resid_freqs):
     water_bound_diff = params['solvent']['vol_free'] - params['solvent']['vol_bound']
     
     oh_diff = volume_diff / water_bound_diff
-
-#    bH_tot = sum_b(all_residues, resid_freqs, False)
-#    bH_tot += bH_tot * oh_diff
-#    bD_tot = sum_b(all_residues, resid_freqs, True) 
-#    bD_tot += bD_tot * oh_diff
-    
-#    delta_vol = params['solvent']['vol_bound'] * oh_diff
 
     return volume_diff, oh_diff
                                 
