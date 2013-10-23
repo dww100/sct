@@ -141,7 +141,7 @@ chothia1975:
      SIA: 326.3
    title:
       aa: CHO75
-      carb: PER86
+      carb: PER85
 perkins1986a:
 # citations:
 # aa & carb: Perkins, S. J. (1986). Protein volumes and hydration effects: The calculations of partial specific volumes, neutron scattering matchpoints
@@ -175,8 +175,8 @@ perkins1986a:
      NGA: 232.9
      SIA: 326.3
    title:
-      aa: PER86
-      carb: PER86
+      aa: PER85
+      carb: PER85
 richards74:
 # citations:
 # aa: Richards, F. M. (1974) J. Mol. Biol. 82, 1-14.
@@ -217,7 +217,7 @@ perkins1986b:
 # and 280-nm absorption coefficients for proteins and glycoproteins from amino acid sequences. Eur. J. Biochem. 157, 169-180
    residue:
      ALA: 87.8
-     ARG: 88.2
+     ARG: 188.2
      ASN: 120.1
      ASP: 115.4
      CYS: 105.4
@@ -244,5 +244,5 @@ perkins1986b:
      NGA: 232.9
      SIA: 326.3
    title:
-      aa: CON86
-      carb: PER86
+      aa: CON85
+      carb: PER85
