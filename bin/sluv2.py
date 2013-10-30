@@ -226,21 +226,36 @@ def print_summary_data(resids, resid_freqs):
         print hyd_vol_line
         print hyd_match_line
 
-def print_exchange_data(resid_freqs,peptide_only):
-    """Print D/H exchange data - echange fraction + scattering lengths"""
+def print_exchange_data(resid_freqs, peptide_only):
+    """Print D/H exchange data - exchange fraction + scattering lengths"""
     
+    # Print a section title for the output table
     vol_datasets = sorted(res_vols.iterkeys())
-    print create_volume_title("                            ", "   ", vol_datasets, 'aa')
+    print create_volume_title("                            ", "   ", 
+                              vol_datasets, 'aa')
     
+    # H scattering length is a constant
     bH_tot = sum_b(all_residues, resid_freqs, False)
     
+    # Increase the D exchanged percentage 
+    # Recalculate the D scattering length for each different percentage
     for ii in [x/10.0 for x in range(1, 11)]:
+        
         bD_tot = 0.0
+        
         for resid in all_residues:
+            
+
+            # bD_tot = sum over all residues:
+            # bD(all D) - (diff in b for D to H * fraction exchanged * no exchangable sites)
+            # peptide only = only calculate exchange in peptide hydrogens
             if peptide_only:
+                
                 bD_tot += params['bD'][resid] * resid_freqs[resid] - (
                     params['no_exchange_peptide_H'][resid] * bDH_diff  * ii * resid_freqs[resid])
+                    
             else:
+                
                 bD_tot += params['bD'][resid] * resid_freqs[resid] - (
                     params['no_exchange_H'][resid] * bDH_diff  * ii * resid_freqs[resid])
             
