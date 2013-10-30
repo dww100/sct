@@ -117,9 +117,7 @@ def create_volume_title(start_string, deliminator, vol_datasets, res_type):
     
            
 def print_summary_data(resids, resid_freqs):
-    """Print all data for specified part of the system
-    
-    Once I figure out exactly what this will do this will need updating"""
+    """Print volume and absorption/scattering data for specified residues"""
 
     no_res = sum_res_no(resids, resid_freqs)
 
@@ -229,8 +227,7 @@ def print_summary_data(resids, resid_freqs):
         print hyd_match_line
 
 def print_exchange_data(resid_freqs,peptide_only):
-    """Print exchange data
-    TODO: make this message less totally redundant :)"""
+    """Print D/H exchange data - echange fraction + scattering lengths"""
     
     vol_datasets = sorted(res_vols.iterkeys())
     print create_volume_title("                            ", "   ", vol_datasets, 'aa')
@@ -258,6 +255,12 @@ def print_exchange_data(resid_freqs,peptide_only):
             
 
 def calc_hydration_effect(resid_freqs):
+    """Calculates the effect of hydration of protein volume
+    
+    Returns:
+        Difference in total hydrated and un-hydrated volumes
+        Equivalent to the above in bound H2O
+    """
 
     vol_chothia = sum_volume(all_residues, resid_freqs, 'chothia1975')
     vol_consensus = sum_volume(all_residues, resid_freqs, 'perkins1986b')
