@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-##!/bin/env python
 
 # David W Wright - 09/08/2013
 """Script to analsye Q and I data from SAS experiments
