@@ -124,11 +124,14 @@ def print_summary_data(resids, resid_freqs):
     if no_res == 0:
         print "No such residues in the provided input"
         return
-            
+      
+    # compute total mass and D/H scattering lengths      
     mass = sum_mass(resids, resid_freqs)
     bH_tot = sum_b(resids, resid_freqs, False)        
     bD_tot = sum_b(resids, resid_freqs, True)
         
+    # whole = is this calculation for the entire glyco protein
+    # If it is we will be printing different values
     whole = False
     
     if len(resids) != len(all_residues):
@@ -150,6 +153,8 @@ def print_summary_data(resids, resid_freqs):
         print "Absorption coefficient x 1.03:    {0:7.3f}".format(abs_coeffs[1])
         print "Absorption coefficient x 1.06:    {0:7.3f}".format(abs_coeffs[2])
         
+        # Calculate the contribution of the hydration layer to the
+        # scattering length (b)
         vol_diff, oh_diff = calc_hydration_effect(resid_freqs)
 
         no_prot_res = sum_res_no(amino_acids, resid_freqs)        
@@ -187,28 +192,30 @@ def print_summary_data(resids, resid_freqs):
     if whole:
         hyd_vol_line = "Volume                       "
         hyd_match_line = "Match Point                  "
-        
+    
+    # Create lines containing data for output 
     for dataset in vol_datasets:
-            tot_volume = sum_volume(resids, resid_freqs, dataset)
-            vol_line += ' {0:7.0f}'.format(tot_volume)
+        tot_volume = sum_volume(resids, resid_freqs, dataset)
+        vol_line += ' {0:7.0f}'.format(tot_volume)
             
-            specific_volume = spec_volume(resids, resid_freqs, dataset)
-            spec_v_line += ' {0:7.4f}'.format(specific_volume)
+        specific_volume = spec_volume(resids, resid_freqs, dataset)
+        spec_v_line += ' {0:7.4f}'.format(specific_volume)
             
-            match_point =  calc_match_point(tot_volume, bH_tot, bD_tot)
-            match_line += ' {0:7.2f}'.format(match_point)
+        match_point =  calc_match_point(tot_volume, bH_tot, bD_tot)
+        match_line += ' {0:7.2f}'.format(match_point)
             
-            scat_density = calc_mpt_scattering_density(match_point)
-            scat_line += ' {0:7.5f}'.format(scat_density)
+        scat_density = calc_mpt_scattering_density(match_point)
+        scat_line += ' {0:7.5f}'.format(scat_density)
             
-            elect_density = sum_electrons(resids, resid_freqs) / tot_volume
-            elect_line  += ' {0:7.5f}'.format(elect_density)
-            
-            if whole:
-                hydr_vol = tot_volume + hydra_delta
-                hyd_vol_line += ' {0:7.0f}'.format(hydr_vol)
-                hydr_match_point = calc_match_point(hydr_vol, bH_tot_hydr,bD_tot_hydr)
-                hyd_match_line += ' {0:7.2f}'.format(hydr_match_point)
+        elect_density = sum_electrons(resids, resid_freqs) / tot_volume
+        elect_line  += ' {0:7.5f}'.format(elect_density)
+
+        # Additional lines about protein hydration for the full protein            
+        if whole:
+            hydr_vol = tot_volume + hydra_delta
+            hyd_vol_line += ' {0:7.0f}'.format(hydr_vol)
+            hydr_match_point = calc_match_point(hydr_vol, bH_tot_hydr,bD_tot_hydr)
+            hyd_match_line += ' {0:7.2f}'.format(hydr_match_point)
             
             
     print vol_line
