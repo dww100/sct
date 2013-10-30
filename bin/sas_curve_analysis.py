@@ -201,16 +201,9 @@ def main():
         q_max = q_ranges[cur_anal]['qmax']
         
         if cur_anal == 'wide':
+            
             fname = create_output_name(out_prefix, cur_anal, 
                                        q_min, q_max, None, None)
-        else:
-            fname = create_output_name(out_prefix, cur_anal, 
-                                       q_min, q_max, fit_min, fit_max)
-    
-        out_file = os.path.join(args.output_dir, fname)
-    
-    
-        if cur_anal == 'wide':
             
             # We don't perform any fitting on Wide Angle plots 
             x = input_data[:,0]
@@ -218,8 +211,16 @@ def main():
             
             create_figure(out_file, x, y, 'Wide Angle ' + out_prefix , 
                           'Q', 'ln(I(Q))', q_min, q_max, y_min, y_max)
-           
+            out_file = os.path.join(args.output_dir, fname)
+            
         else:
+            
+            fit_min = q_ranges[cur_anal]['fitmin']
+            fit_max = q_ranges[cur_anal]['fitmax']
+            
+            fname = create_output_name(out_prefix, cur_anal, 
+                                       q_min, q_max, fit_min, fit_max)
+            out_file = os.path.join(args.output_dir, fname)
             
             # create mask to select range of Q values for fitting
             mask = (input_data[:,0] > fit_min) & (input_data[:,0] < fit_max)
