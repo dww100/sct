@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 
 """Compute the R factor of a comparison between two scattering curves.
 This will usually be one calculated and one experimental data set.

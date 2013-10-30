@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Calculate the scattering length per unit volume for a protein or glycoprotein 
 from its amino acid and carbohydrate composition.
