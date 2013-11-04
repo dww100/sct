@@ -79,15 +79,16 @@ def pdb_res_freq(filename):
             
     res_freq = residue_freq_dict()
 
-    last_res_id = 0    
+    last_res_no = 0    
             
     with open(filename) as f:
         for line in f:
             residue_data = pdb_res_line_parse(line)
             if 'res_no' in residue_data:
                 print residue_data
-                if residue_data['res_id'] != last_res_id:
+                if residue_data['res_no'] != last_res_no:
                     res_freq[residue_data['res_id']] += 1
+                    last_res_no = residue_data['res_no']
                 
     return res_freq
     
