@@ -40,8 +40,8 @@ res_vols = yaml.load(vol_file)
 polar = ['ARG','ASN','ASP','GLN','GLU','HIS','LYS','SER','THR']
 non_polar = ['ALA','CYS','GLY','ILE','LEU','MET','PHE','PRO','TRP','TYR','VAL']
 amino_acids = polar + non_polar
-carbohydrate = ['FUC','GAL','GLC','MAN','NAG','NGA','SIA']
-all_residues = amino_acids + carbohydrate
+monosaccharides = ['FUC','GAL','GLC','MAN','NAG','NGA','SIA']
+all_residues = amino_acids + monosaccharides
 
 bDH_diff = params['solvent']['BOD']-params['solvent']['BOH']
 
@@ -102,7 +102,7 @@ def print_basic_description(resid_freqs):
     title = create_volume_title("\n          ", " ", vol_datasets, 'carb')
     print title + "\n"
 
-    print_resid_data(carbohydrate, resid_freqs, vol_datasets)
+    print_resid_data(monosaccharides, resid_freqs, vol_datasets)
 
     print "\n"    
     print "Total " + str(sum(resid_freqs.itervalues())) + "\n"
@@ -395,7 +395,7 @@ def classic_output(res_freqs):
     print "******************** POLAR AA RESIDUES *************************************************" 
     print_summary_data(polar, res_freqs)
     print "******************** CARBOHYDRATE RESIDUES *********************************************"
-    print_summary_data(carbohydrate, res_freqs)
+    print_summary_data(monosaccharides, res_freqs)
     
     print "******************** EXCHANGEABLE PEPTIDE HYDROGENS ************************************"
     print_exchange_data(res_freqs,True)
@@ -426,7 +426,7 @@ def main():
     if args.output_file != None:
         sys.stdout = open(args.output_file,'w')
    
-    # Get amino acid/carbohydrate occurence ferquencies from file
+    # Get amino acid/carbohydrate occurence frequencies from file
     protein_file = file(args.input_file, 'r')
     protein_res_freq = yaml.load(protein_file)
 
