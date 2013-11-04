@@ -81,15 +81,6 @@ ELSE
     SPHFIL = 6
 ENDIF
 
-IF(JUMP .NE. 1) THEN
-    PRINT *, "Enter Number of boxes for x, y, z-axes"
-    READ(5,*) MX, MY, MZ
-    PRINT *, "Enter minimum x, y, z coords for cubic grid"
-    READ(5,*) XMI, YMI, ZMI
-ENDIF
-
-RADIS = BOX/2.0 
-
 ! Initialize grid dimensions
 
 XMA = -99999.0
@@ -104,6 +95,15 @@ YB1 = 0.D0
 YB2 = 0.D0
 ZB1 = 0.D0
 ZB2 = 0.D0
+
+IF(JUMP .NE. 1) THEN
+    PRINT *, "Enter Number of boxes for x, y, z-axes"
+    READ(5,*) MX, MY, MZ
+    PRINT *, "Enter minimum x, y, z coords for cubic grid"
+    READ(5,*) XMI, YMI, ZMI
+ENDIF
+
+RADIS = BOX/2.0 
 
 ! Two passes are made through the protein file.
 ! 1. Gets statistics including volume and number of residues
