@@ -54,7 +54,8 @@ def pdb_res_line_parse(line):
     the standard PDB column definitions
     
     Output: dictionary containing:
-    atom_no, atom_name, res_id, chain, res_no, x, y, z"""
+    atom_no, atom_name, res_id, chain, res_no, coords
+    coords is a list of the x, y & z coordinates"""
     
     data = {}
 
@@ -75,9 +76,10 @@ def pdb_res_line_parse(line):
             data['res_id'] = res_id
             data['chain'] = line[21:22].strip()
             data['res_no'] = int(line[22:26])
-            data['x'] = float(line[30:38])
-            data['y'] = float(line[38:46])
-            data['z'] = float(line[46:54])
+            x = float(line[30:38])
+            y = float(line[38:46])
+            z = float(line[46:54])          
+            data['coords'] = [x, y, z]
     
     return data
     
