@@ -426,12 +426,12 @@ def main():
 
     # Get amino acid/carbohydrate occurence frequencies from file
     # Can be sluv yaml file, pdb or a fasta file
-    if args.in_type == 'yml':       
+    if args.input_type == 'yml':       
         protein_file = file(args.input_file, 'r')
         protein_res_freq = yaml.load(protein_file)
-    elif args.in_type == 'pdb':
+    elif args.input_type == 'pdb':
         protein_res_freq = pdb_res_freq(args.input_filename)
-    elif args.in_type == 'fas':
+    elif args.input_type == 'fas':
         protein_res_freq = fasta_res_freq(args.input_filename)
 
     if args.mode == 'classic':
