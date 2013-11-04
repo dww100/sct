@@ -15,43 +15,35 @@ aa1 = list("ARNDCQEGHILKMFPSTWYV")
 aa1to3 = dict(zip(aa1,sorted(amino_acids)))
 
 def residue_freq_dict():
-
-    # Create dictionary holding the frequencies of each amino acid
+    """Create dictionary holding the frequencies of all residues"""
+    
     res_freq = {}
     for res_name in all_residues:
         res_freq[res_name] = 0
         
     return res_freq
 
-def parse_arguments():
-    """Parse command line arguments and ensure correct combinations present"""
-   
-    parser = argparse.ArgumentParser(
-        description= 'Convert fasta file to yaml amino acid frequency file\n')   
-    parser.add_argument('-i','--infile', nargs='?', type=str, 
-        dest='inputFilename', help = 'Path to the input fasta file',
-        required=True)
-    parser.add_argument('-o','--outfile', nargs='?', type=str, 
-        dest='outputFilename', help = 'Path to the output file', 
-        required=True)
-    
-    return parser.parse_args()
-
 def parse_fasta(filename):
     """Parse fasta files. Adapted from:
     http://www.petercollingridge.co.uk/python-bioinformatics-tools/fasta-parser
     """
+    
+    # We are going to store ordered sequence names and the sequences themselves
     order = []
     sequences = {}
     
     with open(filename) as f:
         for line in f:
+            # Title line for sequences in fasta files start with >
             if line.startswith('>'):
                 name = line[1:].rstrip('\n')
                 name = name.replace('_', ' ')
                 order.append(name)
                 sequences[name] = ''
             elif len(order) > 0:
+                # If we have seen a title but not in this line
+                # add the contents of the line to the currently named sequence
+                # Note: * = chain ending character in fasta so is removed
                 sequences[name] += line.rstrip('\n').rstrip('*')
 
     return order, sequences
@@ -111,12 +103,12 @@ def parse_arguments():
    
     parser = argparse.ArgumentParser(
         description= 'Convert fasta or pdb file to yaml residue frequency file\n')   
-    parser.add_argument('-i','--infile', nargs='?', type=str, 
+    parser.add_argument('-i','--input_filename', nargs='?', type=str, 
         dest='input_filename', help = 'Path to the input fasta/pdb file',
         required=True)
     parser.add_argument('-p', '--pdb', action='store_true', default=False,
         help = 'Flag to indicate input is a PDB rather than fasta file')
-    parser.add_argument('-o','--outfile', nargs='?', type=str, 
+    parser.add_argument('-o','--output_filename', nargs='?', type=str, 
         dest='output_filename', help = 'Path to the output file')
     
     return parser.parse_args()
