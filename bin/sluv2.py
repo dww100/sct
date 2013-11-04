@@ -52,6 +52,9 @@ def parse_arguments():
     parser.add_argument('-i','--input_file', nargs='?', type=str,  
         help = 'Path to the input composition file', required=True)
         
+    parser.add_argument('-t','--input_type', choices = ['fas','pdb', 'yml'],
+        help = 'Input file format (pdb, fasta or sluv yaml)', default = 'yml')
+        
     parser.add_argument('-o','--output_file', nargs='?', type=str,  
         help = 'Path to the output file', default=None)
    
@@ -420,10 +423,16 @@ def main():
 
     if args.output_file != None:
         sys.stdout = open(args.output_file,'w')
-   
+
     # Get amino acid/carbohydrate occurence frequencies from file
-    protein_file = file(args.input_file, 'r')
-    protein_res_freq = yaml.load(protein_file)
+    # Can be sluv yaml file, pdb or a fasta file
+    if args.in_type == 'yml':       
+        protein_file = file(args.input_file, 'r')
+        protein_res_freq = yaml.load(protein_file)
+    elif args.in_type == 'pdb':
+        protein_res_freq = pdb_res_freq(args.input_filename)
+    elif args.in_type == 'fas':
+        protein_res_freq = fasta_res_freq(args.input_filename)
 
     if args.mode == 'classic':
         classic_output(protein_res_freq)
