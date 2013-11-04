@@ -38,12 +38,6 @@ params = yaml.load(param_file)
 vol_file = file('../share/aa_volumes.yml', 'r')
 res_vols = yaml.load(vol_file)
 
-#polar = ['ARG','ASN','ASP','GLN','GLU','HIS','LYS','SER','THR']
-#non_polar = ['ALA','CYS','GLY','ILE','LEU','MET','PHE','PRO','TRP','TYR','VAL']
-#amino_acids = polar + non_polar
-#monosaccharides = ['FUC','GAL','GLC','MAN','NAG','NGA','SIA']
-#all_residues = amino_acids + monosaccharides
-
 bDH_diff = params['solvent']['BOD']-params['solvent']['BOH']
 
 def parse_arguments():
