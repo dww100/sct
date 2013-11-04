@@ -21,6 +21,7 @@ and model fits. Biophysical Chemistry 93, 129–139
 import sys
 import yaml
 import argparse
+from sct_seq import *
 
 # Load parameters into module global variables
 
@@ -37,11 +38,11 @@ params = yaml.load(param_file)
 vol_file = file('../share/aa_volumes.yml', 'r')
 res_vols = yaml.load(vol_file)
 
-polar = ['ARG','ASN','ASP','GLN','GLU','HIS','LYS','SER','THR']
-non_polar = ['ALA','CYS','GLY','ILE','LEU','MET','PHE','PRO','TRP','TYR','VAL']
-amino_acids = polar + non_polar
-monosaccharides = ['FUC','GAL','GLC','MAN','NAG','NGA','SIA']
-all_residues = amino_acids + monosaccharides
+#polar = ['ARG','ASN','ASP','GLN','GLU','HIS','LYS','SER','THR']
+#non_polar = ['ALA','CYS','GLY','ILE','LEU','MET','PHE','PRO','TRP','TYR','VAL']
+#amino_acids = polar + non_polar
+#monosaccharides = ['FUC','GAL','GLC','MAN','NAG','NGA','SIA']
+#all_residues = amino_acids + monosaccharides
 
 bDH_diff = params['solvent']['BOD']-params['solvent']['BOH']
 
