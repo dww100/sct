@@ -365,6 +365,7 @@ def calc_match_point(volume, bH_tot, bD_tot):
     return match_point
 
 def calc_mpt_scattering_density(match_point):
+    """Calculate the scattering density at a given matchpoint"""
     
     scat_den = (match_point * (
         params['solvent']['BDDO'] - params['solvent']['BHHO']
@@ -373,9 +374,10 @@ def calc_mpt_scattering_density(match_point):
     return scat_den
 
 def classic_output(res_freqs):
+    """Print volumes and scattering properties in a format similar to original sluv"""
 
     print "SLUV2 2013 by David W. Wright and Stephen J. Perkins"
-    print "based on SLUV written by Stephen J. Perkins shortly after the dawn of time.\n"
+    print "Based on SLUV written by Stephen J. Perkins shortly after the dawn of time.\n"
 
     # Print frequencies and parameters for all residues
     print_basic_description(res_freqs)
@@ -397,6 +399,7 @@ def classic_output(res_freqs):
     print_exchange_data(res_freqs,False)  
 
 def auc_output(res_freqs):
+    """Print weight, absorption coeff and specific volume (Consensus)"""
     
     mass = sum_mass(all_residues, res_freqs)
     print "Molecular Weight: {0:7.0f}".format(mass)
@@ -408,6 +411,7 @@ def auc_output(res_freqs):
     print "Specific Volume (Perkins 1986 - Consensus): {0:7.4f}".format(specific_vol)
     
 def modelling_output(res_freqs):
+    """Print Chothia volume for modelling purposes"""
     
     volume = sum_volume(all_residues, res_freqs, 'chothia1975')
     
@@ -430,6 +434,7 @@ def main():
     elif args.input_type == 'fas':
         protein_res_freq = fasta_res_freq(args.input_filename)
 
+    # Print out the data in a format chosenfrom the command line arguments
     if args.mode == 'classic':
         classic_output(protein_res_freq)
     if args.mode in ('project','auc'):
