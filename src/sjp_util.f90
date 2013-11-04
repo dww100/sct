@@ -11,20 +11,28 @@ CONTAINS
 
 SUBROUTINE GET_FILENAME (MSG, FILENAME)
 
+    ! Write a prompt and read a filename from a user
+
     CHARACTER(LEN=*), INTENT(IN) :: MSG
     CHARACTER(LEN=*), INTENT(OUT) :: FILENAME
 
     LOGICAL VALID
+    INTEGER COUNT = 0
 
     VALID = .FALSE.
-    DO WHILE ( .NOT. VALID)
+    DO WHILE (.NOT. VALID)
+    
         WRITE(*,'(1X,A)') MSG
         READ (*,'(A)') FILENAME
         IF (FILENAME .NE. ' ') THEN
             VALID = .TRUE.
         ELSE
             WRITE (*,'(1X,A)') 'Error: Please supply a filename'
+            COUNT = COUNT +1
         END IF
+        
+        IF (COUNT .GT. 3) STOP
+        
     END DO
 
     RETURN
