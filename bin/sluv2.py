@@ -353,11 +353,7 @@ def sum_electrons(resids, resid_freqs):
     return electrons
 
 def calc_match_point(volume, bH_tot, bD_tot):
-#def calc_match_point(resids, resid_freqs, vol_dataset):
-
-#    volume = sum_volume(resids, resid_freqs, vol_dataset)
-#    bH_tot = sum_b(resids, resid_freqs, False)
-#    bD_tot = sum_b(resids, resid_freqs, True)
+    """Calculate matchpoint given a proteins volume + B/H scattering lengths"""
     
     spec_bH = bH_tot / volume
     spec_bD = bD_tot / volume
