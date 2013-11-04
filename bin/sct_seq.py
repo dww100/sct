@@ -3,6 +3,7 @@ import argparse
 import collections
 import sys
 
+# Lists of the residues which are handled by SCT programs
 polar = ['ARG','ASN','ASP','GLN','GLU','HIS','LYS','SER','THR']
 non_polar = ['ALA','CYS','GLY','ILE','LEU','MET','PHE','PRO','TRP','TYR','VAL']
 amino_acids = polar + non_polar
@@ -49,12 +50,25 @@ def parse_fasta(filename):
     return order, sequences
     
 def pdb_res_line_parse(line):
+    """Parse a single line from a PDB file into a dictionary according to 
+    the standard PDB column definitions
+    
+    Output: dictionary containing:
+    atom_no, atom_name, res_id, chain, res_no, x, y, z"""
     
     data = {}
-    
-    record = line[0:6].strip()
+
+    # Only interested in ATOM and HETATM lines not REMARKs etc.    
+    # The type of record on the line is determined by the first 6 characters
+    record = line[0:6].strip()    
     if record in ['ATOM','HETATM']:
-        res_id = line[17:20].strip()
+
+        # Split data on the line according to column definitions for PDB files
+        # Ignore residues that we can't handle in SCT
+        # TODO: This should perhaps give a warning        
+        
+        # res_id is a three letter residue code
+        res_id = line[17:20].strip()                        
         if res_id in all_residues:
             data['atom_no'] = int(line[6:11])
             data['atom_name'] = line[12:16].strip()
@@ -68,16 +82,19 @@ def pdb_res_line_parse(line):
     return data
     
 def pdb_res_freq(filename):
+    """ Read PDB file and return dictionary of residue frequencies"""
             
+    # Initialize a dictionary of all recognized residues (frequency = 0)
     res_freq = residue_freq_dict()
 
+    # Track the last residues seen
     last_res_no = 0    
             
     with open(filename) as f:
         for line in f:
             residue_data = pdb_res_line_parse(line)
-            if 'res_no' in residue_data:
-                print residue_data
+            if 'res_no' in residue_data:                
+                # If there is a change in residue increment appropriate tally
                 if residue_data['res_no'] != last_res_no:
                     res_freq[residue_data['res_id']] += 1
                     last_res_no = residue_data['res_no']
@@ -85,15 +102,20 @@ def pdb_res_freq(filename):
     return res_freq
     
 def fasta_res_freq(filename):
+    """ Read fasta file and return dictionary of residue frequencies"""
     
+    # Initialize a dictionary of all recognized residues (frequency = 0)
     res_freq = residue_freq_dict()
     
     seq_names, sequences = parse_fasta(filename)
 
+    # Loop through all sequences found in the fasta file
     for seq_name in seq_names:
         freq_list = collections.Counter(sequences[seq_name])
         for aa in freq_list:
+            # Convert one to three letter amino acid code
             res_id = aa1to3(aa)
+            # Add sequence totals to overall tally for each residue
             res_freq[res_id] += freq_list[aa]
             
     return res_freq
@@ -116,6 +138,9 @@ def parse_arguments():
 def main():
 
     args = parse_arguments()
+    
+    # Read input
+    # Input should either be PDB or fasta format - chosen by input flag
     if args.pdb:
         res_freq = pdb_res_freq(args.input_filename)
     else:
@@ -124,6 +149,7 @@ def main():
     if args.output_file != None:
         sys.stdout = open(args.output_file,'w')    
 
+    # Output pdb frequencies in a yaml style format that can be read by SLUV2
     for res_name in amino_acids:
         print res_name + ': ' + str(res_freq[res_name]) + '\n'
     for res_name in monosaccharides:
