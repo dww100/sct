@@ -124,7 +124,7 @@ def main ():
 
     args = parse_arguments()
 
-    hydration_positions = xrange(0, args.hydration_no)
+    hydration_pos = xrange(0, args.hydration_no)
 
     out = open(args.output_filename, 'w')
 
@@ -132,7 +132,7 @@ def main ():
         for line in f:
             sphere = parse_sphere_line(line)
             separation = sphere['radius'] * 2.0
-            write_hydrated_model(coords, hydration_positions, separation, out)
+            write_hydrated_model(sphere['radius'], hydration_pos, separation, out)
 
     out.close()
 
