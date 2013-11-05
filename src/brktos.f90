@@ -288,7 +288,7 @@ WRITE(SPHFIL,"(A,F5.1)") " One Side Of The Box        ", BOX
 WRITE(SPHFIL,"(A,I5)") " Cutoff For Creating A Ball ", ICUT
 WRITE(SPHFIL,"(A,I5)") " No Of Balls                ", IBALL
 WRITE(SPHFIL,"(A,F10.2)") " Volume Of Cubes            ", VOL
-WRITE(SPHFIL,"(A,F10.2)") " One Side Of The Box        ", VOLUME
+WRITE(SPHFIL,"(A,F10.2)") " Volume of Protein          ", VOLUME
 WRITE(SPHFIL,"(A,6F7.2)") " Max And Min X,Y,Z Are ", XMA, XMI, YMA, YMI, ZMA, ZMI
 WRITE(SPHFIL,"(A,3I4)") " Increments MX, MY, MZ Are ", MX, MY, MZ
 
