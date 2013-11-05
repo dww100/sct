@@ -104,6 +104,9 @@ def define_axes(coords, box_side):
     
     return x_axis, y_axis, z_axis
 
+def write_sphere_line(x, y, z, radius, output):
+    output.write("{0:10.2f}{1:10.2f}{2:10.2f}{3:10.2f}\n".format(x, y, z, radius))
+
 def main ():
 
     # Process command line inputs
@@ -145,7 +148,7 @@ def main ():
             x = x_axis[full[0][ndx]] + radius
             y = y_axis[full[1][ndx]] + radius
             z = z_axis[full[2][ndx]] + radius
-            output.write("{0:10.2f}{1:10.2f}{2:10.2f}{3:10.2f}\n".format(x, y, z, radius))
+            write_sphere_line(x, y, z, radius, output)
 
     # Depending on output mode chosen print out information on the models
     if args.mode != 'model':
