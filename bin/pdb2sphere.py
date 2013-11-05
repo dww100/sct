@@ -132,19 +132,26 @@ def main ():
     full = np.where(grid > cutoff)
 
     no_spheres = len(full[0])
-    
-    
+        
     # Set the radius for each sphere
     radius = box_side / 2.0
+    
     # Output the sphere coordinates and radii
-    for ndx in xrange(0, no_spheres):
-        x = x_axis[full[0][ndx]] + radius
-        y = y_axis[full[1][ndx]] + radius
-        z = z_axis[full[2][ndx]] + radius
-        print "{0:10.2f}{1:10.2f}{2:10.2f}{3:10.2f}".format(x, y, z, radius)
+    if args.mode != 'info':
+        
+        output = open(args.output_file,'w')
+        
+        for ndx in xrange(0, no_spheres):
+            x = x_axis[full[0][ndx]] + radius
+            y = y_axis[full[1][ndx]] + radius
+            z = z_axis[full[2][ndx]] + radius
+            output.write("{0:10.2f}{1:10.2f}{2:10.2f}{3:10.2f}".format(x, y, z, radius))
 
     # Depending on output mode chosen print out information on the models
-    if args.mode in ['info', 'archive', 'project']:
+    if args.mode != 'model':
+        
+        if args.mode == 'info':
+            output = sys.stdout
         
         no_atoms = len(atom_coords)
         volume = sluv2.sum_volume(sluv2.all_residues, res_freq, 'chothia1975')
@@ -154,18 +161,21 @@ def main ():
         no_y_box = len(y_axis)
         no_z_box = len(z_axis)
 
-        print "pdb_to_sphere: version 0.5 - 05 November 2013"
-        print "No. Of Atoms: {0:d}".format(no_atoms)
-        print "Total Of Amino Acid Residues {0:d}".format(no_res)
-        print "One Side Of The Box: {0:f}".format(box_side)
-        print "Cutoff For Creating A Ball: {0:d}".format(cutoff)
-        print "No Of Balls: {0:d}".format(no_spheres)
-        print "Volume Of Cubes: {0:f}".format(volume_spheres)
-        print "Volume of Protein: {0:f}".format(volume)
-        print "Max And Min X: {0:f} {1:f}".format(x_axis[0],x_axis[no_x_box - 1])
-        print "Max And Min Y: {0:f} {1:f}".format(y_axis[0],y_axis[no_y_box - 1])
-        print "Max And Min Z: {0:f} {1:f}".format(z_axis[0],z_axis[no_z_box - 1])
-        print "No. grid points in X, Y, Z: {0:d} {1:d} {2:d}".format(no_x_box, no_y_box, no_z_box)
+        output.write("pdb_to_sphere: version 0.5 - 05 November 2013\n")
+        output.write("No. Of Atoms: {0:d}\n".format(no_atoms))
+        output.write("Total Of Amino Acid Residues {0:d}\n".format(no_res))
+        output.write("One Side Of The Box: {0:f}\n".format(box_side))
+        output.write("Cutoff For Creating A Ball: {0:d}\n".format(cutoff))
+        output.write("No Of Balls: {0:d}\n".format(no_spheres))
+        output.write("Volume Of Cubes: {0:f}\n".format(volume_spheres))
+        output.write("Volume of Protein: {0:f}\n".format(volume))
+        output.write("Max And Min X: {0:f} {1:f}\n".format(x_axis[0],x_axis[no_x_box - 1]))
+        output.write("Max And Min Y: {0:f} {1:f}\n".format(y_axis[0],y_axis[no_y_box - 1]))
+        output.write("Max And Min Z: {0:f} {1:f}\n".format(z_axis[0],z_axis[no_z_box - 1]))
+        output.write("No. grid points in X, Y, Z: {0:d} {1:d} {2:d}\n".format(no_x_box, no_y_box, no_z_box))
+
+    if args.mode != 'info':
+        output.close()
 
 if __name__ == "__main__":
     main()
