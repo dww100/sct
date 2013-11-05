@@ -34,7 +34,9 @@ def parse_sphere_line(line):
 
     return data
 
-def write_hydrated_model(coords, hydration_pos, sep, out):
+def write_hydrated_model(coords, hydration_pos, radius, out):
+
+    sep = radius * 2.0
 
     p2s.write_sphere_line(coords[0], coords[1], coords[2], radius, out)
 
@@ -131,8 +133,7 @@ def main ():
     with open(args.input_filename) as f:
         for line in f:
             sphere = parse_sphere_line(line)
-            separation = sphere['radius'] * 2.0
-            write_hydrated_model(sphere['radius'], hydration_pos, separation, out)
+            write_hydrated_model(sphere['coords'], hydration_pos, sphere['radius'], out)
 
     out.close()
 
