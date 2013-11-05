@@ -139,7 +139,7 @@ def main ():
     # Output the sphere coordinates and radii
     if args.mode != 'info':
         
-        output = open(args.output_file,'w')
+        output = open(args.output_filename,'w')
         
         for ndx in xrange(0, no_spheres):
             x = x_axis[full[0][ndx]] + radius
