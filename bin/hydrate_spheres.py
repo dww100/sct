@@ -39,7 +39,7 @@ def hydrate_sphere(coords, hydration_pos, radius):
     sep = radius * 2.0
     hyd_coords = []
 
-    hyd_coords.append[coords]
+    hyd_coords.append(coords)
 
     if 1 in hydration_pos:
         hyd_coords.append([coords[0] - sep, coords[1], coords[2]])
@@ -123,21 +123,36 @@ def hydrate_sphere(coords, hydration_pos, radius):
     if 26 in hydration_pos:
         hyd_coords.append([coords[0] + sep, coords[1] - sep, coords[2] - sep])
 
+    return hyd_coords
+
+def hydrate_sphere_model(coord_list, hydration_pos, radius):
+
+    wet_spheres = []
+
+    for coords in coord_list:
+        wet_spheres += hydrate_sphere(coords, hydration_pos, radius)
+
+    return wet_spheres
+
 def main ():
 
     args = parse_arguments()
 
     hydration_pos = xrange(0, args.hydration_no)
 
-    out = open(args.output_filename, 'w')
+    dry_spheres = []
+    radius = 0.0
 
     with open(args.input_filename) as f:
         for line in f:
             sphere = parse_sphere_line(line)
-            wet_spheres = hydrate_sphere(sphere['coords'],
-                                         hydration_pos, sphere['radius'])
-            p2s.write_spheres(wet_spheres, sphere['radius'], out)
+            dry_spheres.append(sphere['coords'])
+            radius = sphere['radius']
 
+    wet_spheres = hydrate_sphere_model(dry_spheres, hydration_pos, radius)
+
+    out = open(args.output_filename, 'w')
+    p2s.write_spheres(wet_spheres, radius, out)
     out.close()
 
 if __name__ == "__main__":
