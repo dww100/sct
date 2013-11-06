@@ -34,93 +34,94 @@ def parse_sphere_line(line):
 
     return data
 
-def write_hydrated_model(coords, hydration_pos, radius, out):
+def hydrate_sphere(coords, hydration_pos, radius):
 
     sep = radius * 2.0
+    hyd_coords = []
 
-    p2s.write_sphere_line(coords[0], coords[1], coords[2], radius, out)
+    hyd_coords.append[coords]
 
     if 1 in hydration_pos:
-        p2s.write_sphere_line(coords[0] - sep, coords[1], coords[2], radius, out)
+        hyd_coords.append([coords[0] - sep, coords[1], coords[2]])
 
     if 2 in hydration_pos:
-        p2s.write_sphere_line(coords[0] + sep, coords[1], coords[2], radius, out)
+        hyd_coords.append([coords[0] + sep, coords[1], coords[2]])
 
     if 3 in hydration_pos:
-        p2s.write_sphere_line(coords[0], coords[1], coords[2] + sep, radius, out)
+        hyd_coords.append([coords[0], coords[1], coords[2] + sep])
 
     if 4 in hydration_pos:
-        p2s.write_sphere_line(coords[0], coords[1], coords[2] - sep, radius, out)
+        hyd_coords.append([coords[0], coords[1], coords[2] - sep])
 
     if 5 in hydration_pos:
-        p2s.write_sphere_line(coords[0], coords[1] + sep, coords[2], radius, out)
+        hyd_coords.append([coords[0], coords[1] + sep, coords[2]])
 
     if 6 in hydration_pos:
-        p2s.write_sphere_line(coords[0], coords[1] - sep, coords[2], radius, out)
+        hyd_coords.append([coords[0], coords[1] - sep, coords[2]])
 
 
     if 7 in hydration_pos:
-        p2s.write_sphere_line(coords[0] - sep, coords[1], coords[2] + sep, radius, out)
+        hyd_coords.append([coords[0] - sep, coords[1], coords[2] + sep])
 
     if 8 in hydration_pos:
-        p2s.write_sphere_line(coords[0] + sep, coords[1], coords[2] - sep, radius, out)
+        hyd_coords.append([coords[0] + sep, coords[1], coords[2] - sep])
 
     if 9 in hydration_pos:
-        p2s.write_sphere_line(coords[0], coords[1] + sep, coords[2] + sep, radius, out)
+        hyd_coords.append([coords[0], coords[1] + sep, coords[2] + sep])
 
     if 10 in hydration_pos:
-        p2s.write_sphere_line(coords[0], coords[1] + sep, coords[2] - sep, radius, out)
+        hyd_coords.append([coords[0], coords[1] + sep, coords[2] - sep])
 
     if 11 in hydration_pos:
-        p2s.write_sphere_line(coords[0] - sep, coords[1] - sep, coords[2], radius, out)
+        hyd_coords.append([coords[0] - sep, coords[1] - sep, coords[2]])
 
     if 12 in hydration_pos:
-        p2s.write_sphere_line(coords[0] + sep, coords[1] - sep, coords[2], radius, out)
+        hyd_coords.append([coords[0] + sep, coords[1] - sep, coords[2]])
 
 
     if 13 in hydration_pos:
-        p2s.write_sphere_line(coords[0] - sep, coords[1], coords[2] - sep, radius, out)
+        hyd_coords.append([coords[0] - sep, coords[1], coords[2] - sep])
 
     if 14 in hydration_pos:
-        p2s.write_sphere_line(coords[0] + sep, coords[1], coords[2] + sep, radius, out)
+        hyd_coords.append([coords[0] + sep, coords[1], coords[2] + sep])
 
     if 15 in hydration_pos:
-        p2s.write_sphere_line(coords[0], coords[1] - sep, coords[2] - sep, radius, out)
+        hyd_coords.append([coords[0], coords[1] - sep, coords[2] - sep])
 
     if 16 in hydration_pos:
-        p2s.write_sphere_line(coords[0], coords[1] - sep, coords[2] + sep, radius, out)
+        hyd_coords.append([coords[0], coords[1] - sep, coords[2] + sep])
 
     if 17 in hydration_pos:
-        p2s.write_sphere_line(coords[0] - sep, coords[1] + sep, coords[2], radius, out)
+        hyd_coords.append([coords[0] - sep, coords[1] + sep, coords[2]])
 
     if 18 in hydration_pos:
-        p2s.write_sphere_line(coords[0] + sep, coords[1] + sep, coords[2], radius, out)
+        hyd_coords.append([coords[0] + sep, coords[1] + sep, coords[2]])
 
 
     if 19 in hydration_pos:
-        p2s.write_sphere_line(coords[0] + sep, coords[1] + sep, coords[2] + sep, radius, out)
+        hyd_coords.append([coords[0] + sep, coords[1] + sep, coords[2] + sep])
 
     if 20 in hydration_pos:
-        p2s.write_sphere_line(coords[0] + sep, coords[1] - sep, coords[2] + sep, radius, out)
+        hyd_coords.append([coords[0] + sep, coords[1] - sep, coords[2] + sep])
 
     if 21 in hydration_pos:
-        p2s.write_sphere_line(coords[0] - sep, coords[1] + sep, coords[2] - sep, radius, out)
+        hyd_coords.append([coords[0] - sep, coords[1] + sep, coords[2] - sep])
 
     if 22 in hydration_pos:
-        p2s.write_sphere_line(coords[0] - sep, coords[1] - sep, coords[2] - sep, radius, out)
+        hyd_coords.append([coords[0] - sep, coords[1] - sep, coords[2] - sep])
 
     if 23 in hydration_pos:
-        p2s.write_sphere_line(coords[0] + sep, coords[1] + sep, coords[2] - sep, radius, out)
+        hyd_coords.append([coords[0] + sep, coords[1] + sep, coords[2] - sep])
 
     if 24 in hydration_pos:
-        p2s.write_sphere_line(coords[0] - sep, coords[1] - sep, coords[2] + sep, radius, out)
+        hyd_coords.append([coords[0] - sep, coords[1] - sep, coords[2] + sep])
 
 
     if 25 in hydration_pos:
-        p2s.write_sphere_line(coords[0] - sep, coords[1] + sep, coords[2] + sep, radius, out)
+        hyd_coords.append([coords[0] - sep, coords[1] + sep, coords[2] + sep])
 
     if 26 in hydration_pos:
-        p2s.write_sphere_line(coords[0] + sep, coords[1] - sep, coords[2] - sep, radius, out)
+        hyd_coords.append([coords[0] + sep, coords[1] - sep, coords[2] - sep])
 
 def main ():
 
@@ -133,7 +134,9 @@ def main ():
     with open(args.input_filename) as f:
         for line in f:
             sphere = parse_sphere_line(line)
-            write_hydrated_model(sphere['coords'], hydration_pos, sphere['radius'], out)
+            wet_spheres = hydrate_sphere(sphere['coords'],
+                                         hydration_pos, sphere['radius'])
+            p2s.write_spheres(wet_spheres, sphere['radius'], out)
 
     out.close()
 

@@ -12,11 +12,11 @@ from sct_seq import *
 
 def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
-   
+
     parser = argparse.ArgumentParser(
         description= 'Convert atomic pdb to sphere model\n')
-        
-    parser.add_argument('-i','--input_filename', nargs='?', type=str, 
+
+    parser.add_argument('-i','--input_filename', nargs='?', type=str,
         dest='input_filename', help = 'Path to the input PDB file',
         required=True)
 
@@ -25,36 +25,36 @@ def parse_arguments():
     # archive - info and sphere model to file
     # model - model to file (no info)
     # project - model to file and info to screen
-    parser.add_argument('-m','--mode', choices = ['info', 'archive', 'model', 'project'], 
-        default = 'project', help = 'Type of output to be produced')        
+    parser.add_argument('-m','--mode', choices = ['info', 'archive', 'model', 'project'],
+        default = 'project', help = 'Type of output to be produced')
 
-    parser.add_argument('-o','--output_filename', nargs='?', type=str, 
+    parser.add_argument('-o','--output_filename', nargs='?', type=str,
         dest='output_filename', default=None,
         help = 'Path to the output file')
-        
-    parser.add_argument('-c','--cutoff', nargs='?', type=int, 
-        default=4, help = 'Cutoff number of atoms to create sphere in grid box')    
-        
-    parser.add_argument('-b','--box_side', nargs='?', type=float, 
+
+    parser.add_argument('-c','--cutoff', nargs='?', type=int,
+        default=4, help = 'Cutoff number of atoms to create sphere in grid box')
+
+    parser.add_argument('-b','--box_side', nargs='?', type=float,
         default=5.0, help = 'Side length of grid boxes')
-    
+
     args = parser.parse_args()
-    
+
     if args.mode != 'info':
         if args.output_filename == None:
             print "For mode {0:s} an output file must be specified!".format(args.mode)
             sys.exit(1)
-                   
+
     return args
 
 def read_pdb_atom_data (filename):
     """Read PDB file and return residue ferquencies and atom coordinates"""
-    
+
     # Initialize a dictionary of all recognized residues (frequency = 0)
     res_freq = residue_freq_dict()
 
     # Track the last residues seen
-    last_res_no = 0  
+    last_res_no = 0
 
     atom_coords = []
 
@@ -63,31 +63,31 @@ def read_pdb_atom_data (filename):
     with open(filename) as f:
         for line in f:
             data = pdb_res_line_parse(line)
-            
+
             if len(data) != 0:
                 atom_coords.append(data['coords'])
                 # If residue number has changed increment res_id tally
                 if data['res_no'] != last_res_no:
                     res_freq[data['res_id']] += 1
                     last_res_no = data['res_no']
-                
+
     return res_freq, atom_coords
 
 def create_grid(atom_coords, x_axis, y_axis, z_axis):
-    """Count atoms in grid boxes defined by passed axes intervals""" 
-    
+    """Count atoms in grid boxes defined by passed axes intervals"""
+
     # Initialize grid
     # dimension -1 as looking at intervals rather than axes points
     grid = np.zeros([len(x_axis) - 1, len(y_axis) - 1, len(z_axis) - 1])
 
-    # Use a binary search to find which interval each atom coordinate fits in 
+    # Use a binary search to find which interval each atom coordinate fits in
     # then increment count in appropriate grid box
     for atom_coord in atom_coords:
         x = bisect_right(x_axis, atom_coord[0]) - 1
         y = bisect_right(y_axis, atom_coord[1]) - 1
         z = bisect_right(z_axis, atom_coord[2]) - 1
         grid[x, y, z] += 1
-        
+
     return grid
 
 def define_axes(coords, box_side):
@@ -101,31 +101,11 @@ def define_axes(coords, box_side):
     x_axis = np.arange(coord_mins[0], coord_maxs[0] + box_side, box_side)
     y_axis = np.arange(coord_mins[1], coord_maxs[1] + box_side, box_side)
     z_axis = np.arange(coord_mins[2], coord_maxs[2] + box_side, box_side)
-    
+
     return x_axis, y_axis, z_axis
 
-def write_sphere_line(x, y, z, radius, output):
-    output.write("{0:10.2f}{1:10.2f}{2:10.2f}{3:10.2f}\n".format(x, y, z, radius))
+def grid_to_spheres(grid, cutoff, x_axis, y_axis, z_axis):
 
-def main ():
-
-    # Process command line inputs
-    args = parse_arguments()
-    box_side = args.box_side
-    cutoff = args.cutoff
-
-    # Read in the resdues frequencies (to calculate real volume) and 
-    # atomic coordinates from input PDB
-    res_freq, atom_coords = read_pdb_atom_data(args.input_filename)
-    
-    # Conversion to numpy array speeds up operations later
-    atom_coords = np.array(atom_coords)
-    
-    # Get axes for the grid used to create sphere models
-    # The grid we create contains all atoms and is divided into cubes with
-    # dimension box_side
-    x_axis, y_axis, z_axis = define_axes(atom_coords, box_side)
-    
     # Create a grid containing the number of atoms in each cube defined
     # by the axes created above
     grid = create_grid(atom_coords, x_axis, y_axis, z_axis)
@@ -134,32 +114,72 @@ def main ():
     # A sphere will be placed at the centre of each of these cubes
     full = np.where(grid > cutoff)
 
-    no_spheres = len(full[0])
-        
+    sphere_coords = []
+
+    for ndx in xrange(0, no_spheres):
+        x = x_axis[full[0][ndx]] + radius
+        y = y_axis[full[1][ndx]] + radius
+        z = z_axis[full[2][ndx]] + radius
+        sphere_coords.append([x,y,z])
+
+    return sphere_coords
+
+def write_spheres(coord_list, radius, out):
+
+    for coords in coord_list:
+        write_sphere_line(coords[0], coords[1], coords[2], radius, out)
+
+def write_sphere_line(x, y, z, radius, out):
+
+    out.write("{0:10.2f}{1:10.2f}{2:10.2f}{3:10.2f}\n".format(x, y, z, radius))
+
+def main ():
+
+    # Process command line inputs
+    args = parse_arguments()
+    box_side = args.box_side
+    cutoff = args.cutoff
+
+    # Read in the resdues frequencies (to calculate real volume) and
+    # atomic coordinates from input PDB
+    res_freq, atom_coords = read_pdb_atom_data(args.input_filename)
+
+    # Conversion to numpy array speeds up operations later
+    atom_coords = np.array(atom_coords)
+
+    # Get axes for the grid used to create sphere models
+    # The grid we create contains all atoms and is divided into cubes with
+    # dimension box_side
+    x_axis, y_axis, z_axis = define_axes(atom_coords, box_side)
+
+    # Create a grid containing the number of atoms in each cube defined
+    # by the axes created above
+    grid = create_grid(atom_coords, x_axis, y_axis, z_axis)
+
     # Set the radius for each sphere
     radius = box_side / 2.0
-    
+
+    # Convert grid to spheres
+    # A sphere centre of a box is created if > cutoff atoms are within it
+    sphere_coords = grid_to_spheres(grid, cutoff, x_axis, y_axis, z_axis)
+
     # Output the sphere coordinates and radii
     if args.mode != 'info':
-        
+
         output = open(args.output_filename,'w')
-        
-        for ndx in xrange(0, no_spheres):
-            x = x_axis[full[0][ndx]] + radius
-            y = y_axis[full[1][ndx]] + radius
-            z = z_axis[full[2][ndx]] + radius
-            write_sphere_line(x, y, z, radius, output)
+        write_spheres(sphere_coords, radius, output)
 
     # Depending on output mode chosen print out information on the models
     if args.mode != 'model':
-        
+
         if args.mode == 'info':
             output = sys.stdout
-        
+
         no_atoms = len(atom_coords)
         volume = sluv2.sum_volume(sluv2.all_residues, res_freq, 'chothia1975')
         no_res = sluv2.sum_res_no(sluv2.all_residues, res_freq)
-        volume_spheres = no_spheres * box_side**3 
+        no_spheres = len(sphere_coords)
+        volume_spheres = no_spheres * box_side**3
         no_x_box = len(x_axis)
         no_y_box = len(y_axis)
         no_z_box = len(z_axis)
