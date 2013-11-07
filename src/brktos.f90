@@ -9,7 +9,7 @@ PROGRAM BRKTOS
 ! Further revised by K.F. SMITH 17/7/91
 ! SGI version 1.00 A. S. Nealis 11/02/1992
 ! - Gives same volume for CA only and complete files
-! SGI version 1.10 M. O. Mayans 22/02/1994 
+! SGI version 1.10 M. O. Mayans 22/02/1994
 ! - Added carbohydrate support
 ! SGI version 1.15 M. K. Boehm ??/01/1995
 ! - Added SIA as a carbohydrate
@@ -103,7 +103,7 @@ IF(JUMP .NE. 1) THEN
     READ(5,*) XMI, YMI, ZMI
 ENDIF
 
-RADIS = BOX/2.0 
+RADIS = BOX/2.0
 
 ! Two passes are made through the protein file.
 ! 1. Gets statistics including volume and number of residues
@@ -118,7 +118,7 @@ DO
 
     READ (PDBFIL,'(A4)', IOSTAT=IERR) ATOM(1:4)
     IF (IERR .LT. 0) THEN
-        WRITE(STDERR, "(A)") "End of file reached with no ATOM recods read."
+        WRITE(STDERR, "(A)") "End of file reached with no ATOM records read."
         STOP
     END IF
 
@@ -146,7 +146,7 @@ DO
 
     READ(PDBFIL, ATMFMT, IOSTAT=IERR) ATOM, AANAM, RESNUM, X
     IF (IERR .LT. 0) EXIT
-    
+
     IF (ATOM .EQ. "ATOM") THEN
         NATOMM = NATOMM + 1
         XMA = MAX(XMA, X(1))
@@ -166,7 +166,7 @@ DO
            LAST_RESN = RESNUM
         END IF
     END IF
-    
+
 END DO
 
 MX = INT((XMA-XMI)/BOX) + 1
@@ -184,12 +184,12 @@ ELSE IF(MZ .GT. INCZ) THEN
     STOP
 ENDIF
 
-! Re-read file to populate our grid       
+! Re-read file to populate our grid
 
 REWIND PDBFIL
 
 ! Read in PDB file until ATOM found in cols 1-4
-DO 
+DO
 
     READ (PDBFIL,'(A4)', IOSTAT=IERR) ATOM(1:4)
 
@@ -215,11 +215,11 @@ DO
     ! Read the PDB and locate each atom record in a grid cube
     READ(PDBFIL, ATMFMT, IOSTAT=IERR) ATOM, AANAM, RESNUM, X
     IF (IERR .LT. 0) EXIT
-    
+
     IF(ATOM .EQ. "ATOM") THEN
-    
+
         ! Locate atom in a grid square along each axis on at a time
-    
+
         DO NX = 1, MX
             XB1 = XMI + BOX*(NX-1)
             XB2 = XMI + BOX*NX
@@ -228,7 +228,7 @@ DO
                EXIT
             ENDIF
         END DO
-        
+
         DO NY = 1, MY
             YB1 = YMI + BOX*(NY-1)
             YB2 = YMI + BOX*NY
@@ -237,7 +237,7 @@ DO
                EXIT
             ENDIF
         END DO
-        
+
         DO NZ = 1, MZ
             ZB1 = ZMI + BOX*(NZ-1)
             ZB2 = ZMI + BOX*NZ
@@ -245,12 +245,12 @@ DO
                NZZ = NZ
                EXIT
             ENDIF
-        END DO       
-        
+        END DO
+
         ! Increment atom count in appropriate grid square and the total
         INC(NXX,NYY,NZZ) = INC(NXX,NYY,NZZ) + 1
-        ISUM = ISUM + 1        
-        
+        ISUM = ISUM + 1
+
     END IF
 
 END DO
@@ -309,17 +309,17 @@ DOUBLE PRECISION FUNCTION RES_VOLUME(WORD)
         167.3, 168.8, 167.9, 171.3, 170.8, 203.4, 129.3,  99.1, 122.1, &
         237.6, 203.6, 141.7, 166.8, 170.8, 222.0, 160.8, 326.3, 232.9, &
         155.1, 171.9/
-    ! GLA is added with the same value as GLU 
+    ! GLA is added with the same value as GLU
     ! also added GLC as glucose - volume from sluv awa 950313
-    ! NB PDB file may need glucose to be changed to GLC 
-    ! NGA added (N-acetyl galactosamine), volume from SLUV - MK BOEHM 6/5/97      
-    DO I = 1, 28 
+    ! NB PDB file may need glucose to be changed to GLC
+    ! NGA added (N-acetyl galactosamine), volume from SLUV - MK BOEHM 6/5/97
+    DO I = 1, 28
          IF (WORD .EQ. NAMAA(I)) THEN
             RES_VOLUME = AV(I)
             RETURN
          ENDIF
     END DO
-    
+
     ! Handle unrecognized residues
     VOLL = -1.
     RETURN
