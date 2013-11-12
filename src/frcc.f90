@@ -131,8 +131,6 @@ DO K = 1, IP
     TEST = .TRUE.
     IT = 1
 
-!    DO IT = 1, NMAX
-
     DO WHILE (TEST)
 
         EIG(K)=0.0
