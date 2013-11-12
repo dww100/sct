@@ -1,7 +1,7 @@
 PROGRAM APS
 
 ! Program to calculate the radius of gyration of sphere models
-! Hard limit of 5000 spheres
+! Hard limit of 6000 spheres
 
 ! Original Fortran 77 code:
 ! S.J. Perkins July 1981
@@ -10,10 +10,8 @@ PROGRAM APS
 
 ! Rewritten in Fortran 90 by David W. Wright November 2013
 
-! TODO: For reasons currently beyond my comprehension this results in X having a
-! start index of 0 and D of 1, this needs to be fixed as it is odd
-! and makes the code difficult to understand
-DIMENSION X(5000,3),D(5000)
+REAL, DIMENSION(6000,3) :: X
+REAL, DIMENSION(6000) :: D
 
 WRITE(6,"(A/)") "APS: VERSION 2.50"
 WRITE(6,"(A/)") "CALCULATION OF Rg FOR UP TO 5000 SPHERE MODELS"
@@ -24,7 +22,7 @@ WRITE(6,"(A/)") "CALCULATION OF Rg FOR UP TO 5000 SPHERE MODELS"
 
 REWIND 5
 
-NSPHERE = 0
+NSPHERE = 1
 
 DO
     READ(5,"(4F10.2)", IOSTAT=IERR) (X(NSPHERE,J),J=1,3), RADIUS
@@ -36,6 +34,8 @@ DO
     END IF
     NSPHERE = NSPHERE + 1
 END DO
+
+NSPHERE = NSPHERE - 1
 
 CLOSE(5)
 
@@ -79,7 +79,7 @@ XSUM = 0.0
 YSUM = 0.0
 ZSUM = 0.0
 
-DO N = 0, NSPHERE - 1
+DO N = 1, NSPHERE
     XSUM = XSUM + X(N,1)
     YSUM = YSUM + X(N,2)
     ZSUM = ZSUM + X(N,3)
@@ -101,7 +101,7 @@ WRITE(6,"(A,3F10.3)")"MEAN X,Y,Z COORDS ARE ", XMEAN, YMEAN, ZMEAN
 RADSQ = 0.0
 RRAD = 0.0
 
-DO N = 0, NSPHERE - 1
+DO N = 1, NSPHERE
 
     D(N+1) = ((X(N,1)-XMEAN)**2 + (X(N,2)-YMEAN)**2 + (X(N,3)-ZMEAN)**2)
     RADSQ = RADSQ + D(N+1)
