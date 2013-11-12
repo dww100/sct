@@ -20,7 +20,7 @@ DOUBLE PRECISION PI, EI, ER, EPS, S1, S2, S3, S4, S5, E2, E3
 DOUBLE PRECISION EL2, D2, DISTAN, EE, FACT, A, B, F1, FR1, FR2
 DOUBLE PRECISION V, F2, EA, F, FRT
 INTEGER IND, NMAX, IP, NEPS, NSTOP, N, J, NATOM, K
-INTEGER L, I, IT
+INTEGER L, I, IT, IERR
 
 PI = 3.1415926536
 IND = 1
@@ -31,7 +31,7 @@ NEPS = 4
 WRITE(6,"(A,/)") " FRCC: THIS VERSION 11.11.2013"
 
 DO N=1,2000
-    READ(5, IOSTAT=IERR, "(4F10.2)") (R(N,J),J=1,3),E(N)
+    READ(5, "(4F10.2)", IOSTAT=IERR) (R(N,J),J=1,3),E(N)
 
     IF (IERR .LT. 0) THEN
         EXIT
@@ -43,7 +43,7 @@ DO N=1,2000
 END DO
 
 NATOM = N - 1
-WRITE(6,325) NATOM
+WRITE(6,*) NATOM
 
 EPS = 10.0**(-NEPS)
 S1 = 0.0
@@ -60,7 +60,7 @@ DO K = 1, NATOM
     E3 = E2 * E(K)
     S4 = S4 + E3
 
-    DO L= 1, NATOM
+    DO L = 1, NATOM
         EL2 = E(L)**2
         IF (K .LT. L) THEN
             D2 = 0.0
@@ -77,11 +77,12 @@ DO K = 1, NATOM
             B = 1.0 - FACT
 
             ! Calculation of the diagonal part of the Oseen tensor only
-            DO 260  I=1,IP
+            DO I=1,IP
                 V=A+(DIS(I)*DIS(I)*B/D2)
                 T(K,L,I)=V*6.0/(8.0*DISTAN)
                 T(L,K,I)=T(K,L,I)
             END DO
+        END IF
 
     END DO
 END DO
@@ -143,7 +144,7 @@ DO K = 1, IP
             EXIT
         END IF
 
-        IF IT .EQ. NMAX WRITE(9,"(A)") " MAXIMUM OF ITERATIONS REACHED"
+        IF (IT .EQ. NMAX) WRITE(9,"(A)") " MAXIMUM OF ITERATIONS REACHED"
 
     END DO
 
