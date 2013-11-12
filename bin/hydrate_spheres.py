@@ -35,6 +35,16 @@ def parse_sphere_line(line):
     return data
 
 def hydrate_sphere(coords, hydration_pos, radius):
+    """Add spheres to selected positions coordinate
+    Inputs:
+        * coordinates of sphere in dry model
+        * list of positions to include in wet sphere model:
+          Position 1 = original sphere position,
+          2 to 27 positions on cube centred on original sphere
+        * radius for each sphere
+    Outputs
+        * list containing coordinates of all spheres in wet model
+    """
 
     sep = radius * 2.0
     hyd_coords = []
