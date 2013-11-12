@@ -11,16 +11,17 @@ IMPLICIT NONE
 
 ! Fortran 90 version by David W. Wright November 2013
 
-INTEGER NOSPH
-PARAMETER (NOSPH = 2000)
-DOUBLE PRECISION R(NOSPH,3),G(NOSPH),T(NOSPH,NOSPH,3)
-DOUBLE PRECISION E(NOSPH)
+INTEGER MAX_SPH
+PARAMETER (MAX_SPH = 2000)
+DOUBLE PRECISION R(MAX_SPH,3),G(MAX_SPH),T(MAX_SPH,MAX_SPH,3)
+DOUBLE PRECISION E(MAX_SPH)
 DOUBLE PRECISION DIS(3),EIG(3)
 DOUBLE PRECISION PI, EI, ER, EPS, S1, S2, S3, S4, S5, E2, E3
 DOUBLE PRECISION EL2, D2, DISTAN, EE, FACT, A, B, F1, FR1, FR2
 DOUBLE PRECISION V, F2, EA, F, FRT
-INTEGER IND, NMAX, IP, NEPS, NSTOP, N, J, NATOM, K
+INTEGER IND, NMAX, IP, NEPS, NSTOP, N, J, NSPHERE, K
 INTEGER L, I, IT, IERR
+LOGICAL TEST
 
 PI = 3.1415926536
 IND = 1
@@ -42,8 +43,8 @@ DO N=1,2000
 
 END DO
 
-NATOM = N - 1
-WRITE(6,*) NATOM
+NSPHERE = N - 1
+WRITE(6,"(/,A,I5,/)") " TOTAL SPHERES = ", NSPHERE
 
 EPS = 10.0**(-NEPS)
 S1 = 0.0
@@ -52,7 +53,7 @@ S3 = 0.0
 S4 = 0.0
 S5 = 0.0
 
-DO K = 1, NATOM
+DO K = 1, NSPHERE
 
     E2 = E(K)**2
     S1 = S1 + E(K)
@@ -60,7 +61,7 @@ DO K = 1, NATOM
     E3 = E2 * E(K)
     S4 = S4 + E3
 
-    DO L = 1, NATOM
+    DO L = 1, NSPHERE
         EL2 = E(L)**2
         IF (K .LT. L) THEN
             D2 = 0.0
@@ -98,15 +99,17 @@ WRITE(6,*)
 WRITE(6,*) " KIRKWOOD"
 WRITE(6,*)
 WRITE(6,"(A,F9.4,E12.4)") " FRICTIONAL COEFFICIENT = ", F1, FR1
+WRITE(6,*)
 WRITE(6,*) " BLOOMFIELD "
 WRITE(6,*)
 WRITE(6,"(A,F9.4,E12.4)") " FRICTIONAL COEFFICIENT = ", F2, FR2
-WRITE(6,"(A, I5)") " TOTAL SPHERES = ", NATOM
+WRITE(6,*)
+WRITE(6,"(A, I5)") " TOTAL SPHERES = ", NSPHERE
 
 ! ITERATIONS START HERE
 
-DO I = 1, NATOM
-    DO J = 1, NATOM
+DO I = 1, NSPHERE
+    DO J = 1, NSPHERE
         IF (I .NE. J) THEN
             DO K = 1, IP
                 T(I,J,K) = T(I,J,K) * E(J)
@@ -116,20 +119,27 @@ DO I = 1, NATOM
 END DO
 
 DO K = 1, IP
+
     WRITE(6,"(A,I2,/)") " COMPONENT ", K
-    DO I = 1, NATOM
+
+    DO I = 1, NSPHERE
         G(I) = 1.0
     END DO
 
     EA=0.0
 
-    DO IT = 1, NMAX
+    TEST = .TRUE.
+    IT = 1
+
+!    DO IT = 1, NMAX
+
+    DO WHILE (TEST)
 
         EIG(K)=0.0
 
-        DO I = 1, NATOM
+        DO I = 1, NSPHERE
             G(I)=1.0
-            DO J=1,NATOM
+            DO J=1,NSPHERE
                 IF (I .NE. J) G(I)=G(I)-T(I,J,K)*G(J)
             END DO
 
@@ -140,13 +150,20 @@ DO K = 1, IP
         WRITE(6,"(I5,E11.4)") IT, EIG(K)
 
         IF (ABS((EIG(K) - EA) / EIG(K)) .GE. EPS) THEN
-            EA=EIG(K)
+            EA = EIG(K)
+        ELSE
             EXIT
         END IF
 
-        IF (IT .EQ. NMAX) WRITE(9,"(A)") " MAXIMUM OF ITERATIONS REACHED"
+        IF (IT .EQ. NMAX) THEN
+            WRITE(9,"(A)") " MAXIMUM OF ITERATIONS REACHED"
+            EXIT
+        END IF
+
+        IT = IT + 1
 
     END DO
+
 
 END DO
 
