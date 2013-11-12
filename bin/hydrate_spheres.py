@@ -136,6 +136,7 @@ def hydrate_sphere(coords, hydration_pos, radius):
     return hyd_coords
 
 def hydrate_sphere_model(coord_list, hydration_pos, radius):
+    """Add hydration layer spheres to the spheres at input coordinates"""
 
     wet_spheres = []
 
@@ -145,6 +146,8 @@ def hydrate_sphere_model(coord_list, hydration_pos, radius):
     return wet_spheres
 
 def read_mono_spheres(filename):
+    """Read in sphere file and return coordinates and radius
+    Note: assumed that we have only one radius of sphere here"""
 
     spheres = []
 
@@ -160,10 +163,15 @@ def main ():
 
     args = parse_arguments()
 
+    # List of positions to include in wet sphere model:
+    # Position 1 = original sphere position,
+    # Positions 2 to 27 positions on cube centred on original sphere
     hydration_pos = xrange(0, args.hydration_no)
 
+    # Read dry sphere model from file
     dry_spheres, radius = read_mono_spheres(args.input_filename)
 
+    # Create hydrated model
     wet_spheres = hydrate_sphere_model(dry_spheres, hydration_pos, radius)
 
     out = open(args.output_filename, 'w')
