@@ -30,8 +30,16 @@ NEPS = 4
 
 WRITE(6,"(A,/)") " FRCC: THIS VERSION 11.11.2013"
 
-DO 100 N=1,2000
-    READ(5,"(4F10.2)", END = 110) (R(N,J),J=1,3),E(N)
+DO N=1,2000
+    READ(5, IOSTAT=IERR, "(4F10.2)") (R(N,J),J=1,3),E(N)
+
+    IF (IERR .LT. 0) THEN
+        EXIT
+    ELSE IF (IERR .NE. 0) THEN
+         WRITE(*,*) 'Abort: Error reading input'
+         STOP
+    END IF
+
 END DO
 
 NATOM = N - 1
