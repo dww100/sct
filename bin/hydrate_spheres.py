@@ -134,20 +134,25 @@ def hydrate_sphere_model(coord_list, hydration_pos, radius):
 
     return wet_spheres
 
+def read_mono_spheres(filename):
+
+    spheres = []
+
+    with open(filename) as f:
+        for line in f:
+            sphere = parse_sphere_line(line)
+            spheres.append(sphere['coords'])
+            radius = sphere['radius']
+
+    return spheres, radius
+
 def main ():
 
     args = parse_arguments()
 
     hydration_pos = xrange(0, args.hydration_no)
 
-    dry_spheres = []
-    radius = 0.0
-
-    with open(args.input_filename) as f:
-        for line in f:
-            sphere = parse_sphere_line(line)
-            dry_spheres.append(sphere['coords'])
-            radius = sphere['radius']
+    dry_spheres, radius = read_mono_spheres(args.input_filename)
 
     wet_spheres = hydrate_sphere_model(dry_spheres, hydration_pos, radius)
 
