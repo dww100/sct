@@ -133,16 +133,7 @@ def write_sphere_line(x, y, z, radius, out):
 
     out.write("{0:10.2f}{1:10.2f}{2:10.2f}{3:10.2f}\n".format(x, y, z, radius))
 
-def main ():
-
-    # Process command line inputs
-    args = parse_arguments()
-    box_side = args.box_side
-    cutoff = args.cutoff
-
-    # Read in the resdues frequencies (to calculate real volume) and
-    # atomic coordinates from input PDB
-    res_freq, atom_coords = read_pdb_atom_data(args.input_filename)
+def create_sphere_model(atom_coords, cutoff, box_side):
 
     # Conversion to numpy array speeds up operations later
     atom_coords = np.array(atom_coords)
@@ -156,12 +147,26 @@ def main ():
     # by the axes created above
     grid = create_grid(atom_coords, x_axis, y_axis, z_axis)
 
-    # Set the radius for each sphere
-    radius = box_side / 2.0
-
     # Convert grid to spheres
     # A sphere centre of a box is created if > cutoff atoms are within it
     sphere_coords = grid_to_spheres(grid, cutoff, x_axis, y_axis, z_axis)
+
+    return sphere_coords
+
+def main():
+
+    # Process command line inputs
+    args = parse_arguments()
+
+    # Read in the residues frequencies (to calculate target volume) and
+    # atomic coordinates from input PDB
+    res_freq, atom_coords = read_pdb_atom_data(args.input_filename)
+
+    # Bin atomic coordinates to give sphere coordinates
+    sphere_coords = create_sphere_model(atom_coords, args.cutoff, args.box_side)
+
+    # Set the radius for each sphere
+    radius = box_side / 2.0
 
     # Output the sphere coordinates and radii
     if args.mode != 'info':
