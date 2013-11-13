@@ -125,15 +125,17 @@ def grid_to_spheres(grid, cutoff, x_axis, y_axis, z_axis):
     return sphere_coords
 
 def write_spheres(coord_list, radius, out):
-
+    """Write coordinates and radius (to out) for each sphere entry in coords"""
     for coords in coord_list:
         write_sphere_line(coords[0], coords[1], coords[2], radius, out)
 
 def write_sphere_line(x, y, z, radius, out):
+    """Write out a single sphere entry to a SCT sphere file format"""
 
     out.write("{0:10.2f}{1:10.2f}{2:10.2f}{3:10.2f}\n".format(x, y, z, radius))
 
 def create_sphere_model(atom_coords, cutoff, box_side):
+    """Bin atomic coordinates to give sphere coordinates"""
 
     # Conversion to numpy array speeds up operations later
     atom_coords = np.array(atom_coords)
@@ -151,7 +153,7 @@ def create_sphere_model(atom_coords, cutoff, box_side):
     # A sphere centre of a box is created if > cutoff atoms are within it
     sphere_coords = grid_to_spheres(grid, cutoff, x_axis, y_axis, z_axis)
 
-    return sphere_coords
+    return sphere_coords, x_axis, y_axis, z_axis
 
 def main():
 
@@ -163,7 +165,9 @@ def main():
     res_freq, atom_coords = read_pdb_atom_data(args.input_filename)
 
     # Bin atomic coordinates to give sphere coordinates
-    sphere_coords = create_sphere_model(atom_coords, args.cutoff, args.box_side)
+    sphere_coords, x_axis, y_axis, z_axis = create_sphere_model(atom_coords,
+                                                                args.cutoff,
+                                                                args.box_side)
 
     # Set the radius for each sphere
     radius = box_side / 2.0
