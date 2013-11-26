@@ -104,17 +104,15 @@ def define_axes(coords, box_side):
 
     return x_axis, y_axis, z_axis
 
-def grid_to_spheres(grid, cutoff, x_axis, y_axis, z_axis):
-
-    # Create a grid containing the number of atoms in each cube defined
-    # by the axes created above
-    grid = create_grid(atom_coords, x_axis, y_axis, z_axis)
+def grid_to_spheres(grid, radius, cutoff, x_axis, y_axis, z_axis):
 
     # Find the locations in the grid containing more than cutoff atoms
     # A sphere will be placed at the centre of each of these cubes
     full = np.where(grid > cutoff)
 
     sphere_coords = []
+
+    no_spheres = len(full[0])
 
     for ndx in xrange(0, no_spheres):
         x = x_axis[full[0][ndx]] + radius
@@ -151,7 +149,7 @@ def create_sphere_model(atom_coords, cutoff, box_side):
 
     # Convert grid to spheres
     # A sphere centre of a box is created if > cutoff atoms are within it
-    sphere_coords = grid_to_spheres(grid, cutoff, x_axis, y_axis, z_axis)
+    sphere_coords = grid_to_spheres(grid, box_side/2.0, cutoff, x_axis, y_axis, z_axis)
 
     return sphere_coords, x_axis, y_axis, z_axis
 
