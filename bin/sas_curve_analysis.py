@@ -141,10 +141,24 @@ def create_output_name(prefix, analysis, q_min, q_max, fit_min, fit_max):
 
     return filename
 
-def main():
+def guinier_fit(x, y, calc_type):
 
-    # Interpret command line arguments
-    args = parse_arguments()
+    fit_coeffs = polyfit(x, y, 1)
+
+    result = {}
+
+    result['fit'] = fit_coeffs
+
+    if (calc_type == 'rxs1') or (calc_type == 'rxs2'):
+        result['r'] = sqrt(2 * abs(fit_coeffs[0]))
+        result['i'] = None
+    else:
+        result['r'] = sqrt(3 * abs(fit_coeffs[0]))
+        result['i'] = exp(fit_coeffs[1])
+
+    return result
+
+def check_args(args):
 
     if args.header:
         print ('Filename\t' + create_header(args.anal_type))
@@ -175,42 +189,78 @@ def main():
                                     'fitmin':args.fitrange[0],
                                     'fitmax':args.fitrange[0]}
 
+    return analyses, q_ranges
+
+def get_paths_output(input_filename):
+
     # The full pathname of the input is added to the output data.
     # The filename without suffix is used to title graphs
     # and name output graph files
-    in_full_path = os.path.abspath(args.input_filename)
+    in_full_path = os.path.abspath(input_filename)
     in_path,filename = os.path.split(in_full_path)
     out_prefix, ext = os.path.splitext(filename)
+
+    return in_full_path, out_prefix
+
+def main():
+
+    # Interpret command line arguments
+    args = parse_arguments()
+
+    analyses, q_ranges = check_args(args)
+
+    # The full pathname of the input is added to the output data.
+    # The filename without suffix is used to title graphs
+    # and name output graph files
+    in_full_path, out_prefix = get_paths_output(args.input_filename)
 
     # Initialise a string to contain computed values for output
     out_values = ''
 
     input_data = loadtxt(in_full_path, skiprows=args.skip)
 
-    # Range of the y-axes to plot
-    if args.y_range == None:
-        y_max = round(max(log(input_data[:,1])) + 1, 0)
-        y_min = round(min(log(input_data[:,1])) - 1, 0)
-    else:
-        y_min, y_max = args.y_range
-
     for cur_anal in analyses:
+
+        # Different functions of Q I are plot/fit for each analysis:
+        # Wide angle: Q vs ln(I)
+        # Rg: Q^2 vs ln(I)
+        # Rxs1/Rxs2: Q^2 vs ln(I*Q)
+
+        if cur_anal == 'wide':
+            xlabel = 'Q'
+            x = input_data[:,0]
+        else:
+            xlabel = 'Q^2'
+            x = input_data[:,0]**2
+
+        if (cur_anal == 'wide') or (cur_anal == 'rg'):
+            ylabel = 'ln(I(Q))'
+            y = log(input_data[:,1])
+        else:
+            ylabel = 'ln(I(Q)*Q)'
+            y = log(input_data[:,1] * input_data[:,0])
+
+        # Range of the y-axes to plot
+        if args.y_range == None:
+            y_max = round(max(y) + 1, 0)
+            y_min = round(min(y) - 1, 0)
+        else:
+            y_min, y_max = args.y_range
 
         q_min = q_ranges[cur_anal]['qmin']
         q_max = q_ranges[cur_anal]['qmax']
 
         if cur_anal == 'wide':
 
+            # We don't perform any fitting on Wide Angle plots
+            title_graph = 'Wide Angle ' + out_prefix
+
             fname = create_output_name(out_prefix, cur_anal,
                                        q_min, q_max, None, None)
-
-            # We don't perform any fitting on Wide Angle plots
-            x = input_data[:,0]
-            y = log(input_data[:,1])
-
-            create_figure(out_file, x, y, 'Wide Angle ' + out_prefix ,
-                          'Q', 'ln(I(Q))', q_min, q_max, y_min, y_max)
             out_file = os.path.join(args.output_dir, fname)
+
+            create_figure(out_file, x, y, title_graph,
+                          xlabel, ylabel, q_min, q_max, y_min, y_max)
 
         else:
 
@@ -231,70 +281,44 @@ def main():
             fit_text = '{0:s} (Q fit range = {1:5.4}-{2:5.4})'.format(
                                                 out_prefix, fit_min, fit_max)
 
+            # Perform linear fit over the fit range selected by mask
+            results = guinier_fit(x[mask], y[mask], cur_anal)
+
+            # calculate R? * Q for the ends of the range of Q used in fit
+            rq_min = results['r'] * fit_min
+            rq_max = results['r'] * fit_max
+
+            # Create output for text and graph labels
             if cur_anal == 'rg':
-
-                x = input_data[:,0]**2
-                y = log(input_data[:,1])
-
-                # Calculate Rg and Io from linear fit of Q^2 vs ln(I)
-                fit_coeffs = polyfit(x[mask], y[mask],1)
-                Rg = sqrt(3 * abs(fit_coeffs[0]))
-                Io = exp(fit_coeffs[1])
-
-                rg_q_min = Rg * fit_min
-                rg_q_max = Rg * fit_max
-
                 # Format data for text output
-                out_values += '{0:0.2f}\t{1:0.2f}\t{2:0.2f}\t{3:0.2f}\t'.format(Rg, rg_q_min, rg_q_max, Io)
+                out_values += '{0:0.2f}\t{1:0.2f}\t{2:0.2f}\t{3:0.2f}\t'.format(results['r'], rq_min, rq_max, results['i'])
 
-                # Create header and format data for output on graph
-                data_graph = 'Rg: {0:0.2f}\tIo: {1:0.2f}'.format(Rg, Io)
+                # Format data for output on graph for Rg
+                title_graph = 'Rg ' + fit_text
+                data_graph = 'Rg: {0:0.2f}\tIo: {1:0.2f}'.format(results['r'], results['i'])
                 rq_range = 'Rg*Qmin: {0:0.2f}\tRg*Qmax: {1:0.2f}'.format(
-                                                             rg_q_min, rg_q_max)
-
-                create_figure(out_file, x, y, 'Rg ' + fit_text ,
-                             'Q^2', 'ln(I(Q))', q2_min, q2_max, y_min, y_max,
-                             fitcoeffs = fit_coeffs, outputs = data_graph,
-                             rqrange = rq_range, mask = mask)
-
+                                                             rq_min, rq_max)
             else:
-
-                x = input_data[:,0]**2
-                y = log(input_data[:,1] * input_data[:,0])
-
-                # Calculate Rxs1 or Rxs2 from linear fit of Q^2 vs ln(I*Q)
-                fit_coeffs = polyfit(x[mask], y[mask],1)
-                Rxs = sqrt(2 * abs(fit_coeffs[0]))
-                rx_q_min = Rxs * fit_min
-                rx_q_max = Rxs * fit_max
-
                 # Format data for text output
                 out_values += '{0:0.2f}\t{1:0.2f}\t{2:0.2f}\t'.format(
-                                              Rxs, Rxs * fit_min, Rxs * fit_max)
+                                              results['r'], rq_min, rq_max)
 
                 if cur_anal == 'rxs1':
+                    # Format data for output on graph for Rxs1
+                    title_graph = 'Rxs1 ' + fit_text
+                    data_graph = 'Rxs1: {0:0.2f}'.format(results['r'])
+                    rq_range = 'Rxs1*Qmin: {0:0.2f}\tRxs1*Qmax: {1:0.2f}'.format(rq_min,rq_max)
+                else:
+                    # Format data for output on graph for Rxs2
+                    title_graph = 'Rxs2 ' + fit_text
+                    data_graph = 'Rxs2: {0:0.2f}'.format(results['r'])
+                    rq_range = 'Rxs2*Qmin: {0:0.2f}\tRxs2*Qmax: {1:0.2f}'.format(rq_min,rq_max)
 
-                    # Format data for output on graph
-                    data_graph = 'Rxs1: {0:0.2f}'.format(Rxs)
-                    rq_range = 'Rxs1*Qmin: {0:0.2f}\tRxs1*Qmax: {1:0.2f}'.format(rx_q_min,rx_q_max)
-
-                    create_figure(out_file, x, y, 'Rxs1 ' + fit_text,
-                                 'Q^2', 'ln(I(Q)*Q)',  q2_min, q2_max,
-                                 y_min, y_max, fitcoeffs = fit_coeffs,
-                                 outputs = data_graph, rqrange = rq_range,
-                                 mask = mask)
-
-                elif cur_anal == 'rxs2':
-
-                    # Format data for output on graph
-                    data_graph = 'Rxs2: {0:0.2f}'.format(Rxs)
-                    rq_range = 'Rxs2*Qmin: {0:0.2f}\tRxs2*Qmax: {1:0.2f}'.format(rx_q_min,rx_q_max)
-
-                    create_figure(out_file, x, y, 'Rxs2 ' + fit_text,
-                                 'Q^2', 'ln(I(Q)*Q)',  q2_min, q2_max,
-                                 y_min, y_max, fitcoeffs = fit_coeffs,
-                                 outputs = data_graph, rqrange = rq_range,
-                                 mask = mask)
+            # Create graph including highlighted area for fit and key data
+            create_figure(out_file, x, y, title_graph ,
+                             xlabel, ylabel, q2_min, q2_max, y_min, y_max,
+                             fitcoeffs = results['fit'], outputs = data_graph,
+                             rqrange = rq_range, mask = mask)
 
     print (in_full_path + '\t'+ out_values)
 
