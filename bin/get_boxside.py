@@ -53,7 +53,7 @@ def residual2(box_side, cutoff, atom_coords, targ_volume):
     return (vol_spheres - targ_volume)**2
 
 def optimize_side(cutoff, coords, target_vol, side_min, side_max, tolerance):
-    """Get optimal box_side to reproduce target_volume"""
+    """Get optimal box_side to reproduce target_volume (and deviation)"""
 
     # Format the bounds within which to run the optimization
     side_bounds = (side_min, side_max)
@@ -64,10 +64,11 @@ def optimize_side(cutoff, coords, target_vol, side_min, side_max, tolerance):
                              bounds=side_bounds, method='bounded',
                              options={'xtol' : tolerance})
 
-    return opt['x']
+    # Return the optimized box_side and residual
+    return opt['x'], opt['fun']**0.5
 
 def get_opt_side(filename, cutoff, side_min, side_max, tolerance):
-    """Read PDB and get optimal sphere model box_side to reproduce theoretical volume"""
+    """Read PDB, get best sphere model box_side to reproduce theoretical volume (+ deviation)"""
 
     # Read in the residues frequencies (to calculate target volume) and
     # atomic coordinates from input PDB
@@ -76,16 +77,16 @@ def get_opt_side(filename, cutoff, side_min, side_max, tolerance):
     # Get the target volume from sluv (based on sequence)
     volume = sluv2.sum_volume(sluv2.all_residues, res_freq, 'chothia1975')
 
-    best_side = optimize_side(cutoff, atom_coords, volume,
+    best_side, dev = optimize_side(cutoff, atom_coords, volume,
                               side_min, side_max, tolerance)
 
-    return best_side
+    return best_side, dev
 
 def main ():
 
     args = parse_arguments()
 
-    best_side = get_opt_side(args.input_filename, args.cutoff,
+    best_side, dev = get_opt_side(args.input_filename, args.cutoff,
                             args.box_range[0], args.box_range[1], args.tolerance)
 
     if args.output_filename == None:
@@ -95,6 +96,7 @@ def main ():
 
     output.write("# Optimized box_side for {0:s}, using cutoff {1:d}\n".format(
                  args.input_filename, args.cutoff))
+    output.write("# Deviation from target volume was {0:f}\n".format(dev))
     output.write("box_side: {0:f}\n".format(best_side))
 
     output.close()
