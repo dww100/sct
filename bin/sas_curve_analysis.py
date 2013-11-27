@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 
-# David W Wright - 09/08/2013
 """Script to analsye Q and I data from SAS experiments
 Can produce the following plots and data:
 wide - Wide Angle:  Q vs ln(I)
 rg - Radius of gyration/Guinier:     Q^2 vs ln(I)
 rxs1/rxs2 - Rxs1/Rsx2:   Q^2 vs ln(I*Q)
 At the minute we assume input has no header and the
-first column is Q and second is I """
+first column is Q and second is I
+
+David W Wright - 09/08/2013"""
 
 import os
 import argparse
