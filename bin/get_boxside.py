@@ -68,7 +68,8 @@ def optimize_side(cutoff, coords, target_vol, side_min, side_max, tolerance):
     return opt['x'], opt['fun']**0.5
 
 def get_opt_side(filename, cutoff, side_min, side_max, tolerance):
-    """Read PDB, get best sphere model box_side to reproduce theoretical volume (+ deviation)"""
+    """Read PDB, get optimal sphere model box_side (+ deviation)
+    The idea is to reproduce theoretical volume from sluv"""
 
     # Read in the residues frequencies (to calculate target volume) and
     # atomic coordinates from input PDB
