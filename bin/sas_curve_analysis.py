@@ -25,9 +25,10 @@ def parse_arguments():
     [-y YRANGE YRANGE]
     """
     #Command line option parsing
-    parser = argparse.ArgumentParser(description= """Basic processing of SAS data.
-    Produces Rg, Io, Rxs1 and Rxs2 estimates and associated plots.
-    """, usage=use_message)
+    parser = argparse.ArgumentParser(
+        description= """Basic processing of SAS data.
+        Produces Rg, Io, Rxs1 and Rxs2 estimates and associated plots.
+        """, usage=use_message)
 
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-i','--infile', nargs='?', type=str,
@@ -68,8 +69,7 @@ def parse_arguments():
     return args
 
 def process_range_file(filename):
-    """Load file containing the ranges for all analyses.
-    """
+    """Load file containing the ranges for all analyses."""
 
     f = file(filename,'r')
     q_ranges = yaml.load(f)
@@ -96,7 +96,7 @@ def create_header(analysis_type):
 def create_figure(filename, x, y, title_text, x_lab, y_lab,
                   x_min, x_max, y_min, y_max, **kwargs):
     """ Outputs graph of x and y to a pdf file
-    Values computed from graph (outputs) and range of R? * Qfit written as text on graph
+    Values computed from graph (outputs) and range of R? * Qfit written on graph
     """
 
     fit_coeffs = kwargs.get('fitcoeffs', None)
@@ -107,7 +107,7 @@ def create_figure(filename, x, y, title_text, x_lab, y_lab,
     # Plot the input x, y values and if provided a fit line
     # Also output data calculated from fit and R*Q over fit valies
 
-    figure(figsize=(8, 6), dpi=80)
+    figure(figsize=(8, 6), dpi=300)
 
     ax = subplot(111, xlabel=x_lab, ylabel=y_lab, title=title_text,
                 xlim=(x_min, x_max), ylim=(y_min,y_max))
