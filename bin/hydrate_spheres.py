@@ -22,6 +22,9 @@ def parse_arguments():
     parser.add_argument('-n','--hydration_no', nargs='?', type=int,
         default=27, help = 'No. spheres to add as a hydration shell (1-27)')
 
+    parser.add_argument('-b','--box_side', nargs='?', type=float,
+        default=5.0, help = 'Side length of grid boxes')
+
     return parser.parse_args()
 
 def parse_sphere_line(line):
@@ -173,6 +176,12 @@ def main ():
 
     # Create hydrated model
     wet_spheres = hydrate_sphere_model(dry_spheres, hydration_pos, radius)
+
+    # Remove un-necessary/overlapping spheres from model
+    # Use grid system from pdb2sphere with a cutoff of 1 for the number of
+    # 'atoms' per box required to add a sphere
+
+    wet_spheres = p2s.create_sphere_model(wet_spheres, 1, args.box_side)
 
     out = open(args.output_filename, 'w')
     p2s.write_spheres(wet_spheres, radius, out)
