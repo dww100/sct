@@ -279,13 +279,13 @@ DO M = 1,100
     DO N = 1, IMAXIM
         QR = Q(M) * RTERM(N)
         SINQR(N) = DSIN(QR)/ QR
-        SUMM(M) = SUMM(M) +  (2.0*IDRSQ(N)*SINQR(N))
+        SUMM(M) = SUMM(M) +  (IDRSQ(N)*SINQR(N))
     END DO
 
 END DO
 
 DO M=1,100
-    SCATT(M) = FFAC(M) * ATS * (AT + SUMM(M))*1000.0
+    SCATT(M) = FFAC(M) * ATS * (AT + 2.0 * SUMM(M))*1000.0
 END DO
 
 ! SCATT contains calculated scattering curve
