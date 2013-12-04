@@ -34,7 +34,7 @@ def parse_arguments():
         default=0.16, help = 'No. bins to use in histogram of r')
 
     parser.add_argument('-p','--n_points', nargs='?', type=int,
-        default=0.16, help = 'No. points in output curve')
+        default=100, help = 'No. points in output curve')
 
     return parser.parse_args()
 
