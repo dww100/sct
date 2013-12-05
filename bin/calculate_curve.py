@@ -11,7 +11,7 @@ def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
 
     parser = argparse.ArgumentParser(
-        description= '\n')
+        description= 'Calculate SAS curve from sphere model\n')
 
     parser.add_argument('-i','--input_filename', nargs='?', type=str,
         dest='input_filename', help = 'Path to the input PDB file',
