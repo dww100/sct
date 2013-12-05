@@ -100,6 +100,11 @@ def spheres_to_sas_curve(coords, radius, q_max, n_points, **kwargs):
 
     return q, scat
 
+def output_sas_curve(q, i, output):
+
+    for ndx,x in enumerate(q):
+        output.write("{0:7.4f} {1:7.4f}\n".format(x, i[ndx]))
+
 def smear_curve(i, q, q_delta, wavelength, spread, divergence):
 
     # Calculation of the sigma for the smearing gaussian
@@ -129,7 +134,6 @@ def smear_curve(i, q, q_delta, wavelength, spread, divergence):
     for ndx in range(1, mid_qq + 1):
         neg_ndx = mid_qq - ndx
         pos_ndx = mid_qq + ndx
-        print pos_ndx
         qq[neg_ndx] = -ndx * q_delta
         qq[pos_ndx] = ndx * q_delta
         sigma[pos_ndx] = np.sqrt(con * qq[pos_ndx]**2 + bon) / aon
@@ -185,8 +189,7 @@ def main():
     else:
         output = sys.stdout
 
-    for i in range(0, args.n_points):
-        output.write("{0:7.4f} {1:7.4f}\n".format(q[i], scat[i]))
+    output_sas_curve(q, scat, output)
 
 if __name__ == "__main__":
     main()
