@@ -22,16 +22,13 @@ def parse_arguments():
         help = 'Path to the output file')
 
     parser.add_argument('-q','--q_max', nargs='?', type=float,
-        default=0.16, help = 'Maximum q value to make curve out to')
+        default=0.16, help = 'Maximum q value in output curve')
 
     parser.add_argument('-r','--radius', nargs='?', type=float,
         default=3.77, help = 'sphere radius')
 
-    parser.add_argument('-m','--r_max', nargs='?', type=float,
-        default=160, help = 'Maximum r value to use in histogram')
-
     parser.add_argument('-b','--n_bins', nargs='?', type=int,
-        default=0.16, help = 'No. bins to use in histogram of r')
+        default=400, help = 'No. bins to use in histogram of r')
 
     parser.add_argument('-p','--n_points', nargs='?', type=int,
         default=100, help = 'No. points in output curve')
@@ -48,11 +45,10 @@ def sphere_squared_form_factor(q, r):
     return numerator / qr6
 
 
-def calc_r_hist(coords, r_min, r_max, no_bins):
+def calc_r_hist(coords, no_bins):
 
     pair_dists = dist.pdist(coords, 'euclidean')
-    hist, bin_edges = np.histogram(pair_dists, bins = no_bins, range=(r_min, r_max))
-    #hist, bin_edges = np.histogram(pair_dists, bins = no_bins)
+    hist, bin_edges = np.histogram(pair_dists, bins = no_bins)
     last_used = len([i for i in hist if i > 0])
 
     return hist, bin_edges, last_used
@@ -63,30 +59,24 @@ def smear_curve(curve):
 
 args = parse_arguments()
 
-
-r_res = args.r_max / args.n_bins
-
 q_delta = args.q_max / args.n_points
 
 q = []
-for n in range(0, args.n_points):
-    q.append((n + 1) * q_delta)
+for n in range(1, args.n_points + 1):
+    q.append(n * q_delta)
 
 res_freq, coords = p2s.read_pdb_atom_data(args.input_filename)
 natom = len(coords)
 
 smear = False
 
-r_min = 0
-r_max = args.r_max + r_res
-
-hist, bin_edges, last_used = calc_r_hist(coords, r_min, r_max, args.n_bins)
+hist, bin_edges, last_used = calc_r_hist(coords, args.n_bins)
 
 sigma = []
 
 for i in range(0, args.n_points):
     sigma_tmp = 0.0
-    for j in range(0, args.no_bins):
+    for j in range(0, args.n_bins):
         qr = q[i] * bin_edges[j + 1]
         sin_term = np.sin(qr)/ qr
         sigma_tmp += hist[j] * sin_term
