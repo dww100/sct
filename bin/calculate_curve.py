@@ -25,13 +25,25 @@ def parse_arguments():
         default=0.16, help = 'Maximum q value in output curve')
 
     parser.add_argument('-r','--radius', nargs='?', type=float,
-        default=3.77, help = 'sphere radius')
+        default=3.77, help = 'Sphere radius')
 
     parser.add_argument('-b','--n_bins', nargs='?', type=int,
         default=400, help = 'No. bins to use in histogram of r')
 
     parser.add_argument('-p','--n_points', nargs='?', type=int,
         default=100, help = 'No. points in output curve')
+
+    parser.add_argument('-s','--smear', action='store_true',
+        help = 'Apply smearing to curve')
+
+    parser.add_argument('-e','--spread', nargs='?', type=float,
+        default=0.1, help = 'Wavelength spread used to calculate smearing')
+
+    parser.add_argument('-w','--wavelength', nargs='?', type=float,
+        default=6.0, help = 'Wavelength used to calculate smearing')
+
+    parser.add_argument('-d','--divergence', nargs='?', type=float,
+        default=0.016, help = 'Beam divergence used to calculate smearing')
 
     return parser.parse_args()
 
@@ -68,8 +80,6 @@ for n in range(1, args.n_points + 1):
 res_freq, coords = p2s.read_pdb_atom_data(args.input_filename)
 natom = len(coords)
 
-smear = False
-
 hist, bin_edges, last_used = calc_r_hist(coords, args.n_bins)
 
 sigma = []
@@ -92,7 +102,7 @@ for i in range(0, args.n_points):
     scat.append(sphere_squared_form_factor(q[i], args.radius)
                 * (inv_n + 2.0 * inv_n2 * sigma[i]))
 
-if smear:
+if args.smear:
     scat = smear_curve(scat)
 
 if args.output_filename != None:
