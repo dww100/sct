@@ -220,12 +220,12 @@ DO
 
     IF(ATOM .EQ. "ATOM") THEN
 
-        ! Locate atom in a grid square along each axis on at a time
+        ! Locate atom in a grid square along each axis one at a time
 
         DO NX = 1, MX
             XB1 = XMI + BOX*(NX-1)
             XB2 = XMI + BOX*NX
-            IF (X(1) .GT. XB1 .AND. X(1) .LT. XB2) THEN
+            IF (X(1) .GE. XB1 .AND. X(1) .LT. XB2) THEN
                NXX = NX
                EXIT
             ENDIF
@@ -234,7 +234,7 @@ DO
         DO NY = 1, MY
             YB1 = YMI + BOX*(NY-1)
             YB2 = YMI + BOX*NY
-            IF (X(2) .GT. YB1 .AND. X(2) .LT. YB2) THEN
+            IF (X(2) .GE. YB1 .AND. X(2) .LT. YB2) THEN
                NYY = NY
                EXIT
             ENDIF
@@ -243,7 +243,7 @@ DO
         DO NZ = 1, MZ
             ZB1 = ZMI + BOX*(NZ-1)
             ZB2 = ZMI + BOX*NZ
-            IF (X(3) .GT. ZB1 .AND. X(3) .LT. ZB2) THEN
+            IF (X(3) .GE. ZB1 .AND. X(3) .LT. ZB2) THEN
                NZZ = NZ
                EXIT
             ENDIF
