@@ -266,9 +266,9 @@ DO I = 1, MX
         DO K = 1, MZ
             IF (INC(I,J,K) .GE. ICUT) THEN
                 IF( IPRINT .EQ. 0 .OR. IPRINT .EQ. 1 .OR. IPRINT.EQ.3) THEN
-                     XX = BOX*I + XMI
-                     YY = BOX*J + YMI
-                     ZZ = BOX*K + ZMI
+                     XX = BOX*I + XMI - RADIS
+                     YY = BOX*J + YMI - RADIS
+                     ZZ = BOX*K + ZMI - RADIS
                      WRITE(SPHFIL,"(4F10.2)") XX, YY, ZZ, RADIS
                 ENDIF
                 IBALL = IBALL + 1
