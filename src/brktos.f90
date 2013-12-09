@@ -117,18 +117,19 @@ REWIND PDBFIL
 DO
 
     READ (PDBFIL,'(A4)', IOSTAT=IERR) ATOM(1:4)
+
+    IF (ATOM .EQ. "ATOM") THEN
+        BACKSPACE PDBFIL
+        EXIT
+    END IF
+
     IF (IERR .LT. 0) THEN
         WRITE(STDERR, "(A)") "End of file reached with no ATOM records read."
         STOP
     END IF
 
-    IF (ATOM .NE. "ATOM") THEN
-        BACKSPACE PDBFIL
-        EXIT
-    END IF
 
 END DO
-
 
 ! Initialize statistics
 NATOMM = 0
@@ -169,6 +170,7 @@ DO
 
 END DO
 
+
 MX = INT((XMA-XMI)/BOX) + 1
 MY = INT((YMA-YMI)/BOX) + 1
 MZ = INT((ZMA-ZMI)/BOX) + 1
@@ -193,7 +195,7 @@ DO
 
     READ (PDBFIL,'(A4)', IOSTAT=IERR) ATOM(1:4)
 
-    IF (ATOM .NE. "ATOM") THEN
+    IF (ATOM .EQ. "ATOM") THEN
         BACKSPACE PDBFIL
         EXIT
     END IF
