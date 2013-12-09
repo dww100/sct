@@ -108,7 +108,7 @@ def grid_to_spheres(grid, radius, cutoff, x_axis, y_axis, z_axis):
 
     # Find the locations in the grid containing more than cutoff atoms
     # A sphere will be placed at the centre of each of these cubes
-    full = np.where(grid > cutoff)
+    full = np.where(grid >= cutoff)
 
     sphere_coords = []
 
@@ -168,7 +168,7 @@ def main():
                                                                 args.box_side)
 
     # Set the radius for each sphere
-    radius = box_side / 2.0
+    radius = args.box_side / 2.0
 
     # Output the sphere coordinates and radii
     if args.mode != 'info':
@@ -186,7 +186,7 @@ def main():
         volume = sluv2.sum_volume(sluv2.all_residues, res_freq, 'chothia1975')
         no_res = sluv2.sum_res_no(sluv2.all_residues, res_freq)
         no_spheres = len(sphere_coords)
-        volume_spheres = no_spheres * box_side**3
+        volume_spheres = no_spheres * args.box_side**3
         no_x_box = len(x_axis)
         no_y_box = len(y_axis)
         no_z_box = len(z_axis)
@@ -194,8 +194,8 @@ def main():
         output.write("pdb_to_sphere: version 0.5 - 05 November 2013\n")
         output.write("No. Of Atoms: {0:d}\n".format(no_atoms))
         output.write("Total Of Amino Acid Residues {0:d}\n".format(no_res))
-        output.write("One Side Of The Box: {0:f}\n".format(box_side))
-        output.write("Cutoff For Creating A Ball: {0:d}\n".format(cutoff))
+        output.write("One Side Of The Box: {0:f}\n".format(args.box_side))
+        output.write("Cutoff For Creating A Ball: {0:d}\n".format(args.cutoff))
         output.write("No Of Balls: {0:d}\n".format(no_spheres))
         output.write("Volume Of Cubes: {0:f}\n".format(volume_spheres))
         output.write("Volume of Protein: {0:f}\n".format(volume))
