@@ -1,5 +1,7 @@
 PROGRAM hypro
 
+IMPLICIT NONE
+
 ! A program adapted from hydrate to give a shell of spheres
 ! around a brktos sphere file
 ! Originally produced (Fortran 77) by S. J. Perkins
@@ -25,21 +27,21 @@ WRITE (*,*)
 
 WRITE(*,'(1X,A)') 'Input file :'
 READ (*,'(A)')  INFIL
-OPEN(UNIT=10,FILE=INFIL,ERR=5000,STATUS='OLD')
+OPEN(UNIT=10,FILE=INFIL,STATUS='OLD')
 
 ! Open new output file
 
 WRITE(*,'(1X,A)') 'Output File'
 READ (*,'(A)') OUTFIL
 
-OPEN(UNIT=11,FILE=OUTFIL,ERR=6000,STATUS='NEW')
+OPEN(UNIT=11,FILE=OUTFIL,STATUS='NEW')
 
 
 ! Get the number hydration spheres to add to each existing sphere from user
 WRITE(*,'(1X,A)') 'How many spheres [1,7,13,19,27 Recomended]'
 READ (*,'(I2)') NOOFSPHERES
 
-IF (NOOFSPHERES .EQ. NULL) THEN
+IF (NOOFSPHERES .GT. 27 .OR. NOOFSPHERES .LT. 1) THEN
     WRITE (*,'(1X,A)') 'Default set to [1]: '
 ENDIF
 
@@ -176,8 +178,8 @@ DO
 
 END DO
 
-CLOSE (UNIT=10)
-CLOSE (UNIT=11)
-STOP 'Finished !'
+!CLOSE (UNIT=10)
+!CLOSE (UNIT=11)
+!STOP 'Finished !'
 
 END PROGRAM
