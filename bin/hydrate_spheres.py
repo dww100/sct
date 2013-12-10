@@ -22,8 +22,8 @@ def parse_arguments():
     parser.add_argument('-n','--hydration_no', nargs='?', type=int,
         default=27, help = 'No. spheres to add as a hydration shell (1-27)')
 
-    parser.add_argument('-b','--box_side', nargs='?', type=float,
-        default=5.0, help = 'Side length of grid boxes')
+    parser.add_argument('-c','--cutoff', nargs='?', type=int,
+        default=5.0, help = 'Cutoff used to reduce the number of water spheres')
 
     return parser.parse_args()
 
@@ -138,7 +138,7 @@ def hydrate_sphere(coords, hydration_pos, radius):
 
     return hyd_coords
 
-def hydrate_sphere_model(coord_list, hydration_pos, radius):
+def hydrate_spheres(coord_list, hydration_pos, radius):
     """Add hydration layer spheres to the spheres at input coordinates"""
 
     wet_spheres = []
@@ -162,6 +162,34 @@ def read_mono_spheres(filename):
 
     return spheres, radius
 
+def hydrate_model(dry_spheres, hydration_pos, radius, water_cutoff):
+    """Create hydrated model in 4 steps (returning the appropriate sphere
+    coordinates):
+    1. Add spheres to the dry model in positions assigned through hydration_pos
+    2. Filter out excess spheres using create_sphere_model with water_cutoff
+    (this cutoff should be high ~ 10-12 spheres per box)
+    3. Add dry spheres back to the model. Some will have been removed alongside
+    the excess water in the last step
+    4. Filter out overlapping spheres using create_sphere_model with cutoff set
+    to 1."""
+
+    box_side = radius * 2.0
+
+    # Create hydrated model
+    wet_spheres = hydrate_spheres(dry_spheres, hydration_pos, radius)
+
+    wet_spheres, x_axis, y_axis, z_axis = p2s.create_sphere_model(wet_spheres, water_cutoff, box_side)
+
+    wet_spheres = wet_spheres + dry_spheres
+
+    # Remove un-necessary/overlapping spheres from model
+    # Use grid system from pdb2sphere with a cutoff of 1 for the number of
+    # 'atoms' per box required to add a sphere
+
+    wet_spheres, x_axis, y_axis, z_axis = p2s.create_sphere_model(wet_spheres, 1, box_side)
+
+    return wet_spheres
+
 def main ():
 
     args = parse_arguments()
@@ -175,13 +203,7 @@ def main ():
     dry_spheres, radius = read_mono_spheres(args.input_filename)
 
     # Create hydrated model
-    wet_spheres = hydrate_sphere_model(dry_spheres, hydration_pos, radius)
-
-    # Remove un-necessary/overlapping spheres from model
-    # Use grid system from pdb2sphere with a cutoff of 1 for the number of
-    # 'atoms' per box required to add a sphere
-
-    wet_spheres, x_axis, y_axis, z_axis = p2s.create_sphere_model(wet_spheres, 1, args.box_side)
+    wet_spheres = hydrate_model(dry_spheres, hydration_pos, radius, args.cutoff)
 
     out = open(args.output_filename, 'w')
     p2s.write_spheres(wet_spheres, radius, out)
