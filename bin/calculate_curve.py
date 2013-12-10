@@ -114,10 +114,10 @@ def output_sas_curve(q, i, output):
         output.write("{0:7.4f} {1:7.4f}\n".format(x, i[ndx]))
 
 def smear_curve(i, q, q_delta, wavelength, spread, divergence):
-    """Adds smearing to inputtheoretical  q vs I curve."""
+    """Adds smearing to input theoretical  q vs I curve."""
 
     # Calculation of the sigma for the smearing gaussian
-    # Based on CHAUVIN but 0.25/D^2 removed and 8LN2 not 2LN2
+    # Based on CHAUVIN but 0.25/D^2 removed and 8*ln(2) not 2*ln(2)
     # spread and alpha taken from Cusack JMB 1981 145, 539-541
 
     inv_wave_no = wavelength / (2.0 * np.pi)
