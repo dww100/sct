@@ -105,6 +105,10 @@ def define_axes(coords, box_side):
     return x_axis, y_axis, z_axis
 
 def grid_to_spheres(grid, radius, cutoff, x_axis, y_axis, z_axis):
+    """"Return list of sphere coordinates based on counts in grid. A sphere
+    is returned for each grid space with a content >= cutoff. Coordinates based
+    on the passed axes.
+    """
 
     # Find the locations in the grid containing more than cutoff atoms
     # A sphere will be placed at the centre of each of these cubes
