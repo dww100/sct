@@ -167,9 +167,9 @@ def main ():
     args = parse_arguments()
 
     # List of positions to include in wet sphere model:
-    # Position 1 = original sphere position,
-    # Positions 2 to 27 positions on cube centred on original sphere
-    hydration_pos = xrange(0, args.hydration_no)
+    # Position 0 = original sphere position,
+    # Positions 1 to 26 positions on cube centred on original sphere
+    hydration_pos = xrange(0, args.hydration_no + 1)
 
     # Read dry sphere model from file
     dry_spheres, radius = read_mono_spheres(args.input_filename)
@@ -181,7 +181,7 @@ def main ():
     # Use grid system from pdb2sphere with a cutoff of 1 for the number of
     # 'atoms' per box required to add a sphere
 
-    wet_spheres = p2s.create_sphere_model(wet_spheres, 1, args.box_side)
+    wet_spheres, x_axis, y_axis, z_axis = p2s.create_sphere_model(wet_spheres, 1, args.box_side)
 
     out = open(args.output_filename, 'w')
     p2s.write_spheres(wet_spheres, radius, out)
