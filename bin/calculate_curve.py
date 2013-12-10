@@ -48,6 +48,8 @@ def parse_arguments():
     return parser.parse_args()
 
 def sphere_squared_form_factor(q, r):
+    """Return the squared form factor for scattering vector q and sphere with
+    radius r."""
 
     qr = q * r
     qr6 = qr**6
@@ -58,6 +60,8 @@ def sphere_squared_form_factor(q, r):
 
 
 def calc_r_hist(coords, no_bins):
+    """Calculate histrogram of pair distances between the coordinates using
+    no_bins bins. Return hist (counts), bin_edges and last non-zero bin no."""
 
     pair_dists = dist.pdist(coords, 'euclidean')
     hist, bin_edges = np.histogram(pair_dists, bins = no_bins)
@@ -66,6 +70,9 @@ def calc_r_hist(coords, no_bins):
     return hist, bin_edges, last_used
 
 def spheres_to_sas_curve(coords, radius, q_max, n_points, **kwargs):
+    """Return theoretical curve given sphere coordinates and radius. Assumes all
+    spheres are identical. A curve containing n_points is computed over a q
+    range of 0 to q_max."""
 
     n_bins = kwargs.get('rbins', 400)
 
@@ -101,11 +108,13 @@ def spheres_to_sas_curve(coords, radius, q_max, n_points, **kwargs):
     return q, scat
 
 def output_sas_curve(q, i, output):
+    """"Prints out formated q and I columns to output."""
 
     for ndx,x in enumerate(q):
         output.write("{0:7.4f} {1:7.4f}\n".format(x, i[ndx]))
 
 def smear_curve(i, q, q_delta, wavelength, spread, divergence):
+    """Adds smearing to inputtheoretical  q vs I curve."""
 
     # Calculation of the sigma for the smearing gaussian
     # Based on CHAUVIN but 0.25/D^2 removed and 8LN2 not 2LN2
@@ -152,8 +161,9 @@ def smear_curve(i, q, q_delta, wavelength, spread, divergence):
 
     sqrt2pi = np.sqrt(2.0 * np.pi)
 
+    # Convolution of f and g
     for ndx1 in range(0, n_qq):
-        # Calculation of Gaussian G
+        # Calculation of Gaussian, g
         for ndx2 in range(0, n_qq):
             # Note: difference from Chauvin and Cusack - ndx1 not ndx2 for aa, vv
             aa = 1.0 / (sigma[ndx1] * sqrt2pi)
@@ -164,7 +174,7 @@ def smear_curve(i, q, q_delta, wavelength, spread, divergence):
                 g[ndx2] = aa * np.exp(-vv / 2.0)
 
         for ndx2 in range(0, n_qq):
-            asum[ndx1] += f[ndx2]*g[ndx2]
+            asum[ndx1] += f[ndx2] * g[ndx2]
 
         asum[ndx1] *= q_delta
 
