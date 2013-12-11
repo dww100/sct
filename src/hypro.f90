@@ -4,8 +4,9 @@ IMPLICIT NONE
 
 ! A program adapted from hydrate to give a shell of spheres
 ! around a brktos sphere file
-! Originally produced (Fortran 77) by S. J. Perkins
-! Fortran 90 version coded by David W. Wright November 2013
+! Originally produced (Fortran 77) by Stephen J. Perkins
+! Version 1.00  Alan W. Ashton 18 Febraury 1997
+! Fortran 90 version by David W. Wright November 2013
 
 REAL                X,Y,Z,R
 CHARACTER*50        INFIL, OUTFIL, OUTFIL2, QUERY, T, E, S
@@ -18,7 +19,7 @@ C = 1
 
 ! Identify program to user
 
-WRITE (*,'(1X,A)') 'Program HYPRO version 1.00 awa970218'
+WRITE (*,'(1X,A)') 'Program HYPRO version 1.50'
 WRITE (*,*)
 
 ! TODO: some error checking on the input/output here would be nice
