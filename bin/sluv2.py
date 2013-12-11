@@ -275,6 +275,17 @@ def print_exchange_data(resid_freqs, peptide_only, output):
 
         output.write(line + '\n')
 
+def calc_model_wet_volume(res_freq):
+
+    # Hydration is estimated to be 0.3 g water per 1 g protein
+    protein_mass = sluv2.sum_mass(all_residues, res_freq)
+    water_mass = 0.3 * protein_mass
+    # Mass of single water molecule = 18
+    no_water = water_mass / 18
+    # Bound water occupies smaller volume than in bulk
+    water_vol = no_water * params['solvent']['vol_bound']
+
+    return water_vol
 
 def calc_hydration_effect(resid_freqs):
     """Calculates the effect of hydration of protein volume
