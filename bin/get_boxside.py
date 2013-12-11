@@ -40,7 +40,7 @@ def parse_arguments():
 
     return parser.parse_args()
 
-def residual2(box_side, cutoff, atom_coords, targ_volume):
+def residual2_box(box_side, cutoff, atom_coords, targ_volume):
     """Compute squared residual of sphere model to the theroetical target volume"""
 
     # Create sphere model
@@ -60,7 +60,7 @@ def optimize_side(cutoff, coords, target_vol, side_min, side_max, tolerance):
 
     # Minimize the squared residuals between the sphere model ang target volume
     # Uses minimize_scalar from scipy.optimize
-    opt = optimize.minimize_scalar(residual2, args=(cutoff, coords, target_vol),
+    opt = optimize.minimize_scalar(residual2_box, args=(cutoff, coords, target_vol),
                              bounds=side_bounds, method='bounded',
                              options={'xtol' : tolerance})
 
