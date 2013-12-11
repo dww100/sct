@@ -187,7 +187,8 @@ def main():
             output = sys.stdout
 
         no_atoms = len(atom_coords)
-        volume = sluv2.sum_volume(sluv2.all_residues, res_freq, 'chothia1975')
+        #volume = sluv2.sum_volume(sluv2.all_residues, res_freq, 'chothia1975')
+        volume = sluv2.sum_volume(sluv2.all_residues, res_freq, 'perkins1986b')
         no_res = sluv2.sum_res_no(sluv2.all_residues, res_freq)
         no_spheres = len(sphere_coords)
         volume_spheres = no_spheres * args.box_side**3
