@@ -5,6 +5,7 @@
 import argparse
 import sys
 import pdb2sphere as p2s
+import scipy.optimize as optimize
 
 def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
@@ -162,7 +163,7 @@ def read_mono_spheres(filename):
 
     return spheres, radius
 
-def hydrate_model(dry_spheres, hydration_pos, radius, water_cutoff):
+def hydrate_model(dry_spheres, hydration_no, box_side, water_cutoff):
     """Create hydrated model in 4 steps (returning the appropriate sphere
     coordinates):
     1. Add spheres to the dry model in positions assigned through hydration_pos
@@ -173,7 +174,12 @@ def hydrate_model(dry_spheres, hydration_pos, radius, water_cutoff):
     4. Filter out overlapping spheres using create_sphere_model with cutoff set
     to 1."""
 
-    box_side = radius * 2.0
+    radius = box_side / 2.0
+
+    # List of positions to include in wet sphere model:
+    # Position 0 = original sphere position,
+    # Positions 1 to 26 positions on cube centred on original sphere
+    hydration_pos = xrange(0, hydration_no + 1)
 
     # Create hydrated model
     wet_spheres = hydrate_spheres(dry_spheres, hydration_pos, radius)
@@ -190,20 +196,47 @@ def hydrate_model(dry_spheres, hydration_pos, radius, water_cutoff):
 
     return wet_spheres
 
+def residual2_cut(cutoff, box_side, dry_spheres, hydration_no, targ_volume):
+    """Compute squared residual of sphere model to the theroetical target volume"""
+
+    # Create sphere model
+    wet_model = hydrate_model(dry_spheres, hydration_no, box_side, cutoff)
+
+    # Compute volume of the model
+    vol_spheres = len(wet_model) * box_side**3
+
+    # Return squared residual
+    return (vol_spheres - targ_volume)**2
+
+def optimize_cut(box_side, coords, hydration_no, target_vol, cut_min, cut_max, tolerance):
+    """Get optimal box_side to reproduce target_volume (and deviation)"""
+
+    # Format the bounds within which to run the optimization
+    cut_bounds = (cut_min, cut_max)
+
+    # Minimize the squared residuals between the sphere model and target volume
+    # Uses minimize_scalar from scipy.optimize
+    opt = optimize.minimize_scalar(residual2_cut, args=(box_side, coords, hydration_no, target_vol),
+                                   bounds=cut_bounds, method='bounded',
+                                   options={'xtol' : tolerance})
+
+    # Return the optimized box_side and residual
+    return opt['x'], opt['fun']**0.5
+
 def main ():
 
     args = parse_arguments()
 
-    # List of positions to include in wet sphere model:
+    # Select number of solvent positions to occupy before filtering
     # Position 0 = original sphere position,
     # Positions 1 to 26 positions on cube centred on original sphere
-    hydration_pos = xrange(0, args.hydration_no + 1)
+    hydration_no = 26
 
     # Read dry sphere model from file
     dry_spheres, radius = read_mono_spheres(args.input_filename)
 
     # Create hydrated model
-    wet_spheres = hydrate_model(dry_spheres, hydration_pos, radius, args.cutoff)
+    wet_spheres = hydrate_model(dry_spheres, hydration_no, radius, args.cutoff)
 
     out = open(args.output_filename, 'w')
     p2s.write_spheres(wet_spheres, radius, out)
