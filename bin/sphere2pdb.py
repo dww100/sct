@@ -39,7 +39,22 @@ def create_pdb_atom(res_no, res_id, atom_no, atom_type, coords, **kwargs):
 
     return line
 
-def main():
+def write_sphere_pdb(coords, radius, filename):
+
+    out_file = open(filename, 'w')
+
+    count = 1
+
+    for coord in coords:
+
+        pdb_line = create_pdb_atom(count, 'SER', count, 'C1', coord, beta = radius)
+
+        out_file.write(pdb_line)
+        count += 1
+
+    out_file.close()
+
+def main(coords):
 
     args = parse_arguments()
 

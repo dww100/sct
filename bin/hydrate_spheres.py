@@ -163,7 +163,7 @@ def read_mono_spheres(filename):
 
     return spheres, radius
 
-def hydrate_model(dry_spheres, hydration_no, box_side, water_cutoff):
+def hydrate_model(dry_spheres, hydration_no, box_side, water_cutoff, **kwargs):
     """Create hydrated model in 4 steps (returning the appropriate sphere
     coordinates):
     1. Add spheres to the dry model in positions assigned through hydration_pos
@@ -173,6 +173,14 @@ def hydrate_model(dry_spheres, hydration_no, box_side, water_cutoff):
     the excess water in the last step
     4. Filter out overlapping spheres using create_sphere_model with cutoff set
     to 1."""
+
+    if ('xaxis' in kwargs) and ('yaxis' in kwargs) and ('zaxis' in kwargs):
+        old_axes = True
+        x_axis = kwargs['xaxis']
+        y_axis = kwargs['yaxis']
+        z_axis = kwargs['zaxis']
+    else:
+        old_axes = False
 
     radius = box_side / 2.0
 
@@ -184,7 +192,17 @@ def hydrate_model(dry_spheres, hydration_no, box_side, water_cutoff):
     # Create hydrated model
     wet_spheres = hydrate_spheres(dry_spheres, hydration_pos, radius)
 
-    wet_spheres, x_axis, y_axis, z_axis = p2s.create_sphere_model(wet_spheres, water_cutoff, box_side)
+    if old_axes:
+        wet_spheres, x_axis, y_axis, z_axis = p2s.create_sphere_model(wet_spheres,
+                                                                      water_cutoff,
+                                                                      box_side,
+                                                                      xaxis = x_axis,
+                                                                      yaxis = y_axis,
+                                                                      zaxis = z_axis)
+    else:
+        wet_spheres, x_axis, y_axis, z_axis = p2s.create_sphere_model(wet_spheres,
+                                                                      water_cutoff,
+                                                                      box_side)
 
     wet_spheres = wet_spheres + dry_spheres
 

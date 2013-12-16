@@ -98,9 +98,9 @@ def define_axes(coords, box_side):
     coord_maxs = np.ceil(np.amax(coords, 0))
 
     # Create float valued arrays of intervals
-    x_axis = np.arange(coord_mins[0], coord_maxs[0] + box_side, box_side)
-    y_axis = np.arange(coord_mins[1], coord_maxs[1] + box_side, box_side)
-    z_axis = np.arange(coord_mins[2], coord_maxs[2] + box_side, box_side)
+    x_axis = np.arange(coord_mins[0] - 2.0 * box_side, coord_maxs[0] + 2.0 * box_side, box_side)
+    y_axis = np.arange(coord_mins[1] - 2.0 * box_side, coord_maxs[1] + 2.0 * box_side, box_side)
+    z_axis = np.arange(coord_mins[2] - 2.0 * box_side, coord_maxs[2] + 2.0 * box_side, box_side)
 
     return x_axis, y_axis, z_axis
 
@@ -119,9 +119,9 @@ def grid_to_spheres(grid, radius, cutoff, x_axis, y_axis, z_axis):
     no_spheres = len(full[0])
 
     for ndx in xrange(0, no_spheres):
-        x = x_axis[full[0][ndx]] + radius
-        y = y_axis[full[1][ndx]] + radius
-        z = z_axis[full[2][ndx]] + radius
+        x = x_axis[full[0][ndx]]
+        y = y_axis[full[1][ndx]]
+        z = z_axis[full[2][ndx]]
         sphere_coords.append([x,y,z])
 
     return sphere_coords
@@ -134,18 +134,23 @@ def write_spheres(coord_list, radius, out):
 def write_sphere_line(x, y, z, radius, out):
     """Write out a single sphere entry to a SCT sphere file format"""
 
-    out.write("{0:10.2f}{1:10.2f}{2:10.2f}{3:10.2f}\n".format(x, y, z, radius))
+    out.write("{0:10.2f}{1:10.2f}{2:10.2f}{3:10.2f}\n".format(x + radius, y + radius, z + radius, radius))
 
-def create_sphere_model(atom_coords, cutoff, box_side):
+def create_sphere_model(atom_coords, cutoff, box_side, **kwargs):
     """Bin atomic coordinates to give sphere coordinates"""
+
+    if ('xaxis' in kwargs) and ('yaxis' in kwargs) and ('zaxis' in kwargs):
+        x_axis = kwargs['xaxis']
+        y_axis = kwargs['yaxis']
+        z_axis = kwargs['zaxis']
+    else:
+        # Get axes for the grid used to create sphere models
+        # The grid we create contains all atoms and is divided into cubes with
+        # dimension box_side
+        x_axis, y_axis, z_axis = define_axes(atom_coords, box_side)
 
     # Conversion to numpy array speeds up operations later
     atom_coords = np.array(atom_coords)
-
-    # Get axes for the grid used to create sphere models
-    # The grid we create contains all atoms and is divided into cubes with
-    # dimension box_side
-    x_axis, y_axis, z_axis = define_axes(atom_coords, box_side)
 
     # Create a grid containing the number of atoms in each cube defined
     # by the axes created above
