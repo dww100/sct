@@ -239,7 +239,7 @@ def optimize_cut(box_side, coords, hydration_no, target_vol, cut_min, cut_max, t
                                    options={'xtol' : tolerance})
 
     # Return the optimized box_side and residual
-    return opt['x'], opt['fun']**0.5
+    return int(round(opt['x'])), opt['fun']**0.5
 
 def main ():
 
