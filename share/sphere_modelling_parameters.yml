@@ -1,0 +1,24 @@
+---
+rg:
+    fitmin: 0.013
+    fitmax: 0.028
+rxs1:
+    fitmin: 0.030
+    fitmax: 0.051
+sphere:
+    cutoff: 4
+    boxside: 5.19
+hydrate:
+    positions: 27
+    cutoff: 11
+curve:
+    qmax: 0.25
+    npoints: 100
+    radbins: 400
+    smear: True
+    wavelength: 6.0
+    spread: 0.1
+    divergence: 0.016
+rfac:
+    qmin: 0.013
+    qmax: 0.2
