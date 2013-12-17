@@ -424,11 +424,15 @@ def auc_output(res_freqs, output):
     output.write( "Specific Volume (Perkins 1986 - Consensus): {0:7.4f}\n".format(specific_vol))
 
 def modelling_output(res_freqs, output):
-    """Print Chothia volume for modelling purposes"""
+    """Print volumes used for modelling purposes"""
 
     volume = sum_volume(all_residues, res_freqs, 'chothia1975')
 
     output.write("Volume (Chothia 1975 - Crystal Structures): {0:7.0f}\n".format(volume))
+
+    volume = sum_volume(all_residues, res_freqs, 'perkins1986b')
+
+    output.write("Volume (Perkins 1986 - Consensus): {0:7.0f}\n".format(volume))
 
 def main():
 
