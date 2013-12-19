@@ -128,9 +128,14 @@ if not os.path.exists(args.output_path):
 
 summary_name = os.path.join(args.output_path, args.title + '.sum')
 summary_data = open(summary_name,'w')
+summary_data.write("Neutron\t\t\t\t\tX-ray\n")
+summary_data.write("Rg_model\tRg_curve\tRxs1_curve\tRfactor\tVolume\tRg_model\tRg_curve\tRxs1_curve\tRfactor\tVolume\n")
 
 # Read in experimental curves and calculate Rg and Rxs
 # Setup output directories for theoretical curves and sphere models
+
+expt_name = os.path.join(args.output_path, args.title + '_expt.sum')
+expt_data = open(expt_name,'w')
 
 if args.neutron is not None:
 
@@ -143,7 +148,7 @@ if args.neutron is not None:
                                               param['rxs1']['fitmin'],
                                               param['rxs1']['fitmax'])
 
-    neut_expt_summ = "{0:7.4f} {1:7.4f}".format(neut_rg, neut_rxs)
+    neut_expt_summ = "{0:7.4f}\t{1:7.4f}".format(neut_rg, neut_rxs)
 
     scn_path = os.path.join(args.output_path, 'neutron','curves')
     if not os.path.exists(scn_path):
@@ -154,7 +159,7 @@ if args.neutron is not None:
         os.makedirs(dry_model_path)
 
 else:
-    neut_expt_summ = "NA NA"
+    neut_expt_summ = "NA\tNA"
 
 
 if args.xray is not None:
@@ -168,7 +173,7 @@ if args.xray is not None:
                                               param['rxs1']['fitmin'],
                                               param['rxs1']['fitmax'])
 
-    xray_expt_summ = "{0:7.4f} {1:7.4f}".format(xray_rg, xray_rxs)
+    xray_expt_summ = "{0:7.4f}\t{1:7.4f}".format(xray_rg, xray_rxs)
 
     scx_path = os.path.join(args.output_path, 'xray','curves')
     if not os.path.exists(scx_path):
@@ -179,7 +184,12 @@ if args.xray is not None:
         os.makedirs(wet_model_path)
 
 else:
-    xray_expt_summ = "NA NA"
+    xray_expt_summ = "NA\tNA"
+
+expt_data.write("Neutron\t\tX-ray\n")
+expt_data.write("Rg\tRxs1\tRg\tRxs1\n")
+expt_data.write("\t".join([neut_expt_summ, xray_expt_summ])+"\n")
+expt_data.close()
 
 # Get list of PDBs in the input directory
 pdb_filter = os.path.join(args.input_path, '*.pdb')
@@ -195,6 +205,7 @@ res_freq, atom_coords = p2s.read_pdb_atom_data(pdb_files[0])
 # Parameters for turning PDB into spheres
 cutoff = param['sphere']['cutoff']
 box_side = param['sphere']['boxside']
+box_side3 = box_side**3
 
 # Model spheres just fit into grid box (no overlap) therefore:
 radius = box_side / 2.0
@@ -228,12 +239,15 @@ for pdb in pdb_files:
         model_file = os.path.join(dry_model_path,  pdb_id + '.pdb')
         s2pdb.write_sphere_pdb(dry_spheres, radius, model_file)
 
-        neut_summ = "{0:7.4f} {1:7.4f} {2:7.4f} {3:7.4f}".format(neut_theor['model_rg'],
+        volume = box_side3 * len(dry_spheres)
+
+        neut_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}".format(neut_theor['model_rg'],
                                                                  neut_theor['curve_rg'],
                                                                  neut_theor['curve_rxs'],
-                                                                 neut_theor['rfac'][0])
+                                                                 neut_theor['rfac'][0],
+                                                                 volume)
     else:
-        neut_summ = "NA NA NA NA"
+        neut_summ = "NA\tNA\tNA\tNA\tNA"
 
     # If x-ray data provided compare with curve computed from wet sphere model
     if args.xray is not None:
@@ -258,17 +272,18 @@ for pdb in pdb_files:
         model_file = os.path.join(wet_model_path,  pdb_id + '.pdb')
         s2pdb.write_sphere_pdb(wet_spheres, radius, model_file)
 
-        xray_summ = "{0:7.4f} {1:7.4f} {2:7.4f} {3:7.4f}".format(xray_theor['model_rg'],
+        volume = box_side3 * len(wet_spheres)
+
+        xray_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}".format(xray_theor['model_rg'],
                                                                  xray_theor['curve_rg'],
                                                                  xray_theor['curve_rxs'],
-                                                                 xray_theor['rfac'][0])
+                                                                 xray_theor['rfac'][0],
+                                                                 volume)
     else:
-        xray_summ = "NA NA NA NA"
+        xray_summ = "NA\tNA\tNA\tNA\tNA"
 
-    summary_data.write('{0:s} {1:s} {2:s} {3:s} {4:s}\n'.format(pdb_id,
-                                                                neut_summ,
-                                                                neut_expt_summ,
-                                                                xray_summ,
-                                                                xray_expt_summ,))
+    summary_data.write('{0:s}\t{1:s}\t{2:s}\n'.format(pdb_id,
+                                                    neut_summ,
+                                                    xray_summ))
 
 summary_data.close()

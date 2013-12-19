@@ -25,7 +25,7 @@ def parse_arguments():
         help = 'Path to the input PDB file', required=True)
 
     parser.add_argument('-o','--output_file', nargs='?', type=str,
-        default='.', help = 'Path in which to save output files')
+        default='.', help = 'Path to output file')
 
     parser.add_argument('-p','--parameter_file', nargs='?', type=str,
         help = 'Path to a file containing input parameters', required=True)
@@ -73,7 +73,8 @@ hydr_cutoff, err = hydrate.optimize_cut(box_side,
                                         14,
                                         0.01)
 
-print "Target dry volume: {0:7.4f}".format(volume)
-print "Target hydrated volume: {0:7.4f}".format(wet_volume)
-print "Sphere model box side: {0:7.4f}".format(box_side)
-print "Hydration cutoff: {0:d}".format(hydr_cutoff)
+out_file = open(args.output_file,'w')
+out_file.write("Target dry volume: {0:7.4f}\n".format(volume))
+out_file.write("Target hydrated volume: {0:7.4f}\n".format(wet_volume))
+out_file.write("Sphere model box side: {0:7.4f}\n".format(box_side))
+out_file.write("Hydration cutoff: {0:d}\n".format(hydr_cutoff))
