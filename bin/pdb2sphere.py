@@ -119,9 +119,9 @@ def grid_to_spheres(grid, radius, cutoff, x_axis, y_axis, z_axis):
     no_spheres = len(full[0])
 
     for ndx in xrange(0, no_spheres):
-        x = x_axis[full[0][ndx]]
-        y = y_axis[full[1][ndx]]
-        z = z_axis[full[2][ndx]]
+        x = x_axis[full[0][ndx]] + radius
+        y = y_axis[full[1][ndx]] + radius
+        z = z_axis[full[2][ndx]] + radius
         sphere_coords.append([x,y,z])
 
     return sphere_coords
