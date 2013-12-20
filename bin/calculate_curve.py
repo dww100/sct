@@ -116,6 +116,9 @@ def output_sas_curve(q, i, output):
 def smear_curve(i, q, q_delta, wavelength, spread, divergence):
     """Adds smearing to input theoretical  q vs I curve."""
 
+    # Smearing based on:
+    # Perkins, S. J. & Weiss, H. (1983) J. Mol. Biol. 168, 847–866.
+
     # Calculation of the sigma for the smearing gaussian
     # Based on CHAUVIN but 0.25/D^2 removed and 8*ln(2) not 2*ln(2)
     # spread and alpha taken from Cusack JMB 1981 145, 539-541
