@@ -82,7 +82,6 @@ def analyse_model(model, expt_curve, sphere_radius, param):
                                                 param['curve']['npoints'],
                                                 rbins = param['curve']['radbins'])
 
-#    theor_curve = [result['q'], result['i']]
     theor_curve = format_qi_data(result['q'], result['i'])
     # Rg and Rxs from theoretical curve
     result['curve_rg'], result['curve_rxs'] = get_curve_descriptors(theor_curve,
