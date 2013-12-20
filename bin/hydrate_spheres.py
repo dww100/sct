@@ -210,12 +210,18 @@ def hydrate_model(dry_spheres, hydration_no, box_side, water_cutoff, **kwargs):
     # Use grid system from pdb2sphere with a cutoff of 1 for the number of
     # 'atoms' per box required to add a sphere
 
-    wet_spheres, x_axis, y_axis, z_axis = p2s.create_sphere_model(wet_spheres,
-                                                                  1,
-                                                                  box_side,
-                                                                  xaxis = x_axis,
-                                                                  yaxis = y_axis,
-                                                                  zaxis = z_axis)
+    if old_axes:
+        wet_spheres, x_axis, y_axis, z_axis = p2s.create_sphere_model(wet_spheres,
+                                                                      1,
+                                                                      box_side,
+                                                                      xaxis = x_axis,
+                                                                      yaxis = y_axis,
+                                                                      zaxis = z_axis)
+
+    else:
+        wet_spheres, x_axis, y_axis, z_axis = p2s.create_sphere_model(wet_spheres,
+                                                                      1,
+                                                                      box_side)
 
     return wet_spheres
 
