@@ -50,6 +50,15 @@ def parse_arguments():
     parser.add_argument('-t','--title', nargs='?', type=str,
         help = 'Title to use for summary output file', default = 'sct_output')
 
+    parser.add_argument('-xu','--xray_unit', choices = ['nm', 'a'],
+                        default = 'a', help = 'Unit for Q in input x-ray data')
+
+    parser.add_argument('-nu','--neutron_unit', choices = ['nm', 'a'],
+                        default = 'a', help = 'Unit for Q in input neutron data')
+
+    parser.add_argument('-ou','--output_unit', choices = ['nm', 'a'],
+                        default = 'a', help = 'Unit for Q in output data')
+
     args = parser.parse_args()
 
     if (args.neutron == None) and (args.xray == None):
@@ -144,6 +153,10 @@ if args.neutron is not None:
     neut_data = rfactor.load_scatter_curve(args.neutron,
                                            param['rfac']['qmin'],
                                            param['rfac']['qmax'])
+
+    if args.nu == 'nm':
+        neut_data[:,0] = neut_data[:,0] / 10.0
+
     neut_rg, neut_rxs = get_curve_descriptors(neut_data,
                                               param['rg']['fitmin'],
                                               param['rg']['fitmax'],
@@ -169,6 +182,10 @@ if args.xray is not None:
     xray_data = rfactor.load_scatter_curve(args.xray,
                                            param['rfac']['qmin'],
                                            param['rfac']['qmax'])
+
+    if args.xu == 'nm':
+        xray_data[:,0] = xray_data[:,0] / 10.0
+
     xray_rg, xray_rxs = get_curve_descriptors(xray_data,
                                               param['rg']['fitmin'],
                                               param['rg']['fitmax'],
@@ -243,6 +260,7 @@ for pdb in pdb_files:
 
         volume = box_side3 * len(dry_spheres)
 
+        # Format results for output to file
         neut_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}".format(neut_theor['model_rg'],
                                                                  neut_theor['curve_rg'],
                                                                  neut_theor['curve_rxs'],
@@ -276,6 +294,7 @@ for pdb in pdb_files:
 
         volume = box_side3 * len(wet_spheres)
 
+        # Format results for output to file
         xray_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}".format(xray_theor['model_rg'],
                                                                  xray_theor['curve_rg'],
                                                                  xray_theor['curve_rxs'],
@@ -284,6 +303,7 @@ for pdb in pdb_files:
     else:
         xray_summ = "NA\tNA\tNA\tNA\tNA"
 
+    # Output all summary data to file
     summary_data.write('{0:s}\t{1:s}\t{2:s}\n'.format(pdb_id,
                                                     neut_summ,
                                                     xray_summ))
