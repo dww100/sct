@@ -106,6 +106,9 @@ def get_curve_descriptors(data, rg_min, rg_max, rxs_min, rxs_max):
     # Create mask to select range of Q values for Rxs fitting
     rxs_mask = (data[:,0] > rxs_min) & (data[:,0] < rxs_max)
 
+    # Fitting is performed on:
+    # Q^2 vs ln(I) for Rg
+    # Q^2 vs ln(I*Q) for Rxs1
     x = data[:,0]**2
     y_rg = np.log(data[:,1])
     y_rxs = np.log(data[:,1] * data[:,0])
