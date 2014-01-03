@@ -139,6 +139,7 @@ if not os.path.exists(args.output_path):
 
 summary_name = os.path.join(args.output_path, args.title + '.sum')
 summary_data = open(summary_name,'w')
+summary_data.write("Input PDB path: {0:s}".format(args.input_path))
 summary_data.write("Neutron\t\t\t\t\tX-ray\n")
 summary_data.write("Rg_model\tRg_curve\tRxs1_curve\tRfactor\tVolume\tRg_model\tRg_curve\tRxs1_curve\tRfactor\tVolume\n")
 
@@ -214,6 +215,7 @@ else:
     xray_expt_summ = "NA\tNA"
 
 expt_data.write("Neutron\t\tX-ray\n")
+expt_data.write("{0:s}\t\t{1:s}\n".format(args.xray, args.neutron))
 expt_data.write("Rg\tRxs1\tRg\tRxs1\n")
 expt_data.write("\t".join([neut_expt_summ, xray_expt_summ])+"\n")
 expt_data.close()
@@ -227,7 +229,7 @@ if len(pdb_files) < 1:
     sys.exit(1)
 
 # Read in initial PDB
-res_freq, atom_coords = p2s.read_pdb_atom_data(pdb_files[0])
+#res_freq, atom_coords = p2s.read_pdb_atom_data(pdb_files[0])
 
 # Parameters for turning PDB into spheres
 cutoff = param['sphere']['cutoff']
