@@ -150,12 +150,15 @@ expt_data = open(expt_name,'w')
 
 if args.neutron is not None:
 
-    neut_data = rfactor.load_scatter_curve(args.neutron,
+    if args.neutron_unit == 'nm':
+        neut_data = rfactor.load_scatter_curve(args.neutron,
+                                           param['rfac']['qmin'] * 10,
+                                           param['rfac']['qmax'] * 10)
+        neut_data[:,0] = neut_data[:,0] / 10.0
+    else:
+        neut_data = rfactor.load_scatter_curve(args.neutron,
                                            param['rfac']['qmin'],
                                            param['rfac']['qmax'])
-
-    if args.nu == 'nm':
-        neut_data[:,0] = neut_data[:,0] / 10.0
 
     neut_rg, neut_rxs = get_curve_descriptors(neut_data,
                                               param['rg']['fitmin'],
@@ -179,12 +182,17 @@ else:
 
 if args.xray is not None:
 
-    xray_data = rfactor.load_scatter_curve(args.xray,
+    if args.xray_unit == 'nm':
+        xray_data = rfactor.load_scatter_curve(args.xray,
+                                           param['rfac']['qmin'] * 10,
+                                           param['rfac']['qmax'] * 10)
+        xray_data[:,0] = xray_data[:,0] / 10.0
+    else:
+        xray_data = rfactor.load_scatter_curve(args.xray,
                                            param['rfac']['qmin'],
                                            param['rfac']['qmax'])
 
-    if args.xu == 'nm':
-        xray_data[:,0] = xray_data[:,0] / 10.0
+
 
     xray_rg, xray_rxs = get_curve_descriptors(xray_data,
                                               param['rg']['fitmin'],
