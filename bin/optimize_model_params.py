@@ -25,7 +25,7 @@ def parse_arguments():
         help = 'Path to the input PDB file', required=True)
 
     parser.add_argument('-o','--output_file', nargs='?', type=str,
-        default='.', help = 'Path to output file')
+        default='optimized_params.txt', help = 'Path to output file')
 
     parser.add_argument('-p','--parameter_file', nargs='?', type=str,
         help = 'Path to a file containing input parameters', required=True)
