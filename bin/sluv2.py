@@ -64,14 +64,14 @@ def parse_arguments():
     args = parser.parse_args()
     return args
 
-def print_resid_data(resid_list, res_freqs, vol_methods):
+def print_resid_data(resid_list, res_freq, vol_methods):
     """Print the volume, mass and scattering parameters for each passed resid
     and volume method"""
 
     # Use the module global params and res_vols data
 
     for resid in resid_list:
-        line = '{0:>5s} {1:>4d}'.format(resid, res_freqs[resid])
+        line = '{0:>5s} {1:>4d}'.format(resid, res_freq[resid])
 
         for dataset in vol_methods:
             line = line + ' {0:5.1f}'.format(res_vols[dataset]['residue'][resid])
@@ -80,7 +80,7 @@ def print_resid_data(resid_list, res_freqs, vol_methods):
                 params['bH'][resid], params['bD'][resid])
         output.write(line + '\n')
 
-def print_basic_description(resid_freqs, output):
+def print_basic_description(res_freq, output):
     """Print table of volume, mass and scattering parameters for each passed
     resid and volume method"""
 
@@ -91,19 +91,19 @@ def print_basic_description(resid_freqs, output):
     title = title + "   MWT ELEC B(H2O) B(D2O)\n\n"
     output.write(title)
 
-    print_resid_data(non_polar, resid_freqs, vol_datasets)
+    print_resid_data(non_polar, res_freq, vol_datasets)
 
     output.write("\n\n")
 
-    print_resid_data(polar, resid_freqs, vol_datasets)
+    print_resid_data(polar, res_freq, vol_datasets)
 
     title = create_volume_title("\n          ", " ", vol_datasets, 'carb')
     output.write(title + "\n\n")
 
-    print_resid_data(monosaccharides, resid_freqs, vol_datasets)
+    print_resid_data(monosaccharides, res_freq, vol_datasets)
 
     output.write("\n\n")
-    output.write("Total " + str(sum(resid_freqs.itervalues())) + "\n\n")
+    output.write("Total " + str(sum(res_freq.itervalues())) + "\n\n")
 
 def create_volume_title(start_string, deliminator, vol_datasets, res_type):
 
@@ -116,19 +116,19 @@ def create_volume_title(start_string, deliminator, vol_datasets, res_type):
     return title
 
 
-def print_summary_data(resids, resid_freqs, output):
+def print_summary_data(resids, res_freq, output):
     """Print volume and absorption/scattering data for specified residues"""
 
-    no_res = sum_res_no(resids, resid_freqs)
+    no_res = sum_res_no(resids, res_freq)
 
     if no_res == 0:
         output.write("No such residues in the provided input\n")
         return
 
     # compute total mass and D/H scattering lengths
-    mass = sum_mass(resids, resid_freqs)
-    bH_tot = sum_b(resids, resid_freqs, False)
-    bD_tot = sum_b(resids, resid_freqs, True)
+    mass = sum_mass(resids, res_freq)
+    bH_tot = sum_b(resids, res_freq, False)
+    bD_tot = sum_b(resids, res_freq, True)
 
     # whole = is this calculation for the entire glyco protein
     # If it is we will be printing different values
@@ -136,7 +136,7 @@ def print_summary_data(resids, resid_freqs, output):
 
     if len(resids) != len(all_residues):
 
-        total_mass = sum_mass(all_residues, resid_freqs)
+        total_mass = sum_mass(all_residues, res_freq)
         frac_mass = 100*mass/total_mass
         output.write("Molecular Weight:  {0:5.0f}  Fraction of Total:  {1:3.2f}  Residues:  {2:4d}\n".format(
             mass, frac_mass, no_res))
@@ -147,7 +147,7 @@ def print_summary_data(resids, resid_freqs, output):
 
         output.write("Molecular Weight:  {0:5.0f}\n".format(mass))
 
-        abs_coeffs = calc_absorption_coeffs(resid_freqs, mass)
+        abs_coeffs = calc_absorption_coeffs(res_freq, mass)
 
         output.write("Absorption coefficient (280 nM):  {0:7.3f}\n".format(abs_coeffs[0]))
         output.write("Absorption coefficient x 1.03:    {0:7.3f}\n".format(abs_coeffs[1]))
@@ -155,9 +155,9 @@ def print_summary_data(resids, resid_freqs, output):
 
         # Calculate the contribution of the hydration layer to the
         # scattering length (b)
-        vol_diff, oh_diff = calc_hydration_effect(resid_freqs)
+        vol_diff, oh_diff = calc_hydration_effect(res_freq)
 
-        no_prot_res = sum_res_no(amino_acids, resid_freqs)
+        no_prot_res = sum_res_no(amino_acids, res_freq)
         hydra_per_res = oh_diff / no_prot_res
 
         hydra_delta = params['solvent']['vol_bound'] * oh_diff
@@ -173,7 +173,7 @@ def print_summary_data(resids, resid_freqs, output):
     output.write("Scattering density of water H2O:  {0:7.6f}  D2O:  {1:7.6f}\n".format(
                 params['solvent']['BHHO'],params['solvent']['BDDO']))
 
-    total_electrons = sum_electrons(resids, resid_freqs)
+    total_electrons = sum_electrons(resids, res_freq)
     output.write("Total no. electrons:\t\t{0:10.0f}\n".format(total_electrons))
 
     output.write("Electron density of water:\t{0:10.6f}\n".format(
@@ -195,10 +195,10 @@ def print_summary_data(resids, resid_freqs, output):
 
     # Create lines containing data for output
     for dataset in vol_datasets:
-        tot_volume = sum_volume(resids, resid_freqs, dataset)
+        tot_volume = sum_volume(resids, res_freq, dataset)
         vol_line += ' {0:7.0f}'.format(tot_volume)
 
-        specific_volume = spec_volume(resids, resid_freqs, dataset)
+        specific_volume = spec_volume(resids, res_freq, dataset)
         spec_v_line += ' {0:7.4f}'.format(specific_volume)
 
         match_point =  calc_match_point(tot_volume, bH_tot, bD_tot)
@@ -207,7 +207,7 @@ def print_summary_data(resids, resid_freqs, output):
         scat_density = calc_mpt_scattering_density(match_point)
         scat_line += ' {0:7.5f}'.format(scat_density)
 
-        elect_density = sum_electrons(resids, resid_freqs) / tot_volume
+        elect_density = sum_electrons(resids, res_freq) / tot_volume
         elect_line  += ' {0:7.5f}'.format(elect_density)
 
         # Additional lines about protein hydration for the full protein
@@ -233,7 +233,7 @@ def print_summary_data(resids, resid_freqs, output):
         output.write(hyd_vol_line + '\n')
         output.write(hyd_match_line + '\n')
 
-def print_exchange_data(resid_freqs, peptide_only, output):
+def print_exchange_data(res_freq, peptide_only, output):
     """Print D/H exchange data - exchange fraction + scattering lengths"""
 
     # Print a section title for the output table
@@ -242,7 +242,7 @@ def print_exchange_data(resid_freqs, peptide_only, output):
                               vol_datasets, 'aa'))
 
     # H scattering length is a constant
-    bH_tot = sum_b(all_residues, resid_freqs, False)
+    bH_tot = sum_b(all_residues, res_freq, False)
 
     # Increase the D exchanged percentage
     # Recalculate the D scattering length for each different percentage
@@ -258,18 +258,18 @@ def print_exchange_data(resid_freqs, peptide_only, output):
             # peptide only = only calculate exchange in peptide hydrogens
             if peptide_only:
 
-                bD_tot += params['bD'][resid] * resid_freqs[resid] - (
-                    params['no_exchange_peptide_H'][resid] * bDH_diff  * ii * resid_freqs[resid])
+                bD_tot += params['bD'][resid] * res_freq[resid] - (
+                    params['no_exchange_peptide_H'][resid] * bDH_diff  * ii * res_freq[resid])
 
             else:
 
-                bD_tot += params['bD'][resid] * resid_freqs[resid] - (
-                    params['no_exchange_H'][resid] * bDH_diff  * ii * resid_freqs[resid])
+                bD_tot += params['bD'][resid] * res_freq[resid] - (
+                    params['no_exchange_H'][resid] * bDH_diff  * ii * res_freq[resid])
 
             line = "Exc {0:3.1f}  Tot b: {1:5.0f}  {2:5.0f}".format(ii, bH_tot, bD_tot)
 
             for dataset in vol_datasets:
-                tot_volume = sum_volume(all_residues, resid_freqs, dataset)
+                tot_volume = sum_volume(all_residues, res_freq, dataset)
                 match_point = calc_match_point(tot_volume, bH_tot, bD_tot)
                 line += ' {0:7.2f}'.format(match_point)
 
@@ -309,7 +309,7 @@ def sum_res_no(resids, res_freq):
     """Get the total number of residues for given selection of residue names """
     no = 0
     for resid in resids:
-        no += resid_freq[resid]
+        no += res_freq[resid]
     return no
 
 def sum_mass(resids, res_freq):
