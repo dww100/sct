@@ -287,7 +287,7 @@ def calc_model_wet_volume(res_freq):
 
     return water_vol
 
-def calc_hydration_effect(resid_freqs):
+def calc_hydration_effect(res_freq):
     """Calculates the effect of hydration of protein volume
 
     Returns:
@@ -295,8 +295,8 @@ def calc_hydration_effect(resid_freqs):
         Equivalent to the above in bound H2O
     """
 
-    vol_chothia = sum_volume(all_residues, resid_freqs, 'chothia1975')
-    vol_consensus = sum_volume(all_residues, resid_freqs, 'perkins1986b')
+    vol_chothia = sum_volume(all_residues, res_freq, 'chothia1975')
+    vol_consensus = sum_volume(all_residues, res_freq, 'perkins1986b')
     volume_diff = vol_chothia - vol_consensus
 
     water_bound_diff = params['solvent']['vol_free'] - params['solvent']['vol_bound']
@@ -305,63 +305,63 @@ def calc_hydration_effect(resid_freqs):
 
     return volume_diff, oh_diff
 
-def sum_res_no(resids, resid_freqs):
+def sum_res_no(resids, res_freq):
     """Get the total number of residues for given selection of residue names """
     no = 0
     for resid in resids:
-        no += resid_freqs[resid]
+        no += resid_freq[resid]
     return no
 
-def sum_mass(resids, resid_freqs):
+def sum_mass(resids, res_freq):
     """Calculate the total mass of the input residue constitution"""
 
     mass = 0.0
     for resid in resids:
-        mass += params['mass'][resid] * resid_freqs[resid]
+        mass += params['mass'][resid] * res_freq[resid]
 
     return mass
 
-def sum_volume(resids, resid_freqs, dataset):
+def sum_volume(resids, res_freq, dataset):
     """Calculate the total volume of the input residue constitution"""
 
     volume = 0.0
     for resid in resids:
-        volume += res_vols[dataset]['residue'][resid] * resid_freqs[resid]
+        volume += res_vols[dataset]['residue'][resid] * res_freq[resid]
 
     return volume
 
-def spec_volume(resids, resid_freqs, dataset):
+def spec_volume(resids, res_freq, dataset):
     """Calculate the specific volume of the input residue constitution"""
 
-    volume = sum_volume(resids, resid_freqs, dataset)
-    mass = sum_mass(resids, resid_freqs)
+    volume = sum_volume(resids, res_freq, dataset)
+    mass = sum_mass(resids, res_freq)
 
     return volume * params['constants']['avagadro'] / mass
 
-def calc_absorption_coeffs(resid_freqs, mass):
+def calc_absorption_coeffs(res_freq, mass):
     """Calculate absorption coefficients"""
 
-    coeff = 10 * (150.0 * resid_freqs['CYS'] + 1340.0 * resid_freqs['TYR']
-            + 5550.0 * resid_freqs['TRP']) / mass
+    coeff = 10 * (150.0 * res_freq['CYS'] + 1340.0 * res_freq['TYR']
+            + 5550.0 * res_freq['TRP']) / mass
 
     return [coeff, 1.03 * coeff, 1.06 * coeff]
 
-def sum_b(resids, resid_freqs, heavy_water):
+def sum_b(resids, res_freq, heavy_water):
     """Calculate total scattering length of selected residues"""
     b_tot = 0.0
     for resid in resids:
         if heavy_water:
-            b_tot += params['bD'][resid] * resid_freqs[resid]
+            b_tot += params['bD'][resid] * res_freq[resid]
         else:
-            b_tot += params['bH'][resid] * resid_freqs[resid]
+            b_tot += params['bH'][resid] * res_freq[resid]
 
     return b_tot
 
-def sum_electrons(resids, resid_freqs):
+def sum_electrons(resids, res_freq):
     """Calculate the total number of elections in the selected residues"""
     electrons = 0
     for resid in resids:
-        electrons += params['no_electron'][resid] * resid_freqs[resid]
+        electrons += params['no_electron'][resid] * res_freq[resid]
 
     return electrons
 
@@ -386,44 +386,44 @@ def calc_mpt_scattering_density(match_point):
 
     return scat_den
 
-def classic_output(res_freqs, output):
+def classic_output(res_freq, output):
     """Print volumes and scattering properties in a format similar to original sluv"""
 
     output.write("SLUV2 2013 by David W. Wright and Stephen J. Perkins\n")
     output.write("Based on SLUV written by Stephen J. Perkins shortly after the dawn of time.\n\n")
 
     # Print frequencies and parameters for all residues
-    print_basic_description(res_freqs)
+    print_basic_description(res_freq)
 
     output.write("******************** TOTAL GLYCOPROTEIN ************************************************\n")
-    print_summary_data(all_residues, res_freqs, output)
+    print_summary_data(all_residues, res_freq, output)
     output.write("******************** AA RESIDUES ONLY **************************************************\n")
-    print_summary_data(amino_acids, res_freqs, output)
+    print_summary_data(amino_acids, res_freq, output)
     output.write("******************** NONPOLAR AA RESIDUES **********************************************\n")
-    print_summary_data(non_polar, res_freqs, output)
+    print_summary_data(non_polar, res_freq, output)
     output.write("******************** POLAR AA RESIDUES *************************************************\n")
-    print_summary_data(polar, res_freqs, output)
+    print_summary_data(polar, res_freq, output)
     output.write("******************** CARBOHYDRATE RESIDUES *********************************************\n")
-    print_summary_data(monosaccharides, res_freqs, output)
+    print_summary_data(monosaccharides, res_freq, output)
 
     output.write("******************** EXCHANGEABLE PEPTIDE HYDROGENS ************************************\n")
-    print_exchange_data(res_freqs,True, output)
+    print_exchange_data(res_freq, True, output)
     output.write("******************** TOTAL OF EXCHANGEABLE HYDROGENS ***********************************\n")
-    print_exchange_data(res_freqs,False, output)
+    print_exchange_data(res_freq, False, output)
 
-def auc_output(res_freqs, output):
+def auc_output(res_freq, output):
     """Print weight, absorption coeff and specific volume (Consensus)"""
 
-    mass = sum_mass(all_residues, res_freqs)
+    mass = sum_mass(all_residues, res_freq)
     output.write( "Molecular Weight: {0:7.0f}\n".format(mass))
 
-    abs_coeffs = calc_absorption_coeffs(res_freqs, mass)
+    abs_coeffs = calc_absorption_coeffs(res_freq, mass)
     output.write( "Absorption Coefficient x 1.03: {0:7.3f}\n".format(abs_coeffs[1]))
 
-    specific_vol = spec_volume(all_residues, res_freqs, 'perkins1986b')
+    specific_vol = spec_volume(all_residues, res_freq, 'perkins1986b')
     output.write( "Specific Volume (Perkins 1986 - Consensus): {0:7.4f}\n".format(specific_vol))
 
-def modelling_output(res_freqs, output):
+def modelling_output(res_freq, output):
     """Print volumes used for modelling purposes"""
 
     volume = sum_volume(all_residues, res_freqs, 'chothia1975')
