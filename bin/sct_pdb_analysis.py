@@ -65,9 +65,35 @@ def parse_arguments():
     return args
 
 def analyse_sphere_model(model, expt_curve, sphere_radius, param):
-    """Take a sphere model and calculate the theoretical scattering curve. The
+    """
+    Take a sphere model and calculate the theoretical scattering curve. The
     Rg and Rxs1 are also calculated from the curve and returned alongside the
-    rfac comparing the theoretical curve to an experimental one."""
+    rfac comparing the theoretical curve to an experimental one.
+
+    @type  model:          list
+    @param model:          List of lists containing x, y & z coordinates
+                           (3 * floats) for each sphere in a sphere model.
+    @type  expt_curve:     numpy array
+    @param expt_curve:     Two dimensional array containing scattered vector
+                           magnitudes, q, and intensities, I, from experiment.
+    @type  sphere_radius:  float
+    @param sphere_radius:  Sphere radius
+    @type  param:          dictionary
+    @param param:          Dictionary containing parameters to use when creating
+                           models and analysing curves.
+    @rtype:                dictionary
+    @return                Dictionary containing the following key/value pairs:
+                           - model_rg: Radius of gyration calculated directly
+                           from sphere model.
+                           - curve_rg: Radius of gyration calculated from the
+                           theoretical scattering curve derived from the sphere
+                           model.
+                           - curve_rxs1: Cross-section calculated from the
+                           theoretical scattering curve derived from the sphere
+                           model.
+                           - rfac: R factor comparing experimental and
+                           theoretical scattering curves.
+    """
 
     result = {}
 
