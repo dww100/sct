@@ -17,7 +17,6 @@ import sys
 import os
 import glob
 import yaml
-import numpy as np
 
 import sct
 
