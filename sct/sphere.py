@@ -482,8 +482,8 @@ def hydrate_spheres(coords, hydration_pos, radius):
     Add hydration layer spheres to the spheres in the input coordinate list
 
     @type  coords:         list
-    @param coords:         List containing x, y & z coordinates (3 * floats) for
-                           a sphere.
+    @param coords:         List of lists containing x, y & z coordinates
+                           (3 * floats) for each sphere in a sphere model.
     @type  hydration_pos:  list
     @param hydration_pos:  List of positions to include in wet sphere model:
                            Position 1 = original sphere position,
