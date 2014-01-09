@@ -16,18 +16,15 @@ import argparse
 import sys
 import os
 import glob
-import pdb2sphere as p2s
-import sphere2pdb as s2pdb
-import hydrate_spheres as hydrate
-import sas_curve_analysis
-import calculate_curve
-import calculate_rfactor as rfactor
-import sphere_rg
 import yaml
 import numpy as np
 
+import sct
+
 def parse_arguments():
-    """Parse command line arguments and ensure correct combinations present"""
+    """
+    Parse command line arguments and ensure correct combinations present
+    """
 
     parser = argparse.ArgumentParser(
         description= 'Compare theoretical curves generated from PDB files to experimental SAS curves\n')
@@ -67,65 +64,36 @@ def parse_arguments():
 
     return args
 
-def format_qi_data(q,i):
-    """Convert separate lists/arrays of q and i values into a single 2d array"""
-    data = []
-
-    for element in range(0, len(q)):
-        data.append([q[element], i[element]])
-
-    return np.array(data)
-
-def analyse_model(model, expt_curve, sphere_radius, param):
+def analyse_sphere_model(model, expt_curve, sphere_radius, param):
     """Take a sphere model and calculate the theoretical scattering curve. The
     Rg and Rxs1 are also calculated from the curve and returned alongside the
     rfac comparing the theoretical curve to an experimental one."""
+
     result = {}
 
     # Calculate Rg from sphere model
-    result['model_rg'] = sphere_rg.sphere_model_rg(model, sphere_radius)
+    result['model_rg'] = sct.sphere.sphere_model_rg(model, sphere_radius)
     # Create theoretical curve from model
-    result['q'], result['i'] = calculate_curve.spheres_to_sas_curve(model,
+    result['curve'] = sct.sphere.spheres_to_sas_curve(model,
                                                 sphere_radius,
                                                 param['curve']['qmax'],
                                                 param['curve']['npoints'],
                                                 rbins = param['curve']['radbins'])
 
-    theor_curve = format_qi_data(result['q'], result['i'])
     # Rg and Rxs from theoretical curve
-    result['curve_rg'], result['curve_rxs'] = get_curve_descriptors(theor_curve,
+    result['curve_rg'], result['curve_rxs'] = sct.curve.get_curve_descriptors(result['curve'],
                                                             param['rg']['fitmin'],
                                                             param['rg']['fitmax'],
                                                             param['rxs1']['fitmin'],
                                                             param['rxs1']['fitmax'])
 
     # Calculate Rfactor for theoretical vs experimental curves
-    result['rfac'] = rfactor.calculate_rfactor(expt_curve,
-                                               theor_curve,
-                                               param['rfac']['qmin'],
-                                               param['rfac']['qmax'])
+    result['rfac'] = sct.curve.calculate_rfactor(expt_curve,
+                                                 result['curve'],
+                                                 param['rfac']['qmin'],
+                                                 param['rfac']['qmax'])
 
     return result
-
-def get_curve_descriptors(data, rg_min, rg_max, rxs_min, rxs_max):
-    """Calculate the Rg and Rxs1 from the input curve"""
-
-    # Create mask to select range of Q values for Rg fitting
-    rg_mask = (data[:,0] > rg_min) & (data[:,0] < rg_max)
-    # Create mask to select range of Q values for Rxs fitting
-    rxs_mask = (data[:,0] > rxs_min) & (data[:,0] < rxs_max)
-
-    # Fitting is performed on:
-    # Q^2 vs ln(I) for Rg
-    # Q^2 vs ln(I*Q) for Rxs1
-    x = data[:,0]**2
-    y_rg = np.log(data[:,1])
-    y_rxs = np.log(data[:,1] * data[:,0])
-
-    rg_result = sas_curve_analysis.guinier_fit(x[rg_mask], y_rg[rg_mask], 'rg')
-    rxs_result = sas_curve_analysis.guinier_fit(x[rxs_mask], y_rxs[rxs_mask], 'rxs1')
-
-    return rg_result['r'], rxs_result['r']
 
 args = parse_arguments()
 
@@ -152,16 +120,16 @@ expt_data = open(expt_name,'w')
 if args.neutron is not None:
 
     if args.neutron_unit == 'nm':
-        neut_data = rfactor.load_scatter_curve(args.neutron,
+        neut_data = sct.curve.load_scatter_curve(args.neutron,
                                            param['rfac']['qmin'] * 10,
                                            param['rfac']['qmax'] * 10)
         neut_data[:,0] = neut_data[:,0] / 10.0
     else:
-        neut_data = rfactor.load_scatter_curve(args.neutron,
+        neut_data = sct.curve.load_scatter_curve(args.neutron,
                                            param['rfac']['qmin'],
                                            param['rfac']['qmax'])
 
-    neut_rg, neut_rxs = get_curve_descriptors(neut_data,
+    neut_rg, neut_rxs = sct.curve.get_curve_descriptors(neut_data,
                                               param['rg']['fitmin'],
                                               param['rg']['fitmax'],
                                               param['rxs1']['fitmin'],
@@ -184,18 +152,18 @@ else:
 if args.xray is not None:
 
     if args.xray_unit == 'nm':
-        xray_data = rfactor.load_scatter_curve(args.xray,
+        xray_data = sct.curve.load_scatter_curve(args.xray,
                                            param['rfac']['qmin'] * 10,
                                            param['rfac']['qmax'] * 10)
         xray_data[:,0] = xray_data[:,0] / 10.0
     else:
-        xray_data = rfactor.load_scatter_curve(args.xray,
+        xray_data = sct.curve.load_scatter_curve(args.xray,
                                            param['rfac']['qmin'],
                                            param['rfac']['qmax'])
 
 
 
-    xray_rg, xray_rxs = get_curve_descriptors(xray_data,
+    xray_rg, xray_rxs = sct.curve.get_curve_descriptors(xray_data,
                                               param['rg']['fitmin'],
                                               param['rg']['fitmax'],
                                               param['rxs1']['fitmin'],
@@ -246,27 +214,27 @@ for pdb in pdb_files:
     pdb_id = os.path.splitext(pdb_basename)[0]
 
     # Read PDB
-    res_freq, atom_coords = p2s.read_pdb_atom_data(pdb)
+    res_freq, atom_coords = sct.pdb.read_pdb_atom_data(pdb)
 
     # PDB to dry sphere model
-    dry_spheres, x_axis, y_axis, z_axis = p2s.create_sphere_model(atom_coords,
+    dry_spheres, x_axis, y_axis, z_axis = sct.sphere.create_sphere_model(atom_coords,
                                                                   cutoff,
                                                                   box_side)
 
     # If neutron data provided compare with curve computed from dry sphere model
     if args.neutron is not None:
 
-        neut_theor = analyse_model(dry_spheres, neut_data, radius, param)
+        neut_theor = analyse_sphere_model(dry_spheres, neut_data, radius, param)
 
         # Write curve to file
         curve_file = os.path.join(scn_path, pdb_id + '.scn')
         output = open(curve_file,'w')
-        calculate_curve.output_sas_curve(neut_theor['q'],neut_theor['i'], output)
+        sct.curve.output_sas_curve(neut_theor['curve'], output)
         output.close()
 
         # Write model to file
         model_file = os.path.join(dry_model_path,  pdb_id + '.pdb')
-        s2pdb.write_sphere_pdb(dry_spheres, radius, model_file)
+        sct.pdb.write_sphere_pdb(dry_spheres, radius, model_file)
 
         volume = box_side3 * len(dry_spheres)
 
@@ -282,7 +250,7 @@ for pdb in pdb_files:
     # If x-ray data provided compare with curve computed from wet sphere model
     if args.xray is not None:
         # Hydrate model - > wet sphere model
-        wet_spheres = hydrate.hydrate_model(dry_spheres,
+        wet_spheres = sct.sphere.hydrate_model(dry_spheres,
                                             param['hydrate']['positions'],
                                             box_side,
                                             param['hydrate']['cutoff'],
@@ -290,17 +258,17 @@ for pdb in pdb_files:
                                             yaxis = y_axis,
                                             zaxis = z_axis)
 
-        xray_theor = analyse_model(wet_spheres, xray_data, radius, param)
+        xray_theor = analyse_sphere_model(wet_spheres, xray_data, radius, param)
 
         # Write curve to file
         curve_file = os.path.join(scx_path, pdb_id + '.scx')
         output = open(curve_file,'w')
-        calculate_curve.output_sas_curve(xray_theor['q'],xray_theor['i'], output)
+        sct.curve.output_sas_curve(xray_theor['curve'], output)
         output.close()
 
         # Write model to file
         model_file = os.path.join(wet_model_path,  pdb_id + '.pdb')
-        s2pdb.write_sphere_pdb(wet_spheres, radius, model_file)
+        sct.pdb.write_sphere_pdb(wet_spheres, radius, model_file)
 
         volume = box_side3 * len(wet_spheres)
 

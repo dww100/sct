@@ -1,13 +1,18 @@
 #!/usr/bin/env python
-
-"""Convert file containing sphere co-ordinates and radii into a PDB
-Each sphere is set to be a C1 atom"""
+# -*- coding: utf-8 -*-
+"""
+Convert file containing sphere co-ordinates and radii into a PDB.
+Each sphere is set to be a C1 atom.
+"""
 
 import argparse
-import hydrate_spheres as hyd
+
+import sct
 
 def parse_arguments():
-    """Parse command line arguments and ensure correct combinations present"""
+    """
+    Parse command line arguments and ensure correct combinations present
+    """
 
     parser = argparse.ArgumentParser(
         description= 'Convert atomic pdb to sphere model\n')
@@ -22,38 +27,6 @@ def parse_arguments():
 
     return parser.parse_args()
 
-def create_pdb_atom(res_no, res_id, atom_no, atom_type, coords, **kwargs):
-    """Create ATOM line for output in a PDB file (output has a \n)"""
-
-    # Columns for temperatur factor (beta) and occupancy (occ) often used to
-    # store other data
-    beta = kwargs.get('beta', 0.0)
-    occ = kwargs.get('occ', 0.0)
-    chain = kwargs.get('chain', 'A')
-
-
-    line = "ATOM  {0:5d} {1:4s} {2:3s}".format(atom_no, atom_type, res_id)
-    line += " {0:1s}{1:4d}    ".format(chain, res_no)
-    line += "{0:8.3f}{1:8.3f}{2:8.3f}".format(coords[0],coords[1],coords[2])
-    line += "{0:6.2f}{1:6.2f}\n".format(occ, beta)
-
-    return line
-
-def write_sphere_pdb(coords, radius, filename):
-
-    out_file = open(filename, 'w')
-
-    count = 1
-
-    for coord in coords:
-
-        pdb_line = create_pdb_atom(count, 'SER', count, 'C1', coord, beta = radius)
-
-        out_file.write(pdb_line)
-        count += 1
-
-    out_file.close()
-
 def main(coords):
 
     args = parse_arguments()
@@ -67,10 +40,10 @@ def main(coords):
     # atom and residue number
     with open(args.input_filename) as f:
         for line in f:
-            sphere = hyd.parse_sphere_line(line)
+            sphere = sct.sphere.parse_sphere_line(line)
             # As in SJP original codes use SER residue type and C1 for atom type
             # Store the sphere radius at the temperature factor (beta)
-            pdb_line = create_pdb_atom(count, 'SER', count, 'C1',
+            pdb_line = sct.pdb.create_pdb_atom(count, 'SER', count, 'C1',
                                       sphere['coords'], beta = sphere['radius'])
             out_file.write(pdb_line)
             count += 1

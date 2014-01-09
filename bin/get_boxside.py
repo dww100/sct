@@ -1,18 +1,19 @@
 #!/usr/bin/env python
-
-"""Automatic optimization of the box side used to create sphere models from
+# -*- coding: utf-8 -*-
+"""
+Automatic optimization of the box side used to create sphere models from
 atomistic PDBs in SCT tools.
 The target is the theoretical volume of the PDB structure calculated from sluv2
 Takes a PDB, a range of box sizes to try, a cutoff for the number of atoms
 per box and a percentage tolerance for the optimization as inputs.
 
-Within the Perkins lab this replaces the do_cubeside script."""
+Within the Perkins lab this replaces the do_cubeside script.
+"""
 
 import argparse
-import pdb2sphere as p2s
-import sluv2
 import sys
-import scipy.optimize as optimize
+
+import sct
 
 def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
@@ -40,46 +41,33 @@ def parse_arguments():
 
     return parser.parse_args()
 
-def residual2_box(box_side, cutoff, atom_coords, targ_volume):
-    """Compute squared residual of sphere model to the theroetical target volume"""
+def get_opt_box_side(filename, cutoff, side_min, side_max, tolerance):
+    """
+    Read PDB, get optimal sphere model box_side (+ deviation).
+    The idea is to reproduce theoretical volume estimated from the sequence as
+    in sluv.
 
-    # Create sphere model
-    sphere_coords, x_axis, y_axis, z_axis = p2s.create_sphere_model(atom_coords,
-                                                               cutoff, box_side)
-    # Compute volume of the model
-    vol_spheres = len(sphere_coords) * box_side**3
-
-    # Return squared residual
-    return (vol_spheres - targ_volume)**2
-
-def optimize_side(cutoff, coords, target_vol, side_min, side_max, tolerance):
-    """Get optimal box_side to reproduce target_volume (and deviation)"""
-
-    # Format the bounds within which to run the optimization
-    side_bounds = (side_min, side_max)
-
-    # Minimize the squared residuals between the sphere model ang target volume
-    # Uses minimize_scalar from scipy.optimize
-    opt = optimize.minimize_scalar(residual2_box, args=(cutoff, coords, target_vol),
-                             bounds=side_bounds, method='bounded',
-                             options={'xtol' : tolerance})
-
-    # Return the optimized box_side and residual
-    return opt['x'], opt['fun']**0.5
-
-def get_opt_side(filename, cutoff, side_min, side_max, tolerance):
-    """Read PDB, get optimal sphere model box_side (+ deviation)
-    The idea is to reproduce theoretical volume from sluv"""
+    @type  filename:  string
+    @param filename:  Path to PDB file to optimize box_side on
+    @type  side_min:  float
+    @param side_min:  Minimum side length to consider in the optimization.
+    @type  side_max:  float
+    @param side_min:  Maximum side length to consider in the optimization.
+    @type  tolerance: float
+    @param tolerance: Percentage tolerance before optimization is said to
+                      have converged.
+    """
 
     # Read in the residues frequencies (to calculate target volume) and
     # atomic coordinates from input PDB
-    res_freq, atom_coords = p2s.read_pdb_atom_data(filename)
+    res_freq, atom_coords = sct.pdb.read_pdb_atom_data(filename)
 
     # Get the target volume from sluv (based on sequence)
-    volume = sluv2.sum_volume(sluv2.all_residues, res_freq, 'chothia1975')
+    #volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'chothia1975')
+    volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986b')
 
-    best_side, dev = optimize_side(cutoff, atom_coords, volume,
-                              side_min, side_max, tolerance)
+    best_side, dev = sct.sphere.optimize_box_side(cutoff, atom_coords, volume,
+                                       side_min, side_max, tolerance)
 
     return best_side, dev
 
@@ -87,7 +75,7 @@ def main ():
 
     args = parse_arguments()
 
-    best_side, dev = get_opt_side(args.input_filename, args.cutoff,
+    best_side, dev = get_opt_box_side(args.input_filename, args.cutoff,
                             args.box_range[0], args.box_range[1], args.tolerance)
 
     if args.output_filename == None:

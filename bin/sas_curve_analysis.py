@@ -1,19 +1,21 @@
 #!/usr/bin/env python
-
+# -*- coding: utf-8 -*-
 """Script to analsye Q and I data from SAS experiments
 Can produce the following plots and data:
-wide - Wide Angle:  Q vs ln(I)
-rg - Radius of gyration/Guinier:     Q^2 vs ln(I)
-rxs1/rxs2 - Rxs1/Rsx2:   Q^2 vs ln(I*Q)
-At the minute we assume input has no header and the
-first column is Q and second is I
+wide - Wide Angle: Q vs ln(I)
+rg - Radius of gyration/Guinier: Q^2 vs ln(I)
+rxs1/rxs2 - Rxs1/Rsx2: Q^2 vs ln(I*Q)
+Presently input is assumed to be columns of data with no header - first column
+being q and the second I.
 
 David W Wright - 09/08/2013"""
 
 import os
+import sys
 import argparse
-from pylab import *
-import yaml
+import numpy as np
+
+import sct
 
 def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
@@ -36,9 +38,6 @@ def parse_arguments():
                        dest='input_filename', help = 'Path to the input file')
     group.add_argument('--header', action='store_true',
                        help = 'Output a header alongside output data')
-
-    parser.add_argument('-s','--skip', nargs = '?', type = int, default = 0,
-                       help = 'Number of lines in input file to skip')
 
     group2 = parser.add_mutually_exclusive_group(required=True)
     group2.add_argument('-q','--q-ranges', type = str, dest='q_ranges_filename',
@@ -69,14 +68,6 @@ def parse_arguments():
 
     return args
 
-def process_range_file(filename):
-    """Load file containing the ranges for all analyses."""
-
-    f = file(filename,'r')
-    q_ranges = yaml.load(f)
-
-    return q_ranges
-
 def create_header(analysis_type):
     """Creates a string containing column headings for the data produced by analyses
     selected by analType"""
@@ -94,44 +85,6 @@ def create_header(analysis_type):
 
     return header
 
-def create_figure(filename, x, y, title_text, x_lab, y_lab,
-                  x_min, x_max, y_min, y_max, **kwargs):
-    """ Outputs graph of x and y to a pdf file
-    Values computed from graph (outputs) and range of R? * Qfit written on graph
-    """
-
-    fit_coeffs = kwargs.get('fitcoeffs', None)
-    outputs = kwargs.get('outputs', None)
-    rq_range = kwargs.get('rqrange', None)
-    mask = kwargs.get('mask', None)
-
-    # Plot the input x, y values and if provided a fit line
-    # Also output data calculated from fit and R*Q over fit valies
-
-    figure(figsize=(8, 6), dpi=300)
-
-    ax = subplot(111, xlabel=x_lab, ylabel=y_lab, title=title_text,
-                xlim=(x_min, x_max), ylim=(y_min,y_max))
-
-    scatter(x, y, s=5)
-    for item in ([ax.title, ax.xaxis.label, ax.yaxis.label]):
-        item.set_fontsize(15)
-    ax.tick_params(axis='both', which='major', labelsize=12)
-
-    # Plot linear fit and highlight points used in its construction
-    if fit_coeffs != None:
-        fitLine = poly1d(fit_coeffs)
-        x_points = linspace(x_min, x_max, 300)
-        plot(x_points, fitLine(x_points))
-        if mask == None:
-            scatter(x, y,s=30)
-        else:
-            scatter(x[mask], y[mask],s=30)
-        plt.annotate(outputs + '\n' + rq_range, xy=(0.45, 0.85),
-                    xycoords='axes fraction')
-
-    savefig(filename)
-
 def create_output_name(prefix, analysis, q_min, q_max, fit_min, fit_max):
 
     q_range = "-".join([str(q_min),str(q_max)])
@@ -141,23 +94,6 @@ def create_output_name(prefix, analysis, q_min, q_max, fit_min, fit_max):
                 prefix, q_range, fit_range, analysis)
 
     return filename
-
-def guinier_fit(x, y, calc_type):
-
-    fit_coeffs = polyfit(x, y, 1)
-
-    result = {}
-
-    result['fit'] = fit_coeffs
-
-    if (calc_type == 'rxs1') or (calc_type == 'rxs2'):
-        result['r'] = sqrt(2 * abs(fit_coeffs[0]))
-        result['i'] = None
-    else:
-        result['r'] = sqrt(3 * abs(fit_coeffs[0]))
-        result['i'] = exp(fit_coeffs[1])
-
-    return result
 
 def check_args(args):
 
@@ -174,7 +110,7 @@ def check_args(args):
         analyses = [args.anal_type]
 
     if args.q_ranges_filename:
-        q_ranges = process_range_file(args.q_ranges_filename)
+        q_ranges = sct.curve.process_qrange_file(args.q_ranges_filename)
     else:
         q_ranges = {}
 
@@ -218,7 +154,7 @@ def main():
     # Initialise a string to contain computed values for output
     out_values = ''
 
-    input_data = loadtxt(in_full_path, skiprows=args.skip)
+    input_data = sct.curve.load_scatter_curve(in_full_path, 0.0, 100.0)
 
     for cur_anal in analyses:
 
@@ -236,10 +172,10 @@ def main():
 
         if (cur_anal == 'wide') or (cur_anal == 'rg'):
             ylabel = 'ln(I(Q))'
-            y = log(input_data[:,1])
+            y = np.log(input_data[:,1])
         else:
             ylabel = 'ln(I(Q)*Q)'
-            y = log(input_data[:,1] * input_data[:,0])
+            y = np.log(input_data[:,1] * input_data[:,0])
 
         # Range of the y-axes to plot
         if args.y_range == None:
@@ -260,7 +196,7 @@ def main():
                                        q_min, q_max, None, None)
             out_file = os.path.join(args.output_dir, fname)
 
-            create_figure(out_file, x, y, title_graph,
+            sct.curve.graph_sas_curve(out_file, x, y, title_graph,
                           xlabel, ylabel, q_min, q_max, y_min, y_max)
 
         else:
@@ -283,7 +219,7 @@ def main():
                                                 out_prefix, fit_min, fit_max)
 
             # Perform linear fit over the fit range selected by mask
-            results = guinier_fit(x[mask], y[mask], cur_anal)
+            results = sct.curve.sas_curve_fit(x[mask], y[mask], cur_anal)
 
             # calculate R? * Q for the ends of the range of Q used in fit
             rq_min = results['r'] * fit_min
@@ -316,7 +252,7 @@ def main():
                     rq_range = 'Rxs2*Qmin: {0:0.2f}\tRxs2*Qmax: {1:0.2f}'.format(rq_min,rq_max)
 
             # Create graph including highlighted area for fit and key data
-            create_figure(out_file, x, y, title_graph ,
+            sct.curve.graph_sas_curve(out_file, x, y, title_graph ,
                              xlabel, ylabel, q2_min, q2_max, y_min, y_max,
                              fitcoeffs = results['fit'], outputs = data_graph,
                              rqrange = rq_range, mask = mask)

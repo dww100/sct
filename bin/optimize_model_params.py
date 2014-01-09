@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Take an input PDB and optimize the box size and cutoff used to create sphere
+"""
+Take an input PDB and optimize the box size and cutoff used to create sphere
 models. The optimization is run to recreate the volume predicted from sluv2.
 The box size determines the size of the grid used to create the sphere models
 from a PDB. The cutoff is used in the creation of the hydration layer.
@@ -10,11 +11,10 @@ analyse_pdb_models.py script to run on a series of models.
 """
 
 import argparse
-import pdb2sphere as p2s
-import hydrate_spheres as hydrate
-import get_boxside
-import sluv2
 import yaml
+
+import sct
+
 
 def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
@@ -42,36 +42,40 @@ param_file = file(args.parameter_file)
 param = yaml.load(param_file)
 
 # Read in initial PDB
-res_freq, atom_coords = p2s.read_pdb_atom_data(args.input_pdb)
+res_freq, atom_coords = sct.pdb.read_pdb_atom_data(args.input_pdb)
 
 # Get volume from sluv for PDB
-volume = sluv2.sum_volume(sluv2.all_residues, res_freq, 'perkins1986b')
+volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986b')
 
 # Optimize box side for sphere models
 cutoff = param['sphere']['cutoff']
-box_side, err = get_boxside.optimize_side(cutoff, atom_coords, volume,
+box_side, err = sct.sphere.optimize_box_side(cutoff, atom_coords, volume,
                                           args.min_max[0],
                                           args.min_max[1],
                                           0.01)
 
-dry_spheres, x_axis, y_axis, z_axis = p2s.create_sphere_model(atom_coords,
-                                                              cutoff,
-                                                              box_side)
+dry_spheres, x_axis, y_axis, z_axis = sct.sphere.create_sphere_model(atom_coords,
+                                                                     cutoff,
+                                                                     box_side)
 
 # Calculate the expected volume of the hydration layer
 # Hydration is estimated to be 0.3 g water per 1 g protein
 # Bound water volume (< bulk volume) is given as a sluv parameter
-water_vol = sluv2.calc_model_wet_volume(res_freq)
+water_vol = sct.seq.calc_model_wet_volume(res_freq)
 
 wet_volume = volume + water_vol
 
-hydr_cutoff, err = hydrate.optimize_cut(box_side,
-                                        dry_spheres,
-                                        26,
-                                        wet_volume,
-                                        10,
-                                        14,
-                                        0.01)
+# Optimize the water cutoff used to filter out excessive/overlapping hydration
+# spheres
+# Use 26 additional spheres in teh trial hydration
+# 10 - 14 is a reasonable window over which to refine the cutoff
+hydr_cutoff, err = sct.sphere.optimize_cut(box_side,
+                                           dry_spheres,
+                                           26,
+                                           wet_volume,
+                                           10,
+                                           14,
+                                           0.01)
 
 out_file = open(args.output_file,'w')
 out_file.write("Target dry volume: {0:7.4f}\n".format(volume))
