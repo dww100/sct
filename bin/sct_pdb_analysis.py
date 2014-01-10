@@ -132,9 +132,14 @@ if not os.path.exists(args.output_path):
 
 summary_name = os.path.join(args.output_path, args.title + '.sum')
 summary_data = open(summary_name,'w')
+
 summary_data.write("Input PDB path: {0:s}\n".format(args.input_path))
 summary_data.write("Neutron\t\t\t\t\tX-ray\n")
-summary_data.write("Rg_model\tRg_curve\tRxs1_curve\tRfactor\tVolume\tRg_model\tRg_curve\tRxs1_curve\tRfactor\tVolume\n")
+
+column_headings = "Rg_model\tRg_curve\tRxs1_curve\tRfactor\tVolume"
+column_headings = column_headings + "\t" + column_headings + "\n"
+
+summary_data.write(column_headings)
 
 # Read in experimental curves and calculate Rg and Rxs
 # Setup output directories for theoretical curves and sphere models
