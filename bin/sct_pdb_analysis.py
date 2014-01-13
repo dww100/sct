@@ -280,7 +280,7 @@ for pdb in pdb_files:
     # If x-ray data provided compare with curve computed from wet sphere model
     if args.xray is not None:
         # Hydrate model - > wet sphere model
-        wet_spheres = sct.sphere.hydrate_model(dry_spheres,
+        wet_spheres = sct.sphere.hydrate_sphere_model(dry_spheres,
                                             param['hydrate']['positions'],
                                             box_side,
                                             param['hydrate']['cutoff'],
