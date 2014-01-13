@@ -397,7 +397,7 @@ WAB = WAV / (2.0*PI)
 CON = (WAS * WAB)**2
 CON = CON * 4.0
 BON = (ALF)**2
-AON = WAB * DSQRT(DFLOAT(8.0) * DLOG(DFLOAT(2.0)))
+AON = WAB * DSQRT(DFLOAT(8) * DLOG(DFLOAT(2)))
 
 ! Calculation of lookup table for sigma (SIG)
 
