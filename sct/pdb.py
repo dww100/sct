@@ -35,7 +35,7 @@ def pdb_res_line_parse(line):
 
         # res_id is a three letter residue code
         res_id = line[17:20].strip()
-        if res_id in sct_seq.all_residues:
+        if res_id in seq.all_residues:
             data['atom_no'] = int(line[6:11])
             data['atom_name'] = line[12:16].strip()
             data['res_id'] = res_id
@@ -62,7 +62,7 @@ def read_pdb_atom_data (filename):
     """
 
     # Initialize a dictionary of all recognized residues (frequency = 0)
-    res_freq = sct_seq.residue_freq_dict()
+    res_freq = seq.residue_freq_dict()
 
     # Track the last residues seen
     last_res_no = 0
