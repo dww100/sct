@@ -20,6 +20,9 @@ Provides the following variables:
 
 import collections
 import yaml
+import os
+
+share_dir = os.path.join(__file__.rsplit(os.sep,2)[0], 'share')
 
 # Lists of the residues which are handled by SCT programs
 polar = ['ARG','ASN','ASP','GLN','GLU','HIS','LYS','SER','THR']
@@ -40,11 +43,11 @@ aa1to3 = dict(zip(aa1,sorted(amino_acids)))
 # Load scattering and mass parameters:
 # bH, bD, mass, no_electron, no_exchange_H, no_exchange_peptide_H,
 # solvent -[BDDO, BHHO, EHHO], constants -[avagadro]
-param_file = file('/usr0/usr3/people/davidw/dev/sjp_sas/share/sluv_parameters.yml', 'r')
+param_file = file(os.path.join(share_dir,'sluv_parameters.yml'), 'r')
 params = yaml.load(param_file)
 
 # Load the different volume datasets
-vol_file = file('/usr0/usr3/people/davidw/dev/sjp_sas/share/aa_volumes.yml', 'r')
+vol_file = file(os.path.join(share_dir,'aa_volumes.yml'), 'r')
 res_vols = yaml.load(vol_file)
 
 # Difference in scattering length from heavy to light water
