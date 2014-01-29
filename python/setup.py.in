@@ -1,0 +1,21 @@
+from numpy.distutils.core import Extension
+
+sjp_utils = Extension(name = 'sct.sjp_util', sources=['${CMAKE_CURRENT_SOURCE_DIR}/../src/sjp_util.f90'])
+
+if __name__ == "__main__":
+    from numpy.distutils.core import setup
+    setup(name = 'SCT',
+          description       = "SCT: Atomistic modelling of small angle scattering data",
+          author            = "David W. Wright",
+          author_email      = "dave.william.wright@gmail.com",
+          package_dir={'':'${CMAKE_CURRENT_SOURCE_DIR}'},
+          packages = ['sct'],
+          ext_modules = [sjp_utils],
+          data_files = [('sct/share',
+                         ['${CMAKE_CURRENT_SOURCE_DIR}/share/sluv_parameters.yml','${CMAKE_CURRENT_SOURCE_DIR}/share/aa_volumes.yml'])],
+#          scripts =  ['bin/calculate_curve.py','bin/get_boxside.py','bin/optimize_model_params.py',
+#                      'bin/sas_curve_analysis.py','bin/sct_pdb_analysis.py','bin/sphere2pdb.py',
+#                      'bin/calculate_rfactor.py','bin/hydrate_spheres.py','bin/pdb2sphere.py']
+          scripts =['${CMAKE_CURRENT_SOURCE_DIR}/bin/calculate_curve.py']
+          )
+

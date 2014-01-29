@@ -22,7 +22,7 @@ import collections
 import yaml
 import os
 
-share_dir = os.path.join(__file__.rsplit(os.sep,2)[0], 'share')
+share_dir = os.path.join(__file__.rsplit(os.sep,1)[0], 'share')
 
 # Lists of the residues which are handled by SCT programs
 polar = ['ARG','ASN','ASP','GLN','GLU','HIS','LYS','SER','THR']
