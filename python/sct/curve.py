@@ -103,10 +103,12 @@ def match_scatter_curves(target_data, source_data):
 
 def calculate_rfactor(target_data, source_data, q_min, q_max):
     """
-    Compute R factor comparing two matched scattering curves. Input is two
+    Compute R factor comparing two scattering curves. Input is two
     q vs I scattering curves and the min/max q values to use to compare them.
-    Output is the R factor and the scaling factor needed to match I from the
-    target scattering curve to the source data.
+    The target (experimental) curve is scaled to match the source (theoretical)
+    one. This is because the theoretical curve is based on a calculation of
+    I/Io. Output is the R factor and the scaling factor needed to match I from
+    the target scattering curve to the source data.
 
     R factor is used by analogy with crystallography where:
     R = sum (abs(F_expt - F_calc)) / sum (abs(F_expt))
