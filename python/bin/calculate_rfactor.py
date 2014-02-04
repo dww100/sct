@@ -85,8 +85,7 @@ def main():
                 fle.write(output_data)
     else:
 
-        header = 'Calculated file\tExperimental file\tQ min'
-        '\tQ max\tScaling factor\tR factor\n'
+        header = 'Calculated file\tExperimental file\tQ min\tQ max\tScaling factor\tR factor\n'
 
         if args.out_file == None:
             print header
