@@ -199,9 +199,10 @@ END FUNCTION AVERAGE_DATA
 
 DOUBLE PRECISION FUNCTION CALC_RFACTOR (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, VERBOSE)
 
-    ! Calculate the R factor comparing IOBS to IMATCH
-    ! Rfactor is used by analogy with crystallography where:
-    ! R = sum (abs(F_expt - F_calc)) / sum (abs(F_expt))
+    ! Calculate the R factor comparing IOBS (experiment) to
+    ! IMATCH (calculated curve)
+    ! R factor is used by analogy with crystallography where:
+    ! R = sum (abs(F_obs - F_calc)) / sum (abs(F_obs))
 
     DOUBLE PRECISION, DIMENSION(*), INTENT(IN) :: QOBS, IOBS, ICALC
     INTEGER, INTENT(IN) :: N
@@ -252,5 +253,61 @@ DOUBLE PRECISION FUNCTION CALC_RFACTOR (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, V
     CALC_RFACTOR = RFACTOR * 100
 
 END FUNCTION CALC_RFACTOR
+
+DOUBLE PRECISION FUNCTION CALC_CHI2 (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, VERBOSE)
+
+    ! Calculate the R factor comparing IOBS (experiment) to
+    ! IMATCH (calculated curve)
+    !
+    ! Chi^2 = sum ((F_obs - F_calc)^2 / F_calc)
+
+    DOUBLE PRECISION, DIMENSION(*), INTENT(IN) :: QOBS, IOBS, ICALC
+    INTEGER, INTENT(IN) :: N
+    DOUBLE PRECISION, INTENT(IN) :: QMIN, QMAX
+    DOUBLE PRECISION, INTENT(INOUT) :: CON
+    LOGICAL, INTENT(IN) :: VERBOSE
+
+    DOUBLE PRECISION :: DELTAC, OCHI2, TMPCHI2, CHI2
+    INTEGER :: NDX
+
+    ! Initialize the update and Chi^2
+    DELTAC = CON / 10.
+    CHI2 = 1000000.
+
+    DO WHILE ( ( ABS(DELTAC) ) .GT. ( CON / 10000. ) )
+
+        OCHI2 = CHI2
+        CHI2 = 0.
+
+        DO NDX = 1, N
+            IF ( ( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
+                TMPCHI2 = ( IOBS(NDX) / CON ) - ICALC(NDX) )**2
+                TMPCHI2 = TMPCHI2 / ICALC(NDX)
+                CHI2 = CHI2 + TMP
+            END IF
+        END DO
+
+        RFACTOR = RFNUM / RFDEN
+
+        IF (VERBOSE) THEN
+            WRITE(*,*) 'BEST YET:', DELTAC, CON, CHI2
+        END IF
+
+        IF (CHI2 .LT. OCHI2) THEN
+            CON = CON + DELTAC
+        ELSE
+            DELTAC = DELTAC * (-0.5)
+            CON = CON + DELTAC
+        ENDIF
+
+    END DO
+
+    IF (VERBOSE) THEN
+        WRITE(*,*) 'FINISHED WITH:', DELTAC, CON, CHI2
+    END IF
+
+    CHI2 = CHI2 * 100
+
+END FUNCTION CALC_CHI2
 
 END MODULE SJP_UTIL
