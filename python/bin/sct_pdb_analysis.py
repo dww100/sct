@@ -76,7 +76,7 @@ def parse_arguments():
 
     return args
 
-def analyse_sphere_model(model, expt_curve, sphere_radius, param):
+def analyse_sphere_model(model, expt_curve, sphere_radius, param, neutron=False):
     """
     Take a sphere model and calculate the theoretical scattering curve. The
     Rg and Rxs1 are also calculated from the curve and returned alongside the
@@ -93,6 +93,9 @@ def analyse_sphere_model(model, expt_curve, sphere_radius, param):
     @type  param:          dictionary
     @param param:          Dictionary containing parameters to use when creating
                            models and analysing curves.
+    @param neutron:        Flag set if aiming to create a theoretical
+                           neutron curve
+    @type  neutron:        boolean
     @rtype:                dictionary
     @return                Dictionary containing the following key/value pairs:
                            - model_rg: Radius of gyration calculated directly
@@ -125,6 +128,15 @@ def analyse_sphere_model(model, expt_curve, sphere_radius, param):
                                                             param['rxs1']['fitmin'],
                                                             param['rxs1']['fitmax'])
 
+    # Neutron curves are usually smeared with parameters for the instrument used
+    if (neutron and param['curve']['smear']):
+
+        sct.curve.smear_sas_curve(result['i'], result['q'],
+                                    param['curve']['q_delta'],
+                                    param['curve']['wavelength'],
+                                    param['curve']['spread'],
+                                    param['curve']['divergence'])
+
     # Calculate Rfactor for theoretical vs experimental curves
     result['rfac'] = sct.curve.calculate_rfactor(expt_curve,
                                                  result['curve'],
@@ -138,6 +150,7 @@ args = parse_arguments()
 # Read in parameters
 param_file = file(args.parameter_file)
 param = yaml.load(param_file)
+param['curve']['q_delta'] = param['curve']['qmax'] / param['curve']['npoints']
 
 # Create output directory and open file for summary output
 if not os.path.exists(args.output_path):
@@ -267,7 +280,7 @@ for pdb in pdb_files:
     # If neutron data provided compare with curve computed from dry sphere model
     if args.neutron is not None:
 
-        neut_theor = analyse_sphere_model(dry_spheres, neut_data, radius, param)
+        neut_theor = analyse_sphere_model(dry_spheres, neut_data, radius, param, True)
 
         # Write curve to file
         curve_file = os.path.join(scn_path, pdb_id + '.scn')
