@@ -3,12 +3,30 @@ Program RfacXN
 ! RfacXn
 
 ! Takes two small angle scattering curves and compares them by calculating the R factor.
-! First curve provided is assumed to be a computationally calculated curve, 
+! First curve provided is assumed to be a computationally calculated curve,
 ! the second experimental in origin.
 ! Minimimum and maximum Q values to consider must be provided.
 
 ! Rfactor is used by analogy with crystallography where:
 ! R = sum (abs(F_expt - F_calc)) / sum (abs(F_expt))
+
+!-------------------------------------------------------------------------------
+
+! Copyright 1981-2014 University College London
+
+! Licensed under the Apache License, Version 2.0 (the "License");
+! you may not use this file except in compliance with the License.
+! You may obtain a copy of the License at
+
+!    http://www.apache.org/licenses/LICENSE-2.0
+
+! Unless required by applicable law or agreed to in writing, software
+! distributed under the License is distributed on an "AS IS" BASIS,
+! WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+! See the License for the specific language governing permissions and
+! limitations under the License.
+
+!-------------------------------------------------------------------------------
 
 ! Original author: Stephen J. Perkins
 ! Rewritten: David W. Wright
@@ -32,13 +50,13 @@ VERBOSE = .TRUE.
 WRITE (*,'(1X,A)') 'Program Rfac version 1.50'
 WRITE (*,*)
 
-! Get the filnames for the input calculated and experimental data 
+! Get the filnames for the input calculated and experimental data
 CALL GET_FILENAME ('Provide the name of the file containing the calculated data: ', INFIL1)
 CALL GET_FILENAME ('Provide the name of the file containing the experimental data: ', INFIL2)
 
 WRITE(*,*) 'Minimum value of Q to be used in fit?'
 READ(*,*)  QMIN
-      
+
 CALL READ_SCATTER_FILE (INFIL1, QMIN, QCALC, ICALC, CNO)
 CALL READ_SCATTER_FILE (INFIL2, QMIN, QOBS, IOBS, XNO)
 
@@ -51,7 +69,7 @@ IF (IOERR .NE. 0) THEN
     WRITE(*,*) 'Abort: Error opening file: ', OUTFIL
     STOP
 END IF
-      
+
 ! Match the observed (experimental) and calculated values to a common Q range
 CALL QRANGE_MATCH(QOBS, QCALC, ICALC, XNO, CNO, IMATCH, MATCHNO)
 
@@ -66,12 +84,12 @@ IF (VERBOSE) THEN
     WRITE(*,*) 'Max Xptl Q=', QOBS(XNO)
     WRITE(*,*) 'Max Calc Q=', QCALC(CNO)
 END IF
-       
+
 WRITE(*,*) 'What is the maximum Q value to be used in the fit?'
 READ(*,*)  QMAX
 
-! Use the ratio of the experimental and calculated curves to give a initial guess 
-! of the concentration       
+! Use the ratio of the experimental and calculated curves to give a initial guess
+! of the concentration
 CON = AVIXPT / AVICAL
 RFACTOR = CALC_RFACTOR (QOBS, IOBS, IMATCH, MATCHNO, QMIN, QMAX, CON, VERBOSE)
 

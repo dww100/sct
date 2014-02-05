@@ -2,16 +2,33 @@ PROGRAM SLUV
 
 ! Program to calculate the scattering length per unit volume from amino acid and carbohydrate composition
 ! of a protein/glycoprotein
-! 
-! Requires a file containg the occurence frequency of each amino acid (in the order they appear in the variable AN) 
+!
+! Requires a file containg the occurence frequency of each amino acid (in the order they appear in the variable AN)
 ! This file is read from stdin
 
 ! [SJP1] Perkins, S. J. (1986). Protein volumes and hydration effects: The calculations of partial specific volumes, neutron scattering matchpoints
-! and 280-nm absorption coefficients for proteins and glycoproteins from amino acid sequences. Eur. J. Biochem. 157, 169-180 
+! and 280-nm absorption coefficients for proteins and glycoproteins from amino acid sequences. Eur. J. Biochem. 157, 169-180
 !
-! [SJP2] Perkins, S. J. (2001). X-ray and neutron scattering analyses of hydration shells: 
+! [SJP2] Perkins, S. J. (2001). X-ray and neutron scattering analyses of hydration shells:
 ! a molecular interpretation based on sequence predictions and model fits. Biophysical Chemistry 93, 129–139
 
+!-------------------------------------------------------------------------------
+
+! Copyright 1981-2014 University College London
+
+! Licensed under the Apache License, Version 2.0 (the "License");
+! you may not use this file except in compliance with the License.
+! You may obtain a copy of the License at
+
+!    http://www.apache.org/licenses/LICENSE-2.0
+
+! Unless required by applicable law or agreed to in writing, software
+! distributed under the License is distributed on an "AS IS" BASIS,
+! WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+! See the License for the specific language governing permissions and
+! limitations under the License.
+
+!-------------------------------------------------------------------------------
 
 ! First (Fortran 77) version written 19/5/1979 by Stephen J. Perkins (SJP)
 ! Modified and much rewritten 9/8/1982 by SJP
@@ -25,7 +42,7 @@ PROGRAM SLUV
 INTEGER NTITL1(20)
 DIMENSION AVS(27), AVR(27), AVZ84(27), AVCE(27)
 DIMENSION IAC(27), ELEC(27), AVC(27), AVZ72(27), AVP(27)
-DIMENSION BH(27), BD(27) 
+DIMENSION BH(27), BD(27)
 DIMENSION NOEX(27), NOPEEX(27)
 DIMENSION BHT(27), BDT(27), WT(27)
 
@@ -46,7 +63,7 @@ REAL BOH, BOD, VOLDIF, DIFOH, VOLOH, VL
 COMMON AVS, AVR, AVZ84, AVCE, ELEC, AVC, AVZ72, AVP, BH, BD, WT
 
 ! IF IARGC() .LT. 2 THEN
-!    WRITE(*,*) "Error: An input file must be provided!" 
+!    WRITE(*,*) "Error: An input file must be provided!"
 !    STOP
 ! END IF
 
@@ -66,18 +83,18 @@ DATA AVCE/168.9,187.9,141.4,168.9,228.5,163.1,87.2,60.6, &
     106.7,192.1,122.4,117.4,91.0,152.4,141.4,117.4, &
     142.4,114.6,174.3,181.3,164.9,164.9,164.9,224.5, &
     224.5,164.3,281.2/
-  
+
 ! Densitrometry
 ! Zamyatnin, A. A. (1972) Progr. Biophys. Mol. Biol. 24, 109-123.
 DATA  AVZ72/166.1,189.2,139.4,166.1,226.9,162.3,88.3,59.9, &
-    108.1,192.9,122.2,115.7,88.6,152.5,137.8,117.3, & 
+    108.1,192.9,122.2,115.7,88.6,152.5,137.8,117.3, &
     143.3,110.6,167.9,172.7,162.7,162.2,161.9,216.6, &
     227.5,155.4,320.9/
 
 ! Densitrometry
-! Zamyatnin, A. A. (1984) Annu. Rev. Biophys. Bioeng. 13, 145-165.    
+! Zamyatnin, A. A. (1984) Annu. Rev. Biophys. Bioeng. 13, 145-165.
 DATA AVZ84/164.6,187.2,136.8,164.6,225.1,161.0,86.4,57.8, &
-    107.9,190.5,120.6,113.5,86.2,150.1,128.7,115.6, & 
+    107.9,190.5,120.6,113.5,86.2,150.1,128.7,115.6, &
     141.9,108.5,166.2,197.3,162.7,162.2,161.9,216.6, &
     227.5,155.4,320.9/
 
@@ -106,7 +123,7 @@ DATA AVS/166.1,189.7,138.8,168.0,227.9,165.2,87.8,59.9, &
     105.4,191.2,123.3,118.3,91.7,156.3,140.9,120.1, &
     145.1,115.4,172.7,188.2,171.9,166.8,170.8,222.0, &
     232.9,160.8,326.3/
-    
+
 ! Amino acid/carboydrate scattering lengths ( (H)ydrogen and (D)ueterium)
 
 ! Values direct from:
@@ -126,12 +143,12 @@ DATA BH/1.3948,4.1385,1.4781,1.3948,6.0345,1.7628,1.6447,1.7280, &
     2.3036,4.7189,2.2265,2.1418,2.2251,4.3974,3.7615,3.4560, &
     3.3727,3.8448,1.5864,3.4664,3.1506,3.1506,3.1506,4.2982, &
     4.2982,2.5702,6.9121/
-    
+
 DATA BD/2.4361,5.1798,2.5194,2.4381,8.1171,2.8041,2.6860,2.7693, &
     3.3449,6.8015,2.2265,4.2244,4.3077,7.5213,4.8028,6.5799, &
     6.4966,4.8861,5.7516,9.7142,6.2745,6.2745,6.2745,7.4221, &
     7.4221,5.6941,12.1186/
-    
+
 ! Number of exchangable hydrogens
 DATA NOEX/1,1,1,1,2,1,1,1, &
     1,2,0,2,2,3,1,3, &
@@ -142,13 +159,13 @@ DATA NOPEEX/1,1,1,1,1,1,1,1, &
     1,1,0,1,1,1,1,1, &
     1,1,1,1,0,0,0,0, &
     0,0,0/
-    
+
 ! Residue/sugar masses
 DATA WT/113.0,147.0,99.0,113.0,186.0,131.0,71.0,57.0, &
     102.0,163.0,97.0,101.0,87.0,137.0,129.0,114.0, &
     128.0,115.0,128.0,156.0,162.0,162.0,162.0,203.0, &
     203.0,146.0,290.0/
-    
+
 ! Number of electrons per residue/sugar
 DATA ELEC/62.0,78.0,54.0,62.0,98.0,70.0,38.0,30.0, &
     53.0,86.0,52.0,54.0,46.0,73.0,67.0,60.0, &
@@ -167,7 +184,7 @@ EHHO = 10.0/29.9
 AVAGADRO = 0.6023
 
 ! Unit 5 is stdin
-! Read first line of the input file, which is a title.   
+! Read first line of the input file, which is a title.
 READ(5,'(20A2)')(NTITL1(J),J=1,20)
 
 ! Read in the residue frequencies from the input file
@@ -180,7 +197,7 @@ WRITE (6,'(A)') " SLUV VERSION OCTOBER 2013 :  S. J. Perkins & D. W. Wright"
 WRITE(6,'(1X)')
 WRITE(6,'(A,1X)') " RESID  TOT C&E43 ZAM72 ZAM84 RIC74 CHO75 PER85 CON85   MWT ELEC B(H2O) B(D2O)"
 WRITE(6,'(1X)')
-DO I=1,27 
+DO I=1,27
     IF(I.EQ.12) WRITE(6,'(1X)')
     IF(I.EQ.21) THEN
         WRITE(6,'(1X)')
@@ -188,7 +205,7 @@ DO I=1,27
         WRITE(6,'(1X)')
     END IF
     WRITE(6,'(3X,A3,I5,7F6.1,2X,2F5.0,F6.3,F7.3)') AN(I), IAC(I), AVCE(I), AVZ72(I), AVZ84(I), AVR(I), AVC(I), &
-        AVP(I), AVS(I), WT(I), ELEC(I), BH(I), BD(I)      
+        AVP(I), AVS(I), WT(I), ELEC(I), BH(I), BD(I)
 END DO
 
 !
@@ -203,11 +220,11 @@ WRITE(6,'(1X)')
 ! Store total weight so that we can work out what fraction of the whole is protein etc. later on
 TOTWT=WEIGHT
 
-! Calculate densities and specific volumes 
+! Calculate densities and specific volumes
 
 BHM = BHTOT/WEIGHT
 BDM = BDTOT/WEIGHT
-      
+
 SVC = VOLC * AVAGADRO/WEIGHT
 SVP = VOLP * AVAGADRO/WEIGHT
 SVZ = VOLZ * AVAGADRO/WEIGHT
@@ -215,7 +232,7 @@ SVZZ = VOLZZ * AVAGADRO/WEIGHT
 SVCC = VOLCC * AVAGADRO/WEIGHT
 SVR= VOLR * AVAGADRO/WEIGHT
 SVS= VOLS * AVAGADRO/WEIGHT
-      
+
 ELC = ELTOT/VOLC
 ELZ = ELTOT/VOLZ
 ELP = ELTOT/VOLP
@@ -223,7 +240,7 @@ ELCC = ELTOT/VOLCC
 ELZZ = ELTOT/VOLZZ
 ELR = ELTOT/VOLR
 ELS = ELTOT/VOLS
-      
+
 SDHC = BHTOT/VOLC
 SDDC = BDTOT/VOLC
 SDHP = BHTOT/VOLP
@@ -240,7 +257,7 @@ SDHS = BHTOT/VOLS
 SDDS = BDTOT/VOLS
 
 ! Calculate Matchpoints
-      
+
 ATPTC = ((SDHC-BHHO)*100.0)/(BDDO-BHHO-SDDC+SDHC)
 ATPTP = ((SDHP-BHHO)*100.0)/(BDDO-BHHO-SDDP+SDHP)
 ATPTZ = ((SDHZ-BHHO)*100.0)/(BDDO-BHHO-SDDZ+SDHZ)
@@ -255,7 +272,7 @@ SCZZ= (ATPTZZ*(BDDO-BHHO)/100.0) + BHHO
 SCCC= (ATPTCC*(BDDO-BHHO)/100.0) + BHHO
 SCR = (ATPTR*(BDDO-BHHO)/100.0) + BHHO
 SCS = (ATPTS*(BDDO-BHHO)/100.0) + BHHO
-      
+
 EXTINC = (10.0 * ( IAC(9) * 150.0 + IAC(10) * 1340.0 + IAC(5) * 5550.0) ) / WEIGHT
 EXTINCC = EXTINC * 1.06
 EXTIN = EXTINC * 1.03
@@ -289,10 +306,10 @@ VOLDIF = VOLC - VOLS
 DIFOH = VOLDIF / 5.4
 ! Bound water volume is 24.5
 VOLOH=24.5
-      
-BHTOT = BHTOT + ( BOH * DIFOH ) 
+
+BHTOT = BHTOT + ( BOH * DIFOH )
 BDTOT = BDTOT + ( BOD * DIFOH )
- 
+
 VL = VOLOH*DIFOH
 
 VOLC = VOLC + VL
@@ -304,7 +321,7 @@ VOLR = VOLR + VL
 VOLS = VOLS + VL
 
 ISUMC = 0
-DO I=1,20 
+DO I=1,20
     ISUMC = ISUMC + IAC(I)
 END DO
 DIFRES = DIFOH/ISUMC
@@ -333,7 +350,7 @@ ATPTR = ((SDHR-BHHO)*100.0)/(BDDO-BHHO-SDDR+SDHR)
 ATPTS = ((SDHS-BHHO)*100.0)/(BDDO-BHHO-SDDS+SDHS)
 
 WRITE(6,*) " ************* HYDRATION OF TOTAL GLYCOPROTEIN BY OH GROUPS ******************"
-WRITE(6,'(A,F10.0,A,F10.0)') " DIFF (CHO75 - CON85) VOLS = ", VOLDIF, " TOTAL OF EQUIV BOUND H2O  = ", DIFOH 
+WRITE(6,'(A,F10.0,A,F10.0)') " DIFF (CHO75 - CON85) VOLS = ", VOLDIF, " TOTAL OF EQUIV BOUND H2O  = ", DIFOH
 WRITE(6,'(A,F10.2)') " AVERAGE H2O PER AA RESIDUE= ", DIFRES
 WRITE (6,'(A,F10.2,4X,F10.2)') " TOTAL B      IN H2O & D2O  ", BHTOT, BDTOT
 WRITE(6,'(17X,A)') "   C&E 43  ZAM 72  ZAM 84  RIC 74  CHO 75  PER 85  CON 85"
@@ -348,11 +365,11 @@ CALL SUM_PROPERTIES( 1, 20, IAC, WEIGHT, BDTOT, BHTOT, ELTOT, VOLC, VOLP, VOLZ, 
 
 FRWT=(WEIGHT*100.0)/TOTWT
 
-! Calculate densities and specific volumes 
+! Calculate densities and specific volumes
 
 BHM = BHTOT/WEIGHT
 BDM = BDTOT/WEIGHT
-      
+
 SVC = VOLC * AVAGADRO/WEIGHT
 SVP = VOLP * AVAGADRO/WEIGHT
 SVZ = VOLZ * AVAGADRO/WEIGHT
@@ -360,7 +377,7 @@ SVZZ = VOLZZ * AVAGADRO/WEIGHT
 SVCC = VOLCC * AVAGADRO/WEIGHT
 SVR= VOLR * AVAGADRO/WEIGHT
 SVS= VOLS * AVAGADRO/WEIGHT
-      
+
 ELC = ELTOT/VOLC
 ELZ = ELTOT/VOLZ
 ELP = ELTOT/VOLP
@@ -368,7 +385,7 @@ ELCC = ELTOT/VOLCC
 ELZZ = ELTOT/VOLZZ
 ELR = ELTOT/VOLR
 ELS = ELTOT/VOLS
-      
+
 SDHC = BHTOT/VOLC
 SDDC = BDTOT/VOLC
 SDHP = BHTOT/VOLP
@@ -385,7 +402,7 @@ SDHS = BHTOT/VOLS
 SDDS = BDTOT/VOLS
 
 ! Calculate Matchpoints
-      
+
 ATPTC = ((SDHC-BHHO)*100.0)/(BDDO-BHHO-SDDC+SDHC)
 ATPTP = ((SDHP-BHHO)*100.0)/(BDDO-BHHO-SDDP+SDHP)
 ATPTZ = ((SDHZ-BHHO)*100.0)/(BDDO-BHHO-SDDZ+SDHZ)
@@ -420,11 +437,11 @@ WRITE (6,'(A,7F8.5)') " ELECT DEN        ", ELCC, ELZ, ELZZ, ELR, ELC, ELP, ELS
 CALL SUM_PROPERTIES( 1, 11, IAC, WEIGHT, BDTOT, BHTOT, ELTOT, VOLC, VOLP, VOLZ, VOLZZ, VOLCC, VOLR, VOLS, ISUMC)
 FRWT=(WEIGHT*100.0)/TOTWT
 
-! Calculate densities and specific volumes 
+! Calculate densities and specific volumes
 
 BHM = BHTOT/WEIGHT
 BDM = BDTOT/WEIGHT
-      
+
 SVC = VOLC * AVAGADRO/WEIGHT
 SVP = VOLP * AVAGADRO/WEIGHT
 SVZ = VOLZ * AVAGADRO/WEIGHT
@@ -432,7 +449,7 @@ SVZZ = VOLZZ * AVAGADRO/WEIGHT
 SVCC = VOLCC * AVAGADRO/WEIGHT
 SVR= VOLR * AVAGADRO/WEIGHT
 SVS= VOLS * AVAGADRO/WEIGHT
-      
+
 ELC = ELTOT/VOLC
 ELZ = ELTOT/VOLZ
 ELP = ELTOT/VOLP
@@ -440,7 +457,7 @@ ELCC = ELTOT/VOLCC
 ELZZ = ELTOT/VOLZZ
 ELR = ELTOT/VOLR
 ELS = ELTOT/VOLS
-      
+
 SDHC = BHTOT/VOLC
 SDDC = BDTOT/VOLC
 SDHP = BHTOT/VOLP
@@ -457,7 +474,7 @@ SDHS = BHTOT/VOLS
 SDDS = BDTOT/VOLS
 
 ! Calculate Matchpoints
-      
+
 ATPTC = ((SDHC-BHHO)*100.0)/(BDDO-BHHO-SDDC+SDHC)
 ATPTP = ((SDHP-BHHO)*100.0)/(BDDO-BHHO-SDDP+SDHP)
 ATPTZ = ((SDHZ-BHHO)*100.0)/(BDDO-BHHO-SDDZ+SDHZ)
@@ -494,11 +511,11 @@ CALL SUM_PROPERTIES( 12, 20, IAC, WEIGHT, BDTOT, BHTOT, ELTOT, VOLC, VOLP, VOLZ,
 
 FRWT=(WEIGHT*100.0)/TOTWT
 
-! Calculate densities and specific volumes 
+! Calculate densities and specific volumes
 
 BHM = BHTOT/WEIGHT
 BDM = BDTOT/WEIGHT
-      
+
 SVC = VOLC * AVAGADRO/WEIGHT
 SVP = VOLP * AVAGADRO/WEIGHT
 SVZ = VOLZ * AVAGADRO/WEIGHT
@@ -506,7 +523,7 @@ SVZZ = VOLZZ * AVAGADRO/WEIGHT
 SVCC = VOLCC * AVAGADRO/WEIGHT
 SVR = VOLR * AVAGADRO/WEIGHT
 SVS = VOLS * AVAGADRO/WEIGHT
-      
+
 ELC = ELTOT/VOLC
 ELZ = ELTOT/VOLZ
 ELP = ELTOT/VOLP
@@ -514,7 +531,7 @@ ELCC = ELTOT/VOLCC
 ELZZ = ELTOT/VOLZZ
 ELR = ELTOT/VOLR
 ELS = ELTOT/VOLS
-      
+
 SDHC = BHTOT/VOLC
 SDDC = BDTOT/VOLC
 SDHP = BHTOT/VOLP
@@ -531,7 +548,7 @@ SDHS = BHTOT/VOLS
 SDDS = BDTOT/VOLS
 
 ! Calculate Matchpoints
-     
+
 ATPTC = ((SDHC-BHHO)*100.0)/(BDDO-BHHO-SDDC+SDHC)
 ATPTP = ((SDHP-BHHO)*100.0)/(BDDO-BHHO-SDDP+SDHP)
 ATPTZ = ((SDHZ-BHHO)*100.0)/(BDDO-BHHO-SDDZ+SDHZ)
@@ -568,11 +585,11 @@ CALL SUM_PROPERTIES( 21, 27, IAC, WEIGHT, BDTOT, BHTOT, ELTOT, VOLC, VOLP, VOLZ,
 IF (WEIGHT .NE. 0.0) THEN
     FRWT=(WEIGHT*100.0)/TOTWT
 
-    ! Calculate densities and specific volumes 
+    ! Calculate densities and specific volumes
 
     BHM = BHTOT/WEIGHT
     BDM = BDTOT/WEIGHT
-      
+
     SVC = VOLC * AVAGADRO/WEIGHT
     SVP = VOLP * AVAGADRO/WEIGHT
     SVZ = VOLZ * AVAGADRO/WEIGHT
@@ -580,7 +597,7 @@ IF (WEIGHT .NE. 0.0) THEN
     SVCC = VOLCC * AVAGADRO/WEIGHT
     SVR= VOLR * AVAGADRO/WEIGHT
     SVS= VOLS * AVAGADRO/WEIGHT
-      
+
     ELC = ELTOT/VOLC
     ELZ = ELTOT/VOLZ
     ELP = ELTOT/VOLP
@@ -588,7 +605,7 @@ IF (WEIGHT .NE. 0.0) THEN
     ELZZ = ELTOT/VOLZZ
     ELR = ELTOT/VOLR
     ELS = ELTOT/VOLS
-      
+
     SDHC = BHTOT/VOLC
     SDDC = BDTOT/VOLC
     SDHP = BHTOT/VOLP
@@ -605,7 +622,7 @@ IF (WEIGHT .NE. 0.0) THEN
     SDDS = BDTOT/VOLS
 
     ! Calculate Matchpoints
-      
+
     ATPTC = ((SDHC-BHHO)*100.0)/(BDDO-BHHO-SDDC+SDHC)
     ATPTP = ((SDHP-BHHO)*100.0)/(BDDO-BHHO-SDDP+SDHP)
     ATPTZ = ((SDHZ-BHHO)*100.0)/(BDDO-BHHO-SDDZ+SDHZ)
@@ -637,10 +654,10 @@ IF (WEIGHT .NE. 0.0) THEN
     WRITE (6,'(A,7F8.5)') " ELECT DEN        ", ELCC, ELZ, ELZZ, ELR, ELC, ELP, ELS
 
 END IF
-      
-! Exchange for peptide hydrogens     
 
-WRITE(6,'(A)')" ************* EXCHANGEABLE PEPTIDE HYDROGENS ********************************" 
+! Exchange for peptide hydrogens
+
+WRITE(6,'(A)')" ************* EXCHANGEABLE PEPTIDE HYDROGENS ********************************"
 WRITE(6,'(25X,A)') "   C&E43  ZAM72  ZAM84  RIC74  CHO75  PER85  CON85"
 
 CALL SUM_PROPERTIES( 1, 27, IAC, WEIGHT, BDTOT, BHTOT, ELTOT, VOLC, VOLP, VOLZ, VOLZZ, VOLCC, VOLR, VOLS, ISUMC)
@@ -668,7 +685,7 @@ DO II=1,10
     SDDCC= BDTOT/VOLCC
     SDDR = BDTOT/VOLR
     SDDS = BDTOT/VOLS
-      
+
     ATPTC = ((SDHC-BHHO)*100.0)/(BDDO-BHHO-SDDC+SDHC)
     ATPTP = ((SDHP-BHHO)*100.0)/(BDDO-BHHO-SDDP+SDHP)
     ATPTZ = ((SDHZ-BHHO)*100.0)/(BDDO-BHHO-SDDZ+SDHZ)
@@ -676,12 +693,12 @@ DO II=1,10
     ATPTCC= ((SDHCC-BHHO)*100.0)/(BDDO-BHHO-SDDCC+SDHCC)
     ATPTR = ((SDHR -BHHO)*100.0)/(BDDO-BHHO-SDDR+SDHR)
     ATPTS = ((SDHS -BHHO)*100.0)/(BDDO-BHHO-SDDS+SDHS)
-      
+
     WRITE (6,'(A,F4.1,A,2F6.0,7F7.2)') " EXC", FM, " TOT B", BHTOT, BDTOT, ATPTCC, ATPTZ, ATPTZZ, ATPTR, ATPTC, ATPTP, ATPTS
-      
+
 END DO
 
-! Exchange for all hydrogens  
+! Exchange for all hydrogens
 
 WRITE (6,'(A)') " ************* TOTAL OF EXCHANGEABLE HYDROGENS *******************************"
 WRITE(6,'(25X,A)') "   C&E43  ZAM72  ZAM84  RIC74  CHO75  PER85  CON85"
@@ -691,7 +708,7 @@ DO II= 1,10
     BDTOT = 0.0
     FM=II*0.1
     DO I=1,27
-        ! 1.0413 is the difference between H and D scattering lengths 
+        ! 1.0413 is the difference between H and D scattering lengths
         BDTOT = BDTOT + BD(I)*IAC(I) - (NOEX(I) * 1.0413 * FM * IAC(I))
     END DO
 
@@ -702,7 +719,7 @@ DO II= 1,10
     SDDCC= BDTOT/VOLCC
     SDDR = BDTOT/VOLR
     SDDS = BDTOT/VOLS
-      
+
     ATPTC = ((SDHC-BHHO)*100.0)/(BDDO-BHHO-SDDC+SDHC)
     ATPTP = ((SDHP-BHHO)*100.0)/(BDDO-BHHO-SDDP+SDHP)
     ATPTZ = ((SDHZ-BHHO)*100.0)/(BDDO-BHHO-SDDZ+SDHZ)
@@ -710,21 +727,21 @@ DO II= 1,10
     ATPTCC= ((SDHCC-BHHO)*100.0)/(BDDO-BHHO-SDDCC+SDHCC)
     ATPTR = ((SDHR -BHHO)*100.0)/(BDDO-BHHO-SDDR+SDHR)
     ATPTS = ((SDHS -BHHO)*100.0)/(BDDO-BHHO-SDDS+SDHS)
-      
+
     WRITE (6,'(A,F4.1,A,2F6.0,7F7.2)') " EXC", FM, " TOT B", BHTOT, BDTOT, ATPTCC, ATPTZ, ATPTZZ, ATPTR, ATPTC, ATPTP, ATPTS
-    
+
 END DO
 
 WRITE(6,'(1X)')
 WRITE(6,'(1X)')
-      
+
 CONTAINS
 
 SUBROUTINE SUM_PROPERTIES( FIRST, LAST, IAC, WEIGHT, BDTOT, BHTOT, ELTOT, VOLC, VOLP, VOLZ, VOLZZ, VOLCC, VOLR, VOLS, ISUMC)
 
 ! Sum the various properties for the residues between the FIRST and LAST indicies
 ! See the definition of AN in the main program for the ordering
-! IAC provides the number of each residue type 
+! IAC provides the number of each residue type
 
     INTEGER, INTENT(IN) :: FIRST, LAST
     INTEGER, DIMENSION(27), INTENT(IN) :: IAC
@@ -748,7 +765,7 @@ SUBROUTINE SUM_PROPERTIES( FIRST, LAST, IAC, WEIGHT, BDTOT, BHTOT, ELTOT, VOLC, 
     VOLS=0.0
     ISUMC = 0
 
-    DO I = FIRST, LAST 
+    DO I = FIRST, LAST
         ISUMC = ISUMC + IAC(I)
         BHTOT = BHTOT + BH(I) * IAC(I)
         BDTOT = BDTOT + BD(I)*IAC(I)
