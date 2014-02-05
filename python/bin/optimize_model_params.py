@@ -10,7 +10,7 @@ These parameters can then be put into the input file (yaml) for the
 analyse_pdb_models.py script to run on a series of models.
 """
 
-# Copyright 2014 David W. Wright
+# Copyright 2014 University College London
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

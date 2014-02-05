@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Take sequence from a PDB or FASTA file and return a yaml file 
+Take sequence from a PDB or FASTA file and return a yaml file
 containing the frequencies of all residue types.
 """
 
-# Copyright 2014 David W. Wright
+# Copyright 2014 University College London
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

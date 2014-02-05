@@ -8,7 +8,7 @@ R factor is used by analogy with crystallography where:
 R = sum (abs(F_expt - F_calc)) / sum (abs(F_expt))
 """
 
-# Copyright 2014 David W. Wright
+# Copyright 2014 University College London
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

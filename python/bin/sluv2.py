@@ -16,7 +16,7 @@ hydration shells: a molecular interpretation based on sequence predictions
 and model fits. Biophysical Chemistry 93, 129–139
 """
 
-# Copyright 2014 David W. Wright
+# Copyright 2014 University College London
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

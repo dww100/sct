@@ -10,7 +10,7 @@ per box and a percentage tolerance for the optimization as inputs.
 Within the Perkins lab this replaces the do_cubeside script.
 """
 
-# Copyright 2014 David W. Wright
+# Copyright 2014 University College London
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

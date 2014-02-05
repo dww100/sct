@@ -5,7 +5,7 @@ Add hydration shell of spheres around an existing sphere model read from a SCT
 format sphere file.
 """
 
-# Copyright 2014 David W. Wright
+# Copyright 2014 University College London
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
