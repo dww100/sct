@@ -7,12 +7,16 @@ Stephen J Perkins (s.perkins@ucl.ac.uk) and the Python version was created by Da
 Requirements:
 -------------
 gfortran version > 4.2
+
 Python 2.7
+
 NumPy
+
 SciPy
+
 matplotlib
 
-We recommend the installation of Enthought Canopy to guarantee the correct installation of python and the 
+We recommend the installation of Enthought Canopy to guarantee the correct installation of python and the packages required
 
 Installation instructions:
 --------------------------
