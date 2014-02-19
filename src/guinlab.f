@@ -1,0 +1,376 @@
+C--------------------------------------------------------------------------
+C
+C Copyright 1981-2014 University College London
+C
+C Licensed under the Apache License, Version 2.0 (the "License");
+C you may not use this file except in compliance with the License.
+C You may obtain a copy of the License at
+C
+C    http://www.apache.org/licenses/LICENSE-2.0
+C
+C Unless required by applicable law or agreed to in writing, software
+C distributed under the License is distributed on an "AS IS" BASIS,
+C WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+C See the License for the specific language governing permissions and
+C limitations under the License.
+C
+C--------------------------------------------------------------------------
+      SUBROUTINE GUINLAB(RDRMOD)
+      IMPLICIT NONE
+      INCLUDE 'SCTPL.COM'
+      COMMON /LINEFIT/ R, W, SI, SIGSI, SL, SIGSL, I0, DI0, RG, DRG
+      DOUBLE PRECISION R(6), W(7), SI, SIGSI, SL, SIGSL, I0(10),
+     *                 DI0(10), RG(10), DRG(10)
+      DOUBLE PRECISION QRG(10), DQRG(10)
+      CHARACTER DATE*9, TIME*8, RGTYPE*3, QRGTYP*5
+      REAL XSTART, YSTART, YDIFF, XOFFST, I0I0, DY, RDATA(2)
+      INTEGER II, SYMBL, NAFTPT, RDRMOD, COUNT, LIST(6), RGLEN, QRGLEN,
+     *        BIG, MEDIUM, SMALL
+C Variables added 29/7/91
+      REAL PNUMX, PNUMY, PNAMX, PNAMY, PSYMBX, PSYMBY, PLOTCX, PLOTCY,
+     *     PLOT1X, PLOT1Y, PSYMX, PSYMY, PLOTLX, PLOTLY, FITCX, FITCY,
+     *     FIT1X, FIT1Y, FTSYMX, FTSYMY, FITLX, FITLY, QCX, QCY,
+     *     QVAL1X, QVAL1Y, QSYMX, QSYMY, QVALLX, QVALLY, I0X, I0Y,
+     *     I0CX, I0CY, I0EX, I0EY, I0SYMX, I0SYMY, RGCX, RGCY, RGX, RGY,
+     *     RGSYMX, RGSYMY, RGERRX, RGERRY, QRGCX, QRGCY, QRG1X, QRG1Y,
+     *     QRSIMX, QRSIMY, QRGLX, QRGLY
+      INTEGER CRSIZ
+
+      XSTART = .965
+      XOFFST = .011
+      YSTART = .853846
+      BIG = 20
+      MEDIUM = 15
+      SMALL = 13
+C Extra gap between each group of data
+      YDIFF = 0.02
+C Get the date and time
+C-SJP      CALL ENQDAT(DATE)
+C-SJP      CALL ENQTIM(TIME)
+C Decide which bits of text to use in the key
+      IF (CURPLOT.EQ.0) THEN
+         RGTYPE(1:3) = 'RTH'
+	 RGLEN = 3
+         QRGTYP(1:4) = 'QRTH'
+	 QRGLEN = 4
+      ELSE IF (CURPLOT.EQ.1) THEN
+         RGTYPE(1:3) = 'RXS'
+	 RGLEN = 3
+         QRGTYP(1:4) = 'QRXS'
+	 QRGLEN = 4
+      ELSE IF (CURPLOT.EQ.2) THEN
+         RGTYPE(1:2) = 'RG'
+	 RGLEN = 2
+         QRGTYP(1:3) = 'QRG'
+	 QRGLEN = 3
+      ENDIF
+C Have to take square roots of the Q values because they are Guin plots!
+      DO 10 II = 1, PLOTCNT
+         QRG(II) = RG(II) * DSQRT(Q(II,FSTFITPT(II)))
+         DQRG(II) = RG(II) * DSQRT(Q(II,LSTFITPT(II)))
+ 10   CONTINUE
+C Draw a box around max drawing area
+C-SJP      CALL PSPACE(0.0, 1.33, 0.0, 1.0)
+C-SJP      CALL BORDER
+C-SJP      CALL MAP(0.0, 1.33, 0.0, 1.0)
+C Sort out which plots to plot
+      IF (RDRMOD.EQ.1) THEN
+         COUNT = 0
+         DO 30 II = 1, MAXPLOT
+           IF ((PTYPE(II).EQ.CURPLOT).AND.(ISPLOT(II).EQ.1)) THEN
+	      COUNT = COUNT + 1
+	      LIST(COUNT) = II
+	   ENDIF
+ 30     CONTINUE
+      ELSE
+         COUNT = 1
+	 LIST(1) = PLOTCNT
+      ENDIF
+      IF (COUNT.GT.6) THEN
+C-SJP         CALL PICNOW
+	 CALL TOALPH
+         CALL ERRMSG(" More than 6 plots ! Only showing first 6 ")
+	 COUNT = 6
+      ENDIF
+C This appears regardless of how many plots, always in the same place.
+C-SJP      CALL CTRMAG(BIG)
+C-SJP      CALL PLOTCS(.965, .92, 'GUINIER ')
+C-SJP      CALL TYPECS(RGTYPE(1:RGLEN))
+C-SJP      CALL CTRMAG(MEDIUM)
+C-SJP      CALL PLOTCS(.965, .89, DATE)
+C-SJP      CALL SPACE(2)
+C-SJP      CALL TYPECS(TIME)
+C A.S. Nealis 29/7/91
+C Init all the first x and y coords
+      IF (COUNT.LT.3) THEN
+         CRSIZ = BIG
+	 YDIFF = 20. * CRSIZ * .001
+	 DO 50 II = 1, COUNT
+C PLOT NO.
+            PNUMX = XSTART + 2 * XOFFST
+            PNUMY = YSTART - YDIFF * (II - 1)
+C FILENAME
+            PNAMX = PNUMX + .001 * CRSIZ
+            PNAMY = PNUMY
+C PLOT SYMBOL
+            PSYMBX = PNUMX + 15 * CRSIZ * .001
+	    PSYMBY = PNUMY
+C 'PLOT' N1 -> N2
+            PLOTCX = XSTART + XOFFST
+            PLOTCY = PNUMY - 2 * (2 * CRSIZ * .001)
+C N1
+            PLOT1X = XSTART + 9 * CRSIZ * .001
+            PLOT1Y = PLOTCY
+C -> SYMBOL
+            PSYMX = PLOTCX + 9 * CRSIZ * .001
+	    PSYMY = PLOTCY
+C N2
+            PLOTLX = PLOTCX + 13 * CRSIZ * .001
+	    PLOTLY = PLOTCY
+C 'FIT' N1 -> N2
+            FITCX = XSTART + XOFFST
+	    FITCY = PNUMY - 3 * (2 * CRSIZ * .001)
+C N1
+            FIT1X = PLOT1X
+	    FIT1Y = FITCY
+C -> SYMBOL
+            FTSYMX = PSYMX
+	    FTSYMY = FITCY
+C N2
+            FITLX = PLOTLX
+	    FITLY = FITCY
+C 'Q' N1.NNN -> N2.NNN
+            QCX = XSTART + XOFFST
+            QCY = PNUMY - 4 * (2 * CRSIZ * .001)
+C N1.NNN
+            QVAL1X = QCX + 4 * CRSIZ * .001
+	    QVAL1Y = QCY
+C -> SYMBOL
+            QSYMX = PSYMX
+	    QSYMY = QCY
+C N2.NNN
+            QVALLX = QCX + 12 * CRSIZ * .001
+	    QVALLY = QCY
+C I0 / IQQ OR WHATEVER FROM N1.NNN +- N2.NNN
+            I0CX = XSTART + XOFFST
+	    I0CY = QCY - 2 * (2 * CRSIZ * .001)
+C N1.NNN - A BIT TRICKY, SINCE I0S ARE A BLOODY NUISANCE. LIMITED SPACE ON
+C THE SCREEN DEMANDS APPROXIMATIONS ARE MADE. NEED TO FIND OUT HOW BIG THE
+C I0 IS, SO ONE KNOWS WHERE TO POSITION THE DECIMAL POINT. IF I0 VERY BIG,
+C HAVE TO SWITCH TO EXPONENTIAL NOTATION!
+            CALL I0SIZE(REAL(I0(LIST(II))), NAFTPT, COUNT)
+	    IF (NAFTPT.EQ.-1.OR.NAFTPT.EQ.0) THEN
+               I0X = I0CX + 3 * CRSIZ * .001
+               I0Y = I0CY
+	       I0EX = I0CX + 11 * CRSIZ * .001
+	       I0EY = I0CY
+            ELSE
+	       IF (NAFTPT.EQ.-2) NAFTPT = 6
+	       I0X = I0CX + (9 - NAFTPT) * CRSIZ * .001
+	       I0Y = I0CY
+	       I0EX = I0CX + (17 - NAFTPT) * CRSIZ * .001
+	       I0EY = I0CY
+            ENDIF
+	    I0SYMX = I0CX + 9 * CRSIZ * .001
+	    I0SYMY = I0CY
+C RG / RXS OR WHATEVER, RG +- DRG
+            RGCX = XSTART + XOFFST
+	    RGCY = I0CY - 2 * CRSIZ * .001
+C RG X/Y COORDS
+            RGX = RGCX + 7 * CRSIZ * .001
+	    RGY = RGCY
+C +-
+            RGSYMX = I0SYMX
+	    RGSYMY = RGCY
+C DRG
+            RGERRX = RGCX + 12 * CRSIZ * .001
+            RGERRY = RGCY
+C QRG / QRXS OR WHATEVER FROM N1.NNN -> N2.NNN
+            QRGCX = XSTART + XOFFST
+            QRGCY = RGCY - 2 * CRSIZ * .001
+C N1.NNN
+            QRG1X = QRGCX + 6 * CRSIZ * .001
+	    QRG1Y = QRGCY
+C ->
+            QRSIMX = I0SYMX
+	    QRSIMY = QRGCY
+C N2.NNN
+            QRGLX = QRGCX + 12 * CRSIZ * .001
+	    QRGLY = QRGCY
+C NOW SEE HOW THEY LOOK!
+C PLOT NUMBER, NAME AND SYMBOL
+C-SJP            CALL CTRMAG(BIG)
+C-SJP            CALL PLOTNI(PNUMX, PNUMY, LIST(II))
+C-SJP            CALL PLOTCS(PNAMX, PNAMY, FILENAME(LIST(II)))
+C-SJP	    CALL PLOTNC(PSYMBX, PSYMBY, SYMBLIST(LIST(II)))
+C PLOT FROM POINT1 -> POINTL
+C-SJP            CALL PLOTCS(PLOTCX, PLOTCY, 'PLOT')
+C-SJP	    CALL PLOTNI(PLOT1X, PLOT1Y, FSTPLTPT(LIST(II)))
+C-SJP	    CALL PLOTNC(PSYMX, PSYMY, 186)
+C-SJP	    CALL PLOTNI(PLOTLX, PLOTLY, LSTPLTPT(LIST(II)))
+C FIT FROM FIT1 -> FIT2
+C-SJP            CALL PLOTCS(FITCX, FITCY, 'FIT')
+C-SJP	    CALL PLOTNI(FIT1X, FIT1Y, FSTFITPT(LIST(II)))
+C-SJP	    CALL PLOTNC(FTSYMX, FTSYMY, 186)
+C-SJP	    CALL PLOTNI(FITLX, FITLY, LSTFITPT(LIST(II)))
+C Q RANGE IS FROM N1.NNN -> N2.NNN
+C-SJP            CALL PLOTCS(QCX, QCY, 'Q')
+C-SJP	    CALL PLOTNF(QVAL1X, QVAL1Y, REAL(DSQRT(Q(LIST(II),
+C-SJP     *               FSTFITPT(LIST(II))))), 4)
+C-SJP	    CALL PLOTNC(QSYMX, QSYMY, 186)
+C-SJP	    CALL PLOTNF(QVALLX, QVALLY, REAL(DSQRT(Q(LIST(II),
+C-SJP     *               LSTFITPT(LIST(II))))), 4)
+C I0 IS N1.NNN +- N2.NNN
+C-SJP            CALL PLOTCS(I0CX, I0CY, 'I0')
+C-SJP	    IF (NAFTPT.EQ.-1.OR.NAFTPT.EQ.0) THEN
+C-SJP	       CALL PLOTNE(I0X, I0Y, REAL(I0(LIST(II))), 2)
+C-SJP	    ELSE
+C-SJP	       CALL PLOTNF(I0X, I0Y, REAL(I0(LIST(II))), NAFTPT)
+C-SJP            ENDIF
+C-SJP	    CALL PLOTNC(I0SYMX, I0SYMY, 163)
+C-SJP	    IF (NAFTPT.EQ.-1.OR.NAFTPT.EQ.0) THEN
+C-SJP   	       CALL PLOTNE(I0EX, I0EY, REAL(DI0(LIST(II))), 2)
+C-SJP	    ELSE
+C-SJP	       CALL PLOTNF(I0EX, I0EY, REAL(DI0(LIST(II))), NAFTPT)
+C-SJP            ENDIF
+C RG +- DRG
+C-SJP            CALL PLOTCS(RGCX, RGCY, RGTYPE(1:RGLEN))
+C-SJP	    CALL PLOTNF(RGX, RGY, REAL(RG(LIST(II))), 1)
+C-SJP	    CALL PLOTNC(RGSYMX, RGSYMY, 163)
+C-SJP	    CALL PLOTNF(RGERRX, RGERRY, REAL(DRG(LIST(II))), 1)
+C QRG FROM N1.NNN -> N2.NNN
+C-SJP            CALL PLOTCS(QRGCX, QRGCY, QRGTYP(1:QRGLEN))
+C-SJP	    CALL PLOTNF(QRG1X, QRG1Y, REAL(QRG(LIST(II))), 2)
+C-SJP	    CALL PLOTNC(QRSIMX, QRSIMY, 186)
+C-SJP	    CALL PLOTNF(QRGLX, QRGLY, REAL(DQRG(LIST(II))), 2)
+ 50      CONTINUE
+      ELSE
+C WE HAVE > 2 PLOTS, SO SWITCH TO A SMALLER KEY FORMAT
+         DY = 0.028
+         DO 40 II = 1, COUNT
+C-SJP            CALL CTRMAG(SMALL)
+C-SJP            CALL TYPECS(' ')
+C-SJP	    CALL PLOTNI(XSTART + XOFFST, YSTART, LIST(II))
+C-SJP	    CALL TYPECS(' ')
+C-SJP	    CALL TYPECS(FILENAME(LIST(II)))
+	    SYMBL = SYMBLIST(LIST(II))
+C-SJP	    CALL TYPECS(' ')
+C-SJP	    CALL CTRMAG(BIG)
+C-SJP	    CALL TYPENC(SYMBL)
+C NEXT LINE
+C-SJP            CALL CTRMAG(SMALL)
+	    YSTART = YSTART - DY
+C-SJP	    CALL PLOTCS(XSTART, YSTART, 'PLOT')
+C-SJP	    CALL TYPENI(FSTPLTPT(LIST(II)))
+C PLOT SPACE, THEN -> SYMBOL
+C-SJP	    CALL TYPENC(32)
+C-SJP	    CALL TYPENC(186)
+C-SJP	    CALL TYPENI(LSTPLTPT(LIST(II)))
+C-SJP	    CALL TYPECS(' Q')
+C-SJP	    CALL TYPENF(REAL(DSQRT(Q(II,FSTFITPT(II)))), 4)
+C PLOT SPACE, THEN -> SYMBOL
+C-SJP	    CALL TYPENC(32)
+C-SJP	    CALL TYPENC(186)
+C-SJP	    CALL TYPENF(REAL(DSQRT(Q(II,LSTFITPT(II)))), 4)
+C NEXT LINE
+	    YSTART = YSTART - DY
+C-SJP            CALL PLOTCS(XSTART, YSTART, 'FIT')
+C-SJP            CALL TYPENI(FSTFITPT(LIST(II)))
+C PLOT SPACE, THEN -> SYMBOL
+C-SJP	    CALL TYPENC(32)
+C-SJP	    CALL TYPENC(186)
+C-SJP            CALL TYPENI(LSTFITPT(LIST(II)))
+C-SJP            CALL TYPECS(' I0')
+            I0I0 = REAL(I0(II))
+            CALL I0SIZE(I0I0, NAFTPT, COUNT)
+C-SJP            IF (NAFTPT.EQ.-1.OR.NAFTPT.EQ.0) THEN
+C-SJP       	       CALL TYPENE(REAL(I0(LIST(II))), 2)
+C PLOT SPACE, THEN +- SYMBOL
+C-SJP	       CALL TYPENC(32)
+C-SJP	       CALL TYPENC(163)
+C-SJP       	       CALL TYPENE(REAL(DI0(LIST(II))), 2)
+C-SJP            ELSE
+C-SJP       	       IF(NAFTPT.EQ.-2) NAFTPT = 5
+C-SJP	       CALL TYPENF(REAL(I0(LIST(II))), NAFTPT)
+C PLOT SPACE, THEN +- SYMBOL
+C-SJP   	       CALL TYPENC(32)
+C-SJP	       CALL TYPENC(163)
+C-SJP               CALL TYPENF(REAL(DI0(LIST(II))), NAFTPT)
+C-SJP            ENDIF
+            YSTART = YSTART - DY
+C-SJP            CALL PLOTCS(XSTART, YSTART, RGTYPE(1:RGLEN))
+C-SJP            CALL TYPENF(REAL(RG(LIST(II))), 1)
+C PLOT SPACE, THEN +- SYMBOL
+C-SJP	    CALL TYPENC(32)
+C-SJP	    CALL TYPENC(163)
+C-SJP            CALL TYPENF(REAL(DRG(LIST(II))), 1)
+C-SJP            CALL TYPECS(QRGTYP(1:QRGLEN))
+C-SJP            CALL TYPENF(REAL(QRG(LIST(II))), 2)
+C PLOT SPACE, THEN +- SYMBOL
+C-SJP	    CALL TYPENC(32)
+C-SJP	    CALL TYPENC(186)
+C-SJP            CALL TYPENF(REAL(DQRG(LIST(II))), 2)
+            YSTART = YSTART - DY - YDIFF
+ 40      CONTINUE
+      ENDIF
+
+C-SJP      CALL CTRMAG(10)
+
+      RETURN
+
+      END
+
+      SUBROUTINE I0SIZE(I0, NAFTPT, COUNT)
+      IMPLICIT NONE
+      REAL I0
+      INTEGER NAFTPT, COUNT
+
+      NAFTPT = -2
+C IF I0 > A CERTAIN NUMBER, USE TYPENE, NOT TYPENF
+      IF (I0.GT.99999999.) THEN
+         NAFTPT = -1
+	 RETURN
+      ENDIF
+C NOW CHECK TO SEE HOW DECIMAL PLACES WE ARE ALLOWED
+      IF ((I0.LE.0.0001).AND.(I0.GT.0.000001)) THEN
+         NAFTPT = 6
+	 RETURN
+      ENDIF
+      IF ((I0.LE.1.).AND.(I0.GT.0.001)) THEN
+         NAFTPT = 5
+	 RETURN
+      ENDIF
+      IF ((I0.LE.9.).AND.(I0.GT.1.)) THEN
+         NAFTPT = 5
+	 RETURN
+      ENDIF
+      IF ((I0.LE.99.).AND.(I0.GT.9.)) THEN
+         NAFTPT = 5
+	 RETURN
+      ENDIF
+      IF ((I0.LE.999.).AND.(I0.GT.99.)) THEN
+         NAFTPT = 4
+	 RETURN
+      ENDIF
+      IF ((I0.LE.9999.).AND.(I0.GT.999.)) THEN
+         NAFTPT = 3
+	 RETURN
+      ENDIF
+      IF ((I0.LE.99999.).AND.(I0.GT.9999.)) THEN
+         NAFTPT = 2
+	 RETURN
+      ENDIF
+      IF ((I0.LE.999999.).AND.(I0.GT.99999.)) THEN
+         NAFTPT = 1
+	 RETURN
+      ENDIF
+c      IF (I0.GT.99,999,999.) THEN
+      IF ((I0.LE.9999999.).AND.(I0.GT.999999.).AND.(COUNT.LT.4)) THEN
+         NAFTPT = 1
+	 RETURN
+      ELSE
+         NAFTPT = 0
+         RETURN
+      ENDIF
+
+      END

@@ -14,7 +14,8 @@ add_executable(frcc frcc.f90)
 add_executable(hypro hypro.f90)
 add_executable(sct sct.f90)
 add_executable(sluv sluv.f90)
+add_executable(sctpl sctpl.f axtrans.f decide.f getfile.f grinit.f linegt.f opnfil.f plots.f ptypget.f rfctxt.f smear.f toalph.f widang.f consgt.f errmsg.f getfval.f guinlab.f linfit.f plotone.f prtscr.f qcnvt.f sctpl.f symbgt.f unaxtr.f datype.f fitq.f getmodel.f init.f lotus.f plotq.f pstyle.f rfacauto.f setaxes.f titles.f wghtdav.f)
 
-SET (EXES brktos rfacXN aps frcc hypro sct sluv)
+SET (EXES brktos rfacXN aps frcc hypro sct sluv sctpl)
 
 install(TARGETS ${EXES} DESTINATION . COMPONENT binaries)
