@@ -301,7 +301,7 @@ DOUBLE PRECISION FUNCTION CALC_CHI2 (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, VERB
             IF ( ( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
                 TMPCHI2 = ( (IOBS(NDX) / CON ) - ICALC(NDX) )**2
                 TMPCHI2 = TMPCHI2 / ICALC(NDX)
-                CHI2 = CHI2 + TMP
+                CHI2 = CHI2 + TMPCHI2
             END IF
         END DO
 
