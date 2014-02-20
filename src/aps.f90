@@ -32,7 +32,7 @@ REAL, DIMENSION(6000,3) :: X
 REAL, DIMENSION(6000) :: D
 
 WRITE(6,"(A/)") "APS: VERSION 2.50"
-WRITE(6,"(A/)") "CALCULATION OF Rg FOR UP TO 5000 SPHERE MODELS"
+WRITE(6,"(A/)") "CALCULATION OF Rg FOR UP TO 6000 SPHERE MODELS"
 
 !
 !  Read in sphere coordinates and radii (also count the number of spheres)
