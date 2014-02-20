@@ -13,9 +13,8 @@ if __name__ == "__main__":
           ext_modules = [sjp_utils],
           data_files = [('sct/share',
                          ['${CMAKE_CURRENT_SOURCE_DIR}/share/sluv_parameters.yml','${CMAKE_CURRENT_SOURCE_DIR}/share/aa_volumes.yml'])],
-#          scripts =  ['bin/calculate_curve.py','bin/get_boxside.py','bin/optimize_model_params.py',
-#                      'bin/sas_curve_analysis.py','bin/sct_pdb_analysis.py','bin/sphere2pdb.py',
-#                      'bin/calculate_rfactor.py','bin/hydrate_spheres.py','bin/pdb2sphere.py']
-          scripts =['${CMAKE_CURRENT_SOURCE_DIR}/bin/calculate_curve.py']
+          scripts =  ['${CMAKE_CURRENT_SOURCE_DIR}/bin/calculate_curve.py','${CMAKE_CURRENT_SOURCE_DIR}/bin/get_boxside.py','${CMAKE_CURRENT_SOURCE_DIR}/bin/optimize_model_params.py',
+                      '${CMAKE_CURRENT_SOURCE_DIR}/bin/sas_curve_analysis.py','${CMAKE_CURRENT_SOURCE_DIR}/bin/sct_pdb_analysis.py','${CMAKE_CURRENT_SOURCE_DIR}/bin/sphere2pdb.py',
+                      '${CMAKE_CURRENT_SOURCE_DIR}/bin/calculate_rfactor.py','${CMAKE_CURRENT_SOURCE_DIR}/bin/hydrate_spheres.py','${CMAKE_CURRENT_SOURCE_DIR}/bin/pdb2sphere.py']
           )
 

@@ -16,6 +16,10 @@ if (PYTHON)
     COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
     DEPENDS ${DEPS})
     add_custom_target(target ALL DEPENDS ${OUTPUT})
-    install(CODE "execute_process(COMMAND ${PYTHON} ${SETUP_PY} install)")
+    if (CMAKE_INSTALL_PREFIX)
+        install(CODE "execute_process(COMMAND ${PYTHON} ${SETUP_PY} install --install-scripts=${CMAKE_INSTALL_PREFIX})")
+    else()
+        install(CODE "execute_process(COMMAND ${PYTHON} ${SETUP_PY} install)")
+    endif()
 
 endif()
