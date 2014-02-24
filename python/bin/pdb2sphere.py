@@ -105,7 +105,7 @@ def main():
         no_y_box = len(y_axis)
         no_z_box = len(z_axis)
 
-        output.write("pdb_to_sphere: version 0.5 - 05 November 2013\n")
+        output.write("pdb2sphere: version 0.5 - 05 November 2013\n")
         output.write("No. Of Atoms: {0:d}\n".format(no_atoms))
         output.write("Total Of Amino Acid Residues {0:d}\n".format(no_res))
         output.write("One Side Of The Box: {0:f}\n".format(args.box_side))

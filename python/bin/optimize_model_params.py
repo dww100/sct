@@ -45,7 +45,7 @@ def parse_arguments():
         help = 'Path to a file containing input parameters', required=True)
 
     parser.add_argument('-m','--min_max', nargs=2, type=float,
-        default = [2.0, 11.0], help = 'Path to a file containing input parameters')
+        default = [2.0, 11.0], help = 'Minimum and maximum values of box side')
 
     return parser.parse_args()
 

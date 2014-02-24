@@ -85,5 +85,6 @@ Max And Min X,Y,Z Are
 Increments MX, MY, MZ Are
 ~~~~~~
 
-When *output type* = 0 the summary data is appended to the coordinated in output file. 
+When *output type* = 0 the summary data is appended to the coordinated in output file
+(starts with the line "brktos: This Version 1.20 from 30/10/2013."). 
 This may cause problems when used as input for other SCT programs.

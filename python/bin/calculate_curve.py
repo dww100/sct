@@ -44,7 +44,7 @@ def parse_arguments():
         default=3.77, help = 'Sphere radius')
 
     parser.add_argument('-b','--n_bins', nargs='?', type=int,
-        default=400, help = 'No. bins to use in histogram of r')
+        default=400, help = 'No. bins to use in histogram of sphere separation')
 
     parser.add_argument('-p','--n_points', nargs='?', type=int,
         default=100, help = 'No. points in output curve')

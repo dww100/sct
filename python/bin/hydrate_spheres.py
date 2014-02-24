@@ -40,8 +40,8 @@ def parse_arguments():
                         help = 'Path to the output file', required=True)
 
     parser.add_argument('-n','--hydration_no', nargs='?', type=int,
-                        default=27,
-                        help = 'No. spheres to add as a hydration shell (1-27)')
+                        default=26,
+                        help = 'No. spheres to add as a hydration shell (1-26)')
 
     parser.add_argument('-c','--cutoff', nargs='?', type=int,
                         default=5.0,
@@ -56,7 +56,7 @@ def main ():
     # Select number of solvent positions to occupy before filtering
     # Position 0 = original sphere position,
     # Positions 1 to 26 positions on cube centred on original sphere
-    hydration_no = 26
+    hydration_no = args.hydration_no + 1
 
     # Read dry sphere model from file
     dry_spheres, radius = sct.sphere.read_mono_spheres(args.input_filename)
