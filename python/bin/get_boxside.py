@@ -37,14 +37,13 @@ def parse_arguments():
         )
 
     parser.add_argument('-i','--input_pdb', nargs='?', type=str,
-        dest='input_filename', help = 'Path to the input PDB file',
-        required=True)
+        help = 'Path to the input PDB file', required=True)
 
     parser.add_argument('-s','--input_seq', nargs='?', type=str,
         help = 'Path to input sequence file if different from PDB', 
         default = None)    
 
-    parser.add_argument('-t','--input_type', choices = ['fas','yml'],
+    parser.add_argument('-f','--input_format', choices = ['fas','yml'],
         help = 'Input file format (fasta or sluv yaml)', default = None)
 
     parser.add_argument('-o','--output_filename', nargs='?', type=str,
@@ -100,7 +99,7 @@ def main ():
 
     target_volume, atom_coords = get_box_opt_input(args.input_pdb, 
                                                    args.input_seq, 
-                                                   args.input_type)
+                                                   args.input_format)
 
     best_side, dev = sct.sphere.optimize_box_side(args.cutoff,
                                                   atom_coords, 
@@ -115,7 +114,7 @@ def main ():
         output = open(args.output_filename,'w')
 
     output.write("# Optimized box_side for {0:s}, using cutoff {1:d}\n".format(
-                 args.input_filename, args.cutoff))
+                 args.input_pdb, args.cutoff))
     output.write("# Deviation from target volume was {0:f}\n".format(dev))
     output.write("box_side: {0:f}\n".format(best_side))
 
