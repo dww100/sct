@@ -297,8 +297,9 @@ def write_spheres(coords, radius, out):
     @type  out:     file object
     @param out:     The file to which the output sphere line is written
     """
+    
     for coord in coords:
-        write_sphere_line(coords[0], coords[1], coords[2], radius, out)
+        write_sphere_line(coord[0], coord[1], coord[2], radius, out)
 
 def parse_sphere_line(line):
     """
