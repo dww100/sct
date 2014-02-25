@@ -36,9 +36,16 @@ def parse_arguments():
         description= 'Optimize the box size used in creation of sphere models\n'
         )
 
-    parser.add_argument('-i','--input_filename', nargs='?', type=str,
-        dest='input_filename', help = 'Path to the input file',
+    parser.add_argument('-i','--input_pdb', nargs='?', type=str,
+        dest='input_filename', help = 'Path to the input PDB file',
         required=True)
+
+    parser.add_argument('-s','--input_seq', nargs='?', type=str,
+        help = 'Path to input sequence file if different from PDB', 
+        default = None)    
+
+    parser.add_argument('-t','--input_type', choices = ['fas','yml'],
+        help = 'Input file format (fasta or sluv yaml)', default = None)
 
     parser.add_argument('-o','--output_filename', nargs='?', type=str,
         dest='output_filename', default=None,
@@ -55,42 +62,52 @@ def parse_arguments():
 
     return parser.parse_args()
 
-def get_opt_box_side(filename, cutoff, side_min, side_max, tolerance):
+def get_box_opt_input(pdb_filename, seq_filename, seq_type):
     """
-    Read PDB, get optimal sphere model box_side (+ deviation).
-    The idea is to reproduce theoretical volume estimated from the sequence as
-    in sluv.
+    Get the target volume and atomic coordinates for box_side optimization. If 
+    specified use a sequence other than that of the input PDB providing the 
+    coordinates.
+    @type  pdb_filename: string
+    @param pdb_filename: Path to PDB file
+    @type  seq_filename: string
+    @param seq_filename: Path to sequence file (either fasta or YAML)
+    @type  file_type:    string
+    @param file_type:    Is the input a fasta ('fas') or YAML ('yml') file
+    @rtype:              float, list
+    @return:             1. Target volume from sequence
 
-    @type  filename:  string
-    @param filename:  Path to PDB file to optimize box_side on
-    @type  side_min:  float
-    @param side_min:  Minimum side length to consider in the optimization.
-    @type  side_max:  float
-    @param side_min:  Maximum side length to consider in the optimization.
-    @type  tolerance: float
-    @param tolerance: Percentage tolerance before optimization is said to
-                      have converged.
+                         2. A list containing lists of x, y & z coordinates 
+                         (3 * floats)     
     """
 
     # Read in the residues frequencies (to calculate target volume) and
     # atomic coordinates from input PDB
-    res_freq, atom_coords = sct.pdb.read_pdb_atom_data(filename)
+    res_freq, atom_coords = sct.pdb.read_pdb_atom_data(pdb_filename)
 
-    # Get the target volume from sluv (based on sequence)
-    #volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'chothia1975')
-    volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986b')
+    # If an additional sequence file was provided then use this as the sequence
+    # to optimize 
+    if seq_type != None:
+        res_freq = sct.seq.seq_file_to_freq(seq_filename, seq_type)
 
-    best_side, dev = sct.sphere.optimize_box_side(cutoff, atom_coords, volume,
-                                       side_min, side_max, tolerance)
-
-    return best_side, dev
+    volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986b')    
+    
+    return volume, atom_coords
+            
 
 def main ():
 
     args = parse_arguments()
 
-    best_side, dev = get_opt_box_side(args.input_filename, args.cutoff,
-                            args.box_range[0], args.box_range[1], args.tolerance)
+    target_volume, atom_coords = get_box_opt_input(args.input_pdb, 
+                                                   args.input_seq, 
+                                                   args.input_type)
+
+    best_side, dev = sct.sphere.optimize_box_side(args.cutoff,
+                                                  atom_coords, 
+                                                  target_volume, 
+                                                  args.box_range[0], 
+                                                  args.box_range[1],
+                                                  args.tolerance)
 
     if args.output_filename == None:
         output = sys.stdout

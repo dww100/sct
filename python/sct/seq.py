@@ -145,7 +145,30 @@ def fasta_res_freq(filename):
 
     return res_freq
 
-def calc_model_wet_volume(res_freq):
+def seq_file_to_freq(seq_filename, file_type):
+    """
+    Read a sequence file in either fasta or YAML format and return residue 
+    frequencies.
+    
+    @type  seq_filename: string
+    @param seq_filename: Path to sequence file (either fasta or YAML)
+    @type  file_type:    string
+    @param file_type:    Is the input a fasta ('fas') or YAML ('yml') file
+    @rtype:              dictionary
+    @return:             Dictionary for residue type frequency. Three letter 
+                         residue code for the key and residue type frequency as 
+                         the values.    
+    """
+    
+    if file_type == 'yml':
+        seq_file = file(seq_filename, 'r')
+        res_freq = yaml.load(seq_file)
+    elif file_type == 'fas':
+        res_freq = fasta_res_freq(seq_filename)
+        
+    return res_freq
+
+def calc_hydration_volume(res_freq):
     """
     Estimate hydrated volume of a protein from its amino acid composition
 
