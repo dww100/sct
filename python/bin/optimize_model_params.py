@@ -42,7 +42,7 @@ def parse_arguments():
         help = 'Path to input sequence file if different from PDB', 
         default = None)    
 
-    parser.add_argument('-t','--input_type', choices = ['fas','yml'],
+    parser.add_argument('-f','--input_format', choices = ['fas','yml'],
         help = 'Input file format (fasta or sluv yaml)', default = None)
 
     parser.add_argument('-o','--output_file', nargs='?', type=str,
@@ -105,7 +105,7 @@ def main():
     # the PDB
     dry_volume, wet_volume, atom_coords = get_box_opt_input(args.input_pdb, 
                                                             args.input_seq, 
-                                                            args.input_type)
+                                                            args.input_format)
 
     # Optimize box side for sphere models
     cutoff = param['sphere']['cutoff']
@@ -124,13 +124,13 @@ def main():
     # hydration spheres
     # Use 26 additional spheres in teh trial hydration
     # 10 - 14 is a reasonable window over which to refine the cutoff
-    hydr_cutoff, err = sct.sphere.optimize_cut(box_side,
-                                               dry_spheres,
-                                               26,
-                                               wet_volume,
-                                               10,
-                                               14,
-                                               0.01)
+    hydr_cutoff, err = sct.sphere.optimize_watercut(box_side,
+                                                    dry_spheres,
+                                                    26,
+                                                    wet_volume,
+                                                    10,
+                                                    14,
+                                                    0.01)
 
     out_file = open(args.output_file,'w')
     out_file.write("Target dry volume: {0:7.4f}\n".format(dry_volume))
