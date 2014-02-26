@@ -21,8 +21,9 @@ Useage:
 Run using the command:
 
 ~~~~~~~
-optimize_model_params.py [-h] -i [INPUT_PDB] [-o [OUTPUT_FILE]] -p
-                                [PARAMETER_FILE] [-m MIN_MAX MIN_MAX]
+optimize_model_params.py [-h] -i [INPUT_PDB] [-s [INPUT_SEQ]]
+                         [-f {fas,yml}] [-o [OUTPUT_FILE]] -p
+                         [PARAMETER_FILE] [-m MIN_MAX MIN_MAX]
 ~~~~~~~
 
 Arguments:
@@ -31,6 +32,10 @@ Arguments:
   -h, --help            show this help message and exit
   -i [INPUT_PDB], --input_pdb [INPUT_PDB]
                         Path to the input PDB file
+  -s [INPUT_SEQ], --input_seq [INPUT_SEQ]
+                        Path to input sequence file if different from PDB
+  -f {fas,yml}, --input_format {fas,yml}
+                        Input file format (fasta or sluv yaml)
   -o [OUTPUT_FILE], --output_file [OUTPUT_FILE]
                         Path to output file
   -p [PARAMETER_FILE], --parameter_file [PARAMETER_FILE]
@@ -45,6 +50,8 @@ Notes:
 Defaults:
 
 + min_max = 2.0 11.0
+
+Unless an *input_seq* is specified then the sequence of the PDB is used.
 
 Output:
 -------

@@ -1,4 +1,4 @@
-% SCT: documentation
+% SCT: get_boxside documentation
 % David W. Wright
 % 20 Feb 2014
 get_boxside - Automatic Optimization of Box Side Used in Sphere Model Creation
@@ -15,16 +15,22 @@ Useage:
 Run using the command:
 
 ~~~~~~~
-get_boxside.py [-h] -i [INPUT_FILENAME] [-o [OUTPUT_FILENAME]]
-                      [-b BOX_RANGE BOX_RANGE] [-t [TOLERANCE]] [-c [CUTOFF]]
+get_boxside.py [-h] -i [INPUT_PDB] [-s [INPUT_SEQ]] [-f {fas,yml}]
+               [-o [OUTPUT_FILENAME]] [-b BOX_RANGE BOX_RANGE]
+               [-t [TOLERANCE]] [-c [CUTOFF]]
+
 ~~~~~~~
 
 Arguments:
 
 ~~~~~~~
   -h, --help            show this help message and exit
-  -i [INPUT_FILENAME], --input_filename [INPUT_FILENAME]
-                        Path to the input file
+  -i [INPUT_PDB], --input_pdb [INPUT_PDB]
+                        Path to the input PDB file
+  -s [INPUT_SEQ], --input_seq [INPUT_SEQ]
+                        Path to input sequence file if different from PDB
+  -f {fas,yml}, --input_format {fas,yml}
+                        Input file format (fasta or sluv yaml)
   -o [OUTPUT_FILENAME], --output_filename [OUTPUT_FILENAME]
                         Path to the output file
   -b BOX_RANGE BOX_RANGE, --box_range BOX_RANGE BOX_RANGE
@@ -43,6 +49,8 @@ Defaults:
 + box_range = 1.1 10.0
 + tolerance = 0.01
 + cutoff = 4
+
+Unless an *input_seq* is specified then the sequence of the PDB is used.
 
 Output:
 -------
