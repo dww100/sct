@@ -90,7 +90,7 @@ def define_grid_axes(coords, box_side):
     return x_axis, y_axis, z_axis
 
 def grid_to_spheres(grid, radius, cutoff, x_axis, y_axis, z_axis):
-    """"
+    """
     Generate a list of sphere coordinates based on counts of atoms in the passed
     grid. A sphere is included in the model in each grid space with a content
     >= cutoff. Coordinates are based on the passed axes defining teh grid boxes.
