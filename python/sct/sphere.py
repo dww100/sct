@@ -69,8 +69,8 @@ def define_grid_axes(coords, box_side):
     @type  box_side:  float
     @param box_side:  Length of the sides of the cubes used to create a grid to
                       coarse grain atomic structure into a sphere model
-    rtype:            numpy array, numpy array, numpy array
-    return:           Intervals of length box_side along the x, y and z axes.
+    @rtype:           numpy array, numpy array, numpy array
+    @return:          Intervals of length box_side along the x, y and z axes.
                       Minimum and maximum values chosed to extend beyond the
                       input coordinates.
     """
@@ -156,16 +156,17 @@ def create_sphere_model(atom_coords, cutoff, box_side, **kwargs):
     @keyword z_axis:    Array of floats defining the intersection of grid boxes
                         along the z-axis.
     @rtype:             list, numpy array, numpy array, numpy array
-    @return:            1. A list containing lists of x, y & z coordinates
+    @return:            
+                        - A list containing lists of x, y & z coordinates
                         (3 * floats) of spheres within the sphere model.
 
-                        2. Array of floats defining the intersection of grid
+                        - Array of floats defining the intersection of grid
                         boxes along the x-axis.
 
-                        3. Array of floats defining the intersection of grid
+                        - Array of floats defining the intersection of grid
                         boxes along the y-axis.
 
-                        4. Array of floats defining the intersection of grid
+                        - Array of floats defining the intersection of grid
                         boxes along the z-axis.
     """
 
@@ -227,25 +228,25 @@ def optimize_box_side(cutoff, coords, targ_vol, side_min, side_max, tolerance):
     """
     Get optimal box_side to reproduce target_volume (and deviation)
 
-    @type  cutoff:       integer
-    @param cutoff:       Cutoff for number of atoms within a grid square before
-                         a sphere is placed in that grid box.
-    @type  coords:       list
-    @param coords:       A list containing lists of x, y & z coordinates
-                         (3 * floats)
-    @type  targ_volume:  float
-    @param targ_volume:  The target volume for the dry model calculated from
-                         the protein sequence.
-    @type  side_min:     float
-    @param side_min:     Minimum side length to consider in the optimization.
-    @type  side_max:     float
-    @param side_min:     Maximum side length to consider in the optimization.
-    @type  tolerance:    float
-    @param tolerance:    Percentage tolerance before optimization is said to
-                         have converged.
-    @rtype:              float
-    @return:             Squared difference between sphere model volume and
-                         target volume.
+    @type  cutoff:     integer
+    @param cutoff:     Cutoff for number of atoms within a grid square before
+                       a sphere is placed in that grid box.
+    @type  coords:     list
+    @param coords:     A list containing lists of x, y & z coordinates
+                       (3 * floats)
+    @type  targ_vol:   float
+    @param targ_vol:   The target volume for the dry model calculated from
+                       the protein sequence.
+    @type  side_min:   float
+    @param side_min:   Minimum side length to consider in the optimization.
+    @type  side_max:   float
+    @param side_min:   Maximum side length to consider in the optimization.
+    @type  tolerance:  float
+    @param tolerance:  Percentage tolerance before optimization is said to
+                       have converged.
+    @rtype:            float
+    @return:           Squared difference between sphere model volume and
+                       target volume.
     """
 
     # Format the bounds within which to run the optimization
@@ -333,10 +334,10 @@ def read_mono_spheres(filename):
     @type  filename:  string
     @param filename:  Path to the input SCT format sphere model file
     @rtype:           list, float
-    @return:          1. A list containing lists of x, y & z coordinates
-                      (3 * floats) of a sphere within the sphere model.
-
-                      2. Sphere radius (float)
+    @return:    
+                    - A list containing lists of x, y & z coordinates
+                    (3 * floats) of a sphere within the sphere model.
+                    - Sphere radius (float)
     """
 
     spheres = []
@@ -509,9 +510,9 @@ def hydrate_spheres(coords, hydration_pos, radius):
     @return:               A list containing lists of x, y & z coordinates
                            (3 * floats) for all test spheres in hydrated model.
 
-                           - Note: This includes original spheres and
-                           overlapping hydration spheres as no filtering has yet
-                           occured.
+                           B{Note}: This includes original spheres and
+                           overlapping hydration spheres as no filtering 
+                           has yet occured.
     """
 
     wet_spheres = []
@@ -526,15 +527,16 @@ def hydrate_sphere_model(dry_spheres, hydration_no, box_side, water_cutoff, **kw
     """
     Create hydrated sphere model in 4 steps (returning the appropriate sphere
     coordinates):
-    1. Add spheres to the dry model in positions assigned through hydration_no
-    (Position 1 = original sphere position, 2 to 27 positions on cube centred
-    on original sphere).
-    2. Filter out excess spheres using create_sphere_model with water_cutoff
-    (this cutoff should be high ~ 10-12 spheres per box)
-    3. Add dry spheres back to the model. Some will have been removed alongside
-    the excess water in the last step
-    4. Filter out overlapping spheres using create_sphere_model with cutoff set
-    to 1.
+
+        1. Add spheres to the dry model in positions assigned through 
+        hydration_no (Position 1 = original sphere position, 2 to 27 
+        positions on cube centred on original sphere).
+        2. Filter out excess spheres using create_sphere_model with water_cutoff
+        (this cutoff should be high ~ 10-12 spheres per box)
+        3. Add dry spheres back to the model. Some will have been removed 
+        alongside the excess water in the last step
+        4. Filter out overlapping spheres using create_sphere_model with cutoff
+        set to 1.
 
     @type  dry_spheres:   list
     @param dry_spheres:   A list containing lists of x, y & z coordinates
@@ -550,20 +552,20 @@ def hydrate_sphere_model(dry_spheres, hydration_no, box_side, water_cutoff, **kw
     @param box_side:      Length of the sides of the cubes used to create a grid
                           to coarse grain atomic structure into a sphere model
                           (and here to place hydration spheres).
-    type  water_cutoff:   integer
-    param water_cutoff:   Cutoff used to remove overlapping and excess test
+    @type  water_cutoff:  integer
+    @param water_cutoff:  Cutoff used to remove overlapping and excess test
                           hydration spheres
-    keyword xaxis:        Array of floats defining the intersection of grid
+    @keyword xaxis:       Array of floats defining the intersection of grid
                           boxes along the x-axis (from creation of the original
                           sphere model).
-    keyword yaxis:        Array of floats defining the intersection of grid
+    @keyword yaxis:       Array of floats defining the intersection of grid
                           boxes along the y-axis (from creation of the original
                           sphere model).
-    keyword zaxis:        Array of floats defining the intersection of grid
+    @keyword zaxis:       Array of floats defining the intersection of grid
                           boxes along the z-axis (from creation of the original
                           sphere model).
-    rtype:                list
-    return:               A list containing lists of x, y & z coordinates
+    @rtype:               list
+    @return:              A list containing lists of x, y & z coordinates
                           (3 * floats) for all spheres in the hydrated sphere
                           model.
     """
@@ -627,8 +629,8 @@ def residual2_cut(cutoff, box_side, dry_spheres, hydration_no, targ_volume):
     """
     Compute squared residual of sphere model to the theroetical target volume
 
-    type  water_cutoff:   integer
-    param water_cutoff:   Cutoff used to remove overlapping and excess test
+    @type  cutoff:        integer
+    @param cutoff:        Cutoff used to remove overlapping and excess test
                           hydration spheres
     @type  box_side:      float
     @param box_side:      Length of the sides of the cubes used to create a grid
@@ -670,8 +672,8 @@ def optimize_watercut(box_side, coords, hydration_no, targ_vol, cut_min, cut_max
     @param box_side:      Length of the sides of the cubes used to create a grid
                           to coarse grain atomic structure into a sphere model
                           (and place hydration spheres).
-    @type  dry_spheres:   list
-    @param dry_spheres:   A list containing lists of x, y & z coordinates
+    @type  coords:        list
+    @param coords:        A list containing lists of x, y & z coordinates
                           (3 * floats) for all spheres in an non-hydrated sphere
                           model.
     @type  hydration_no:  integer
@@ -680,12 +682,13 @@ def optimize_watercut(box_side, coords, hydration_no, targ_vol, cut_min, cut_max
                           hydration spheres. Position 1 = original sphere
                           position, 2 to 27 positions on cube centred on
                           original sphere.
-    @type  targ_volume:   float
-    @param targ_volume:   The target volume for the hydrated model calculated
+    @type  targ_vol:      float
+    @param targ_vol:      The target volume for the hydrated model calculated
                           from the protein sequence.
     @rtype:               integer, float
-    @return:              1. Optimized cutoff value
-                          2. Deviation of the calculated volume from the target
+    @return:         
+                          - Optimized cutoff value
+                          - Deviation of the calculated volume from the target
                           volume
 
     """
@@ -737,7 +740,8 @@ def calc_r_hist(coords, no_bins):
     @param no_bins:  Number of bins to use when creating histogram of pair
                      distances between spheres.
     @rtype:          numpy array, numpy array, integer
-    @return:         1. Bins containing the counts of atoms in each division of
+    @return:   
+                     1. Bins containing the counts of atoms in each division of
                      the histogram of pair distances between spheres.
 
                      2. The values at the edges of the bins in the histogram of
