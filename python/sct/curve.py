@@ -77,8 +77,8 @@ def match_scatter_curves(target_data, source_data):
     @type  source_data:  numpy array
     @param source_data:  Source scattering vector magnitude, q, and intensity,
                          I, dataset.
-    rtype:               numpy array
-    return:              Intensity, I, data from source_data matched to the
+    @rtype:              numpy array
+    @return:             Intensity, I, data from source_data matched to the
                          scattering vector magnitudes, q, found in target_data.
     """
 
@@ -153,6 +153,10 @@ def calculate_rfactor(target_data, source_data, q_min, q_max):
 
 def sas_curve_fit(x, y, calc_type):
     """
+    Linear fit x vs y data. 
+    calc_type (rg, rxs1, rxs2) determines value computed from gradient and 
+    intercept in Guinier and other analyses of small angle scattering curves.
+
     @type  x:          numpy array
     @param x:          Function of the scattering vector magnitude, q, used for
                        the x-axis of the plot.
@@ -162,15 +166,20 @@ def sas_curve_fit(x, y, calc_type):
     @type  calc_type:  string
     @param calc_type:  Specification of the type of calculation to perform on
                        the output of the linear fit:
-                       - rxs1/rxs2: r = sqrt(2 * gradient), i = None
-                       - rg/default: r = sqrt(3 * gradient), i = exp(intercept)
+
+                       rxs1/rxs2: r = sqrt(2 * gradient), i = None
+
+                       rg/default: r = sqrt(3 * gradient), i = exp(intercept)
     @rtype:            dictionary
     @returns:          Dictionary containing the following keys/value pairs:
+
                        - fit: The output of the numpy polyfit (gradient and
                          intercept)
                        - r: The r value (Rg/Rsx?) calculated from the gradient
                        - i: The Io value calculated from the intercept
     """
+
+
 
     # Linear fit to the input x and y values
     fit_coeffs = np.polyfit(x, y, 1)
@@ -386,8 +395,9 @@ def get_curve_descriptors(curve, rg_min, rg_max, rxs_min, rxs_max):
     @type  rxs_max:  float
     @param rxs_min:  Maximum q value to use in linear fit to compute Rxs1
     @rtype:          float, float
-    @return:         1. Rg value calculated from curve fit
-                     2. Rxs value calculated from curve fit
+    @return:         
+                     - Rg value calculated from curve fit
+                     - Rxs value calculated from curve fit
     """
 
     # Create mask to select range of q values for Rg fitting
