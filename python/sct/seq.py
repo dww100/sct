@@ -3,19 +3,6 @@
 """
 Module that deal with sequence properties within SCT.
 Loads in yaml files containing scattering parameters and residue volumes
-Provides the following variables:
-    polar:           list of polar amino acids (aa) - 3 letter codes
-    non_polar:       list of non-polar aa - 3 letter codes
-    amino_acids:     list of all aa - 3 letter codes
-    monosaccharides: list of monosaccharides - 3 letter codes
-    all_residues:    list combining amino_acids and monosaccharides - 3 letter codes
-    aa1:             list of amino acid 1 letter codes
-    aa1to3:          dictionary providing 1 to 3 letter aa code conversion
-
-    params:          dictionary of scattering parameters read in from file
-    res_vols:        dictionary of residue volumes read in from file
-
-    bDH_diff:        difference in scattering length for heavy and light water
 """
 
 # Copyright 2014 University College London
@@ -37,18 +24,25 @@ import yaml
 import os
 
 share_dir = os.path.join(__file__.rsplit(os.sep,1)[0], 'share')
-
+"""Path to the input data files"""
 # Lists of the residues which are handled by SCT programs
 polar = ['ARG','ASN','ASP','GLN','GLU','HIS','LYS','SER','THR']
+"""List of polar amino acids (aa) - 3 letter codes"""
 non_polar = ['ALA','CYS','GLY','ILE','LEU','MET','PHE','PRO','TRP','TYR','VAL']
+"""List of non-polar aa - 3 letter codes"""
 amino_acids = polar + non_polar
+"""List of all aa - 3 letter codes"""
 monosaccharides = ['FUC','GAL','GLC','MAN','NAG','NGA','SIA']
+"""list of monosaccharides - 3 letter codes"""
 all_residues = amino_acids + monosaccharides
+"""List combining amino_acids and monosaccharides - 3 letter codes"""
 
 # Create dictionary to convert one letter to three letter amino acid codes
 # Trick taken from the pymol wiki
 aa1 = list("ARNDCQEGHILKMFPSTWYV")
+"""List of amino acid 1 letter codes"""
 aa1to3 = dict(zip(aa1,sorted(amino_acids)))
+"""Dictionary providing 1 to 3 letter aa code conversion"""
 
 # Load parameters into module global variables
 
@@ -58,14 +52,19 @@ aa1to3 = dict(zip(aa1,sorted(amino_acids)))
 # bH, bD, mass, no_electron, no_exchange_H, no_exchange_peptide_H,
 # solvent -[BDDO, BHHO, EHHO], constants -[avagadro]
 param_file = file(os.path.join(share_dir,'sluv_parameters.yml'), 'r')
+"""Path to file containing scattering and mass parameters"""
 params = yaml.load(param_file)
+"""Dictionary of scattering parameters read in from file"""
 
 # Load the different volume datasets
 vol_file = file(os.path.join(share_dir,'aa_volumes.yml'), 'r')
+"""Path to file containing volumes parameters"""
 res_vols = yaml.load(vol_file)
+"""Dictionary of residue volumes read in from file"""
 
 # Difference in scattering length from heavy to light water
 bDH_diff = params['solvent']['BOD'] - params['solvent']['BOH']
+"""Difference in scattering length for heavy and light water"""
 
 def residue_freq_dict():
     """
@@ -335,7 +334,7 @@ def sum_b(resids, res_freq, heavy_water):
                          residue code for the key and residue type frequency as
                          the values.
     @type  heavy_water:  boolean
-    @param            :  Are we calculating for deuterated system?
+    @param heavy_water:  Are we calculating for deuterated system?
     @rtype:              float
     @return:             Total scattering length for the selected residues.
     """
