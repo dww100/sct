@@ -27,13 +27,13 @@ def pdb_res_line_parse(line):
     @type  line: string
     @param line: Line from a PDB file.
     @rtype:      dictionary
-    @return:     A dictionary containing:
-                 - atom_no:   integer, atom number
-                 - atom_name: string, atom name
-                 - res_id:    string, residue three letter code
-                 - chain:     string, chain identifier
-                 - res_no:    integer, residue number
-                 - coords:    list of floats, the x, y & z coordinates
+    @return:     Contains:
+                     - atom_no:   integer, atom number
+                     - atom_name: string, atom name
+                     - res_id:    string, residue three letter code
+                     - chain:     string, chain identifier
+                     - res_no:    integer, residue number
+                     - coords:    list of floats, the x, y & z coordinates
     """
 
     data = {}
@@ -64,15 +64,16 @@ def pdb_res_line_parse(line):
 
 def read_pdb_atom_data (filename):
     """
-    Read PDB file and return residue ferquencies and atom coordinates
+    Read PDB file and return residue frequencies and atom coordinates
 
     @type  filename: string
     @param filename: Path to a PDB file.
     @rtype:   dictionary, list
-    @return:  1. Dictionary for residue type frequency. Three letter residue
-              code for the key and residue type frequency as the values.
-
-              2. A list containing lists of x, y & z coordinates (3 * floats)
+    @return:  
+              - Dictionary for residue type frequency. 
+                Three letter residue code for the key and residue type
+                frequency as the values. 
+              - A list containing lists of x, y & z coordinates (3 * floats)
     """
 
     # Initialize a dictionary of all recognized residues (frequency = 0)
@@ -100,8 +101,8 @@ def read_pdb_atom_data (filename):
 
 def create_pdb_atom(res_no, res_id, atom_no, atom_type, coords, **kwargs):
     """
-    Create ATOM line for output in a PDB file (output has a \n)
-
+    Create ATOM line for output in a PDB file (ends with a new line character)
+    
     @type  res_no:    integer
     @param res_no:    Residue number
     @type  res_id:    string
@@ -135,8 +136,9 @@ def create_pdb_atom(res_no, res_id, atom_no, atom_type, coords, **kwargs):
     return line
 
 def write_sphere_pdb(coords, radius, filename):
+    
     """
-    Writes out a PDb file containing entries for the spheres of a sphere model,
+    Writes out a PDB file containing entries for the spheres of a sphere model,
     using the beta column to store radius (all ATOMs are C1 SER)
 
     @type  coords:    list
