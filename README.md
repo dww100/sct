@@ -6,7 +6,10 @@ Stephen J Perkins (s.perkins@ucl.ac.uk) and the Python version was created by Da
 
 Requirements:
 -------------
-gfortran version > 4.2
+
+cmake
+
+gfortran (version 4.2 or greater)
 
 Python 2.7
 
