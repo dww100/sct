@@ -84,7 +84,7 @@ def get_box_opt_input(pdb_filename, seq_filename, seq_type):
         res_freq = sct.seq.seq_file_to_freq(seq_filename, seq_type)
 
     dry_volume = sct.seq.sum_volume(sct.seq.all_residues, 
-                                    res_freq, 'perkins1986b')
+                                    res_freq, 'perkins1986a')
     # Calculate the expected volume of the hydration layer
     # Hydration is estimated to be 0.3 g water per 1 g protein
     # Bound water volume (< bulk volume) is given as a sluv parameter    

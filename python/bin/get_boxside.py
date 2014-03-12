@@ -88,7 +88,7 @@ def get_box_opt_input(pdb_filename, seq_filename, seq_type):
     if seq_type != None:
         res_freq = sct.seq.seq_file_to_freq(seq_filename, seq_type)
 
-    volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986b')    
+    volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986a')    
     
     return volume, atom_coords
             

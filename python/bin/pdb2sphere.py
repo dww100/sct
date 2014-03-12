@@ -97,7 +97,7 @@ def main():
             output = sys.stdout
 
         no_atoms = len(atom_coords)
-        volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986b')
+        volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986a')
         no_res = sct.seq.sum_res_no(sct.seq.all_residues, res_freq)
         no_spheres = len(sphere_coords)
         volume_spheres = no_spheres * args.box_side**3

@@ -456,8 +456,8 @@ def auc_output(res_freq, out):
     abs_coeffs = sct.seq.calc_absorption_coeffs(res_freq, mass)
     out.write( "Absorption Coefficient x 1.03: {0:7.3f}\n".format(abs_coeffs[1]))
 
-    specific_vol = sct.seq.spec_volume(sct.seq.all_residues, res_freq, 'perkins1986b')
-    out.write( "Specific Volume (Perkins 1986 - Consensus): {0:7.4f}\n".format(specific_vol))
+    specific_vol = sct.seq.spec_volume(sct.seq.all_residues, res_freq, 'perkins1986a')
+    out.write( "Specific Volume (Perkins 1986 - Amino Acid Crystals): {0:7.4f}\n".format(specific_vol))
 
 def modelling_output(res_freq, out):
     """
@@ -471,13 +471,9 @@ def modelling_output(res_freq, out):
     @param out:          File object to use for output.
     """
 
-    volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'chothia1975')
+    volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986a')
 
-    out.write("Volume (Chothia 1975 - Crystal Structures): {0:7.0f}\n".format(volume))
-
-    volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986b')
-
-    out.write("Volume (Perkins 1986 - Consensus): {0:7.0f}\n".format(volume))
+    out.write("Volume (Perkins 1986 - Amino Acid Crystals): {0:7.0f}\n".format(volume))
 
 def main():
 
