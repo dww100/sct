@@ -10,12 +10,12 @@ from its amino acid and carbohydrate composition.
 This is a reimplementation of the sluv tool originally created by
 Stephen J. Perkins in 1979. Documentation of the methods used can be found in:
 
-[SJP1] Perkins, S. J. (1986). Protein volumes and hydration effects: The
++ Perkins, S. J. (1986). Protein volumes and hydration effects: The
 calculations of partial specific volumes, neutron scattering matchpoints
 and 280-nm absorption coefficients for proteins and glycoproteins from
 amino acid sequences. Eur. J. Biochem. 157, 169-180
 
-[SJP2] Perkins, S. J. (2001). X-ray and neutron scattering analyses of
++ Perkins, S. J. (2001). X-ray and neutron scattering analyses of
 hydration shells: a molecular interpretation based on sequence predictions
 and model fits. Biophysical Chemistry 93, 129-139
 
@@ -46,6 +46,12 @@ Arguments:
 Notes:
 ------
 
+Whilst the PDB and FASTA file formats are external standards the sluv YAML 
+format contains simple residue name and frequency pairs using the YAML format.
+An [input template](sluv_in.yml) is provided with number of each residue set
+to 0, replace this value for your system of interest or use sct_get_sequence 
+to generate the YAML file.
+
 Output:
 -------
 
@@ -70,7 +76,7 @@ Estimated Hydrated Volume:
 
 The output from both 'auc' and 'model' is produced.
 
-'classic mode selected':
+'classic' mode selected:
 
 The program spews out a lot of data (it is adviseable to set an output file so 
 this is stored for future reference). 
