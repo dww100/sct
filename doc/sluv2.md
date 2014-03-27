@@ -17,7 +17,7 @@ amino acid sequences. Eur. J. Biochem. 157, 169-180
 
 [SJP2] Perkins, S. J. (2001). X-ray and neutron scattering analyses of
 hydration shells: a molecular interpretation based on sequence predictions
-and model fits. Biophysical Chemistry 93, 129–139
+and model fits. Biophysical Chemistry 93, 129-139
 
 Useage:
 -------
@@ -60,9 +60,10 @@ Specific Volume (Perkins 1986 - Consensus):
 'model' mode selected:
 
 ~~~~~~
-Volume (Chothia 1975 - Crystal Structures):
 
-Volume (Perkins 1986 - Consensus):
+Volume (Perkins 1986 - Amino Acid Crystals):
+Estimated Hydrated Volume:
+
 ~~~~~~
 
 'project' mode selected:
@@ -86,7 +87,7 @@ MOLECULAR WEIGHT
 EXTINCTION COEFF (280 NM)
 ~~~~~~
 
-and the values in the CON85 columns (the consensus values from Perkins 1986) for
+and the values in the PER85 columns (the values taken from crystal structures in Perkins 1986) for
 
 ~~~~~~
 VOLUME

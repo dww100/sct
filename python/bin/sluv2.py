@@ -472,8 +472,9 @@ def modelling_output(res_freq, out):
     """
 
     volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986a')
-
+    wet_volume = sct.seq.calc_hydration_volume(res_freq) + volume
     out.write("Volume (Perkins 1986 - Amino Acid Crystals): {0:7.0f}\n".format(volume))
+    out.write("Estimated Hydrated Volume: {0:7.0f}\n".format(wet_volume))
 
 def main():
 

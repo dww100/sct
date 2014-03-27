@@ -29,14 +29,14 @@ Run using the command:
 sluv < INPUT_FILE
 ~~~~~~~
 
-INPUT_FILE is a specifically formated file containing residue frquencies (see 
+INPUT_FILE is a specifically formated file containing residue frequencies (see 
 **Notes**).
 
 Notes:
 ------
 
 The input file for sluv contains residue frequencies in a particular order and 
-should be generated from the [input template](sluv_input_template),all lines 
+should be generated from the [input template](sluv_input_template), all lines 
 must be retained but edited as follows:
 
 + "Template 0" can be replaced with any title
