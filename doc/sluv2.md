@@ -72,6 +72,9 @@ Estimated Hydrated Volume:
 
 ~~~~~~
 
+The estimated hydrated volume comes from assuming that 0.3 g of water is added 
+for each g of protein.
+
 'project' mode selected:
 
 The output from both 'auc' and 'model' is produced.
