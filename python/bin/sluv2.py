@@ -486,9 +486,9 @@ def main():
         protein_file = file(args.input_file, 'r')
         protein_res_freq = yaml.load(protein_file)
     elif args.input_type == 'pdb':
-        protein_res_freq, coords = sct.pdb.pdb_res_freq(args.input_filename)
+        protein_res_freq, coords = sct.pdb.read_pdb_atom_data(args.input_file)
     elif args.input_type == 'fas':
-        protein_res_freq = sct.seq.fasta_res_freq(args.input_filename)
+        protein_res_freq = sct.seq.fasta_res_freq(args.input_file)
 
     if args.output_file != None:
         out = open(args.output_file,'w')
