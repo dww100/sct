@@ -49,8 +49,8 @@ Notes:
 Whilst the PDB and FASTA file formats are external standards the sluv YAML 
 format contains simple residue name and frequency pairs using the YAML format.
 An [input template](sluv_in.yml) is provided with number of each residue set
-to 0, replace this value for your system of interest or use sct_get_sequence 
-to generate the YAML file.
+to 0, replace this value for your system of interest or use 
+_sct_get_sequence.py_ to generate the YAML file.
 
 Output:
 -------

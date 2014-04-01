@@ -20,6 +20,24 @@ PDB related functions used in the SCT suite of programs
 
 import seq
 
+charmm_resids = {
+'ASH': 'ASP',
+'ANE': 'SIA',
+'BFU': 'FUC',
+'BGA': 'GAL',
+'BGL': 'GLC',
+'BMA': 'MAN',
+'CYM': 'CYS',
+'CYX': 'CYS',
+'GLH': 'GLU',
+'HIP': 'HIS',
+'HID': 'HIS',
+'HIE': 'HIS',
+'HSD': 'HIS',
+'LYN': 'LYS',
+'TYM': 'TYR'
+}
+
 def pdb_res_line_parse(line):
     """Parse a single line from a PDB file into a dictionary according to
     the standard PDB column definitions
@@ -93,8 +111,13 @@ def read_pdb_atom_data (filename):
             if len(data) != 0:
                 atom_coords.append(data['coords'])
                 # If residue number has changed increment res_id tally
+
                 if data['res_no'] != last_res_no:
-                    res_freq[data['res_id']] += 1
+                    if data['res_id'] in charmm_resids:
+                        res_name = charmm_resids[data['res_id']]
+                    else:
+                        res_name = data['res_id']
+                    res_freq[res_name] += 1
                     last_res_no = data['res_no']
 
     return res_freq, atom_coords

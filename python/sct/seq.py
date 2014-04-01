@@ -46,8 +46,6 @@ aa1to3 = dict(zip(aa1,sorted(amino_acids)))
 
 # Load parameters into module global variables
 
-# TODO: make path depend on an environment variable or something else sensible
-
 # Load scattering and mass parameters:
 # bH, bD, mass, no_electron, no_exchange_H, no_exchange_peptide_H,
 # solvent -[BDDO, BHHO, EHHO], constants -[avagadro]

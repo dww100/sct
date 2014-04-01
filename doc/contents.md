@@ -1,6 +1,7 @@
 % SCT suite documentation
 % David W. Wright
 % 20 Feb 2014
+
 SCT Suite Documentation
 =======================
 
@@ -47,6 +48,7 @@ Classic Version
 + [sluv](sluv.html)
 
 
--------------------------------------------------------------------------------
 ( c ) 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
 license, [http://creativecommons.org/licenses/by/4.0/](http://creativecommons.org/licenses/by/4.0/)
+
+\newpage
