@@ -20,6 +20,7 @@ PDB related functions used in the SCT suite of programs
 
 import seq
 
+# Dictionary of CHARMM residue names to standard naming
 charmm_resids = {
 'ASH': 'ASP',
 'ANE': 'SIA',
@@ -37,6 +38,9 @@ charmm_resids = {
 'LYN': 'LYS',
 'TYM': 'TYR'
 }
+
+# We will accept either standard or CHARMM residue naming
+accept_resids = seq.all_residues + charmm_resids.keys()
 
 def pdb_res_line_parse(line):
     """Parse a single line from a PDB file into a dictionary according to
@@ -67,7 +71,7 @@ def pdb_res_line_parse(line):
 
         # res_id is a three letter residue code
         res_id = line[17:20].strip()
-        if res_id in seq.all_residues:
+        if res_id in accept_resids:
             data['atom_no'] = int(line[6:11])
             data['atom_name'] = line[12:16].strip()
             data['res_id'] = res_id
@@ -113,6 +117,7 @@ def read_pdb_atom_data (filename):
                 # If residue number has changed increment res_id tally
 
                 if data['res_no'] != last_res_no:
+                    # If a CHARMM residue name is used convert to standard naming
                     if data['res_id'] in charmm_resids:
                         res_name = charmm_resids[data['res_id']]
                     else:
