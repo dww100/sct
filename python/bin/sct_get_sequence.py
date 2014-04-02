@@ -30,11 +30,15 @@ def parse_arguments():
 
     parser = argparse.ArgumentParser(
         description= 'Convert fasta or pdb file to yaml residue frequency file\n')
+
     parser.add_argument('-i','--input_filename', nargs='?', type=str,
         dest='input_filename', help = 'Path to the input fasta/pdb file',
         required=True)
-    parser.add_argument('-p', '--pdb', action='store_true', default=False,
-        help = 'Flag to indicate input is a PDB rather than fasta file')
+
+    parser.add_argument('-t','--input_type', choices = ['fas','pdb'],
+        help = 'Input file format (pdb or fasta)', default = 'pdb', 
+        required=True)
+
     parser.add_argument('-o','--output_filename', nargs='?', type=str,
         dest='output_filename', default=None, help = 'Path to the output file')
 
@@ -44,7 +48,7 @@ args = parse_arguments()
 
 # Read input
 # Input should either be PDB or fasta format - chosen by input flag
-if args.pdb:
+if args.input_type == 'pdb':
     res_freq, coords = sct.pdb.read_pdb_atom_data(args.input_filename)
 else:
     res_freq = sct.seq.fasta_res_freq(args.input_filename)
