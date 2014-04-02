@@ -26,7 +26,7 @@ charmm_resids = {
 'ANE': 'SIA',
 'BFU': 'FUC',
 'BGA': 'GAL',
-'BGL': 'GLC',
+'BGL': 'NAG',
 'BMA': 'MAN',
 'CYM': 'CYS',
 'CYX': 'CYS',

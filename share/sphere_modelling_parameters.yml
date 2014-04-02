@@ -1,10 +1,22 @@
 ---
+wide:
+    qmin: 0.00
+    qmax: 0.30
 rg:
+    qmin: 0.00
+    qmax: 0.05
     fitmin: 0.013
     fitmax: 0.028
 rxs1:
+    qmin: 0.00
+    qmax: 0.07
     fitmin: 0.030
     fitmax: 0.051
+rxs2:
+    qmin: 0.00
+    qmax: 0.15
+    fitmin: 0.056
+    fitmax: 0.14
 sphere:
     cutoff: 4
     boxside: 5.19
