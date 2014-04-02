@@ -62,7 +62,7 @@ def main ():
     dry_spheres, radius = sct.sphere.read_mono_spheres(args.input_filename)
 
     # Create hydrated model
-    wet_spheres = sct.sphere.hydrate_model(dry_spheres, hydration_no, radius, args.cutoff)
+    wet_spheres = sct.sphere.hydrate_sphere_model(dry_spheres, hydration_no, radius, args.cutoff)
 
     out = open(args.output_filename, 'w')
     sct.sphere.write_spheres(wet_spheres, radius, out)
