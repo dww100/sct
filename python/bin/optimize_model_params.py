@@ -146,12 +146,24 @@ def main():
     model_wet_vol = len(wet_spheres) * box_side**3
 
     out_file = open(args.output_file,'w')
+    out_file.write("Sphere model box side: {0:7.4f}\n".format(box_side))
     out_file.write("Target dry volume: {0:7.4f}\n".format(dry_volume))
     out_file.write("Model dry volume: {0:7.4f}\n".format(model_dry_vol))
+    for ii in range(args.wcut_min_max[0], args.wcut_min_max[1] + 1):
+        wet_spheres = sct.sphere.hydrate_sphere_model(dry_spheres,
+                                            27,
+                                            box_side,
+                                            ii,
+                                            xaxis = x_axis,
+                                            yaxis = y_axis,
+                                            zaxis = z_axis)
+        check_wet_vol = len(wet_spheres) * box_side**3        
+        out_file.write("Hydrated volume, water cutoff = {0:d}: {1:7.4f}\n".format(ii,check_wet_vol))
+        
+    out_file.write("Suggested Hydration cutoff [Experimental]: {0:d}\n".format(hydr_cutoff))
     out_file.write("Target hydrated volume: {0:7.4f}\n".format(wet_volume))
     out_file.write("Model hydrated volume: {0:7.4f}\n".format(model_wet_vol))
-    out_file.write("Sphere model box side: {0:7.4f}\n".format(box_side))
-    out_file.write("Hydration cutoff: {0:d}\n".format(hydr_cutoff))
+
 
 if __name__ == "__main__":
     main()
