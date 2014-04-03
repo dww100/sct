@@ -24,6 +24,7 @@ Run using the command:
 optimize_model_params.py [-h] -i [INPUT_PDB] [-s [INPUT_SEQ]]
                          [-f {fas,yml}] [-o [OUTPUT_FILE]] -p
                          [PARAMETER_FILE] [-m MIN_MAX MIN_MAX]
+                         [-w MIN_MAX MIN_MAX]
 ~~~~~~~
 
 Arguments:

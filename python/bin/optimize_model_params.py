@@ -33,7 +33,7 @@ import sct
 def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
 
-    parser = argparse.ArgumentParser(description= 'Optimize the box side used to create dry sphere models and cutoff used to creat a hydration layer that reproduce expected volumes from an input PDB.\n')
+    parser = argparse.ArgumentParser(description = 'Optimize the box side used to create dry sphere models and cutoff used to creat a hydration layer that reproduce expected volumes from an input PDB.\n')
 
     parser.add_argument('-i','--input_pdb', nargs='?', type=str,
         help = 'Path to the input PDB file', required=True)
@@ -53,6 +53,9 @@ def parse_arguments():
 
     parser.add_argument('-m','--min_max', nargs=2, type=float,
         default = [2.0, 11.0], help = 'Minimum and maximum values of box side')
+
+    parser.add_argument('-w','--wcut_min_max', nargs=2, type=int,
+        default = [10, 14], help = 'Minimum and maximum values of water cutoff')
 
     return parser.parse_args()
 
@@ -119,6 +122,7 @@ def main():
                                                                     atom_coords,
                                                                     cutoff,
                                                                     box_side)
+    model_dry_vol = len(dry_spheres) * box_side**3
 
     # Optimize the water cutoff used to filter out excessive/overlapping 
     # hydration spheres
@@ -126,15 +130,26 @@ def main():
     # 10 - 14 is a reasonable window over which to refine the cutoff
     hydr_cutoff, err = sct.sphere.optimize_watercut(box_side,
                                                     dry_spheres,
-                                                    26,
+                                                    27,
                                                     wet_volume,
-                                                    10,
-                                                    14,
+                                                    args.wcut_min_max[0],
+                                                    args.wcut_min_max[1],
                                                     0.01)
+                                                    
+    wet_spheres = sct.sphere.hydrate_sphere_model(dry_spheres,
+                                            27,
+                                            box_side,
+                                            hydr_cutoff,
+                                            xaxis = x_axis,
+                                            yaxis = y_axis,
+                                            zaxis = z_axis)
+    model_wet_vol = len(wet_spheres) * box_side**3
 
     out_file = open(args.output_file,'w')
     out_file.write("Target dry volume: {0:7.4f}\n".format(dry_volume))
+    out_file.write("Model dry volume: {0:7.4f}\n".format(model_dry_vol))
     out_file.write("Target hydrated volume: {0:7.4f}\n".format(wet_volume))
+    out_file.write("Model hydrated volume: {0:7.4f}\n".format(model_wet_vol))
     out_file.write("Sphere model box side: {0:7.4f}\n".format(box_side))
     out_file.write("Hydration cutoff: {0:d}\n".format(hydr_cutoff))
 
