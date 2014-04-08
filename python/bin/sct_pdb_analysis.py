@@ -271,75 +271,77 @@ for pdb in pdb_files:
 
     # Read PDB
     res_freq, atom_coords = sct.pdb.read_pdb_atom_data(pdb)
+    
+    if len(atom_coords) > 0:
 
-    # PDB to dry sphere model
-    dry_spheres, x_axis, y_axis, z_axis = sct.sphere.create_sphere_model(atom_coords,
-                                                                  cutoff,
-                                                                  box_side)
+        # PDB to dry sphere model
+        dry_spheres, x_axis, y_axis, z_axis = sct.sphere.create_sphere_model(atom_coords,
+                                                                             cutoff,
+                                                                             box_side)
 
-    # If neutron data provided compare with curve computed from dry sphere model
-    if args.neutron is not None:
+        # If neutron data provided compare with curve computed from dry sphere model
+        if args.neutron is not None:
 
-        neut_theor = analyse_sphere_model(dry_spheres, neut_data, radius, param, True)
+            neut_theor = analyse_sphere_model(dry_spheres, neut_data, radius, param, True)
 
-        # Write curve to file
-        curve_file = os.path.join(scn_path, pdb_id + '.scn')
-        output = open(curve_file,'w')
-        sct.curve.output_sas_curve(neut_theor['curve'], output)
-        output.close()
+            # Write curve to file
+            curve_file = os.path.join(scn_path, pdb_id + '.scn')
+            output = open(curve_file,'w')
+            sct.curve.output_sas_curve(neut_theor['curve'], output)
+            output.close()
 
-        # Write model to file
-        model_file = os.path.join(dry_model_path,  pdb_id + '.pdb')
-        sct.pdb.write_sphere_pdb(dry_spheres, radius, model_file)
+            # Write model to file
+            model_file = os.path.join(dry_model_path,  pdb_id + '.pdb')
+            sct.pdb.write_sphere_pdb(dry_spheres, radius, model_file)
 
-        volume = box_side3 * len(dry_spheres)
+            volume = box_side3 * len(dry_spheres)
 
-        # Format results for output to file
-        neut_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}".format(neut_theor['model_rg'],
-                                                                 neut_theor['curve_rg'],
-                                                                 neut_theor['curve_rxs'],
-                                                                 neut_theor['rfac'][0],
-                                                                 volume)
-    else:
-        neut_summ = "NA\tNA\tNA\tNA\tNA"
+            # Format results for output to file
+            neut_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}".format(neut_theor['model_rg'],
+                                                                     neut_theor['curve_rg'],
+                                                                     neut_theor['curve_rxs'],
+                                                                     neut_theor['rfac'][0],
+                                                                     volume)
+        else:
+            neut_summ = "NA\tNA\tNA\tNA\tNA"
 
-    # If x-ray data provided compare with curve computed from wet sphere model
-    if args.xray is not None:
-        # Hydrate model - > wet sphere model
-        wet_spheres = sct.sphere.hydrate_sphere_model(dry_spheres,
-                                            param['hydrate']['positions'],
-                                            box_side,
-                                            param['hydrate']['cutoff'],
-                                            xaxis = x_axis,
-                                            yaxis = y_axis,
-                                            zaxis = z_axis)
+        # If x-ray data provided compare with curve computed from wet sphere model
+        if args.xray is not None:
+            # Hydrate model - > wet sphere model
+            wet_spheres = sct.sphere.hydrate_sphere_model(dry_spheres,
+                                                          param['hydrate']['positions'],
+                                                          box_side,
+                                                          param['hydrate']['cutoff'],
+                                                          xaxis = x_axis,
+                                                          yaxis = y_axis,
+                                                          zaxis = z_axis)
 
-        xray_theor = analyse_sphere_model(wet_spheres, xray_data, radius, param)
+            xray_theor = analyse_sphere_model(wet_spheres, xray_data, radius, param)
 
-        # Write curve to file
-        curve_file = os.path.join(scx_path, pdb_id + '.scx')
-        output = open(curve_file,'w')
-        sct.curve.output_sas_curve(xray_theor['curve'], output)
-        output.close()
+            # Write curve to file
+            curve_file = os.path.join(scx_path, pdb_id + '.scx')
+            output = open(curve_file,'w')
+            sct.curve.output_sas_curve(xray_theor['curve'], output)
+            output.close()
 
-        # Write model to file
-        model_file = os.path.join(wet_model_path,  pdb_id + '.pdb')
-        sct.pdb.write_sphere_pdb(wet_spheres, radius, model_file)
+            # Write model to file
+            model_file = os.path.join(wet_model_path,  pdb_id + '.pdb')
+            sct.pdb.write_sphere_pdb(wet_spheres, radius, model_file)
 
-        volume = box_side3 * len(wet_spheres)
+            volume = box_side3 * len(wet_spheres)
 
-        # Format results for output to file
-        xray_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}".format(xray_theor['model_rg'],
-                                                                 xray_theor['curve_rg'],
-                                                                 xray_theor['curve_rxs'],
-                                                                 xray_theor['rfac'][0],
-                                                                 volume)
-    else:
-        xray_summ = "NA\tNA\tNA\tNA\tNA"
+            # Format results for output to file
+            xray_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}".format(xray_theor['model_rg'],
+                                                                        xray_theor['curve_rg'],
+                                                                        xray_theor['curve_rxs'],
+                                                                        xray_theor['rfac'][0],
+                                                                        volume)
+        else:
+            xray_summ = "NA\tNA\tNA\tNA\tNA"
 
-    # Output all summary data to file
-    summary_data.write('{0:s}\t{1:s}\t{2:s}\n'.format(pdb_id,
-                                                    neut_summ,
-                                                    xray_summ))
+        # Output all summary data to file
+        summary_data.write('{0:s}\t{1:s}\t{2:s}\n'.format(pdb_id,
+                                                          neut_summ,
+                                                          xray_summ))
 
 summary_data.close()
