@@ -162,7 +162,7 @@ summary_data = open(summary_name,'w')
 summary_data.write("Input PDB path: {0:s}\n".format(args.input_path))
 summary_data.write("\tNeutron\t\t\t\t\tX-ray\n")
 
-column_headings = "Rg_model\tRg_curve\tRxs1_curve\tRfactor\tVolume"
+column_headings = "Rg_model\tRg_curve\tRxs1_curve\tRfactor\tI0\tVolume"
 column_headings = "Model\t" + column_headings + "\t" + column_headings + "\n"
 
 summary_data.write(column_headings)
@@ -271,7 +271,7 @@ for pdb in pdb_files:
 
     # Read PDB
     res_freq, atom_coords = sct.pdb.read_pdb_atom_data(pdb)
-    
+
     if len(atom_coords) > 0:
 
         # PDB to dry sphere model
@@ -297,13 +297,14 @@ for pdb in pdb_files:
             volume = box_side3 * len(dry_spheres)
 
             # Format results for output to file
-            neut_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}".format(neut_theor['model_rg'],
+            neut_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}\t{5:7.4f}".format(neut_theor['model_rg'],
                                                                      neut_theor['curve_rg'],
                                                                      neut_theor['curve_rxs'],
                                                                      neut_theor['rfac'][0],
+                                                                     neut_theor['rfac'][1],
                                                                      volume)
         else:
-            neut_summ = "NA\tNA\tNA\tNA\tNA"
+            neut_summ = "NA\tNA\tNA\tNA\tNA\tNA"
 
         # If x-ray data provided compare with curve computed from wet sphere model
         if args.xray is not None:
@@ -331,13 +332,14 @@ for pdb in pdb_files:
             volume = box_side3 * len(wet_spheres)
 
             # Format results for output to file
-            xray_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}".format(xray_theor['model_rg'],
+            xray_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}\t{4:7.4f}".format(xray_theor['model_rg'],
                                                                         xray_theor['curve_rg'],
                                                                         xray_theor['curve_rxs'],
                                                                         xray_theor['rfac'][0],
+                                                                        xray_theor['rfac'][1],
                                                                         volume)
         else:
-            xray_summ = "NA\tNA\tNA\tNA\tNA"
+            xray_summ = "NA\tNA\tNA\tNA\tNA\tNA"
 
         # Output all summary data to file
         summary_data.write('{0:s}\t{1:s}\t{2:s}\n'.format(pdb_id,
