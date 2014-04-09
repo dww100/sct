@@ -42,6 +42,8 @@ def parse_arguments():
     parser.add_argument(
         '-o','--outfile', nargs='?', type=str, dest='out_file',
         help = 'Path to the output file', required=True)
+    parser.add_argument('-u','--unit', choices = ['nm', 'a'],
+                        default = 'a', help = 'Unit for Q in input experimental data')
 
     args = parser.parse_args()
     return args
@@ -66,22 +68,36 @@ if len(calc_curves) < 1:
     print "No calculated curve files found to analyze"
     sys.exit(1)
 
+if args.unit == 'nm':
+    qmin = param['rfac']['qmin'] * 10
+    qmax = param['rfac']['qmax'] * 10
+else:
+    qmin = param['rfac']['qmin']
+    qmax = param['rfac']['qmax']
+
 output.write("Expt\tCalc\t1/I0\tRfac\n")
 for expt_curve in args.expt_curves:
+
+    # Load experimental curve and if necessary convert Q to angstrom
+    expt_data = sct.curve.load_scatter_curve(expt_curve, qmin, qmax)
+
+    if args.unit == 'nm':
+        expt_data[:,0] = expt_data[:,0] / 10.0
+
     for calc_curve in calc_curves:
 
-        # Load the data from the two input files
+        # Load the theoretically calculated scattering curve
         calc_data = sct.curve.load_scatter_curve(calc_curve,
                                                  param['rfac']['qmin'],
                                                  param['rfac']['qmax'])
 
-        expt_data = sct.curve.load_scatter_curve(expt_curve,
-                                                 param['rfac']['qmin'],
-                                                 param['rfac']['qmax'])
-
+        # Calculate the R factor comparing the calculated and experimental curves
         rfactor, scale = sct.curve.calculate_rfactor(expt_data,
                                                      calc_data,
                                                      param['rfac']['qmin'],
                                                      param['rfac']['qmax'])
 
-        output.write("{0s:}\t{1:s}\t{2:7.4f}\t{3:7.4f}\n".format(expt_curve, calc_curve, scale, rfactor))
+        output.write("{0s:}\t{1:s}\t{2:7.4f}\t{3:7.4f}\n".format(expt_curve,
+                                                                  calc_curve,
+                                                                  scale,
+                                                                  rfactor))
