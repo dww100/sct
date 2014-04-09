@@ -332,7 +332,7 @@ for pdb in pdb_files:
             volume = box_side3 * len(wet_spheres)
 
             # Format results for output to file
-            xray_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}\t{4:7.4f}".format(xray_theor['model_rg'],
+            xray_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}\t{5:7.4f}".format(xray_theor['model_rg'],
                                                                         xray_theor['curve_rg'],
                                                                         xray_theor['curve_rxs'],
                                                                         xray_theor['rfac'][0],
