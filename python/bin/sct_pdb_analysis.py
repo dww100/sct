@@ -162,7 +162,7 @@ summary_data = open(summary_name,'w')
 summary_data.write("Input PDB path: {0:s}\n".format(args.input_path))
 summary_data.write("\tNeutron\t\t\t\t\tX-ray\n")
 
-column_headings = "Rg_model\tRg_curve\tRxs1_curve\tRfactor\tI0\tVolume"
+column_headings = "Rg_model\tRg_curve\tRxs1_curve\tRfactor\t1/I0\tVolume"
 column_headings = "Model\t" + column_headings + "\t" + column_headings + "\n"
 
 summary_data.write(column_headings)
