@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr0/usr3/people/davidw/linux_apps/anaconda/bin/python
 # -*- coding: utf-8 -*-
 """Compares theorerical scattering curves generated from PDB structure files to
 experimental x-ray and neutron scattering curves.
@@ -50,11 +50,11 @@ def parse_arguments():
     parser.add_argument('-p','--parameter_file', nargs='?', type=str,
         help = 'Path to a file containing input parameters', required=True)
 
-    parser.add_argument('-x','--xray', nargs='?', type=str,
-        help = 'Path to a file containing experimental x-ray scattering curve', default = None)
+    parser.add_argument('-x','--xray', nargs='+', type=str,
+        help = 'Paths to a files containing experimental x-ray scattering curve', default = None)
 
-    parser.add_argument('-n','--neutron', nargs='?', type=str,
-        help = 'Path to a file containing experimental neutron scattering curve', default = None)
+    parser.add_argument('-n','--neutron', nargs='+', type=str,
+        help = 'Paths to a files containing experimental neutron scattering curve', default = None)
 
     parser.add_argument('-t','--title', nargs='?', type=str,
         help = 'Title to use for summary output file', default = 'sct_output')
@@ -76,7 +76,80 @@ def parse_arguments():
 
     return args
 
-def analyse_sphere_model(model, expt_curve, sphere_radius, param, neutron=False):
+def read_curves(curve_files, units, param):
+    """
+    Read in a list of scattering curve files and return a list of dictionaries
+    which contain the file name ('file'), an array of Q and I(Q) vales ('data'),
+    the radius of gyration ('rg') and the cross-section ('rxs1').
+
+    @type  curve_files:  list
+    @param curve_files:  List of files containing scattering curves Q, I(Q)
+                         pairs
+    @type  units:        string
+    @param units:        String containing either 'nm' or 'a' to indicate the
+                         length units used in the scattering curve
+    @type  param:        dictionary
+    @param param:        Dictionary containing parameters to use when creating
+                         models and analysing curves.
+    @return:             List of dictionaries containing the following key/value
+                         pairs:
+                         - data: numpy array of Q, I(Q)
+                         - rg: radius of gyration calculated from input curve
+                         - rxs1: cross-section calculated from input curve
+                         - file: input file name
+    """
+
+    curves = []
+
+    for curve_file in curve_files:
+
+        curve = {}
+
+        curve['file'] = curve_file
+        # Read in the scattering curve
+        # Modeling is performed in angstroms so convert files in nm to a
+        if units == 'nm':
+            curve['data'] = sct.curve.load_scatter_curve(curve_file,
+                                                param['rfac']['qmin'] * 10.0,
+                                                param['rfac']['qmax'] * 10.0)
+            curve['data'][:,0] = curve['data'][:,0] / 10.0
+        else:
+            curve['data'] = sct.curve.load_scatter_curve(curve_file,
+                                                param['rfac']['qmin'],
+                                                param['rfac']['qmax'])
+
+
+        curve['rg'], curve['rxs'] = sct.curve.get_curve_descriptors(curve['data'],
+                                                  param['rg']['fitmin'],
+                                                  param['rg']['fitmax'],
+                                                  param['rxs1']['fitmin'],
+                                                  param['rxs1']['fitmax'])
+
+        curves.append(curve)
+
+    return curves
+
+def create_data_dir(basename, expt_type, data_type):
+    """
+    Set the output to a path basename/expt_type/data_type, if this does not
+    exist create it.
+
+    @type  basename:   string
+    @param basename:   Basename for the output directory
+    @type  expt_type:  string
+    @param expt_type:  Experiment type
+    @type  data_type:  string
+    @param data_type:  Type of data being stored
+
+    """
+
+    full_path = os.path.join(basename, expt_type, data_type)
+    if not os.path.exists(full_path):
+        os.makedirs(full_path)
+
+    return full_path
+
+def analyse_sphere_model(model, expt_curves, sphere_radius, param, neutron=False):
     """
     Take a sphere model and calculate the theoretical scattering curve. The
     Rg and Rxs1 are also calculated from the curve and returned alongside the
@@ -85,9 +158,10 @@ def analyse_sphere_model(model, expt_curve, sphere_radius, param, neutron=False)
     @type  model:          list
     @param model:          List of lists containing x, y & z coordinates
                            (3 * floats) for each sphere in a sphere model.
-    @type  expt_curve:     numpy array
-    @param expt_curve:     Two dimensional array containing scattered vector
-                           magnitudes, q, and intensities, I, from experiment.
+    @type  expt_curves:    list
+    @param expt_curves:    List of two dimensional numpy arrays containing
+                           scattered vector magnitudes, q, and intensities, I,
+                           from experiment.
     @type  sphere_radius:  float
     @param sphere_radius:  Sphere radius
     @type  param:          dictionary
@@ -97,7 +171,7 @@ def analyse_sphere_model(model, expt_curve, sphere_radius, param, neutron=False)
                            neutron curve
     @type  neutron:        boolean
     @rtype:                dictionary
-    @return                Dictionary containing the following key/value pairs:
+    @return:                Dictionary containing the following key/value pairs:
                            - model_rg: Radius of gyration calculated directly
                            from sphere model.
                            - curve_rg: Radius of gyration calculated from the
@@ -137,11 +211,13 @@ def analyse_sphere_model(model, expt_curve, sphere_radius, param, neutron=False)
                                     param['curve']['spread'],
                                     param['curve']['divergence'])
 
-    # Calculate Rfactor for theoretical vs experimental curves
-    result['rfac'] = sct.curve.calculate_rfactor(expt_curve,
-                                                 result['curve'],
-                                                 param['rfac']['qmin'],
-                                                 param['rfac']['qmax'])
+    # Calculate Rfactors for theoretical vs experimental curves
+    result['rfac'] = []
+    for expt_curve in expt_curves:
+        result['rfac'].append(sct.curve.calculate_rfactor(expt_curve['data'],
+                                                          result['curve'],
+                                                          param['rfac']['qmin'],
+                                                          param['rfac']['qmax']))
 
     return result
 
@@ -156,93 +232,63 @@ param['curve']['q_delta'] = param['curve']['qmax'] / param['curve']['npoints']
 if not os.path.exists(args.output_path):
     os.makedirs(args.output_path)
 
-summary_name = os.path.join(args.output_path, args.title + '.sum')
-summary_data = open(summary_name,'w')
-
-summary_data.write("Input PDB path: {0:s}\n".format(args.input_path))
-summary_data.write("\tNeutron\t\t\t\t\tX-ray\n")
-
-column_headings = "Rg_model\tRg_curve\tRxs1_curve\tRfactor\t1/I0\tVolume"
-column_headings = "Model\t" + column_headings + "\t" + column_headings + "\n"
-
-summary_data.write(column_headings)
-
 # Read in experimental curves and calculate Rg and Rxs
 # Setup output directories for theoretical curves and sphere models
-
-expt_name = os.path.join(args.output_path, args.title + '_expt.sum')
-expt_data = open(expt_name,'w')
-
 if args.neutron is not None:
 
-    if args.neutron_unit == 'nm':
-        neut_data = sct.curve.load_scatter_curve(args.neutron,
-                                           param['rfac']['qmin'] * 10,
-                                           param['rfac']['qmax'] * 10)
-        neut_data[:,0] = neut_data[:,0] / 10.0
-    else:
-        neut_data = sct.curve.load_scatter_curve(args.neutron,
-                                           param['rfac']['qmin'],
-                                           param['rfac']['qmax'])
+    neut_data = read_curves(args.neutron, args.neutron_unit, param)
 
-    neut_rg, neut_rxs = sct.curve.get_curve_descriptors(neut_data,
-                                              param['rg']['fitmin'],
-                                              param['rg']['fitmax'],
-                                              param['rxs1']['fitmin'],
-                                              param['rxs1']['fitmax'])
+    scn_path = create_data_dir(args.output_path, 'neutron','curves')
+    dry_model_path = create_data_dir(args.output_path, 'neutron','models')
 
-    neut_expt_summ = "{0:7.4f}\t{1:7.4f}".format(neut_rg, neut_rxs)
-
-    scn_path = os.path.join(args.output_path, 'neutron','curves')
-    if not os.path.exists(scn_path):
-        os.makedirs(scn_path)
-
-    dry_model_path = os.path.join(args.output_path, 'neutron','models')
-    if not os.path.exists(dry_model_path):
-        os.makedirs(dry_model_path)
+    no_neut = len(neut_data)
+    neut_rfact_head = ['\t'.join(['\t']*no_neut),
+                       '\t\t'.join(args.neutron),
+                       '\t'.join(['Rfactor\tscale']*no_neut)]
 
 else:
-    neut_expt_summ = "NA\tNA"
-
+    neut_data = []
+    neut_rfact_head = ['\t\t','\t\t','Rfactor\tscale']
 
 if args.xray is not None:
 
-    if args.xray_unit == 'nm':
-        xray_data = sct.curve.load_scatter_curve(args.xray,
-                                           param['rfac']['qmin'] * 10,
-                                           param['rfac']['qmax'] * 10)
-        xray_data[:,0] = xray_data[:,0] / 10.0
-    else:
-        xray_data = sct.curve.load_scatter_curve(args.xray,
-                                           param['rfac']['qmin'],
-                                           param['rfac']['qmax'])
+    xray_data = read_curves(args.xray, args.xray_unit, param)
 
+    scx_path = create_data_dir(args.output_path, 'xray','curves')
+    wet_model_path = create_data_dir(args.output_path, 'xray','models')
 
-
-    xray_rg, xray_rxs = sct.curve.get_curve_descriptors(xray_data,
-                                              param['rg']['fitmin'],
-                                              param['rg']['fitmax'],
-                                              param['rxs1']['fitmin'],
-                                              param['rxs1']['fitmax'])
-
-    xray_expt_summ = "{0:7.4f}\t{1:7.4f}".format(xray_rg, xray_rxs)
-
-    scx_path = os.path.join(args.output_path, 'xray','curves')
-    if not os.path.exists(scx_path):
-        os.makedirs(scx_path)
-
-    wet_model_path = os.path.join(args.output_path, 'xray','models')
-    if not os.path.exists(wet_model_path):
-        os.makedirs(wet_model_path)
+    no_xray = len(xray_data)
+    xray_rfact_head = ['\t'.join(['\t']*no_xray),
+                       '\t\t'.join(args.xray),
+                       '\t'.join(['Rfactor\tscale']*no_xray)]
 
 else:
-    xray_expt_summ = "NA\tNA"
+    xray_data = []
+    xray_rfact_head = ['\t\t','\t\t','Rfactor\tscale']
 
-expt_data.write("Neutron\t\tX-ray\n")
-expt_data.write("{0:s}\t\t{1:s}\n".format(args.xray, args.neutron))
-expt_data.write("Rg\tRxs1\tRg\tRxs1\n")
-expt_data.write("\t".join([neut_expt_summ, xray_expt_summ])+"\n")
+# Output summary analysis of the experimental data curves
+expt_name = os.path.join(args.output_path, args.title + '_expt.sum')
+expt_data = open(expt_name,'w')
+expt_data.write("Filename\tRg\tRxs1\n")
+
+for curve in neut_data + xray_data:
+    expt_data.write("{0:s}\t{1:7.4f}\t{2:7.4f}\n".format(curve['file'],
+                                                         curve['rg'],
+                                                         curve['rxs']))
 expt_data.close()
+
+# Create the file for model output
+summary_name = os.path.join(args.output_path, args.title + '.sum')
+summary_data = open(summary_name,'w')
+
+# Print header - note the inputs and put in column headings
+summary_data.write("Input PDB path: {0:s}\n".format(args.input_path))
+summary_data.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\tX-ray\n")
+summary_data.write("\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
+
+basic_head = "Rg_model\tRg_curve\tRxs1_curve\tVolume\t"
+col_head = "Model\t" + basic_head + neut_rfact_head[2] + '\t' + basic_head + xray_rfact_head[2] + "\n"
+summary_data.write(col_head)
 
 # Get list of PDBs in the input directory
 pdb_filter = os.path.join(args.input_path, '*.pdb')
@@ -251,9 +297,6 @@ pdb_files = glob.glob(pdb_filter)
 if len(pdb_files) < 1:
     print "No PDB files found to analyze"
     sys.exit(1)
-
-# Read in initial PDB
-#res_freq, atom_coords = p2s.read_pdb_atom_data(pdb_files[0])
 
 # Parameters for turning PDB into spheres
 cutoff = param['sphere']['cutoff']
@@ -297,12 +340,13 @@ for pdb in pdb_files:
             volume = box_side3 * len(dry_spheres)
 
             # Format results for output to file
-            neut_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}\t{5:7.4f}".format(neut_theor['model_rg'],
+            neut_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t".format(neut_theor['model_rg'],
                                                                      neut_theor['curve_rg'],
                                                                      neut_theor['curve_rxs'],
-                                                                     neut_theor['rfac'][0],
-                                                                     neut_theor['rfac'][1],
                                                                      volume)
+            for dataset in neut_theor['rfac']:
+                neut_summ += "{0:7.4f}\t{1:7.4f}\t".format(dataset[0],dataset[1])
+
         else:
             neut_summ = "NA\tNA\tNA\tNA\tNA\tNA"
 
@@ -332,12 +376,14 @@ for pdb in pdb_files:
             volume = box_side3 * len(wet_spheres)
 
             # Format results for output to file
-            xray_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}\t{5:7.4f}".format(xray_theor['model_rg'],
-                                                                        xray_theor['curve_rg'],
-                                                                        xray_theor['curve_rxs'],
-                                                                        xray_theor['rfac'][0],
-                                                                        xray_theor['rfac'][1],
-                                                                        volume)
+            xray_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t".format(xray_theor['model_rg'],
+                                                                           xray_theor['curve_rg'],
+                                                                           xray_theor['curve_rxs'],
+                                                                           volume)
+
+            for dataset in xray_theor['rfac']:
+                xray_summ += "{0:7.4f}\t{1:7.4f}\t".format(dataset[0],dataset[1])
+
         else:
             xray_summ = "NA\tNA\tNA\tNA\tNA\tNA"
 

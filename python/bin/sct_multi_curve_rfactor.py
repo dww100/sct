@@ -32,8 +32,8 @@ def parse_arguments():
     parser = argparse.ArgumentParser(
         description = 'Compute R factor from a comparison of several scattering curves.')
     parser.add_argument(
-        '-c','--calc', nargs='?', type=str, dest='calc_path',
-        help = 'Path to the input calculated curves', required=True)
+        '-c','--calc', nargs='+', type=str, dest='calc_paths',
+        help = 'Paths to the input calculated curves', required=True)
     parser.add_argument(
         '-e','--expt', nargs='+', type=str, dest='expt_curves',
         help = 'List of input experimental curves', required=True)
@@ -58,8 +58,12 @@ param = yaml.load(param_file)
 output = open(args.out_file,'w')
 
 # Get list of scattering curves in the input directory
-curve_filters = (os.path.join(args.calc_path,'*.scn'),
-                 os.path.join(args.calc_path,'*.scx')) # the tuple of file types
+
+curve_filters = []
+for path in args.calc_path:
+    curve_filters.append(os.path.join(path,'*.scn'))
+    curve_filters.append(os.path.join(path,'*.scx'))
+
 calc_curves = []
 for curve_filter in curve_filters:
     calc_curves.extend(glob.glob(curve_filter))
