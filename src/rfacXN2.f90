@@ -89,11 +89,13 @@ WRITE(*,*) 'What is the maximum Q value to be used in the fit?'
 READ(*,*)  QMAX
 
 ! Use the ratio of the experimental and calculated curves to give a initial guess
-! of the concentration
+! of the 'concentration'
 CON = AVIXPT / AVICAL
 RFACTOR = CALC_RFACTOR (QOBS, IOBS, IMATCH, MATCHNO, QMIN, QMAX, CON, VERBOSE)
 
-WRITE(11,*) TRIM(INFIL1), QMAX, CON, RFACTOR
+! 1/'concentration' = estimated theoretical I0
+
+WRITE(11,*) TRIM(INFIL1), QMAX, 1.0/CON, RFACTOR
 CLOSE(11)
 
 END PROGRAM
