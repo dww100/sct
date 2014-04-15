@@ -240,7 +240,10 @@ def sas_model_summary_output(theor_data):
                           model.
                         - rfac: R factor comparing experimental and
                           theoretical scattering curves.
-                        - volume: Sphere model volume    
+                        - volume: Sphere model volume  
+    @rtype:             string
+    @return:            String containing the input for the sphere model Rg, 
+                        curve Rg, curve Rxs1 and volume
     """
     
     if len(theor_data) > 0:
@@ -255,6 +258,72 @@ def sas_model_summary_output(theor_data):
         summ = "NA\tNA\tNA\tNA\tNA\tNA"
         
     return summ
+
+def create_rfac_header_text(data_files):
+    """
+    Create the spacing for needed to provide two columns (Rfactor and scale) 
+    for each input experimental curve in the summary output header. The header 
+    has the following format (in the final version it is tab separated) except 
+    without the line numbering:
+    0. Path to input PDBs
+    1. Neutron                                                              X-ray                                       
+    2. Model Rg_model Rg_curve Rxs1_curve Volume Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
+    This function provides the spacing for one set of curves (either x-ray or 
+    neutron).
+    
+    @type data_files:   list
+    @param data_files:  List of input files names containing experimental 
+                        scattering curves
+    @rtype:             list
+    @return:            List of strings containing the spacing and column 
+                        headings required for the three lines described above.
+    """
+    
+    if data_files is not None:
+    
+        no_files = len(data_files)
+        rfact_head = ['\t'.join(['\t']*no_files),
+                      '\t\t'.join(data_files),
+                      '\t'.join(['Rfactor\tscale']*no_files)]
+    else:
+        rfact_head = ['\t\t','\t\t','Rfactor\tscale']
+                       
+    return rfact_head
+
+def  write_summary_header(in_pdb, in_neut, in_xray, output):
+    """
+    Print the header for the summary data from sphere model analysis. 
+    When properties of the sphere model are references dry models are 
+    associated with neutrons and hydrated (wet) ones with x-rays.
+    The header has the following format (in the final version it is tab 
+    separated) except without the line numbering:
+    0. Path to input PDBs
+    1. Neutron                                                              X-ray                                       
+    2. Model Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
+    
+    Each experimental curve input requires two columns - Rfactor and scale
+    Where the latter is the scaling factor used to match the theoretical and 
+    experimental curves in the Rfactor calculation.
+    
+    @type theor_data:   dictionary, dictionary
+    @param theor_data:  Dictionaries containing the following key/value pairs
+    """
+    # Print header - note the inputs and print as first header row
+    output.write("Input PDB path: {0:s}\n".format(in_pdb))
+
+    # Create appropriate spacing for headings of the Rfactor related columns 
+    # for both neutron and xray input. 
+    neut_rfact_head = create_rfac_header_text(in_neut)
+    xray_rfact_head = create_rfac_header_text(in_xray)
+
+    # Header 0
+    summary_data.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\tX-ray\n")
+    # Header 1
+    summary_data.write("\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
+    # Header 2
+    basic_head = "Rg_model\tRg_curve\tRxs1_curve\tVolume\t"
+    col_head = "Model\t" + basic_head + neut_rfact_head[2] + '\t' + basic_head + xray_rfact_head[2] + "\n"
+    output.write(col_head)
 
 def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3):
     """
@@ -376,14 +445,8 @@ if args.neutron is not None:
     scn_path = create_data_dir(args.output_path, 'neutron','curves')
     dry_model_path = create_data_dir(args.output_path, 'neutron','models')
 
-    no_neut = len(neut_data)
-    neut_rfact_head = ['\t'.join(['\t']*no_neut),
-                       '\t\t'.join(args.neutron),
-                       '\t'.join(['Rfactor\tscale']*no_neut)]
-
 else:
     neut_data = []
-    neut_rfact_head = ['\t\t','\t\t','Rfactor\tscale']
 
 if args.xray is not None:
 
@@ -392,14 +455,8 @@ if args.xray is not None:
     scx_path = create_data_dir(args.output_path, 'xray','curves')
     wet_model_path = create_data_dir(args.output_path, 'xray','models')
 
-    no_xray = len(xray_data)
-    xray_rfact_head = ['\t'.join(['\t']*no_xray),
-                       '\t\t'.join(args.xray),
-                       '\t'.join(['Rfactor\tscale']*no_xray)]
-
 else:
     xray_data = []
-    xray_rfact_head = ['\t\t','\t\t','Rfactor\tscale']
 
 # Output summary analysis of the experimental data curves
 expt_name = os.path.join(args.output_path, args.title + '_expt.sum')
@@ -412,18 +469,16 @@ for curve in neut_data + xray_data:
                                                          curve['rxs']))
 expt_data.close()
 
+
 # Create the file for model output
 summary_name = os.path.join(args.output_path, args.title + '.sum')
 summary_data = open(summary_name,'w')
 
-# Print header - note the inputs and put in column headings
-summary_data.write("Input PDB path: {0:s}\n".format(args.input_path))
-summary_data.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\tX-ray\n")
-summary_data.write("\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
-
-basic_head = "Rg_model\tRg_curve\tRxs1_curve\tVolume\t"
-col_head = "Model\t" + basic_head + neut_rfact_head[2] + '\t' + basic_head + xray_rfact_head[2] + "\n"
-summary_data.write(col_head)
+# Print the header for the summary data from sphere model analysis:
+# Path to input PDBs
+# Neutron                                                              X-ray                                       
+# Model Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
+write_summary_header(args.input_path, args.neutron, args.xray, summary_data)
 
 # Get list of PDBs in the input directory
 pdb_filter = os.path.join(args.input_path, '*.pdb')
