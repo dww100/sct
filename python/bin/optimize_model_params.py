@@ -55,7 +55,7 @@ def parse_arguments():
         default = [2.0, 11.0], help = 'Minimum and maximum values of box side')
 
     parser.add_argument('-w','--wcut_min_max', nargs=2, type=int,
-        default = [10, 14], help = 'Minimum and maximum values of water cutoff')
+        default = [2, 20], help = 'Minimum and maximum values of water cutoff')
 
     return parser.parse_args()
 
@@ -126,8 +126,9 @@ def main():
 
     # Optimize the water cutoff used to filter out excessive/overlapping 
     # hydration spheres
-    # Use 26 additional spheres in teh trial hydration
-    # 10 - 14 is a reasonable window over which to refine the cutoff
+    # Use 26 additional spheres in the trial hydration
+    # 10 - 14 is a reasonable window over which to refine the cutoff 
+    # for proteins, this didn't work for linear carbohydrates
     hydr_cutoff, err = sct.sphere.optimize_watercut(box_side,
                                                     dry_spheres,
                                                     27,
