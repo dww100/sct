@@ -78,12 +78,7 @@ def main():
         sct.curve.smear_curve(curve, q_delta, args.wavelength,
                               args.spread, args.divergence)
 
-    if args.output_filename != None:
-        output = open(args.output_filename,'w')
-    else:
-        output = sys.stdout
-
-    sct.curve.output_sas_curve(curve, output)
+    sct.curve.output_sas_curve(curve, args.output_filename)
 
 if __name__ == "__main__":
     main()
