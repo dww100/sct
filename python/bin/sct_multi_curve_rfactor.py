@@ -60,7 +60,7 @@ output = open(args.out_file,'w')
 # Get list of scattering curves in the input directory
 
 curve_filters = []
-for path in args.calc_path:
+for path in args.calc_paths:
     curve_filters.append(os.path.join(path,'*.scn'))
     curve_filters.append(os.path.join(path,'*.scx'))
 
@@ -101,7 +101,7 @@ for expt_curve in args.expt_curves:
                                                      param['rfac']['qmin'],
                                                      param['rfac']['qmax'])
 
-        output.write("{0s:}\t{1:s}\t{2:7.4f}\t{3:7.4f}\n".format(expt_curve,
+        output.write("{0:s}\t{1:s}\t{2:7.4f}\t{3:7.4f}\n".format(expt_curve,
                                                                   calc_curve,
                                                                   scale,
                                                                   rfactor))
