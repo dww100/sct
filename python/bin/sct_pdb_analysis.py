@@ -51,10 +51,10 @@ def parse_arguments():
         help = 'Path to a file containing input parameters', required=True)
 
     parser.add_argument('-x','--xray', nargs='+', type=str,
-        help = 'Paths to a files containing experimental x-ray scattering curve', default = None)
+        help = 'Paths to files containing experimental x-ray scattering curve', default = None)
 
     parser.add_argument('-n','--neutron', nargs='+', type=str,
-        help = 'Paths to a files containing experimental neutron scattering curve', default = None)
+        help = 'Paths to files containing experimental neutron scattering curve', default = None)
 
     parser.add_argument('-t','--title', nargs='?', type=str,
         help = 'Title to use for summary output file', default = 'sct_output')
