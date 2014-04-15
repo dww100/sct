@@ -18,6 +18,7 @@ Scattering curve related functions used in the SCT suite of programs
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import sys
 import yaml
 import numpy as np
 import matplotlib as plt
@@ -362,20 +363,25 @@ def smear_sas_curve(curve, q_delta, wavelength, spread, divergence):
         ndx2 = ndx - mid_qq - 1
         curve[:,1][ndx2] = asum[ndx]
 
-def output_sas_curve(curve, out):
+def output_sas_curve(curve, filename):
     """
     Prints out formated q and I columns to output.
 
-    @type  curve:  numpy array
-    @param curve:  Two dimensional array containing scattered vector
-                   magnitudes, q, and intensities, I.
-    @type  out:    file object
-    @param out:    File object used for output of q/I curve.
+    @type  curve:     numpy array
+    @param curve:     Two dimensional array containing scattered vector
+                      magnitudes, q, and intensities, I.
+    @type  filename:  string
+    @param filename:  Filename for output of q/I curve.
     """
+    
+    if filename is not None:
+        output = open(filename,'w')
+    else:
+        output = sys.stdout
 
     for qi_pair in curve:
-        out.write("{0:7.4f} {1:7.4f}\n".format(qi_pair[0], qi_pair[1]))
-
+        output.write("{0:7.4f} {1:7.4f}\n".format(qi_pair[0], qi_pair[1]))
+    output.close()
 
 def get_curve_descriptors(curve, rg_min, rg_max, rxs_min, rxs_max):
     """

@@ -171,7 +171,7 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, neutron=False
                            neutron curve
     @type  neutron:        boolean
     @rtype:                dictionary
-    @return:                Dictionary containing the following key/value pairs:
+    @return:               Dictionary containing the following key/value pairs:
                            - model_rg: Radius of gyration calculated directly
                            from sphere model.
                            - curve_rg: Radius of gyration calculated from the
@@ -221,6 +221,41 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, neutron=False
 
     return result
 
+def sas_model_summary_output(theor_data):
+    """
+    Format summary data from modelling for output. Columns are Rg from model, 
+    Rg from curve, Rxs1 from curve, volume of sphere model.
+    
+    @type theor_data:   dictionary, dictionary
+    @param theor_data:  Dictionaries containing the following key/value pairs 
+                        for the dry model/neutron and wet model/xray 
+                        comparisons:
+                        - model_rg: Radius of gyration calculated directly
+                         from sphere model.
+                        - curve_rg: Radius of gyration calculated from the
+                          theoretical scattering curve derived from the sphere
+                          model.
+                        - curve_rxs1: Cross-section calculated from the
+                          theoretical scattering curve derived from the sphere
+                          model.
+                        - rfac: R factor comparing experimental and
+                          theoretical scattering curves.
+                        - volume: Sphere model volume    
+    """
+    
+    if len(theor_data) > 0:
+        summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t".format(theor_data['model_rg'],
+                                                                 theor_data['curve_rg'],
+                                                                 theor_data['curve_rxs'],
+                                                                 theor_data['volume'])        
+        
+        for dataset in theor_data['rfac']:
+            summ += "{0:7.4f}\t{1:7.4f}\t".format(dataset[0],dataset[1])
+    else:
+        summ = "NA\tNA\tNA\tNA\tNA\tNA"
+        
+    return summ
+
 def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3):
     """
     Create sphere models from PDBs and use to generate theoretical scattering
@@ -242,6 +277,21 @@ def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3
     @type  box_side3:  float
     @param box_side3:  Cubed box length for the grid used to make sphere 
                        models (sphere diameter).
+    @rtype:            dictionary, dictionary
+    @return:           Dictionaries containing the following key/value pairs 
+                       for the dry model/neutron and wet model/xray 
+                       comparisons:
+                       - model_rg: Radius of gyration calculated directly
+                         from sphere model.
+                       - curve_rg: Radius of gyration calculated from the
+                         theoretical scattering curve derived from the sphere
+                         model.
+                       - curve_rxs1: Cross-section calculated from the
+                         theoretical scattering curve derived from the sphere
+                         model.
+                       - rfac: R factor comparing experimental and
+                         theoretical scattering curves.
+                       - volume: Sphere model volume
     """
     
     cutoff = param['sphere']['cutoff']
@@ -267,26 +317,16 @@ def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3
 
             # Write curve to file
             curve_file = os.path.join(scn_path, pdb_id + '.scn')
-            output = open(curve_file,'w')
-            sct.curve.output_sas_curve(neut_theor['curve'], output)
-            output.close()
+            sct.curve.output_sas_curve(neut_theor['curve'], curve_file)
 
             # Write model to file
             model_file = os.path.join(dry_model_path,  pdb_id + '.pdb')
             sct.pdb.write_sphere_pdb(dry_spheres, radius, model_file)
 
-            volume = box_side3 * len(dry_spheres)
-
-            # Format results for output to file
-            neut_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t".format(neut_theor['model_rg'],
-                                                                     neut_theor['curve_rg'],
-                                                                     neut_theor['curve_rxs'],
-                                                                     volume)
-            for dataset in neut_theor['rfac']:
-                neut_summ += "{0:7.4f}\t{1:7.4f}\t".format(dataset[0],dataset[1])
+            neut_theor['volume'] = box_side3 * len(dry_spheres)
 
         else:
-            neut_summ = "NA\tNA\tNA\tNA\tNA\tNA"
+            neut_theor = {}
 
         # If x-ray data provided compare with curve computed from wet sphere model
         if len(xray_data) != 0:
@@ -303,29 +343,18 @@ def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3
 
             # Write curve to file
             curve_file = os.path.join(scx_path, pdb_id + '.scx')
-            output = open(curve_file,'w')
-            sct.curve.output_sas_curve(xray_theor['curve'], output)
-            output.close()
+            sct.curve.output_sas_curve(xray_theor['curve'], curve_file)
 
             # Write model to file
             model_file = os.path.join(wet_model_path,  pdb_id + '.pdb')
             sct.pdb.write_sphere_pdb(wet_spheres, radius, model_file)
 
-            volume = box_side3 * len(wet_spheres)
-
-            # Format results for output to file
-            xray_summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t".format(xray_theor['model_rg'],
-                                                                           xray_theor['curve_rg'],
-                                                                           xray_theor['curve_rxs'],
-                                                                           volume)
-
-            for dataset in xray_theor['rfac']:
-                xray_summ += "{0:7.4f}\t{1:7.4f}\t".format(dataset[0],dataset[1])
+            xray_theor['volume'] = box_side3 * len(wet_spheres)
 
         else:
-            xray_summ = "NA\tNA\tNA\tNA\tNA\tNA"
+            xray_theor = {}
             
-        return neut_summ, xray_summ
+        return neut_theor, xray_theor
 
 args = parse_arguments()
 
@@ -415,11 +444,18 @@ radius = box_side / 2.0
 # Loop over input PDBs
 for pdb in pdb_files:
 
-    neut_summ, xray_summ = perform_sas_analysis_pdb(pdb, neut_data, xray_data, 
-                                                    param, radius, box_side3)
+    # Create sphere models, compute scattering curves and compare to 
+    # experimental curves
+    # Dry models are compared to neutron data, wet to xray data.
+    dry_data, wet_data = perform_sas_analysis_pdb(pdb, neut_data, xray_data, 
+                                                  param, radius, box_side3)
 
     pdb_basename = os.path.basename(pdb)
     pdb_id = os.path.splitext(pdb_basename)[0]
+
+    # Format the modelling output data for printing
+    neut_summ = sas_model_summary_output(dry_data)
+    xray_summ = sas_model_summary_output(wet_data)
 
     # Output all summary data to file
     summary_data.write('{0:s}\t{1:s}\t{2:s}\n'.format(pdb_id,
