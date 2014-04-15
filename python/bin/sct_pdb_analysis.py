@@ -223,7 +223,25 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, neutron=False
 
 def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3):
     """
+    Create sphere models from PDBs and use to generate theoretical scattering
+    curves and compare these to experimental inputs
     
+    @type  pdb:        string
+    @param pdb:        Filename of the input PDB
+    @type  neut_data:  list
+    @param neut_data:  List of numpy arrays with two columns (Q and I) 
+                       containing neutron experimental data
+    @type  xray_data:  list
+    @param xray_data:  List of numpy arrays with two columns (Q and I)
+                       containing xray experimental data
+    @type  param:      dictionary
+    @param param:      Dictionary containing parameters to use when creating
+                       models and analysing curves.    
+    @type  radius:     float
+    @param radius:     Radius of spheres to be used in sphere models
+    @type  box_side3:  float
+    @param box_side3:  Cubed box length for the grid used to make sphere 
+                       models (sphere diameter).
     """
     
     cutoff = param['sphere']['cutoff']
