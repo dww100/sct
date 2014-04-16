@@ -266,7 +266,7 @@ def create_rfac_header_text(data_files):
     has the following format (in the final version it is tab separated) except 
     without the line numbering:
     0. Path to input PDBs
-    1. Neutron                                                              X-ray                                       
+    1. Neutron                                                                   X-ray                                       
     2. Model Rg_model Rg_curve Rxs1_curve Volume Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
     This function provides the spacing for one set of curves (either x-ray or 
     neutron).
@@ -298,7 +298,7 @@ def  write_summary_header(in_pdb, in_neut, in_xray, output):
     The header has the following format (in the final version it is tab 
     separated) except without the line numbering:
     0. Path to input PDBs
-    1. Neutron                                                              X-ray                                       
+    1. Neutron                                                                    X-ray                                       
     2. Model Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
     
     Each experimental curve input requires two columns - Rfactor and scale
