@@ -13,11 +13,12 @@ gfortran (version 4.2 or greater)
 
 Python 2.7
 
+The following packages must be in the PYTHONPATH:
+distutils
 NumPy
-
 SciPy
-
 matplotlib
+yaml
 
 We recommend the installation of Enthought Canopy to guarantee the correct installation of python and the packages required
 
