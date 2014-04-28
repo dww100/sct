@@ -19,6 +19,8 @@ PDB related functions used in the SCT suite of programs
 # limitations under the License.
 
 import seq
+import string
+import sys
 
 # Dictionary of CHARMM residue names to standard naming
 charmm_resids = {
@@ -45,8 +47,111 @@ charmm_resids = {
 'TYM': 'TYR'
 }
 
+charmm_residues = charmm_resids.keys()
+
+PDB_ATOM_RECORD = (
+    ('record', 0,  6, None),    # 0,  record type name
+    ('atom_no', 6, 11, int),     # 1,  atom serial/index no
+    ('atom_name', 12, 16, None),     # 2,  atom name
+    ('alt', 16, None, None),    # 3,  altLoc
+    ('res_id', 17, 20, None),  # 4,  residue name
+    ('chain', 21, None, None),   # 5,  chain ID
+    ('res_no', 22, 26, int),     # 6,  residue sequence number
+    ('insert', 26, None, None), # 7,  insertion code
+    ('x', 30, 38, float),       # 8,  x
+    ('y', 38, 46, float),       # 9,  y
+    ('z', 46, 54, float),       # 10, z
+    ('occ', 54, 60, float),     # 11, occupancy
+    ('b', 60, 66, float),       # 12, temperature factor
+    ('segid', 72, 76, None),   # 13, segment ID
+    ('element', 76, 78, None),  # 14, element
+    ('charge', 78, 80, None),   # 15, charge
+)
+
+#  CHARMM Format strings - source/psffres.src
+#
+#  Format shown including CHEQ (which we are ignoring):
+#  II,LSEGID,LRESID,LRES,TYPE(I),IAC(I),CG(I),AMASS(I),IMOVE(I),ECH(I),EHA(I)
+#
+# standard format:
+# (I8,1X,A4,1X,A4,1X,A4,1X,A4,1X,I4,1X,2G14.6,I8,2G14.6)
+# (I8,1X,A4,1X,A4,1X,A4,1X,A4,1X,A4,1X,2G14.6,I8,2G14.6)  XPLOR
+# expanded format EXT:
+# (I10,1X,A8,1X,A8,1X,A8,1X,A8,1X,I4,1X,2G14.6,I8,2G14.6)
+# (I10,1X,A8,1X,A8,1X,A8,1X,A8,1X,A4,1X,2G14.6,I8,2G14.6) XPLOR
+#
+# Note: For some reason the extended format seems to like putting small
+# charges in scientific format which leads to the length increasing by 2 chars
+# Works on files I tested but YMMV
+
+PSF_ATOM_RECORD = (
+    ('atom_no', 0,  8, int),     # 0, atom serial/index no
+    ('segid', 9, 13, None),     # 1, segment ID
+    ('res_no', 14, 18, int),     # 2, residue sequence number
+    ('res_id', 19, 23, None),  # 3, residue name
+    ('atom_name', 24, 28, None),     # 4, atom name
+    ('type', 29, 33, None),     # 5, atom type
+    ('charge', 34, 48, float),  # 6, charge
+    ('mass', 48, 62, float),    # 7, mass
+    ('imove', 62, 70, int),     # 8, imove
+#            ('ech', 70, 84, float),     # 9, ech
+#            ('eha', 84, 100, float),    # 10, eha    
+)
+
+PSFEXT_ATOM_RECORD = (
+    ('atom_no', 0,  10, int),    # 0, atom serial/index no
+    ('segid', 11, 19, None),    # 1, segment ID
+    ('res_no', 20, 28, int),     # 2, residue sequence number
+    ('res_id', 29, 37, None),  # 3, residue name
+    ('atom_name', 38, 46, None),     # 4, atom name
+    ('type', 47, 51, None),     # 5, atom type
+    ('charge', 52, 68, float),  # 6, charge
+    ('mass', 68, 82, float),    # 7, mass
+    ('imove', 82, 90, int),     # 8, imove
+#            ('ech', 90, 104, float),     # 9, ech
+#            ('eha', 104, 118, float),    # 10, eha  
+)
+
 # We will accept either standard or CHARMM residue naming
-accept_resids = seq.all_residues + charmm_resids.keys()
+accept_resids = seq.all_residues + charmm_residues
+
+def parse_line(line, schema):
+    """
+    Parse an atom record line from a PDB or PSF file via schema.
+    Based on the PDB parsing code written by Alisue (lambdalisue@hashnote.net):
+    https://gist.github.com/lambdalisue/7209305
+    
+    Schema format:
+
+        1) record name
+        2) start index
+        3) end index or None for single character
+        4) processing function or None for `string.strip`
+
+        so a truncated (but valid) schema for a PDB ATOM record cold be:
+
+        ATOM_RECORD_SCHEMA = (
+        ...    ('record', 0,  6,   None),   # 0,  record name
+        ...    ('name', 6, 11,   int),      # 1,  serial
+        )
+
+    @type  line:   string
+    @param line:   Line from a text file.
+    @type  schema: list
+    @param schema: List of 4-tuples. The format of the tuples is given above.
+    @rtype:        dictionary
+    @return:       Dictionary with keys specifiec as the record name in the 
+                   schema.
+    """
+    
+    vals = {}
+    for record, start, end, fn in schema:
+        if end is None:
+            end = start + 1
+        if fn is None:
+            fn = string.strip
+        vals[record] = fn(line[start:end])
+    return vals
 
 def pdb_res_line_parse(line):
     """Parse a single line from a PDB file into a dictionary according to
@@ -64,30 +169,22 @@ def pdb_res_line_parse(line):
                      - coords:    list of floats, the x, y & z coordinates
     """
 
-    data = {}
-
     # Only interested in ATOM and HETATM lines not REMARKs etc.
     # The type of record on the line is determined by the first 6 characters
     record = line[0:6].strip()
+    
     if record in ['ATOM','HETATM']:
 
+        data = parse_line(line, PDB_ATOM_RECORD)
+        if data['resname'] in accept_resids:
         # Split data on the line according to column definitions for PDB files
         # Ignore residues that we can't handle in SCT
         # TODO: This should perhaps give a warning
 
-        # res_id is a three letter residue code
-        res_id = line[17:20].strip()
-        if res_id in accept_resids:
-            data['atom_no'] = int(line[6:11])
-            data['atom_name'] = line[12:16].strip()
-            data['res_id'] = res_id
-            data['chain'] = line[21:22].strip()
-            data['res_no'] = int(line[22:26])
-            x = float(line[30:38])
-            y = float(line[38:46])
-            z = float(line[46:54])
-            data['coords'] = [x, y, z]
-
+            data['coords'] = [data['x'], data['y'], data['z']]
+        else:
+            data = {}
+            
     return data
 
 def read_pdb_atom_data (filename):
@@ -133,6 +230,91 @@ def read_pdb_atom_data (filename):
 
     return res_freq, atom_coords
 
+def read_psf(filename):
+    
+    psf_file = open(filename,'r')
+    # Process PSF header
+    # Contains the flags that determine contents and format type 
+    # (EXT or normal, not XPLOR or CHARMM)
+    header = psf_file.readline().split()
+    if header[0] != 'PSF':
+        # This should be a proper exception! As should the other errors!
+        print 'Boo not a PSF!'
+        sys.exit()
+        
+    if 'EXT' in header:
+        schema = PSFEXT_ATOM_RECORD
+    else:
+        schema = PSF_ATOM_RECORD
+    # Skip blank line
+    psf_file.readline()
+
+    title = psf_file.readline().split()
+    if title[1] != '!NTITLE':
+        print 'Not a valid PSF (NTITLE) - sad times'
+        sys.exit()
+
+    # Skip remark lines (number is the first entry on the NTITLE line)                
+    for ii in range(int(title[0])):
+        psf_file.readline()
+        
+    # Skip blank line
+    psf_file.readline()
+
+    atom_title = psf_file.readline().split()
+    if atom_title[1] != '!NATOM':
+        print 'Not a valid PSF (NATOM) - sad times'
+        sys.exit()
+    
+    n_atoms = int(atom_title[0])
+    
+    atoms = []
+    
+    for ii in xrange(n_atoms):
+        line = psf_file.readline()
+        atoms.append(parse_line(line, schema))
+
+    psf_file.close()
+    
+    return atoms
+    
+def process_pdb_psf(psf_filename, pdb_filename):
+    
+    psf_atoms = read_psf(psf_filename)
+    n_atoms = len(psf_atoms)        
+    
+    if n_atoms == 0:
+        print "No atoms foud in the PSF, expect pain"
+    else:
+        tmp_atoms = []
+    
+    # Read in lines of the PDB
+    # ATOM and HETATM records are interpretted - others ignored
+    with open(pdb_filename) as f:
+        for line in f:
+            if line[:6].strip() in ['ATOM', 'HETATM']:
+                data = parse_line(line, PDB_ATOM_RECORD)
+                tmp_atoms.append(data)
+        
+        if len(tmp_atoms) != n_atoms:
+            print "Number of atoms in the PDB do not match the PSF"
+        else:
+            for ii in range(0, n_atoms):
+                psf_atoms[ii]['coords'] = tmp_atoms[ii]['coords']
+                psf_atoms[ii]['chain'] = tmp_atoms[ii]['chain']
+    
+    atoms = []    
+    
+    for atom in psf_atoms:
+        if atom['atom_name'][0] != 'H':
+    
+            if atom['res_id'] in charmm_residues:
+                atom['res_id'] = charmm_resids[atom['res_id']]
+                
+        atoms.append(atom)                            
+                
+    return atoms
+
 def create_pdb_atom(res_no, res_id, atom_no, atom_type, coords, **kwargs):
     """
     Create ATOM line for output in a PDB file (ends with a new line character)
@@ -168,6 +350,22 @@ def create_pdb_atom(res_no, res_id, atom_no, atom_type, coords, **kwargs):
     line += "{0:6.2f}{1:6.2f}\n".format(occ, beta)
 
     return line
+
+def write_pdb(atoms, filename):
+    
+    out_file = open(filename, 'w')
+    
+    for atom in atoms:
+        pdb_line = create_pdb_atom(atom['resno'], 
+                                   atom['res_id'], 
+                                   atom['serial'], 
+                                   atom['name'], 
+                                   [atom['x'],atom['y'],atom['z']],
+                                   chain = atom['chain'])
+    
+        out_file.write(pdb_line)
+
+    out_file.close()
 
 def write_sphere_pdb(coords, radius, filename):
     
