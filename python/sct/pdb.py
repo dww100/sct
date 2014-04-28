@@ -231,6 +231,17 @@ def read_pdb_atom_data (filename):
     return res_freq, atom_coords
 
 def read_psf(filename):
+    """
+    Read in a PSF file and create a list of dictionaries containing the fields 
+    defined in PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD schemas.
+
+    @type  filename: string
+    @param filename: Path to a PSF file.
+    @rtype:          list
+    @return:         List of dictionaries with kets as defined in the
+                     PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD schemas.
+    """    
+    
     
     psf_file = open(filename,'r')
     # Process PSF header
@@ -254,7 +265,7 @@ def read_psf(filename):
         print 'Not a valid PSF (NTITLE) - sad times'
         sys.exit()
 
-    # Skip remark lines (number is the first entry on the NTITLE line)                
+    # Skip remark lines (number given as the first entry on the NTITLE line)                
     for ii in range(int(title[0])):
         psf_file.readline()
         
@@ -279,6 +290,20 @@ def read_psf(filename):
     return atoms
     
 def process_pdb_psf(psf_filename, pdb_filename):
+    """
+    Read in a PSF/PDB pair of files and create a list of dictionaries 
+    containing the fields defined in PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD 
+    schemas plus 'coords' (from the PDB x,y,z coordinates) and 'chain' (from 
+    the PDB chain column). Hydrogen atoms are filtered out.
+
+    @type  filename: string
+    @param filename: Path to a PSF file.
+    @rtype:          list
+    @return:         List of dictionaries with kets as defined in the
+                     PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD schemas plus 'coords' 
+                     (from the PDB x,y,z coordinates) and 'chain' (from the PDB
+                     chain column)..
+    """
     
     psf_atoms = read_psf(psf_filename)
     n_atoms = len(psf_atoms)        
@@ -352,6 +377,15 @@ def create_pdb_atom(res_no, res_id, atom_no, atom_type, coords, **kwargs):
     return line
 
 def write_pdb(atoms, filename):
+    """
+    Writes out a PDB file based on the values in the input atoms
+
+    @type  atoms:     list
+    @param atoms:     A list of dictionaries containing values for the keys 
+                      defined in PDB_ATOM_RECORD schema
+    @type  filename:  string
+    @param filename:  Filename for the output sphere model PDB
+    """
     
     out_file = open(filename, 'w')
     
@@ -374,8 +408,7 @@ def write_sphere_pdb(coords, radius, filename):
     using the beta column to store radius (all ATOMs are C1 SER)
 
     @type  coords:    list
-    @param coords:    A list containing lists of x, y & z coordinates
-                      (3 * floats)
+    @param coords:    A list containing lists of x, y & z coordinates (3 * floats)
     @type  radius:    float
     @param radius:    Sphere radius
     @type  filename:  string
