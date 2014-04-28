@@ -22,12 +22,17 @@ import seq
 
 # Dictionary of CHARMM residue names to standard naming
 charmm_resids = {
+'ANE5AC': 'SIA',
+'BNE5AC': 'SIA',
+'AFUC': 'FUC',
+'BFUC': 'FUC',
+'AGAL': 'GAL',
+'BGAL': 'GAL',
+'AGLCNA': 'NAG',
+'BGLCNA': 'NAG',
+'AMAN': 'MAN',
+'BMAN': 'MAN',
 'ASH': 'ASP',
-'ANE': 'SIA',
-'BFU': 'FUC',
-'BGA': 'GAL',
-'BGL': 'NAG',
-'BMA': 'MAN',
 'CYM': 'CYS',
 'CYX': 'CYS',
 'GLH': 'GLU',
@@ -35,6 +40,7 @@ charmm_resids = {
 'HID': 'HIS',
 'HIE': 'HIS',
 'HSD': 'HIS',
+'HSE': 'HIS',
 'LYN': 'LYS',
 'TYM': 'TYR'
 }
