@@ -176,7 +176,7 @@ def pdb_res_line_parse(line):
     if record in ['ATOM','HETATM']:
 
         data = parse_line(line, PDB_ATOM_RECORD)
-        if data['resname'] in accept_resids:
+        if data['res_id'] in accept_resids:
         # Split data on the line according to column definitions for PDB files
         # Ignore residues that we can't handle in SCT
         # TODO: This should perhaps give a warning
@@ -318,7 +318,7 @@ def process_pdb_psf(psf_filename, pdb_filename):
     with open(pdb_filename) as f:
         for line in f:
             if line[:6].strip() in ['ATOM', 'HETATM']:
-                data = parse_line(line, PDB_ATOM_RECORD)
+                data = pdb_res_line_parse(line)                
                 tmp_atoms.append(data)
         
         if len(tmp_atoms) != n_atoms:
@@ -336,7 +336,7 @@ def process_pdb_psf(psf_filename, pdb_filename):
             if atom['res_id'] in charmm_residues:
                 atom['res_id'] = charmm_resids[atom['res_id']]
                 
-        atoms.append(atom)                            
+            atoms.append(atom)                            
                 
     return atoms
 
@@ -390,11 +390,11 @@ def write_pdb(atoms, filename):
     out_file = open(filename, 'w')
     
     for atom in atoms:
-        pdb_line = create_pdb_atom(atom['resno'], 
+        pdb_line = create_pdb_atom(atom['res_no'], 
                                    atom['res_id'], 
-                                   atom['serial'], 
-                                   atom['name'], 
-                                   [atom['x'],atom['y'],atom['z']],
+                                   atom['atom_no'], 
+                                   atom['atom_name'], 
+                                   atom['coords'],
                                    chain = atom['chain'])
     
         out_file.write(pdb_line)
