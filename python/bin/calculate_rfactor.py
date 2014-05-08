@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-Compute the R factor of a comparison between two scattering curves.
-This will usually be one calculated and one experimental data set.
-
-R factor is used by analogy with crystallography where:
-R = sum (abs(F_expt - F_calc)) / sum (abs(F_expt))
+"""Compares pre-calculated theorerical scattering curves to
+experimental x-ray and neutron scattering curves.
 """
 
 # Copyright 2014 University College London
@@ -23,6 +19,10 @@ R = sum (abs(F_expt - F_calc)) / sum (abs(F_expt))
 # limitations under the License.
 
 import argparse
+import sys
+import os
+import glob
+import yaml
 
 import sct
 
@@ -30,68 +30,82 @@ def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
 
     parser = argparse.ArgumentParser(
-        description = 'Compute R factor from a comparison of two '
-                      'scattering curves.')
+        description = 'Compute R factor from a comparison of several scattering curves.')
     parser.add_argument(
-        '-c','--calc', nargs='?', type=str, dest='calc_curve',
-        help = 'Path to the input calculated curve', required=True)
+        '-c','--calc', nargs='+', type=str, dest='calc_paths',
+        help = 'Path to the input calculated curve or directory containing mutiple curves (with scn, scx extensions)', required=True)
     parser.add_argument(
-        '-e','--expt', nargs='?', type=str, dest='expt_curve',
-        help = 'Path to the input experimental curve', required=True)
-    parser.add_argument(
-        '-q','--qrange', nargs=2, type=float,
-        help = 'Minimum and maximum Q values used in curve fitting',
-        required=True)
+        '-e','--expt', nargs='+', type=str, dest='expt_curves',
+        help = 'List of input experimental curves', required=True)
+    parser.add_argument('-p','--parameter_file', nargs='?', type=str,
+        help = 'Path to a file containing input parameters', required=True)
     parser.add_argument(
         '-o','--outfile', nargs='?', type=str, dest='out_file',
-        help = 'Path to the output file', required=False)
-    parser.add_argument(
-        '--header', action='store_true',
-        help = 'Output a header (no data analysis performed)')
+        help = 'Path to the output file', required=True)
+    parser.add_argument('-u','--unit', choices = ['nm', 'a'],
+                        default = 'a', help = 'Unit for Q in input experimental data')
 
     args = parser.parse_args()
     return args
 
-def main():
-    # Interpret command line arguments
-    args = parse_arguments()
+args = parse_arguments()
 
-    if (not args.header) :
+# Read in parameters
+param_file = file(args.parameter_file)
+param = yaml.load(param_file)
 
-        q_min = args.qrange[0]
-        q_max = args.qrange[1]
+# Open file for output data
+output = open(args.out_file,'w')
 
-        # Load the data from the two input files
-        calc_data = sct.curve.load_scatter_curve(args.calc_curve, q_min, q_max)
-        expt_data = sct.curve.load_scatter_curve(args.expt_curve, q_min, q_max)
+# Get list of scattering curves in the input directory
 
+curve_filters = []
+calc_curves = []
+
+for path in args.calc_paths:
+    if os.path.isdir(path):
+        curve_filters.append(os.path.join(path,'*.scn'))
+        curve_filters.append(os.path.join(path,'*.scx'))
+    else:
+        calc_curves.append(path)
+
+for curve_filter in curve_filters:
+    calc_curves.extend(glob.glob(curve_filter))
+
+if len(calc_curves) < 1:
+    print "No calculated curve files found to analyze"
+    sys.exit(1)
+
+if args.unit == 'nm':
+    qmin = param['rfac']['qmin'] * 10
+    qmax = param['rfac']['qmax'] * 10
+else:
+    qmin = param['rfac']['qmin']
+    qmax = param['rfac']['qmax']
+
+output.write("Expt\tCalc\tI0\tRfac\n")
+for expt_curve in args.expt_curves:
+
+    # Load experimental curve and if necessary convert Q to angstrom
+    expt_data = sct.curve.load_scatter_curve(expt_curve, qmin, qmax)
+
+    if args.unit == 'nm':
+        expt_data[:,0] = expt_data[:,0] / 10.0
+
+    for calc_curve in calc_curves:
+
+        # Load the theoretically calculated scattering curve
+        calc_data = sct.curve.load_scatter_curve(calc_curve,
+                                                 param['rfac']['qmin'],
+                                                 param['rfac']['qmax'])
+
+        # Calculate the R factor comparing the calculated and experimental curves
         rfactor, scale = sct.curve.calculate_rfactor(expt_data,
                                                      calc_data,
-                                                     q_min,
-                                                     q_max)
+                                                     param['rfac']['qmin'],
+                                                     param['rfac']['qmax'])
 
-        output_data = '{0:s}\t{1:s}\t{2:0.5f}\t{3:0.5f}\t{4:0.5f}\t{5:0.5f}\n'.format(
-                                        args.calc_curve,
-                                        args.expt_curve,
-                                        q_min,
-                                        q_max,
-                                        1.0/scale,
-                                        rfactor)
-
-        if args.out_file == None:
-            print output_data
-        else:
-            with open(args.out_file, "a") as fle:
-                fle.write(output_data)
-    else:
-
-        header = 'Calculated file\tExperimental file\tQ min\tQ max\tScaling factor\tR factor\n'
-
-        if args.out_file == None:
-            print header
-        else:
-            with open(args.out_file, "a") as fle:
-                fle.write(header)
-
-if __name__ == "__main__":
-    main()
+        output.write("{0:s}\t{1:s}\t{2:7.4f}\t{3:7.4f}\n".format(expt_curve,
+                                                                  calc_curve,
+                                                                  1.0/scale,
+                                                                  rfactor))
