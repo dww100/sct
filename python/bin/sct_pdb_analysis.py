@@ -205,7 +205,7 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, neutron=False
     # Neutron curves are usually smeared with parameters for the instrument used
     if (neutron and param['curve']['smear']):
 
-        sct.curve.smear_sas_curve(result['i'], result['q'],
+        sct.curve.smear_sas_curve(result['curve'],
                                     param['curve']['q_delta'],
                                     param['curve']['wavelength'],
                                     param['curve']['spread'],
