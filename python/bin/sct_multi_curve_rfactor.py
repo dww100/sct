@@ -79,7 +79,7 @@ else:
     qmin = param['rfac']['qmin']
     qmax = param['rfac']['qmax']
 
-output.write("Expt\tCalc\t1/I0\tRfac\n")
+output.write("Expt\tCalc\tI0\tRfac\n")
 for expt_curve in args.expt_curves:
 
     # Load experimental curve and if necessary convert Q to angstrom
@@ -103,5 +103,5 @@ for expt_curve in args.expt_curves:
 
         output.write("{0:s}\t{1:s}\t{2:7.4f}\t{3:7.4f}\n".format(expt_curve,
                                                                   calc_curve,
-                                                                  scale,
+                                                                  1.0/scale,
                                                                   rfactor))
