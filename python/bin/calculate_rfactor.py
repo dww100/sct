@@ -75,7 +75,7 @@ def main():
                                         args.expt_curve,
                                         q_min,
                                         q_max,
-                                        scale,
+                                        1.0/scale,
                                         rfactor)
 
         if args.out_file == None:

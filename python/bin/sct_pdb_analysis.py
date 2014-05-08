@@ -253,7 +253,7 @@ def sas_model_summary_output(theor_data):
                                                                  theor_data['volume'])        
         
         for dataset in theor_data['rfac']:
-            summ += "{0:7.4f}\t{1:7.4f}\t".format(dataset[0],dataset[1])
+            summ += "{0:7.4f}\t{1:7.4f}\t".format(dataset[0],1.0/dataset[1])
     else:
         summ = "NA\tNA\tNA\tNA\tNA\tNA"
         
