@@ -184,6 +184,8 @@ def pdb_res_line_parse(line):
             data['coords'] = [data['x'], data['y'], data['z']]
         else:
             data = {}
+    else:
+        data = {}
             
     return data
 
