@@ -22,6 +22,7 @@ format sphere file.
 import argparse
 
 import sct
+import yaml
 
 def parse_arguments():
     """
@@ -38,6 +39,9 @@ def parse_arguments():
     parser.add_argument('-o','--output_filename', nargs='?', type=str,
                         dest='output_filename', default=None,
                         help = 'Path to the output file', required=True)
+
+    parser.add_argument('-p','--parameter_file', nargs='?', type=str,
+        help = 'Path to a file containing input parameters', default=None)
 
     parser.add_argument('-n','--hydration_no', nargs='?', type=int,
                         default=26,
@@ -56,13 +60,22 @@ def main ():
     # Select number of solvent positions to occupy before filtering
     # Position 0 = original sphere position,
     # Positions 1 to 26 positions on cube centred on original sphere
-    hydration_no = args.hydration_no + 1
+
+    if args.parameter_file == None:    
+        hydration_no = args.hydration_no + 1
+        cutoff = args.cutoff
+    else:
+        # Read in parameters
+        param_file = file(args.parameter_file)
+        param = yaml.load(param_file)
+        hydration_no = param['hydrate']['positions']
+        cutoff = param['hydrate']['cutoff']
 
     # Read dry sphere model from file
     dry_spheres, radius = sct.sphere.read_mono_spheres(args.input_filename)
 
     # Create hydrated model
-    wet_spheres = sct.sphere.hydrate_sphere_model(dry_spheres, hydration_no, radius, args.cutoff)
+    wet_spheres = sct.sphere.hydrate_sphere_model(dry_spheres, hydration_no, radius, cutoff)
 
     out = open(args.output_filename, 'w')
     sct.sphere.write_spheres(wet_spheres, radius, out)

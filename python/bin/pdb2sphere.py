@@ -21,6 +21,7 @@ spheres for small angle scattering calculations
 
 import argparse
 import sys
+import yaml
 
 import sct
 
@@ -58,6 +59,9 @@ def parse_arguments():
                         default=5.0,
                         help = 'Side length of grid boxes')
 
+    parser.add_argument('-p','--parameter_file', nargs='?', type=str,
+        help = 'Path to a file containing input parameters', default=None)
+
     args = parser.parse_args()
 
     if args.mode != 'info':
@@ -76,10 +80,23 @@ def main():
     # atomic coordinates from input PDB
     res_freq, atom_coords = sct.pdb.read_pdb_atom_data(args.input_filename)
 
+    if args.parameter_file == None:
+        cutoff = args.cutoff
+        box_side = args.boxside
+                                                
+    else:
+        
+        # Read in parameters
+        param_file = file(args.parameter_file)
+        param = yaml.load(param_file)
+        
+        cutoff = param['sphere']['cutoff']
+        box_side = param['sphere']['boxside']
+
     # Bin atomic coordinates to give sphere coordinates
     sphere_coords, x_axis, y_axis, z_axis = sct.sphere.create_sphere_model(atom_coords,
-                                                                           args.cutoff,
-                                                                           args.box_side)
+                                                                           cutoff,
+                                                                           box_side)
 
     # Set the radius for each sphere
     radius = args.box_side / 2.0

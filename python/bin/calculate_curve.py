@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Calculate a theoretical scattering curve from a sphere model input
+Calculate a theoretical scattering curve from a sphere model input.
+
+Note: This code ignores command line optons silently if a parameter 
+file is passed.
 """
 
 # Copyright 2014 University College London
@@ -19,7 +22,7 @@ Calculate a theoretical scattering curve from a sphere model input
 # limitations under the License.
 
 import argparse
-import sys
+import yaml
 
 import sct
 
@@ -37,6 +40,9 @@ def parse_arguments():
         dest='output_filename', default=None,
         help = 'Path to the output file')
 
+    parser.add_argument('-p','--parameter_file', nargs='?', type=str,
+        help = 'Path to a file containing input parameters', default=None)
+
     parser.add_argument('-q','--q_max', nargs='?', type=float,
         default=0.16, help = 'Maximum q value in output curve')
 
@@ -46,7 +52,7 @@ def parse_arguments():
     parser.add_argument('-b','--n_bins', nargs='?', type=int,
         default=400, help = 'No. bins to use in histogram of sphere separation')
 
-    parser.add_argument('-p','--n_points', nargs='?', type=int,
+    parser.add_argument('-n','--n_points', nargs='?', type=int,
         default=100, help = 'No. points in output curve')
 
     parser.add_argument('-s','--smear', action='store_true',
@@ -68,15 +74,37 @@ def main():
     args = parse_arguments()
 
     res_freq, coords = sct.pdb.read_pdb_atom_data(args.input_filename)
+    
+    if args.parameter_file == None:
+        curve = sct.sphere.spheres_to_sas_curve(coords, args.radius,
+                                                args.q_max, args.n_points,
+                                                rbins = args.n_bins)
 
-    curve = sct.sphere.spheres_to_sas_curve(coords, args.radius,
-                                            args.q_max, args.n_points,
-                                            rbins = args.n_bins)
+        if args.smear:
+            q_delta = args.q_max / args.n_points
+            sct.curve.smear_curve(curve, q_delta, args.wavelength,
+                                  args.spread, args.divergence)                                                
+                                                
+    else:
+        
+        # Read in parameters
+        param_file = file(args.parameter_file)
+        param = yaml.load(param_file)
+        
+        param['curve']['q_delta'] = param['curve']['qmax'] / param['curve']['npoints']        
 
-    if args.smear:
-        q_delta = args.q_max / args.n_points
-        sct.curve.smear_curve(curve, q_delta, args.wavelength,
-                              args.spread, args.divergence)
+        radius = param['sphere']['boxside'] / 2.0
+        
+        curve = sct.sphere.spheres_to_sas_curve(coords,
+                                                radius,
+                                                param['curve']['q_max'],
+                                                param['curve']['npoints'],
+                                                rbins = param['curve']['radbins'])
+                             
+        if param['curve']['smear']:
+            sct.curve.smear_curve(curve, param['curve']['q_delta'], param['curve']['wavelength'],
+                                  param['curve']['spread'], param['curve']['divergence'])            
+
 
     sct.curve.output_sas_curve(curve, args.output_filename)
 
