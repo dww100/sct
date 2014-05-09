@@ -53,8 +53,8 @@ def parse_arguments():
                        help = 'Output a header alongside output data')
 
     group2 = parser.add_mutually_exclusive_group(required=True)
-    group2.add_argument('-q','--q-ranges', type = str, dest='q_ranges_filename',
-                       help = 'Path to file containing Q plot and fit ranges')
+    group2.add_argument('-p','--parameter', type = str, dest='parameter_file',
+                       help = 'Path to YAML file containing input parameters')
     group2.add_argument('-r','--plotrange', nargs = 2, type = float,
                        help = 'Range of Q to plot')
 
@@ -72,10 +72,10 @@ def parse_arguments():
 
     args = parser.parse_args()
 
-    if (args.anal_type == 'all') and (not args.q_ranges_filename):
-        print ("If you require all analyses to be run a file containig the relevant Q ranges must be provided.\n")
+    if (args.anal_type == 'all') and (not args.parameter_file):
+        print ("If you require all analyses to be run a parameter file containing the relevant Q ranges must be provided.\n")
         sys.exit(1)
-    elif (not args.q_ranges_filename) and ((not args.fit_range) or (args.anal_type == 'wide')):
+    elif (not args.parameter_file) and ((not args.fit_range) or (args.anal_type == 'wide')):
         print ("For all analyses except wide angle plotting ('wide') a fit range is needed in addition to the plot range.\n")
         sys.exit(1)
 
@@ -122,8 +122,23 @@ def check_args(args):
     else:
         analyses = [args.anal_type]
 
-    if args.q_ranges_filename:
-        q_ranges = sct.curve.process_qrange_file(args.q_ranges_filename)
+    if args.parameter_file:
+        # Read in parameters
+        q_ranges, err = sct.param.read_parameter_file(args.parameter_file)
+        
+        anal_types = []
+        for analysis in analyses:
+            anal_types.append(analysis + '_plot')
+        
+        err = sct.param.check_parameters(q_ranges, anal_types)
+        
+        if err != None:
+            sct.param.output_error(err, args.parameter_file)
+        
+        if 'wide' in analyses:
+            q_ranges['wide']['fitmin'] = None
+            q_ranges['wide']['fitmax'] = None
+        
     else:
         q_ranges = {}
 
