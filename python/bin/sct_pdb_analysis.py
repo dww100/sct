@@ -513,7 +513,7 @@ for pdb in pdb_files:
     xray_summ = sas_model_summary_output(wet_data)
 
     # Output all summary data to file
-    summary_data.write('{0:s}\t{1:s}\t{2:s}\n'.format(pdb_id,
+    summary_data.write('{0:s}\t{1:s}{2:s}\n'.format(pdb_id,
                                                       neut_summ,
                                                       xray_summ))
 
