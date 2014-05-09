@@ -427,8 +427,16 @@ def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3
 args = parse_arguments()
 
 # Read in parameters and check we have those we need
-param = sct.param.read_parameter_file(args.parameter_file)
-sct.param.check_parameters(param, ['curve','sphere','rg','rxs1','rfac'])
+param, err = sct.param.read_parameter_file(args.parameter_file)
+
+if err != None:
+    sct.param.output_error(err, args.parameter_file)
+
+err = sct.param.check_parameters(param, ['curve','sphere','rg','rxs1','rfac'])
+
+if err != None:
+    sct.param.output_error(err, args.parameter_file)
+
 if args.xray is not None:
     sct.param.check_parameters(param, ['hydrate'])
 

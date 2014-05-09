@@ -22,7 +22,6 @@ file is passed.
 # limitations under the License.
 
 import argparse
-import yaml
 
 import sct
 
@@ -90,8 +89,15 @@ def main():
         print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"        
         
         # Read in parameters
-        param = sct.param.read_parameter_file(args.parameter_file)
+        param, err = sct.param.read_parameter_file(args.parameter_file)
+
+        if err != None:
+            sct.param.output_error(err, args.parameter_file)
+
         sct.param.check_parameters(param, ['curve'])
+        
+        if err != None:
+            sct.param.output_error(err, args.parameter_file)
         
         param['curve']['q_delta'] = param['curve']['qmax'] / param['curve']['npoints']        
 

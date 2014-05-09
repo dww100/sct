@@ -25,7 +25,6 @@ analyse_pdb_models.py script to run on a series of models.
 # limitations under the License.
 
 import argparse
-import yaml
 
 import sct
 
@@ -108,8 +107,15 @@ def main():
         print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"        
 
         # Read in parameters and check we have those we need
-        param = sct.param.read_parameter_file(args.parameter_file)
+        param, err = sct.param.read_parameter_file(args.parameter_file)
+        
+        if err != None:
+            sct.param.output_error(err, args.parameter_file)        
+        
         sct.param.check_parameters(param, ['curve','sphere','rg','rxs1','rfac'])
+
+        if err != None:
+            sct.param.output_error(err, args.parameter_file)
 
         cutoff = param['sphere']['cutoff']
     else:

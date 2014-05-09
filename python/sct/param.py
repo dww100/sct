@@ -59,7 +59,7 @@ def read_parameter_file(filename):
 
     return params, err
 
-def check_wide(params):
+def check_wide_plot(params):
     """
     Check that the parameters needed for a wide angle plot are present in 
     params. Namely, params['wide']['qmin'] and params['wide']['qmax']

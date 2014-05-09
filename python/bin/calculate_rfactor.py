@@ -22,7 +22,6 @@ import argparse
 import sys
 import os
 import glob
-import yaml
 
 import sct
 
@@ -51,8 +50,15 @@ def parse_arguments():
 args = parse_arguments()
 
 # Read in parameters
-param = sct.param.read_parameter_file(args.parameter_file)
-sct.param.check_parameters(param, ['rfac'])
+param, err = sct.param.read_parameter_file(args.parameter_file)
+
+if err != None:
+    sct.param.output_error(err, args.parameter_file)
+
+err = sct.param.check_parameters(param, ['rfac'])
+
+if err != None:
+    sct.param.output_error(err, args.parameter_file)
 
 # Open file for output data
 output = open(args.out_file,'w')

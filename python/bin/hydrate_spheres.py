@@ -22,7 +22,6 @@ format sphere file.
 import argparse
 
 import sct
-import yaml
 
 def parse_arguments():
     """
@@ -69,8 +68,16 @@ def main ():
         print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"        
         
         # Read in parameters
-        param = sct.param.read_parameter_file(args.parameter_file)
-        sct.param.check_parameters(param, ['hydrate'])
+        param, err = sct.param.read_parameter_file(args.parameter_file)
+        
+        if err != None:
+            sct.param.output_error(err, args.parameter_file)
+            
+        err = sct.param.check_parameters(param, ['hydrate'])
+        
+        if err != None:
+            sct.param.output_error(err, args.parameter_file)
+            
         hydration_no = param['hydrate']['positions']
         cutoff = param['hydrate']['cutoff']
 

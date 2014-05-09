@@ -89,8 +89,15 @@ def main():
         print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"        
         
         # Read in parameters
-        param = sct.param.read_parameter_file(args.parameter_file)
-        sct.param.check_parameters(param, ['sphere'])
+        param, err = sct.param.read_parameter_file(args.parameter_file)
+        
+        if err != None:
+            sct.param.output_error(err, args.parameter_file)             
+        
+        err = sct.param.check_parameters(param, ['sphere'])
+        
+        if err != None:
+            sct.param.output_error(err, args.parameter_file)        
         
         cutoff = param['sphere']['cutoff']
         box_side = param['sphere']['boxside']
