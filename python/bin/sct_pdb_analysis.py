@@ -29,7 +29,6 @@ import argparse
 import sys
 import os
 import glob
-import yaml
 
 import sct
 
@@ -427,9 +426,12 @@ def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3
 
 args = parse_arguments()
 
-# Read in parameters
-param_file = file(args.parameter_file)
-param = yaml.load(param_file)
+# Read in parameters and check we have those we need
+param = sct.param.read_parameter_file(args.parameter_file)
+sct.param.check_parameters(param, ['curve','sphere','rg','rxs1','rfac'])
+if args.xray is not None:
+    sct.param.check_parameters(param, ['hydrate'])
+
 param['curve']['q_delta'] = param['curve']['qmax'] / param['curve']['npoints']
 
 # Create output directory and open file for summary output

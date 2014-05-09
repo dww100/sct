@@ -51,8 +51,8 @@ def parse_arguments():
 args = parse_arguments()
 
 # Read in parameters
-param_file = file(args.parameter_file)
-param = yaml.load(param_file)
+param = sct.param.read_parameter_file(args.parameter_file)
+sct.param.check_parameters(param, ['rfac'])
 
 # Open file for output data
 output = open(args.out_file,'w')

@@ -66,8 +66,11 @@ def main ():
         cutoff = args.cutoff
     else:
         # Read in parameters
-        param_file = file(args.parameter_file)
-        param = yaml.load(param_file)
+        print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"        
+        
+        # Read in parameters
+        param = sct.param.read_parameter_file(args.parameter_file)
+        sct.param.check_parameters(param, ['hydrate'])
         hydration_no = param['hydrate']['positions']
         cutoff = param['hydrate']['cutoff']
 

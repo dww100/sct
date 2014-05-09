@@ -86,9 +86,11 @@ def main():
                                                 
     else:
         
+        print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"        
+        
         # Read in parameters
-        param_file = file(args.parameter_file)
-        param = yaml.load(param_file)
+        param = sct.param.read_parameter_file(args.parameter_file)
+        sct.param.check_parameters(param, ['sphere'])
         
         cutoff = param['sphere']['cutoff']
         box_side = param['sphere']['boxside']

@@ -40,8 +40,12 @@ def parse_arguments():
 
     parser.add_argument('-s','--input_seq', nargs='?', type=str,
         help = 'Path to input sequence file if different from PDB', 
-        default = None)    
-
+        default = None)
+        
+    parser.add_argument('-c','--cutoff', nargs='?', type=int,
+                        default=4,
+                        help = 'Cutoff number of atoms to create sphere in grid box')
+                        
     parser.add_argument('-f','--input_format', choices = ['fas','yml'],
         help = 'Input file format (fasta or sluv yaml)', default = None)
 
@@ -49,7 +53,7 @@ def parse_arguments():
         default='optimized_params.txt', help = 'Path to output file')
 
     parser.add_argument('-p','--parameter_file', nargs='?', type=str,
-        help = 'Path to a file containing input parameters', required=True)
+        help = 'Path to a file containing input parameters', default = None)
 
     parser.add_argument('-m','--min_max', nargs=2, type=float,
         default = [2.0, 11.0], help = 'Minimum and maximum values of box side')
@@ -99,10 +103,18 @@ def main():
     
     args = parse_arguments()
 
-    # Read in parameters
-    param_file = file(args.parameter_file)
-    param = yaml.load(param_file)
+    if args.parameter_file != None:
 
+        print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"        
+
+        # Read in parameters and check we have those we need
+        param = sct.param.read_parameter_file(args.parameter_file)
+        sct.param.check_parameters(param, ['curve','sphere','rg','rxs1','rfac'])
+
+        cutoff = param['sphere']['cutoff']
+    else:
+        cutoff = args.cutoff
+    
     # Get target volumes for the dry and hydrated protein based on the sequence 
     # from input PDB or separate sequence file if provided and coordinates from 
     # the PDB
@@ -111,7 +123,6 @@ def main():
                                                             args.input_format)
 
     # Optimize box side for sphere models
-    cutoff = param['sphere']['cutoff']
     box_side, err = sct.sphere.optimize_box_side(cutoff, atom_coords, 
                                                  dry_volume,
                                                  args.min_max[0],
