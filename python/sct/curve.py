@@ -21,7 +21,7 @@ Scattering curve related functions used in the SCT suite of programs
 import sys
 import yaml
 import numpy as np
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 from sjp_util import sjp_util
 
