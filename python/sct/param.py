@@ -396,5 +396,12 @@ def parse_parameter_file(parameter_file, needed):
     
     if err != None:
         output_error(err, parameter_file)
+        
+    if 'sphere' in needed:
+        param['sphere']['boxside3'] = param['sphere']['boxside']**3
+        param['sphere']['radius'] = param['sphere']['boxside'] / 2.0
+
+    if 'curve' in needed:
+        param['curve']['q_delta'] = param['curve']['qmax'] / param['curve']['npoints']
 
     return param
