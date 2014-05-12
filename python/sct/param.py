@@ -399,6 +399,7 @@ def parse_parameter_file(parameter_file, needed):
         
     if 'sphere' in needed:
         param['sphere']['boxside3'] = param['sphere']['boxside']**3
+        # Model spheres just fit into grid box (no overlap) therefore:
         param['sphere']['radius'] = param['sphere']['boxside'] / 2.0
 
     if 'curve' in needed:

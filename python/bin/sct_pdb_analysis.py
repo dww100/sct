@@ -301,7 +301,7 @@ def  write_summary_header(in_pdb, in_neut, in_xray, output):
     
     return
 
-def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3, out_paths):
+def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, out_paths):
     """
     Create sphere models from PDBs and use to generate theoretical scattering
     curves and compare these to experimental inputs
@@ -340,7 +340,9 @@ def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3
     """
     
     cutoff = param['sphere']['cutoff']
-    box_side = param['sphere']['boxside']    
+    box_side = param['sphere']['boxside']   
+    box_side3 = param['sphere']['boxside3']
+    radius = param['sphere']['radius']
     
     pdb_basename = os.path.basename(pdb)
     pdb_id = os.path.splitext(pdb_basename)[0]
@@ -416,6 +418,22 @@ def output_expt_summary(neut_data, xray_data, output_path, title):
     
     return
 
+def process_expt_data(neutron_files, neutron_unit, xray_files, xray_unit, output_path, output_title, param):
+    
+    # Read in experimental curves and calculate Rg and Rxs
+    # Setup output directories for theoretical curves and sphere models
+    neut_data, xray_data, out_paths = read_expt_data(neutron_files, 
+                                                     neutron_unit, 
+                                                     xray_files, 
+                                                     xray_unit, 
+                                                     output_path, 
+                                                     param)
+    
+    # Output summary analysis of the experimental data curves
+    output_expt_summary(neut_data, xray_data, output_path, output_title)    
+    
+    return neut_data, xray_data, out_paths
+
 def main():
 
     args = parse_arguments()
@@ -429,23 +447,20 @@ def main():
     
     param = sct.param.parse_parameter_file(args.parameter_file)
     
-    param['curve']['q_delta'] = param['curve']['qmax'] / param['curve']['npoints']
-    
     # Create output directory and open file for summary output
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
 
     # Read in experimental curves and calculate Rg and Rxs
     # Setup output directories for theoretical curves and sphere models
-    neut_data, xray_data, out_paths = read_expt_data(args.neutron, 
-                                                     args.neutron_unit, 
-                                                     args.xray, 
-                                                     args.xray_unit, 
-                                                     args.output_path, 
-                                                     param)
-    
     # Output summary analysis of the experimental data curves
-    output_expt_summary(neut_data, xray_data, args.output_path, args.title)
+    neut_data, xray_data, out_paths = process_expt_data(args.neutron, 
+                                                        args.neutron_unit, 
+                                                        args.xray, 
+                                                        args.xray_unit, 
+                                                        args.output_path, 
+                                                        args.title, 
+                                                        param)
     
     # Create the file for model output
     summary_name = os.path.join(args.output_path, args.title + '.sum')
@@ -465,13 +480,6 @@ def main():
         print "No PDB files found to analyze"
         sys.exit(1)
     
-    # Parameters for turning PDB into spheres
-    box_side = param['sphere']['boxside']
-    box_side3 = box_side**3
-    
-    # Model spheres just fit into grid box (no overlap) therefore:
-    radius = box_side / 2.0
-    
     # Loop over input PDBs
     for pdb in pdb_files:
     
@@ -482,8 +490,6 @@ def main():
                                                       neut_data, 
                                                       xray_data, 
                                                       param, 
-                                                      radius, 
-                                                      box_side3, 
                                                       out_paths)
     
         pdb_basename = os.path.basename(pdb)
