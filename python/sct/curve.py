@@ -50,6 +50,59 @@ def load_scatter_curve(filename, q_min, q_max):
 
     return scatter_data[qrange_mask]
 
+def read_scatter_curves(curve_files, units, param):
+    """
+    Read in a list of scattering curve files and return a list of dictionaries
+    which contain the file name ('file'), an array of Q and I(Q) vales ('data'),
+    the radius of gyration ('rg') and the cross-section ('rxs1').
+
+    @type  curve_files:  list
+    @param curve_files:  List of files containing scattering curves Q, I(Q)
+                         pairs
+    @type  units:        string
+    @param units:        String containing either 'nm' or 'a' to indicate the
+                         length units used in the scattering curve
+    @type  param:        dictionary
+    @param param:        Dictionary containing parameters to use when creating
+                         models and analysing curves.
+    @return:             List of dictionaries containing the following key/value
+                         pairs:
+                         - data: numpy array of Q, I(Q)
+                         - rg: radius of gyration calculated from input curve
+                         - rxs1: cross-section calculated from input curve
+                         - file: input file name
+    """
+
+    curves = []
+
+    for curve_file in curve_files:
+
+        curve = {}
+
+        curve['file'] = curve_file
+        # Read in the scattering curve
+        # Modeling is performed in angstroms so convert files in nm to a
+        if units == 'nm':
+            curve['data'] = load_scatter_curve(curve_file,
+                                                param['rfac']['qmin'] * 10.0,
+                                                param['rfac']['qmax'] * 10.0)
+            curve['data'][:,0] = curve['data'][:,0] / 10.0
+        else:
+            curve['data'] = load_scatter_curve(curve_file,
+                                                param['rfac']['qmin'],
+                                                param['rfac']['qmax'])
+
+
+        curve['rg'], curve['rxs'] = get_curve_descriptors(curve['data'],
+                                                  param['rg']['fitmin'],
+                                                  param['rg']['fitmax'],
+                                                  param['rxs1']['fitmin'],
+                                                  param['rxs1']['fitmax'])
+
+        curves.append(curve)
+
+    return curves
+
 def process_qrange_file(filename):
     """
     Load yaml file containing the ranges for all analyses.

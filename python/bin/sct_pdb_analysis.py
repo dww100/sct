@@ -75,59 +75,6 @@ def parse_arguments():
 
     return args
 
-def read_curves(curve_files, units, param):
-    """
-    Read in a list of scattering curve files and return a list of dictionaries
-    which contain the file name ('file'), an array of Q and I(Q) vales ('data'),
-    the radius of gyration ('rg') and the cross-section ('rxs1').
-
-    @type  curve_files:  list
-    @param curve_files:  List of files containing scattering curves Q, I(Q)
-                         pairs
-    @type  units:        string
-    @param units:        String containing either 'nm' or 'a' to indicate the
-                         length units used in the scattering curve
-    @type  param:        dictionary
-    @param param:        Dictionary containing parameters to use when creating
-                         models and analysing curves.
-    @return:             List of dictionaries containing the following key/value
-                         pairs:
-                         - data: numpy array of Q, I(Q)
-                         - rg: radius of gyration calculated from input curve
-                         - rxs1: cross-section calculated from input curve
-                         - file: input file name
-    """
-
-    curves = []
-
-    for curve_file in curve_files:
-
-        curve = {}
-
-        curve['file'] = curve_file
-        # Read in the scattering curve
-        # Modeling is performed in angstroms so convert files in nm to a
-        if units == 'nm':
-            curve['data'] = sct.curve.load_scatter_curve(curve_file,
-                                                param['rfac']['qmin'] * 10.0,
-                                                param['rfac']['qmax'] * 10.0)
-            curve['data'][:,0] = curve['data'][:,0] / 10.0
-        else:
-            curve['data'] = sct.curve.load_scatter_curve(curve_file,
-                                                param['rfac']['qmin'],
-                                                param['rfac']['qmax'])
-
-
-        curve['rg'], curve['rxs'] = sct.curve.get_curve_descriptors(curve['data'],
-                                                  param['rg']['fitmin'],
-                                                  param['rg']['fitmax'],
-                                                  param['rxs1']['fitmin'],
-                                                  param['rxs1']['fitmax'])
-
-        curves.append(curve)
-
-    return curves
-
 def read_expt_data(neutron_files, neutron_unit, xray_files, xray_unit, output_path, param):
 
     out_paths = {}    
@@ -136,7 +83,7 @@ def read_expt_data(neutron_files, neutron_unit, xray_files, xray_unit, output_pa
     # Setup output directories for theoretical curves and sphere models
     if neutron_files is not None:
     
-        neut_data = read_curves(neutron_files, neutron_unit, param)
+        neut_data = sct.curve.read_scatter_curves(neutron_files, neutron_unit, param)
     
         out_paths['scn'] = create_data_dir(output_path, 'neutron','curves')
         out_paths['dry_model'] = create_data_dir(output_path, 'neutron','models')
@@ -146,7 +93,7 @@ def read_expt_data(neutron_files, neutron_unit, xray_files, xray_unit, output_pa
     
     if xray_files is not None:
     
-        xray_data = read_curves(xray_files, xray_unit, param)
+        xray_data = sct.curve.read_scatter_curves(xray_files, xray_unit, param)
     
         out_paths['scx'] = create_data_dir(output_path, 'xray','curves')
         out_paths['wet_model'] = create_data_dir(output_path, 'xray','models')
