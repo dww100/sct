@@ -316,15 +316,17 @@ def  write_summary_header(in_pdb, in_neut, in_xray, output):
     xray_rfact_head = create_rfac_header_text(in_xray)
 
     # Header 0
-    summary_data.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\tX-ray\n")
+    output.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\tX-ray\n")
     # Header 1
-    summary_data.write("\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
+    output.write("\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
     # Header 2
     basic_head = "Rg_model\tRg_curve\tRxs1_curve\tVolume\t"
     col_head = "Model\t" + basic_head + neut_rfact_head[2] + '\t' + basic_head + xray_rfact_head[2] + "\n"
     output.write(col_head)
+    
+    return
 
-def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3):
+def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3, out_paths):
     """
     Create sphere models from PDBs and use to generate theoretical scattering
     curves and compare these to experimental inputs
@@ -384,11 +386,11 @@ def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3
             neut_theor = analyse_sphere_model(dry_spheres, neut_data, radius, param, True)
 
             # Write curve to file
-            curve_file = os.path.join(scn_path, pdb_id + '.scn')
+            curve_file = os.path.join(out_paths['scn'], pdb_id + '.scn')
             sct.curve.output_sas_curve(neut_theor['curve'], curve_file)
 
             # Write model to file
-            model_file = os.path.join(dry_model_path,  pdb_id + '.pdb')
+            model_file = os.path.join(out_paths['dry_model'],  pdb_id + '.pdb')
             sct.pdb.write_sphere_pdb(dry_spheres, radius, model_file)
 
             neut_theor['volume'] = box_side3 * len(dry_spheres)
@@ -410,11 +412,11 @@ def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3
             xray_theor = analyse_sphere_model(wet_spheres, xray_data, radius, param)
 
             # Write curve to file
-            curve_file = os.path.join(scx_path, pdb_id + '.scx')
+            curve_file = os.path.join(out_paths['scx'], pdb_id + '.scx')
             sct.curve.output_sas_curve(xray_theor['curve'], curve_file)
 
             # Write model to file
-            model_file = os.path.join(wet_model_path,  pdb_id + '.pdb')
+            model_file = os.path.join(out_paths['wet_model'],  pdb_id + '.pdb')
             sct.pdb.write_sphere_pdb(wet_spheres, radius, model_file)
 
             xray_theor['volume'] = box_side3 * len(wet_spheres)
@@ -424,107 +426,118 @@ def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3
             
         return neut_theor, xray_theor
 
-args = parse_arguments()
+def main():
 
-# Read in parameters and check we have those we need
-param, err = sct.param.read_parameter_file(args.parameter_file)
+    args = parse_arguments()
+    
+    # Read in parameters and check we have those we need
+    param, err = sct.param.read_parameter_file(args.parameter_file)
+    
+    if err != None:
+        sct.param.output_error(err, args.parameter_file)
+    
+    err = sct.param.check_parameters(param, ['curve','sphere','rg','rxs1','rfac'])
+    
+    if err != None:
+        sct.param.output_error(err, args.parameter_file)
+    
+    if args.xray is not None:
+        sct.param.check_parameters(param, ['hydrate'])
+    
+    param['curve']['q_delta'] = param['curve']['qmax'] / param['curve']['npoints']
+    
+    # Create output directory and open file for summary output
+    if not os.path.exists(args.output_path):
+        os.makedirs(args.output_path)
+    
+    out_paths = {}    
+    
+    # Read in experimental curves and calculate Rg and Rxs
+    # Setup output directories for theoretical curves and sphere models
+    if args.neutron is not None:
+    
+        neut_data = read_curves(args.neutron, args.neutron_unit, param)
+    
+        out_paths['scn'] = create_data_dir(args.output_path, 'neutron','curves')
+        out_paths['dry_model'] = create_data_dir(args.output_path, 'neutron','models')
+    
+    else:
+        neut_data = []
+    
+    if args.xray is not None:
+    
+        xray_data = read_curves(args.xray, args.xray_unit, param)
+    
+        out_paths['scx'] = create_data_dir(args.output_path, 'xray','curves')
+        out_paths['wet_model'] = create_data_dir(args.output_path, 'xray','models')
+    
+    else:
+        xray_data = []
+    
+    # Output summary analysis of the experimental data curves
+    expt_name = os.path.join(args.output_path, args.title + '_expt.sum')
+    expt_data = open(expt_name,'w')
+    expt_data.write("Filename\tRg\tRxs1\n")
+    
+    for curve in neut_data + xray_data:
+        expt_data.write("{0:s}\t{1:7.4f}\t{2:7.4f}\n".format(curve['file'],
+                                                             curve['rg'],
+                                                             curve['rxs']))
+    expt_data.close()
+    
+    
+    # Create the file for model output
+    summary_name = os.path.join(args.output_path, args.title + '.sum')
+    summary_data = open(summary_name,'w')
+    
+    # Print the header for the summary data from sphere model analysis:
+    # Path to input PDBs
+    # Neutron                                                              X-ray                                       
+    # Model Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
+    write_summary_header(args.input_path, args.neutron, args.xray, summary_data)
+    
+    # Get list of PDBs in the input directory
+    pdb_filter = os.path.join(args.input_path, '*.pdb')
+    pdb_files = glob.glob(pdb_filter)
+    
+    if len(pdb_files) < 1:
+        print "No PDB files found to analyze"
+        sys.exit(1)
+    
+    # Parameters for turning PDB into spheres
+    box_side = param['sphere']['boxside']
+    box_side3 = box_side**3
+    
+    # Model spheres just fit into grid box (no overlap) therefore:
+    radius = box_side / 2.0
+    
+    # Loop over input PDBs
+    for pdb in pdb_files:
+    
+        # Create sphere models, compute scattering curves and compare to 
+        # experimental curves
+        # Dry models are compared to neutron data, wet to xray data.
+        dry_data, wet_data = perform_sas_analysis_pdb(pdb, 
+                                                      neut_data, 
+                                                      xray_data, 
+                                                      param, 
+                                                      radius, 
+                                                      box_side3, 
+                                                      out_paths)
+    
+        pdb_basename = os.path.basename(pdb)
+        pdb_id = os.path.splitext(pdb_basename)[0]
+    
+        # Format the modelling output data for printing
+        neut_summ = sas_model_summary_output(dry_data)
+        xray_summ = sas_model_summary_output(wet_data)
+    
+        # Output all summary data to file
+        summary_data.write('{0:s}\t{1:s}{2:s}\n'.format(pdb_id,
+                                                          neut_summ,
+                                                          xray_summ))
+    
+    summary_data.close()
 
-if err != None:
-    sct.param.output_error(err, args.parameter_file)
-
-err = sct.param.check_parameters(param, ['curve','sphere','rg','rxs1','rfac'])
-
-if err != None:
-    sct.param.output_error(err, args.parameter_file)
-
-if args.xray is not None:
-    sct.param.check_parameters(param, ['hydrate'])
-
-param['curve']['q_delta'] = param['curve']['qmax'] / param['curve']['npoints']
-
-# Create output directory and open file for summary output
-if not os.path.exists(args.output_path):
-    os.makedirs(args.output_path)
-
-# Read in experimental curves and calculate Rg and Rxs
-# Setup output directories for theoretical curves and sphere models
-if args.neutron is not None:
-
-    neut_data = read_curves(args.neutron, args.neutron_unit, param)
-
-    scn_path = create_data_dir(args.output_path, 'neutron','curves')
-    dry_model_path = create_data_dir(args.output_path, 'neutron','models')
-
-else:
-    neut_data = []
-
-if args.xray is not None:
-
-    xray_data = read_curves(args.xray, args.xray_unit, param)
-
-    scx_path = create_data_dir(args.output_path, 'xray','curves')
-    wet_model_path = create_data_dir(args.output_path, 'xray','models')
-
-else:
-    xray_data = []
-
-# Output summary analysis of the experimental data curves
-expt_name = os.path.join(args.output_path, args.title + '_expt.sum')
-expt_data = open(expt_name,'w')
-expt_data.write("Filename\tRg\tRxs1\n")
-
-for curve in neut_data + xray_data:
-    expt_data.write("{0:s}\t{1:7.4f}\t{2:7.4f}\n".format(curve['file'],
-                                                         curve['rg'],
-                                                         curve['rxs']))
-expt_data.close()
-
-
-# Create the file for model output
-summary_name = os.path.join(args.output_path, args.title + '.sum')
-summary_data = open(summary_name,'w')
-
-# Print the header for the summary data from sphere model analysis:
-# Path to input PDBs
-# Neutron                                                              X-ray                                       
-# Model Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
-write_summary_header(args.input_path, args.neutron, args.xray, summary_data)
-
-# Get list of PDBs in the input directory
-pdb_filter = os.path.join(args.input_path, '*.pdb')
-pdb_files = glob.glob(pdb_filter)
-
-if len(pdb_files) < 1:
-    print "No PDB files found to analyze"
-    sys.exit(1)
-
-# Parameters for turning PDB into spheres
-cutoff = param['sphere']['cutoff']
-box_side = param['sphere']['boxside']
-box_side3 = box_side**3
-
-# Model spheres just fit into grid box (no overlap) therefore:
-radius = box_side / 2.0
-
-# Loop over input PDBs
-for pdb in pdb_files:
-
-    # Create sphere models, compute scattering curves and compare to 
-    # experimental curves
-    # Dry models are compared to neutron data, wet to xray data.
-    dry_data, wet_data = perform_sas_analysis_pdb(pdb, neut_data, xray_data, 
-                                                  param, radius, box_side3)
-
-    pdb_basename = os.path.basename(pdb)
-    pdb_id = os.path.splitext(pdb_basename)[0]
-
-    # Format the modelling output data for printing
-    neut_summ = sas_model_summary_output(dry_data)
-    xray_summ = sas_model_summary_output(wet_data)
-
-    # Output all summary data to file
-    summary_data.write('{0:s}\t{1:s}{2:s}\n'.format(pdb_id,
-                                                      neut_summ,
-                                                      xray_summ))
-
-summary_data.close()
+if __name__ == "__main__":
+    main()
