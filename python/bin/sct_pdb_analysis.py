@@ -128,6 +128,34 @@ def read_curves(curve_files, units, param):
 
     return curves
 
+def read_expt_data(neutron_files, neutron_unit, xray_files, xray_unit, output_path, param):
+
+    out_paths = {}    
+    
+    # Read in experimental curves and calculate Rg and Rxs
+    # Setup output directories for theoretical curves and sphere models
+    if neutron_files is not None:
+    
+        neut_data = read_curves(neutron_files, neutron_unit, param)
+    
+        out_paths['scn'] = create_data_dir(output_path, 'neutron','curves')
+        out_paths['dry_model'] = create_data_dir(output_path, 'neutron','models')
+    
+    else:
+        neut_data = []
+    
+    if xray_files is not None:
+    
+        xray_data = read_curves(xray_files, xray_unit, param)
+    
+        out_paths['scx'] = create_data_dir(output_path, 'xray','curves')
+        out_paths['wet_model'] = create_data_dir(output_path, 'xray','models')
+    
+    else:
+        xray_data = []
+        
+    return neut_data, xray_data, out_paths
+
 def create_data_dir(basename, expt_type, data_type):
     """
     Set the output to a path basename/expt_type/data_type, if this does not
@@ -449,30 +477,15 @@ def main():
     # Create output directory and open file for summary output
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
-    
-    out_paths = {}    
-    
+
     # Read in experimental curves and calculate Rg and Rxs
     # Setup output directories for theoretical curves and sphere models
-    if args.neutron is not None:
-    
-        neut_data = read_curves(args.neutron, args.neutron_unit, param)
-    
-        out_paths['scn'] = create_data_dir(args.output_path, 'neutron','curves')
-        out_paths['dry_model'] = create_data_dir(args.output_path, 'neutron','models')
-    
-    else:
-        neut_data = []
-    
-    if args.xray is not None:
-    
-        xray_data = read_curves(args.xray, args.xray_unit, param)
-    
-        out_paths['scx'] = create_data_dir(args.output_path, 'xray','curves')
-        out_paths['wet_model'] = create_data_dir(args.output_path, 'xray','models')
-    
-    else:
-        xray_data = []
+    neut_data, xray_data, out_paths = read_expt_data(args.neutron, 
+                                                     args.neutron_unit, 
+                                                     args.xray, 
+                                                     args.xray_unit, 
+                                                     args.output_path, 
+                                                     param)
     
     # Output summary analysis of the experimental data curves
     expt_name = os.path.join(args.output_path, args.title + '_expt.sum')
