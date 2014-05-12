@@ -420,19 +420,14 @@ def main():
 
     args = parse_arguments()
     
-    # Read in parameters and check we have those we need
-    param, err = sct.param.read_parameter_file(args.parameter_file)
-    
-    if err != None:
-        sct.param.output_error(err, args.parameter_file)
-    
-    err = sct.param.check_parameters(param, ['curve','sphere','rg','rxs1','rfac'])
-    
-    if err != None:
-        sct.param.output_error(err, args.parameter_file)
+    # Read in parameters and check we have those we need for the workflow
+
+    needed = ['curve','sphere','rg','rxs1','rfac']
     
     if args.xray is not None:
-        sct.param.check_parameters(param, ['hydrate'])
+        needed.append('hydrate')
+    
+    param = sct.param.parse_parameter_file(args.parameter_file)
     
     param['curve']['q_delta'] = param['curve']['qmax'] / param['curve']['npoints']
     
