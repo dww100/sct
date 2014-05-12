@@ -401,6 +401,21 @@ def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, radius, box_side3
             
         return neut_theor, xray_theor
 
+def output_expt_summary(neut_data, xray_data, output_path, title):
+    
+    # Output summary analysis of the experimental data curves
+    expt_name = os.path.join(output_path, title + '_expt.sum')
+    expt_data = open(expt_name,'w')
+    expt_data.write("Filename\tRg\tRxs1\n")
+    
+    for curve in neut_data + xray_data:
+        expt_data.write("{0:s}\t{1:7.4f}\t{2:7.4f}\n".format(curve['file'],
+                                                             curve['rg'],
+                                                             curve['rxs']))
+    expt_data.close()        
+    
+    return
+
 def main():
 
     args = parse_arguments()
@@ -435,16 +450,7 @@ def main():
                                                      param)
     
     # Output summary analysis of the experimental data curves
-    expt_name = os.path.join(args.output_path, args.title + '_expt.sum')
-    expt_data = open(expt_name,'w')
-    expt_data.write("Filename\tRg\tRxs1\n")
-    
-    for curve in neut_data + xray_data:
-        expt_data.write("{0:s}\t{1:7.4f}\t{2:7.4f}\n".format(curve['file'],
-                                                             curve['rg'],
-                                                             curve['rxs']))
-    expt_data.close()
-    
+    output_expt_summary(neut_data, xray_data, args.output_path, args.title)
     
     # Create the file for model output
     summary_name = os.path.join(args.output_path, args.title + '.sum')
