@@ -362,3 +362,39 @@ def check_parameters(params, needed):
             err = globals().get(fn)(params)
             
     return err
+
+
+def parse_parameter_file(parameter_file, needed):
+    """
+    Load the parameter file abd check that all the parameters needed to perform
+    the calculations specified in the input list (needed) are in the parameter 
+    dictionary (params).
+    Possible calculations are:
+    'rg', 'rg_plot' - Radius of gyration (calculation alone and with plot also)
+    'rxs1', 'rxs1_plot' - Rxs1 (calculation alone and with plot also)
+    'rxs2', 'rxs2_plot' - Rxs2 (calculation alone and with plot also)
+    'sphere' - creation of a sphere model
+    'hydrate' - hydration of sphere model for x-ray comparisons
+    'curve' - calculation of a theoretical curve
+    'rfac' - calculation of the R factor
+    
+    @type  params:  dictionary
+    @param params:  Dictionary containing the user provided parameters for
+                    SCT.
+    @type  needed:  list
+    @param needed:  List of strings describing the calculations for which 
+                    parameters will be required.
+    @rtype:         string
+    @return:        Error message (None if no error)
+    """    
+    param, err = read_parameter_file(parameter_file)
+    
+    if err != None:
+        output_error(err, parameter_file)
+    
+    err = check_parameters(param, needed)
+    
+    if err != None:
+        output_error(err, parameter_file)
+
+    return param
