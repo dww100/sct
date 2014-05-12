@@ -266,13 +266,13 @@ def  write_summary_header(in_pdb, in_neut, in_xray, output):
     
     return
 
-def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, out_paths):
+def perform_sas_analysis_pdb(pdb_file, neut_data, xray_data, param, out_paths):
     """
     Create sphere models from PDBs and use to generate theoretical scattering
     curves and compare these to experimental inputs
     
-    @type  pdb:        string
-    @param pdb:        Filename of the input PDB
+    @type  pdb_file:   string
+    @param pdb_file:   Filename of the input PDB
     @type  neut_data:  list
     @param neut_data:  List of numpy arrays with two columns (Q and I) 
                        containing neutron experimental data
@@ -309,11 +309,11 @@ def perform_sas_analysis_pdb(pdb, neut_data, xray_data, param, out_paths):
     box_side3 = param['sphere']['boxside3']
     radius = param['sphere']['radius']
     
-    pdb_basename = os.path.basename(pdb)
+    pdb_basename = os.path.basename(pdb_file)
     pdb_id = os.path.splitext(pdb_basename)[0]
 
     # Read PDB
-    res_freq, atom_coords = pdb.read_pdb_atom_data(pdb)
+    res_freq, atom_coords = pdb.read_pdb_atom_data(pdb_file)
 
     if len(atom_coords) > 0:
 

@@ -86,7 +86,7 @@ def main():
     if args.xray is not None:
         needed.append('hydrate')
     
-    param = sct.param.parse_parameter_file(args.parameter_file)
+    param = sct.param.parse_parameter_file(args.parameter_file, needed)
     
     # Create output directory and open file for summary output
     if not os.path.exists(args.output_path):
