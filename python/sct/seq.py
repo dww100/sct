@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Module that deal with sequence properties within SCT.
+Module that deals with sequence properties within SCT.
 Loads in yaml files containing scattering parameters and residue volumes
 """
 
