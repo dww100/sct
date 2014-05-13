@@ -4,7 +4,7 @@
 #
 # Control script for calculating scattering curves for pdb models
 # Initiates; BRKTOS97d, HYPRO, APS, SCT, SCTPL6g, RFAC700XN
-# Versions of codes with _XXXX are edited to handle XXXX atom coordinates
+# Assumes all these programs are in your PATH
 
 #-------------------------------------------------------------------------------
 # Copyright 1981-2014 University College London
@@ -51,7 +51,6 @@ do
     PREFIX_P=$PREFIX$COUNT
     PDB=$PREFIX_P'.pdb'
     BRK=$PREFIX_P'.brk'
-    OUR_PATH='/usr0/usr3/people/davidw/sct'
 
 #
 ################################################################################
@@ -71,7 +70,7 @@ do
 
 
     echo -e $PDB'\n5.57 4 1 0\n'$BRK'\n500 500 500\n-500 -500 -500\n' > tmp_in
-    $OUR_PATH/brktos97d < tmp_in
+    brktos97d < tmp_in
     wc -l $BRK >> $PREFIX'dry_spheres.sum'
 
 #
@@ -98,13 +97,13 @@ do
 
     HYP=$PREFIX_P'.hyp'
     echo -e $BRK'\n'$HYP'1\n26\n' >tmp_in
-    $OUR_PATH/hypro < tmp_in
+    hypro < tmp_in
     echo -e $HYP'1\n5.57 1 1 0\n'$HYP'2\n500 500 500\n-501 -501 -501\n' > tmp_in
-    $OUR_PATH/brktos97d < tmp_in
+    brktos97d < tmp_in
     echo -e $BRK'\n'$HYP'3\n1\n' > tmp_in
-    $OUR_PATH/hypro < tmp_in
+    hypro < tmp_in
     echo -e $HYP'3\n5.57 1 1 0\n'$HYP'4\n500 500 500\n-501 -501 -501\n' > tmp_in
-    $OUR_PATH/brktos97d < tmp_in
+    brktos97d < tmp_in
     cat $HYP'2' > $HYP'5temp'
     cat $HYP'4' >> $HYP'5temp'
     sort -n $HYP'5temp' | uniq > $HYP'5'
@@ -119,10 +118,10 @@ do
 ##    2. Calculate Rg of wet sphere model
 #
 
-    $OUR_PATH/aps < $BRK > tmp_out
+    aps < $BRK > tmp_out
     OUT_RG=`fgrep -i "radius of gyration   =" tmp_out`
     echo -e $BRK'  '$OUT_RG >> $PREFIX'Rg_dry_aps.sum'
-    $OUR_PATH/aps < $HYP'5' > tmp_out
+    aps < $HYP'5' > tmp_out
     OUT_RG=`fgrep -i "radius of gyration   =" tmp_out`
     echo -e $HYP'5 '$OUT_RG >> $PREFIX'Rg_wet_aps.sum'
 
@@ -136,12 +135,12 @@ do
     N=$PREFIX_P'.scn'
     X=$PREFIX_P'.scx'
     echo -e $BRK'\n'$N'\nx\n\n0\n1 1\n0.1 6 0.016\n0.92\n0.25 2.78\n' > tmp_in
-    $OUR_PATH/sct_6000 < tmp_in
+    sct < tmp_in
     echo -e `grep -i 'VALUE OF ' x`'   '$N >> $PREFIX'NEUT_sct.sum'
     echo -e `grep -i ' TOTAL OF CROSS-TERMS OF MIXED SPHERES IS' x`'   '$N >> $PREFIX'NEUT_sct.sum'
     echo -e '------------------------------------------------------------------' >> $PREFIX'NEUT_sct.sum'
     echo -e $HYP'5\n'$X'\nx\n\n0\n1 0\n0.92\n0.25 3.47\n' > tmp_in
-    $OUR_PATH/sct_6000 < tmp_in
+    sct < tmp_in
     echo -e `grep -i 'VALUE OF ' x`'   '$X >> $PREFIX'XRAY_sct.sum'
     echo -e `grep -i ' TOTAL OF CROSS-TERMS OF MIXED SPHERES IS' x`'   '$X >> $PREFIX'XRAY_sct.sum'
     echo -e '------------------------------------------------------------------' >> $PREFIX'XRAY_sct.sum'
@@ -149,33 +148,33 @@ do
     cp $X XRAY
 
 ################################################################################
-##  SCTPL6 Calculation of Rg
+##  SCTPL Calculation of Rg
 ##    1. Calculate Rg of neutron curve
 ##    2. Calculate Rg of X-ray curve
 
 
     echo -e 'm\n'$N' '$PREFIX_P'\n1\nneutron\nn\n2\n0 0.07\n0.016 0.05\n\n12\n' > tmp_in
-    $OUR_PATH/sctpl6g < tmp_in
+    sctpl < tmp_in
     cat Sctpl6_Summary >> $PREFIX'NEUTsctpl_rg.sum'
     rm Sctpl6_Summary
 
     echo -e 'm\n'$X' '$PREFIX_P'\n1\nXRAY\nn\n2\n0 0.07\n0.016 0.05\n\n12\n' >tmp_in
-    $OUR_PATH/sctpl6g < tmp_in
+    sctpl < tmp_in
     cat Sctpl6_Summary >> $PREFIX'XRAYsctpl_rg.sum'
     rm Sctpl6_Summary
 
-##  SCTPL6 Calculation of Rxs
+##  SCTPL Calculation of Rxs
 ##    1. Calculate Rxs of neutron curve
 ##    2. Calculate Rxs of X-ray curve
 
     echo -e 'm\n'$N' '$PREFIX_P'\n1\nneutron\nn\n1\n0.01 0.15\n0.055 0.1\n\n12\n' > tmp_in
-    $OUR_PATH/sctpl6g < tmp_in
+    sctpl < tmp_in
     cat Sctpl6_Summary >> $PREFIX'NEUTsctpl_rxs.sum'
     rm Sctpl6_Summary
 
     echo -e 'm\n'$X' '$PREFIX_P'\n1\nXRAY\nn\n1\n0.01 0.15\n0.055 0.1\n\n12\n' > tmp_in
 
-    $OUR_PATH/sctpl6g < tmp_in
+    sctpl < tmp_in
     cat Sctpl6_Summary >> $PREFIX'XRAYsctpl_rxs.sum'
     rm Sctpl6_Summary
 
@@ -187,15 +186,15 @@ do
 
 
     echo -e $N'\nneut.dat\nRfac.out\n0.2\n' > tmp_in
-    $OUR_PATH/rfacXN < tmp_in
+    rfacXN < tmp_in
     cat Rfac.out >> $PREFIX'Neutron_rfac.sum'
     rm Rfac.out
 
 
-    #echo -e $X'\nFH_68_100cAV\nRfac.out\n0.2\n' > tmp_in
-    #$OUR_PATH/rfac700XN < tmp_in
-    #cat Rfac.out >> $PREFIX'Xray_rfac.sum'
-    #rm Rfac.out
+    echo -e $X'\nxray.dat\nRfac.out\n0.2\n' > tmp_in
+    rfacXN < tmp_in
+    cat Rfac.out >> $PREFIX'Xray_rfac.sum'
+    rm Rfac.out
 
 
 ##    Clean Up Files
