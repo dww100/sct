@@ -1,6 +1,3 @@
-% SCT: calculate_curve documentation
-% David W. Wright
-% 20 Feb 2014
 calculate_curve - Calculate Scattering Curve from a Sphere Model
 ================================================================
 
@@ -13,26 +10,29 @@ Run using the command:
 
 ~~~~~~~
 calculate_curve.py [-h] -i [INPUT_FILENAME] [-o [OUTPUT_FILENAME]]
-                          [-q [Q_MAX]] [-r [RADIUS]] [-b [N_BINS]]
-                          [-p [N_POINTS]] [-s] [-e [SPREAD]] [-w [WAVELENGTH]]
-                          [-d [DIVERGENCE]]
+                   [-p [PARAMETER_FILE]] [-q [Q_MAX]] [-r [RADIUS]]
+                   [-b [N_BINS]] [-n [N_POINTS]] [-s] [-e [SPREAD]]
+                   [-w [WAVELENGTH]] [-d [DIVERGENCE]]
+
 ~~~~~~~
 
 Arguments:
-
+----------
 ~~~~~~~
   -h, --help            show this help message and exit
   -i [INPUT_FILENAME], --input_filename [INPUT_FILENAME]
                         Path to the input PDB file
   -o [OUTPUT_FILENAME], --output_filename [OUTPUT_FILENAME]
                         Path to the output file
+  -p [PARAMETER_FILE],  --parameter_file [PARAMETER_FILE]
+                        Path to YAML format SCT parameter file
   -q [Q_MAX], --q_max [Q_MAX]
                         Maximum q value in output curve
   -r [RADIUS], --radius [RADIUS]
                         Sphere radius
   -b [N_BINS], --n_bins [N_BINS]
                         No. bins to use in histogram of sphere separation
-  -p [N_POINTS], --n_points [N_POINTS]
+  -n [N_POINTS], --n_points [N_POINTS]
                         No. points in output curve
   -s, --smear           Apply smearing to curve
   -e [SPREAD], --spread [SPREAD]
@@ -45,6 +45,9 @@ Arguments:
 
 Notes:
 ------
+
+If a parameter file is used it is prioritized over any parameters passed via 
+command line flags.
 
 Defaults:
 
@@ -59,7 +62,7 @@ Defaults:
 Output:
 -------
 
-Two column text file - with $Q$ and $I/I_{0}$ columns (floating point numbers 
+Two column text file - with Q and I/I(0) columns (floating point numbers 
 as strings formatted using 7.4f in Python).
 
-$Q$ units are $\AA^{-1}$.
+$Q$ units are Angstrom$^{-1}$.

@@ -1,6 +1,3 @@
-% SCT: sluv2 documentation
-% David W. Wright
-% 20 Feb 2014
 sluv2 - Calculate Volume and Other Properties from Sequence
 ==========================================================
 

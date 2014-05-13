@@ -1,7 +1,4 @@
-% SCT: sctpl documentation
-% David W. Wright
-% 20 Feb 2014
-
+sctpl - Calculate Radii of Gyration From Scattering Curves
 =================================================
 
 Useage:

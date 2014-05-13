@@ -1,7 +1,3 @@
-% SCT: aps documentation
-% David W. Wright
-% 20 Feb 2014
-
 aps - Calculation of Radius of Gyration from Sphere Models
 ==========================================================
 

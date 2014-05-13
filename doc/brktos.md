@@ -1,6 +1,3 @@
-% SCT: brktos documentation
-% David W. Wright
-% 20 Feb 2014 
 brktos - Convert Atomistic PDB Structure into Coarse Grained Sphere Model
 =========================================================================
 

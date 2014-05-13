@@ -1,6 +1,3 @@
-% SCT: sphere2pdb documentation
-% David W. Wright
-% 20 Feb 2014
 sphere2pdb - Convert a Sphere Model to PDB Format
 =================================================
 

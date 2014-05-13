@@ -1,6 +1,3 @@
-% SCT: sas_curve_analysis documentation
-% David W. Wright
-% 20 Feb 2014
 sas_curve_analysis - Script to analsye $Q$ and $I$ data from SAS experiments
 ============================================================================
 
@@ -25,14 +22,13 @@ sas_curve_analysis.py [-h]
 ~~~~~~~
 
 Arguments:
-
+----------
 ~~~~~~~
-  -h, --help            show this help message and exit
   -i [INPUT_FILENAME], --infile [INPUT_FILENAME]
                         Path to the input file
   --header              Output a header alongside output data
-  -q Q_RANGES_FILENAME, --q-ranges Q_RANGES_FILENAME
-                        Path to file containing Q plot and fit ranges
+  -p PARAMETER_FILE, --parameter PARAMETER_FILE
+                        Path to YAML format SCT parameter file
   -r PLOTRANGE PLOTRANGE, --plotrange PLOTRANGE PLOTRANGE
                         Range of Q to plot
   -f FIT_RANGE FIT_RANGE, --fitrange FIT_RANGE FIT_RANGE
@@ -49,7 +45,10 @@ Arguments:
 Notes:
 ------
 
-Presently input is assumed to be columns of data with no header - first column
+If a parameter file is used it is prioritized over any parameters passed via 
+command line flags.
+
+Input is assumed to be columns of data with no header - first column
 being $Q$ and the second $I$.
 
 Output calculations will use the same length units as the input curve.
@@ -59,7 +58,7 @@ Output:
 
 Graphs:
 
-A pdf file will be produce showing the appropriate functions of $Q$ and $I$ 
+A PDF file will be produce showing the appropriate functions of $Q$ and $I$ 
 plotted against one another. 
 Points used in any fitting will be shown in larger dots and with a blue line 
 depicting the linear fit.

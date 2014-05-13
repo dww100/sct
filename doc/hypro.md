@@ -1,6 +1,3 @@
-% SCT: hypro documentation
-% David W. Wright
-% 20 Feb 2014
 hypro - Add Hydration Layer to a Sphere Model
 =================================================
 

@@ -1,12 +1,9 @@
-% SCT: sct documentation
-% David W. Wright
-% 20 Feb 2014
 sct - Calculate Scattering Curve from a Sphere Model
 ====================================================
 
-Create a theoretical scattering curve ($I/I_{0}$ vs $Q$) from a sphere model using the 
+Create a theoretical scattering curve (I/I(0) vs $Q$) from a sphere model using the 
 Debye equation.
-Units of $Q$ are $\AA^{-1}$.
+Units of $Q$ are Angstrom$^{-1}$.
 For theoretical neutron curves smearing can be added as described in 
 S. J. Perkins & H. Weiss, (1983) J. Mol. Biol. 168, 847-866
 

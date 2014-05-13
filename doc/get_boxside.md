@@ -1,6 +1,3 @@
-% SCT: get_boxside documentation
-% David W. Wright
-% 20 Feb 2014
 get_boxside - Automatic Optimization of Box Side Used in Sphere Model Creation
 ==============================================================================
 

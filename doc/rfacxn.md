@@ -1,6 +1,3 @@
-% SCT: rfacXN documentation
-% David W. Wright
-% 20 Feb 2014
 rfacXN - Calculate R Factor Comparing Two Curves
 =================================================
 

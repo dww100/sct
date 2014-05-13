@@ -1,6 +1,3 @@
-% SCT: sct_get_sequence documentation
-% David W. Wright
-% 20 Feb 2014
 sct_get_sequence - Convert Fasta or PDB File to YAML Residue Frequency File
 ===========================================================================
 

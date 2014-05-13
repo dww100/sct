@@ -1,6 +1,3 @@
-% SCT: pdb2sphere documentation
-% David W. Wright
-% 20 Feb 2014
 pdb2sphere - Convert Atomistic PDB Structure into Coarse Grained Sphere Model
 =============================================================================
 
@@ -13,14 +10,14 @@ Run using the command:
 
 ~~~~~~~
 pdb2sphere.py [-h] -i [INPUT_FILENAME]
-                     [-m {info,archive,model,project}] [-o [OUTPUT_FILENAME]]
-                     [-c [CUTOFF]] [-b [BOX_SIDE]]
+              [-m {info,archive,model,project}] [-o [OUTPUT_FILENAME]]
+              [-c [CUTOFF]] [-b [BOX_SIDE]] [-p [PARAMETER_FILE]]
+
 ~~~~~~~
 
 Arguments:
-
+----------
 ~~~~~~~
-  -h, --help            show help message and exit
   -i [INPUT_FILENAME], --input_filename [INPUT_FILENAME]
                         Path to the input PDB file
   -m {info,archive,model,project}, --mode {info,archive,model,project}
@@ -31,16 +28,21 @@ Arguments:
                         Cutoff number of atoms to create sphere in grid box
   -b [BOX_SIDE], --box_side [BOX_SIDE]
                         Side length of grid boxes
+  -p [PARAMETER_FILE], --parameter_file [PARAMETER_FILE]
+                        Path to YAML format SCT parameter file
 ~~~~~~~
 
 Notes:
 ------
 
+If a parameter file is used it is prioritized over any parameters passed via 
+command line flags.
+
 An input file is required.
 
 Units of boxside are Angstrom.
 
-Type of output to be produced:
+Options for the type of output to be produced:
 
 - info = summary information on sphere model to stdout only
 - archive = summary information and sphere model to file

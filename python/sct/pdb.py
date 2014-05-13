@@ -327,8 +327,10 @@ def process_pdb_psf(psf_filename, pdb_filename):
             print "Number of atoms in the PDB do not match the PSF"
         else:
             for ii in range(0, n_atoms):
+                print psf_atoms[ii]['atom_name'] + '\t' + tmp_atoms[ii]['atom_name']
                 psf_atoms[ii]['coords'] = tmp_atoms[ii]['coords']
                 psf_atoms[ii]['chain'] = tmp_atoms[ii]['chain']
+    
     
     atoms = []    
     

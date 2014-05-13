@@ -1,6 +1,3 @@
-% SCT: sphere_rg documentation
-% David W. Wright
-% 20 Feb 2014
 sphere_rg - Calculation of Radius of Gyration from Sphere Models
 ================================================================
 

@@ -1,7 +1,3 @@
-% SCT: brksph2pdb documentation
-% David W. Wright
-% 20 Feb 2014
-
 brksph2pdb - Convert a Sphere Model to PDB Format
 =================================================
 

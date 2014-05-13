@@ -1,6 +1,3 @@
-% SCT: optimize_model_parameters documentation
-% David W. Wright
-% 20 Feb 2014
 optimize_model_parameters - Optimize paramateres used for Sphere Modelling
 ==========================================================================
 
@@ -28,7 +25,7 @@ optimize_model_params.py [-h] -i [INPUT_PDB] [-s [INPUT_SEQ]]
 ~~~~~~~
 
 Arguments:
-
+----------
 ~~~~~~~
   -h, --help            show this help message and exit
   -i [INPUT_PDB], --input_pdb [INPUT_PDB]
@@ -40,7 +37,7 @@ Arguments:
   -o [OUTPUT_FILE], --output_file [OUTPUT_FILE]
                         Path to output file
   -p [PARAMETER_FILE], --parameter_file [PARAMETER_FILE]
-                        Path to a file containing input parameters
+                        Path to YAML format SCT parameter file
   -m MIN_MAX MIN_MAX, --min_max MIN_MAX MIN_MAX
                         Minimum and maximum values of box side
 ~~~~~~~

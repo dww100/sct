@@ -1,7 +1,3 @@
-% SCT suite documentation
-% David W. Wright
-% 20 Feb 2014
-
 SCT Suite Documentation
 =======================
 
@@ -12,7 +8,7 @@ Modern Version
 
 **Workflow**
 
-+ sct_pdb_analysis.py
++ [sct_pdb_analysis.py](sct_pdb_analysis.html)
 
 **Individual Steps**
 
