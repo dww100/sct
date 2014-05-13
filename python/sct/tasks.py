@@ -169,22 +169,27 @@ def sas_model_summary_output(theor_data):
     @param theor_data:  Dictionaries containing the following key/value pairs 
                         for the dry model/neutron and wet model/xray 
                         comparisons:
-                        - model_rg: Radius of gyration calculated directly
-                         from sphere model.
-                        - curve_rg: Radius of gyration calculated from the
-                          theoretical scattering curve derived from the sphere
-                          model.
-                        - curve_rxs1: Cross-section calculated from the
-                          theoretical scattering curve derived from the sphere
-                          model.
-                        - rfac: R factor comparing experimental and
-                          theoretical scattering curves.
-                        - volume: Sphere model volume  
+
+                        model_rg: Radius of gyration calculated directly from sphere model.
+
+                        curve_rg: Radius of gyration calculated from the
+                        theoretical scattering curve derived from the sphere
+                        model.
+
+                        curve_rxs1: Cross-section calculated from the
+                        theoretical scattering curve derived from the sphere
+                        model.
+
+                        rfac: R factor comparing experimental and
+                        theoretical scattering curves.
+
+                        volume: Sphere model volume  
+
     @rtype:             string
     @return:            String containing the input for the sphere model Rg, 
                         curve Rg, curve Rxs1 and volume
     """
-    
+
     if len(theor_data) > 0:
         summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t".format(theor_data['model_rg'],
                                                                  theor_data['curve_rg'],
@@ -204,9 +209,13 @@ def create_rfac_header_text(data_files):
     for each input experimental curve in the summary output header. The header 
     has the following format (in the final version it is tab separated) except 
     without the line numbering:
-    0. Path to input PDBs
-    1. Neutron                                                                   X-ray                                       
-    2. Model Rg_model Rg_curve Rxs1_curve Volume Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
+
+    0 Path to input PDBs
+
+    1 Neutron                                                                   X-ray                                       
+
+    2 Model Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
+    
     This function provides the spacing for one set of curves (either x-ray or 
     neutron).
     
@@ -236,9 +245,12 @@ def  write_summary_header(in_pdb, in_neut, in_xray, output):
     associated with neutrons and hydrated (wet) ones with x-rays.
     The header has the following format (in the final version it is tab 
     separated) except without the line numbering:
-    0. Path to input PDBs
-    1. Neutron                                                                    X-ray                                       
-    2. Model Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
+
+    0 Path to input PDBs
+
+    1 Neutron                                                                    X-ray                                       
+
+    2 Model Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
     
     Each experimental curve input requires two columns - Rfactor and scale
     Where the latter is the scaling factor used to match the theoretical and 
@@ -291,17 +303,22 @@ def perform_sas_analysis_pdb(pdb_file, neut_data, xray_data, param, out_paths):
     @return:           Dictionaries containing the following key/value pairs 
                        for the dry model/neutron and wet model/xray 
                        comparisons:
-                       - model_rg: Radius of gyration calculated directly
-                         from sphere model.
-                       - curve_rg: Radius of gyration calculated from the
-                         theoretical scattering curve derived from the sphere
-                         model.
-                       - curve_rxs1: Cross-section calculated from the
-                         theoretical scattering curve derived from the sphere
-                         model.
-                       - rfac: R factor comparing experimental and
-                         theoretical scattering curves.
-                       - volume: Sphere model volume
+
+                       model_rg: Radius of gyration calculated directly
+                       from sphere model.
+
+                       curve_rg: Radius of gyration calculated from the
+                       theoretical scattering curve derived from the sphere
+                       model.
+
+                       curve_rxs1: Cross-section calculated from the
+                       theoretical scattering curve derived from the sphere
+                       model.
+
+                       rfac: R factor comparing experimental and
+                       theoretical scattering curves.
+
+                       volume: Sphere model volume
     """
     
     cutoff = param['sphere']['cutoff']
