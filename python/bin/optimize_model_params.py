@@ -182,7 +182,7 @@ def main():
         out_file.write("Hydrated volume, water cutoff = {0:d}: {1:7.4f}\n".format(ii,check_wet_vol))
     out_file.write("="*20 + "\n")    
 
-    out_file.write("Experimental Automated Hydration Optimization")    
+    out_file.write("Experimental Automated Hydration Optimization\n")    
     out_file.write("Suggested hydration cutoff: {0:d}\n".format(hydr_cutoff))
     out_file.write("Model hydrated volume using suggested cutoff: {0:7.4f}\n".format(model_wet_vol))
 
