@@ -703,7 +703,7 @@ def optimize_watercut(box_side, coords, hydration_no, targ_vol, cut_min, cut_max
                                    options={'xtol' : tolerance})
 
     # Return the optimized cutoff and residual
-    return int(round(opt['x'])), opt['fun']**0.5
+    return int(opt['x']) + 1, opt['fun']**0.5
 
 def sphere_squared_form_factor(q, r):
     """
