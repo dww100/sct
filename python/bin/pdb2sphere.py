@@ -83,32 +83,26 @@ def main():
     if args.parameter_file == None:
         cutoff = args.cutoff
         box_side = args.boxside
+        # Set the radius for each sphere
+        radius = args.box_side / 2.0
+        box_side3 = args.box_side**3
                                                 
     else:
         
         print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"        
         
-        # Read in parameters
-        param, err = sct.param.read_parameter_file(args.parameter_file)
-        
-        if err != None:
-            sct.param.output_error(err, args.parameter_file)             
-        
-        err = sct.param.check_parameters(param, ['sphere'])
-        
-        if err != None:
-            sct.param.output_error(err, args.parameter_file)        
+        # Read in parameters        
+        param = sct.param.parse_parameter_file(args.parameter_file, ['sphere'])
         
         cutoff = param['sphere']['cutoff']
         box_side = param['sphere']['boxside']
+        radius = param['sphere']['boxside']
+        box_side3 = param['sphere']['boxside3']
 
     # Bin atomic coordinates to give sphere coordinates
     sphere_coords, x_axis, y_axis, z_axis = sct.sphere.create_sphere_model(atom_coords,
                                                                            cutoff,
                                                                            box_side)
-
-    # Set the radius for each sphere
-    radius = args.box_side / 2.0
 
     # Output the sphere coordinates and radii
     if args.mode != 'info':
@@ -126,16 +120,16 @@ def main():
         volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986a')
         no_res = sct.seq.sum_res_no(sct.seq.all_residues, res_freq)
         no_spheres = len(sphere_coords)
-        volume_spheres = no_spheres * args.box_side**3
+        volume_spheres = no_spheres * box_side3
         no_x_box = len(x_axis)
         no_y_box = len(y_axis)
         no_z_box = len(z_axis)
 
-        output.write("pdb2sphere: version 0.5 - 05 November 2013\n")
+        output.write("pdb2sphere: version 0.75 - 19 May 2014\n")
         output.write("No. Of Atoms: {0:d}\n".format(no_atoms))
         output.write("Total Of Amino Acid Residues {0:d}\n".format(no_res))
-        output.write("One Side Of The Box: {0:f}\n".format(args.box_side))
-        output.write("Cutoff For Creating A Ball: {0:d}\n".format(args.cutoff))
+        output.write("One Side Of The Box: {0:f}\n".format(box_side))
+        output.write("Cutoff For Creating A Ball: {0:d}\n".format(cutoff))
         output.write("No Of Balls: {0:d}\n".format(no_spheres))
         output.write("Volume Of Cubes: {0:f}\n".format(volume_spheres))
         output.write("Volume of Protein: {0:f}\n".format(volume))
