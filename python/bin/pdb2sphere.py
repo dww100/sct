@@ -96,7 +96,7 @@ def main():
         
         cutoff = param['sphere']['cutoff']
         box_side = param['sphere']['boxside']
-        radius = param['sphere']['boxside']
+        radius = param['sphere']['radius']
         box_side3 = param['sphere']['boxside3']
 
     # Bin atomic coordinates to give sphere coordinates
