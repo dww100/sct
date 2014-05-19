@@ -89,22 +89,10 @@ def main():
         print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"        
         
         # Read in parameters
-        param, err = sct.param.read_parameter_file(args.parameter_file)
-
-        if err != None:
-            sct.param.output_error(err, args.parameter_file)
-
-        sct.param.check_parameters(param, ['curve'])
-        
-        if err != None:
-            sct.param.output_error(err, args.parameter_file)
-        
-        param['curve']['q_delta'] = param['curve']['qmax'] / param['curve']['npoints']        
-
-        radius = param['sphere']['boxside'] / 2.0
-        
+        param = sct.param.parse_parameter_file(args.parameter_file, ['curve', 'sphere'])
+                
         curve = sct.sphere.spheres_to_sas_curve(coords,
-                                                radius,
+                                                param['sphere']['boxside'],
                                                 param['curve']['q_max'],
                                                 param['curve']['npoints'],
                                                 rbins = param['curve']['radbins'])
