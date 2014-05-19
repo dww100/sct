@@ -32,8 +32,11 @@ def parse_arguments():
         description= 'Calculate SAS curve from sphere model\n')
 
     parser.add_argument('-i','--input_filename', nargs='?', type=str,
-        dest='input_filename', help = 'Path to the input PDB file',
+        dest='input_filename', help = 'Path to the input sphere or PDB file',
         required=True)
+
+    parser.add_argument('-f','--input_format', choices = ['pdb','sph'],
+        help = 'Input file format (PDB or SCT sphere)', default = 'pdb')
 
     parser.add_argument('-o','--output_filename', nargs='?', type=str,
         dest='output_filename', default=None,
@@ -75,7 +78,10 @@ def main():
 
     args = parse_arguments()
 
-    res_freq, coords = sct.pdb.read_pdb_atom_data(args.input_filename)
+    if args.input_format == 'pdb':
+        res_freq, coords = sct.pdb.read_pdb_atom_data(args.input_filename)
+    else:
+        coords, radius = sct.sphere.read_mono_spheres(args.input_filename)
     
     if args.parameter_file == None:
         curve = sct.sphere.spheres_to_sas_curve(coords, args.radius,
