@@ -115,6 +115,9 @@ def main():
 
         if args.mode == 'info':
             output = sys.stdout
+        if args.mode == 'project':
+            output.close()
+            output = sys.stdout
 
         no_atoms = len(atom_coords)
         volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986a')
