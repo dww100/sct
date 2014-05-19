@@ -45,6 +45,9 @@ def parse_arguments():
     parser.add_argument('-q','--q_max', nargs='?', type=float,
         default=0.16, help = 'Maximum q value in output curve')
 
+    parser.add_argument('-x','--xray', action='store_true',
+        help = 'Flag to specify this is an x-ray curve')    
+
     parser.add_argument('-r','--radius', nargs='?', type=float,
         default=3.77, help = 'Sphere radius')
 
@@ -55,7 +58,7 @@ def parse_arguments():
         default=100, help = 'No. points in output curve')
 
     parser.add_argument('-s','--smear', action='store_true',
-        help = 'Apply smearing to curve')
+        help = 'Apply smearing to neutron curve')
 
     parser.add_argument('-e','--spread', nargs='?', type=float,
         default=0.1, help = 'Wavelength spread used to calculate smearing')
@@ -79,9 +82,9 @@ def main():
                                                 args.q_max, args.n_points,
                                                 rbins = args.n_bins)
 
-        if args.smear:
+        if args.smear and not args.xray:
             q_delta = args.q_max / args.n_points
-            sct.curve.smear_curve(curve, q_delta, args.wavelength,
+            sct.curve.smear_sas_curve(curve, q_delta, args.wavelength,
                                   args.spread, args.divergence)                                                
                                                 
     else:
@@ -93,12 +96,12 @@ def main():
                 
         curve = sct.sphere.spheres_to_sas_curve(coords,
                                                 param['sphere']['boxside'],
-                                                param['curve']['q_max'],
+                                                param['curve']['qmax'],
                                                 param['curve']['npoints'],
                                                 rbins = param['curve']['radbins'])
                              
-        if param['curve']['smear']:
-            sct.curve.smear_curve(curve, param['curve']['q_delta'], param['curve']['wavelength'],
+        if param['curve']['smear'] and not args.xray:
+            sct.curve.smear_sas_curve(curve, param['curve']['q_delta'], param['curve']['wavelength'],
                                   param['curve']['spread'], param['curve']['divergence'])            
 
 
