@@ -136,7 +136,7 @@ def fasta_res_freq(filename):
         freq_list = collections.Counter(sequences[seq_name])
         for aa in freq_list:
             # Convert one to three letter amino acid code
-            res_id = aa1to3(aa)
+            res_id = aa1to3[aa]
             # Add sequence totals to overall tally for each residue
             res_freq[res_id] += freq_list[aa]
 

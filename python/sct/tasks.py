@@ -268,7 +268,7 @@ def  write_summary_header(in_pdb, in_neut, in_xray, output):
     xray_rfact_head = create_rfac_header_text(in_xray)
 
     # Header 0
-    output.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\tX-ray\n")
+    output.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\t\tX-ray\n")
     # Header 1
     output.write("\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
     # Header 2
