@@ -244,8 +244,8 @@ DOUBLE PRECISION FUNCTION CALC_RFACTOR (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, V
 
         DO NDX = 1, N
             IF ( ( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
-                RFNUM = RFNUM + ABS( ( IOBS(NDX) / CON ) - ICALC(NDX) )
-                RFDEN = RFDEN + ABS( IOBS(NDX) / CON )
+                RFNUM = RFNUM + ABS( IOBS(NDX) - (CON * ICALC(NDX)) )
+                RFDEN = RFDEN + ABS( IOBS(NDX) )
             END IF
         END DO
 
@@ -299,8 +299,8 @@ DOUBLE PRECISION FUNCTION CALC_CHI2 (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, VERB
 
         DO NDX = 1, N
             IF ( ( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
-                TMPCHI2 = ( (IOBS(NDX) / CON ) - ICALC(NDX) )**2
-                TMPCHI2 = TMPCHI2 / ICALC(NDX)
+                TMPCHI2 = ( IOBS(NDX) - (CON * ICALC(NDX)) )**2
+                TMPCHI2 = TMPCHI2 / (CON * ICALC(NDX))
                 CHI2 = CHI2 + TMPCHI2
             END IF
         END DO
@@ -322,7 +322,7 @@ DOUBLE PRECISION FUNCTION CALC_CHI2 (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, VERB
         WRITE(*,*) 'FINISHED WITH:', DELTAC, CON, CHI2
     END IF
 
-    CHI2 = CHI2 * 100
+    CALC_CHI2 = CHI2
 
 END FUNCTION CALC_CHI2
 

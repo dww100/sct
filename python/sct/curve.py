@@ -205,6 +205,56 @@ def calculate_rfactor(target_data, source_data, q_min, q_max):
     # to compare with calculated data
     return rfactor, 1.0/con
 
+def calculate_chi2(target_data, source_data, q_min, q_max):
+    """
+    Compute Chi^2 comparing two scattering curves. Input is two
+    q vs I scattering curves and the min/max q values to use to compare them.
+    The target (experimental) curve is scaled to match the source (theoretical)
+    one. This is because the theoretical curve is based on a calculation of
+    I/Io. Output is the Chi^2 and the scaling factor needed to match I from
+    the target scattering curve to the source data.
+
+    Chi^2 = sum (F_expt - F_calc)^2 / F_calc
+
+    @type  target_data:  numpy array
+    @param target_data:  Target scattering vector magnitude, q, and intensity,
+                         I, dataset.
+    @type  source_data:  numpy array
+    @param source_data:  Source scattering vector magnitude, q, and intensity,
+                         I, dataset.
+    @type  q_min:        float
+    @param q_min:        Minimum value of the magnitude of the scattering
+                         vector, q, to use in matching the curves.
+    @type  q_max:        float
+    @param q_max:        Minimum value of the magnitude of the scattering
+                         vector, q, to use in matching the curves.
+    @rtype:              float, float
+    @return:             1. chi^2 comparing target_data and source_data.
+
+                         2. Scaling factor needed to superimpose target_data and
+                         source_data.
+    """
+
+    matched_source_I = match_scatter_curves(target_data, source_data)
+
+    # Get average I for experimental and calculated values over matched q range
+    matched_no = len(matched_source_I)
+    expt_avg = np.mean( target_data[0:matched_no, 1] )
+    calc_avg = np.mean( matched_source_I )
+
+    # Initial guess of the concentration:
+    # ratio of experimental and calculated average intensities
+    con = expt_avg / calc_avg
+
+    # Call fortran code to calculate the R factor
+    chi2 = sjp_util.calc_chi2( target_data[:,0], target_data[:,1],
+        matched_source_I, matched_no, q_min, q_max, con, False)
+
+    # 1/con is the scaling factor needed to multiply experimental I values
+    # to compare with calculated data
+    return chi2, 1.0/con
+
+
 def sas_curve_fit(x, y, calc_type):
     """
     Linear fit x vs y data. 
