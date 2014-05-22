@@ -218,7 +218,7 @@ def calculate_chi2(target_data, source_data, q_min, q_max):
 
     @type  target_data:  numpy array
     @param target_data:  Target scattering vector magnitude, q, and intensity,
-                         I, dataset.
+                         I, and sigma I dataset.
     @type  source_data:  numpy array
     @param source_data:  Source scattering vector magnitude, q, and intensity,
                          I, dataset.
@@ -235,20 +235,26 @@ def calculate_chi2(target_data, source_data, q_min, q_max):
                          source_data.
     """
 
-    matched_source_I = match_scatter_curves(target_data, source_data)
+    if (target_data.shape[1] > 2) and (np.count_nonzero(target_data[:,2]) != 0):
 
-    # Get average I for experimental and calculated values over matched q range
-    matched_no = len(matched_source_I)
-    expt_avg = np.mean( target_data[0:matched_no, 1] )
-    calc_avg = np.mean( matched_source_I )
+        matched_source_I = match_scatter_curves(target_data, source_data)
 
-    # Initial guess of the concentration:
-    # ratio of experimental and calculated average intensities
-    con = expt_avg / calc_avg
+        # Get average I for experimental and calculated values over matched q range
+        matched_no = len(matched_source_I)
+        expt_avg = np.mean( target_data[0:matched_no, 1] )
+        calc_avg = np.mean( matched_source_I )    
 
-    # Call fortran code to calculate the R factor
-    chi2 = sjp_util.calc_chi2( target_data[:,0], target_data[:,1],
-        matched_source_I, matched_no, q_min, q_max, con, False)
+        # Initial guess of the concentration:
+        # ratio of experimental and calculated average intensities
+        con = expt_avg / calc_avg
+
+        # Call fortran code to calculate the R factor
+        chi2 = sjp_util.calc_chi2( target_data[:,0], target_data[:,1], target_data[:,2],
+                                  matched_source_I, matched_no, q_min, q_max, con, False)
+
+    else:
+        print "For Chi^2 calculations an error column must be present"
+        sys.exit()
 
     # 1/con is the scaling factor needed to multiply experimental I values
     # to compare with calculated data
