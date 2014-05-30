@@ -171,10 +171,12 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, neutron=False
 
     return result
 
-def sas_model_summary_output(theor_data):
+def sas_model_summary_output(theor_data, param):
     """
     Format summary data from modelling for output. Columns are Rg from model, 
-    Rg from curve, Rxs1 from curve, volume of sphere model.
+    Rg from curve, Rxs1 from curve and  volume of sphere model. An Rxs2 from 
+    curve column will also be produced if a 'rxs2' fit range is specified in 
+    param.
     
     @type theor_data:   dictionary, dictionary
     @param theor_data:  Dictionaries containing the following key/value pairs 
@@ -189,28 +191,40 @@ def sas_model_summary_output(theor_data):
 
                         curve_rxs1: Cross-section calculated from the
                         theoretical scattering curve derived from the sphere
-                        model.
+                        model. May also contain curve_rxs2. 
 
                         rfac: R factor comparing experimental and
                         theoretical scattering curves.
 
                         volume: Sphere model volume  
-
+    @type  param:       dictionary
+    @param param:       Dictionary containing parameters to use when creating
+                        models and analysing curves.
     @rtype:             string
     @return:            String containing the input for the sphere model Rg, 
-                        curve Rg, curve Rxs1 and volume
+                        curve Rg, curve Rxs1 (possibly also Rxs2) and volume
     """
 
     if len(theor_data) > 0:
-        summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t".format(theor_data['model_rg'],
-                                                                 theor_data['curve_rg'],
-                                                                 theor_data['curve_rxs1'],
-                                                                 theor_data['volume'])        
+        if 'rxs2' in param:
+            summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t".format(theor_data['model_rg'],
+                                                         theor_data['curve_rg'],
+                                                         theor_data['curve_rxs1'],
+                                                         theor_data['curve_rxs2'],
+                                                         theor_data['volume'])
+        else:
+            summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t".format(theor_data['model_rg'],
+                                                                     theor_data['curve_rg'],
+                                                                     theor_data['curve_rxs1'],
+                                                                     theor_data['volume'])        
         
         for dataset in theor_data['rfac']:
             summ += "{0:7.4f}\t{1:7.4f}\t".format(dataset[0],1.0/dataset[1])
     else:
-        summ = "NA\tNA\tNA\tNA\tNA\tNA\t"
+        if 'rxs2' in param:
+            summ = "NA\tNA\tNA\tNA\tNA\tNA\tNA\t"
+        else:
+            summ = "NA\tNA\tNA\tNA\tNA\tNA\t"
         
     return summ
 
@@ -282,17 +296,17 @@ def  write_summary_header(in_pdb, in_neut, in_xray, param, output):
 
     if 'rxs2' in param:
         # Header 0
-        output.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\t\tX-ray\n")
+        output.write("\tNeutron\t\t\t\t" + neut_rfact_head[0] + "\t\tX-ray\n")
         # Header 1
-        output.write("\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
-        # individual column headings for header 2
+        output.write("\t\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
+        # Individual column headings for header 2
         basic_head = "Rg_model\tRg_curve\tRxs1_curve\tRxs2_curve\tVolume\t"
     else:
         # Header 0
         output.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\t\tX-ray\n")
         # Header 1
         output.write("\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
-        # individual column headings for header 2
+        # Individual column headings for header 2
         basic_head = "Rg_model\tRg_curve\tRxs1_curve\tVolume\t"
         
     # Header 2        
