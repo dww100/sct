@@ -66,7 +66,9 @@ def parse_arguments():
 
     parser.add_argument('-ou','--output_unit', choices = ['nm', 'a'],
                         default = 'a', help = 'Unit for Q in output data')
-
+                        
+    parser.add_argument('--chi2', action='store_true', default=False)
+    
     args = parser.parse_args()
 
     if (args.neutron == None) and (args.xray == None):
@@ -111,14 +113,14 @@ def main():
     # Path to input PDBs
     # Neutron                                                              X-ray                                       
     # Model Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
-    sct.tasks.write_summary_header(args.input_path, args.neutron, args.xray, param, summary_data)
+    sct.tasks.write_summary_header(args.input_path, args.neutron, args.xray, param, summary_data, args.chi2)
     
     # Get list of PDBs in the input directory
     pdb_filter = os.path.join(args.input_path, '*.pdb')
     pdb_files = glob.glob(pdb_filter)
     
     if len(pdb_files) < 1:
-        print "No PDB files found to analyze"
+        print "Error: No PDB files found to analyze"
         sys.exit(1)
     
     # Loop over input PDBs

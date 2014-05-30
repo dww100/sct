@@ -88,7 +88,7 @@ def create_data_dir(basename, expt_type, data_type):
 
     return full_path
 
-def analyse_sphere_model(model, expt_curves, sphere_radius, param, neutron=False):
+def analyse_sphere_model(model, expt_curves, sphere_radius, param, chi2=False, neutron=False):
     """
     Take a sphere model and calculate the theoretical scattering curve. The
     Rg and Rxs1 are also calculated from the curve and returned alongside the
@@ -106,9 +106,12 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, neutron=False
     @type  param:          dictionary
     @param param:          Dictionary containing parameters to use when creating
                            models and analysing curves.
+    @type  neutron:        boolean
     @param neutron:        Flag set if aiming to create a theoretical
                            neutron curve
-    @type  neutron:        boolean
+    @type  chi2:           boolean
+    @param chi2:           Flag set if using Chi^2 to compare curves
+
     @rtype:                dictionary
     @return:               Dictionary containing the following key/value pairs:
                            - model_rg: Radius of gyration calculated directly
@@ -161,13 +164,23 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, neutron=False
                               param['curve']['spread'],
                               param['curve']['divergence'])
 
-    # Calculate Rfactors for theoretical vs experimental curves
+    # Calculate comparison metric for theoretical vs experimental curves
     result['rfac'] = []
-    for expt_curve in expt_curves:
-        result['rfac'].append(curve.calculate_rfactor(expt_curve['data'],
+    
+    if chi2:
+
+        for expt_curve in expt_curves:
+            result['rfac'].append(curve.calculate_chi2(expt_curve['data'],
                                                       result['curve'],
                                                       param['rfac']['qmin'],
                                                       param['rfac']['qmax']))
+    else:
+        result['rfac'] = []
+        for expt_curve in expt_curves:
+            result['rfac'].append(curve.calculate_rfactor(expt_curve['data'],
+                                                          result['curve'],
+                                                          param['rfac']['qmin'],
+                                                          param['rfac']['qmax']))
 
     return result
 
@@ -228,12 +241,12 @@ def sas_model_summary_output(theor_data, param):
         
     return summ
 
-def create_rfac_header_text(data_files):
+def create_comparison_header_text(data_files, metric):
     """
-    Create the spacing for needed to provide two columns (Rfactor and scale) 
-    for each input experimental curve in the summary output header. The header 
-    has the following format (in the final version it is tab separated) except 
-    without the line numbering:
+    Create the spacing for needed to provide two columns (Rfactor/Chi^2 and 
+    scale)     for each input experimental curve in the summary output header. 
+    The header     has the following format (in the final version it is tab 
+    separated) except without the line numbering:
 
     0 Path to input PDBs
 
@@ -255,15 +268,15 @@ def create_rfac_header_text(data_files):
     if data_files is not None:
     
         no_files = len(data_files)
-        rfact_head = ['\t'.join(['\t']*no_files),
+        comparison_head = ['\t'.join(['\t']*no_files),
                       '\t\t'.join(data_files),
-                      '\t'.join(['Rfactor\tscale']*no_files)]
+                      '\t'.join([metric +'\tscale']*no_files)]
     else:
-        rfact_head = ['\t\t','\t\t','Rfactor\tscale']
+        comparison_head = ['\t\t','\t\t',metric + '\tscale']
                        
-    return rfact_head
+    return comparison_head
 
-def  write_summary_header(in_pdb, in_neut, in_xray, param, output):
+def  write_summary_header(in_pdb, in_neut, in_xray, param, output, chi2 = False):
     """
     Print the header for the summary data from sphere model analysis. 
     When properties of the sphere model are references dry models are 
@@ -281,17 +294,33 @@ def  write_summary_header(in_pdb, in_neut, in_xray, param, output):
     Each experimental curve input requires two columns - Rfactor and scale
     Where the latter is the scaling factor used to match the theoretical and 
     experimental curves in the Rfactor calculation.
-    
-    @type theor_data:   dictionary, dictionary
-    @param theor_data:  Dictionaries containing the following key/value pairs
+
+    @type in_pdb:    string
+    @param in_pdb:   Path to directory containg input PDB files
+    @type in_neut:   list
+    @param in_neut:  List of input experimental data files (neutron)
+    @type in_xray:   list
+    @param in_xray:  List of input experimental data files (xray)
+    @type param:     dictionary
+    @param param:    Dictionary containing parameters to use when creating
+                     models and analysing curves.
+    @type output:    file
+    @param output:   File to use to print output
+    @type chi2:      boolean
+    @param chi2:     Use Chi^2 instead of R factor as curve comparison metric
     """
     # Print header - note the inputs and print as first header row
     output.write("Input PDB path: {0:s}\n".format(in_pdb))
 
-    # Create appropriate spacing for headings of the Rfactor related columns 
-    # for both neutron and xray input. 
-    neut_rfact_head = create_rfac_header_text(in_neut)
-    xray_rfact_head = create_rfac_header_text(in_xray)
+    if chi2:
+        metric = 'Chi2'
+    else:
+        metric = 'Rfactor'
+
+    # Create appropriate spacing for headings of the comparison metric 
+    # (Rfactor/Chi^2) related columns for both neutron and xray input. 
+    neut_rfact_head = create_comparison_header_text(in_neut, metric)
+    xray_rfact_head = create_comparison_header_text(in_xray, metric)
 
 
     if 'rxs2' in param:
@@ -315,7 +344,7 @@ def  write_summary_header(in_pdb, in_neut, in_xray, param, output):
     
     return
 
-def perform_sas_analysis_pdb(pdb_file, neut_data, xray_data, param, out_paths):
+def perform_sas_analysis_pdb(pdb_file, neut_data, xray_data, param, out_paths, chi2=False):
     """
     Create sphere models from PDBs and use to generate theoretical scattering
     curves and compare these to experimental inputs
@@ -333,9 +362,9 @@ def perform_sas_analysis_pdb(pdb_file, neut_data, xray_data, param, out_paths):
                        models and analysing curves.    
     @type  radius:     float
     @param radius:     Radius of spheres to be used in sphere models
-    @type  box_side3:  float
-    @param box_side3:  Cubed box length for the grid used to make sphere 
-                       models (sphere diameter).
+    @type  chi2:       boolean
+    @param chi2:       Use Chi^2 instead of R factor as curve comparison metric
+
     @rtype:            dictionary, dictionary
     @return:           Dictionaries containing the following key/value pairs 
                        for the dry model/neutron and wet model/xray 
@@ -379,7 +408,7 @@ def perform_sas_analysis_pdb(pdb_file, neut_data, xray_data, param, out_paths):
         # If neutron data provided compare with curve computed from dry sphere model
         if len(neut_data) != 0:
 
-            neut_theor = analyse_sphere_model(dry_spheres, neut_data, radius, param, True)
+            neut_theor = analyse_sphere_model(dry_spheres, neut_data, radius, param, chi2, True)
 
             # Write curve to file
             curve_file = os.path.join(out_paths['scn'], pdb_id + '.scn')
@@ -405,7 +434,7 @@ def perform_sas_analysis_pdb(pdb_file, neut_data, xray_data, param, out_paths):
                                                           yaxis = y_axis,
                                                           zaxis = z_axis)
 
-            xray_theor = analyse_sphere_model(wet_spheres, xray_data, radius, param)
+            xray_theor = analyse_sphere_model(wet_spheres, xray_data, radius, param, chi2)
 
             # Write curve to file
             curve_file = os.path.join(out_paths['scx'], pdb_id + '.scx')
