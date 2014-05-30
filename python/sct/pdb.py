@@ -49,6 +49,9 @@ charmm_resids = {
 
 charmm_residues = charmm_resids.keys()
 
+# In the PDBs the CHARMM resids get truncated to three characters.
+charmm_three_char = ['ANE','BNE', 'AFU', 'BFU', 'AGA', 'BGA', 'AGL', 'BGL', 'AMA', 'BMA']
+
 PDB_ATOM_RECORD = (
     ('record', 0,  6, None),    # 0,  record type name
     ('atom_no', 6, 11, int),     # 1,  atom serial/index no
@@ -104,8 +107,8 @@ PSFEXT_ATOM_RECORD = (
     ('res_no', 20, 28, int),     # 2, residue sequence number
     ('res_id', 29, 37, None),  # 3, residue name
     ('atom_name', 38, 46, None),     # 4, atom name
-    ('type', 47, 51, None),     # 5, atom type
-    ('charge', 52, 68, float),  # 6, charge
+    ('type', 47, 52, None),     # 5, atom type
+    ('charge', 53, 68, float),  # 6, charge
     ('mass', 68, 82, float),    # 7, mass
     ('imove', 82, 90, int),     # 8, imove
 #            ('ech', 90, 104, float),     # 9, ech
@@ -113,7 +116,7 @@ PSFEXT_ATOM_RECORD = (
 )
 
 # We will accept either standard or CHARMM residue naming
-accept_resids = seq.all_residues + charmm_residues
+accept_resids = seq.all_residues + charmm_residues + charmm_three_char
 
 def parse_line(line, schema):
     """
@@ -176,6 +179,8 @@ def pdb_res_line_parse(line):
     if record in ['ATOM','HETATM']:
 
         data = parse_line(line, PDB_ATOM_RECORD)
+        print line
+        print data
         if data['res_id'] in accept_resids:
         # Split data on the line according to column definitions for PDB files
         # Ignore residues that we can't handle in SCT
@@ -320,14 +325,14 @@ def process_pdb_psf(psf_filename, pdb_filename):
     with open(pdb_filename) as f:
         for line in f:
             if line[:6].strip() in ['ATOM', 'HETATM']:
-                data = pdb_res_line_parse(line)                
-                tmp_atoms.append(data)
+                data = pdb_res_line_parse(line)
+                tmp_atoms.append(data)        
         
         if len(tmp_atoms) != n_atoms:
             print "Number of atoms in the PDB do not match the PSF"
         else:
-            for ii in range(0, n_atoms):
-                print psf_atoms[ii]['atom_name'] + '\t' + tmp_atoms[ii]['atom_name']
+            for ii in range(0, n_atoms - 1):
+                #print psf_atoms[ii]['atom_name'] + '\t' + tmp_atoms[ii]['atom_name']
                 psf_atoms[ii]['coords'] = tmp_atoms[ii]['coords']
                 psf_atoms[ii]['chain'] = tmp_atoms[ii]['chain']
     
