@@ -135,11 +135,11 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, neutron=False
                                                 rbins = param['curve']['radbins'])
 
     # Rg and Rxs from theoretical curve
-    result['curve_rg'], result['curve_rxs'] = curve.get_curve_descriptors(result['curve'],
-                                                            param['rg']['fitmin'],
-                                                            param['rg']['fitmax'],
-                                                            param['rxs1']['fitmin'],
-                                                            param['rxs1']['fitmax'])
+    result.update(curve.get_curve_descriptors(result['curve'],
+                  param['rg']['fitmin'],
+                  param['rg']['fitmax'],
+                  param['rxs1']['fitmin'],
+                  param['rxs1']['fitmax']))
 
     # Neutron curves are usually smeared with parameters for the instrument used
     if (neutron and param['curve']['smear']):
@@ -193,7 +193,7 @@ def sas_model_summary_output(theor_data):
     if len(theor_data) > 0:
         summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t".format(theor_data['model_rg'],
                                                                  theor_data['curve_rg'],
-                                                                 theor_data['curve_rxs'],
+                                                                 theor_data['curve_rxs1'],
                                                                  theor_data['volume'])        
         
         for dataset in theor_data['rfac']:
@@ -409,8 +409,8 @@ def output_expt_summary(neut_data, xray_data, output_path, title):
     
     for curve in neut_data + xray_data:
         expt_data.write("{0:s}\t{1:7.4f}\t{2:7.4f}\n".format(curve['file'],
-                                                             curve['rg'],
-                                                             curve['rxs']))
+                                                             curve['curve_rg'],
+                                                             curve['curve_rxs1']))
     expt_data.close()        
     
     return
@@ -442,7 +442,7 @@ def process_expt_data(neutron_files, neutron_unit, xray_files, xray_unit, output
     @param param:          Dictionary containing standard SCT parameters
     @rtype:                list, list, dictionary
     @return:               Two lists containing dictionaries of containing the 
-                           experimental data ('data'), Rg ('rg'), Rxs1 ('rxs') 
+                           experimental data ('data'), Rg ('curve_rg'), Rxs1 ('curve_rxs1') 
                            and filename ('file'). One dictionary containing the 
                            paths created for the neutron models and data 
                            ('dry_model' and 'scn') and the same for xrays

@@ -93,11 +93,11 @@ def read_scatter_curves(curve_files, units, param):
                                                 param['rfac']['qmax'])
 
 
-        curve['rg'], curve['rxs'] = get_curve_descriptors(curve['data'],
-                                                  param['rg']['fitmin'],
-                                                  param['rg']['fitmax'],
-                                                  param['rxs1']['fitmin'],
-                                                  param['rxs1']['fitmax'])
+        curve.update(get_curve_descriptors(curve['data'],
+                     param['rg']['fitmin'],
+                     param['rg']['fitmax'],
+                     param['rxs1']['fitmin'],
+                     param['rxs1']['fitmax']))
 
         curves.append(curve)
 
@@ -492,42 +492,53 @@ def output_sas_curve(curve, filename):
         output.write("{0:7.4f} {1:7.4f}\n".format(qi_pair[0], qi_pair[1]))
     output.close()
 
-def get_curve_descriptors(curve, rg_min, rg_max, rxs_min, rxs_max):
+def get_curve_descriptors(curve, rg_min, rg_max, rxs1_min, rxs1_max, *args):
     """
     Calculate the Rg and Rxs1 from linear fits to the functions of the input
     curve values (q, I). In the case of Rg the Guinier fit is to q^2 vs ln(I),
     for Rxs1 it is to q^2 vs ln(I*q).
 
-    @type  curve:    numpy array
-    @param curve:    Two dimensional array containing scattered vector
-                     magnitudes, q, and intensities, I.
-    @type  rg_min:   float
-    @param rg_min:   Minimum q value to use in Guinier fit to compute Rg
-    @type  rg_max:   float
-    @param rg_max:   Maximum q value to use in Guinier fit to compute Rg
-    @type  rxs_min:  float
-    @param rxs_min:  Minimum q value to use in linear fit to compute Rxs1
-    @type  rxs_max:  float
-    @param rxs_min:  Maximum q value to use in linear fit to compute Rxs1
-    @rtype:          float, float
+    @type  curve:     numpy array
+    @param curve:     Two dimensional array containing scattered vector
+                      magnitudes, q, and intensities, I.
+    @type  rg_min:    float
+    @param rg_min:    Minimum q value to use in Guinier fit to compute Rg
+    @type  rg_max:    float
+    @param rg_max:    Maximum q value to use in Guinier fit to compute Rg
+    @type  rxs1_min:  float
+    @param rxs1_min:  Minimum q value to use in linear fit to compute Rxs1
+    @type  rxs1_max:  float
+    @param rxs1_max:  Maximum q value to use in linear fit to compute Rxs1
+    @type  args:      list  
+    @param args:      List which allows the optional specification of maximum 
+                      and minimum q values for a Rxs2 calculation (both should 
+                      values checked should be floats)
+    @rtype:           float, float
     @return:         
                      - Rg value calculated from curve fit
                      - Rxs value calculated from curve fit
     """
 
-    # Create mask to select range of q values for Rg fitting
-    rg_mask = (curve[:,0] > rg_min) & (curve[:,0] < rg_max)
-    # Create mask to select range of q values for Rxs fitting
-    rxs_mask = (curve[:,0] > rxs_min) & (curve[:,0] < rxs_max)
-
     # Fitting is performed on:
     # q^2 vs ln(I) for Rg
-    # q^2 vs ln(I*q) for Rxs1
+    # q^2 vs ln(I*q) for Rxs
     x = curve[:,0]**2
     y_rg = np.log(curve[:,1])
     y_rxs = np.log(curve[:,1] * curve[:,0])
 
-    rg_result = sas_curve_fit(x[rg_mask], y_rg[rg_mask], 'rg')
-    rxs_result = sas_curve_fit(x[rxs_mask], y_rxs[rxs_mask], 'rxs1')
+    # Create mask to select range of q values for Rg fitting
+    rg_mask = (curve[:,0] > rg_min) & (curve[:,0] < rg_max)
+    # Create mask to select range of q values for Rxs1 fitting
+    rxs1_mask = (curve[:,0] > rxs1_min) & (curve[:,0] < rxs1_max)
 
-    return rg_result['r'], rxs_result['r']
+    result = {}
+
+    result['curve_rg'] = sas_curve_fit(x[rg_mask], y_rg[rg_mask], 'rg')['r']
+    result['curve_rxs1'] = sas_curve_fit(x[rxs1_mask], y_rxs[rxs1_mask], 'rxs1')['r']
+    
+    if len(args) > 2:
+        # Create mask to select range of q values for Rxs2 fitting
+        rxs2_mask = (curve[:,0] > args[0]) & (curve[:,0] < args[1])
+        result['curve_rxs2'] = sas_curve_fit(x[rxs2_mask], y_rxs[rxs2_mask], 'rxs2')['r']
+
+    return result
