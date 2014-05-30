@@ -107,11 +107,11 @@ def main():
     summary_name = os.path.join(args.output_path, args.title + '.sum')
     summary_data = open(summary_name,'w')
     
-    # Print the header for the summary data from sphere model analysis:
+    # Print the header for the summary data from sphere model analysis (Rxs2 added after Rxs1 if a range is supplied in param):
     # Path to input PDBs
     # Neutron                                                              X-ray                                       
     # Model Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
-    sct.tasks.write_summary_header(args.input_path, args.neutron, args.xray, summary_data)
+    sct.tasks.write_summary_header(args.input_path, args.neutron, args.xray, param, summary_data)
     
     # Get list of PDBs in the input directory
     pdb_filter = os.path.join(args.input_path, '*.pdb')
@@ -137,8 +137,8 @@ def main():
         pdb_id = os.path.splitext(pdb_basename)[0]
     
         # Format the modelling output data for printing
-        neut_summ = sct.tasks.sas_model_summary_output(dry_data)
-        xray_summ = sct.tasks.sas_model_summary_output(wet_data)
+        neut_summ = sct.tasks.sas_model_summary_output(dry_data, param)
+        xray_summ = sct.tasks.sas_model_summary_output(wet_data, param)
     
         # Output all summary data to file
         summary_data.write('{0:s}\t{1:s}{2:s}\n'.format(pdb_id,

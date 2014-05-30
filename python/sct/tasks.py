@@ -249,13 +249,14 @@ def create_rfac_header_text(data_files):
                        
     return rfact_head
 
-def  write_summary_header(in_pdb, in_neut, in_xray, output):
+def  write_summary_header(in_pdb, in_neut, in_xray, param, output):
     """
     Print the header for the summary data from sphere model analysis. 
     When properties of the sphere model are references dry models are 
     associated with neutrons and hydrated (wet) ones with x-rays.
     The header has the following format (in the final version it is tab 
-    separated) except without the line numbering:
+    separated) except without the line numbering (also a Rxs2 cloumn is added 
+    after Rxs1 if a range is supplied in param):
 
     0 Path to input PDBs
 
@@ -278,12 +279,23 @@ def  write_summary_header(in_pdb, in_neut, in_xray, output):
     neut_rfact_head = create_rfac_header_text(in_neut)
     xray_rfact_head = create_rfac_header_text(in_xray)
 
-    # Header 0
-    output.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\t\tX-ray\n")
-    # Header 1
-    output.write("\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
-    # Header 2
-    basic_head = "Rg_model\tRg_curve\tRxs1_curve\tVolume\t"
+
+    if 'rxs2' in param:
+        # Header 0
+        output.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\t\tX-ray\n")
+        # Header 1
+        output.write("\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
+        # individual column headings for header 2
+        basic_head = "Rg_model\tRg_curve\tRxs1_curve\tRxs2_curve\tVolume\t"
+    else:
+        # Header 0
+        output.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\t\tX-ray\n")
+        # Header 1
+        output.write("\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
+        # individual column headings for header 2
+        basic_head = "Rg_model\tRg_curve\tRxs1_curve\tVolume\t"
+        
+    # Header 2        
     col_head = "Model\t" + basic_head + neut_rfact_head[2] + '\t' + basic_head + xray_rfact_head[2] + "\n"
     output.write(col_head)
     
