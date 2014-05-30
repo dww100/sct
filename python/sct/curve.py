@@ -93,12 +93,21 @@ def read_scatter_curves(curve_files, units, param):
                                                 param['rfac']['qmax'])
 
 
-        curve.update(get_curve_descriptors(curve['data'],
-                     param['rg']['fitmin'],
-                     param['rg']['fitmax'],
-                     param['rxs1']['fitmin'],
-                     param['rxs1']['fitmax']))
 
+        if 'rxs2' in param:
+             curve.update(get_curve_descriptors(curve['data'],
+             param['rg']['fitmin'],
+             param['rg']['fitmax'],
+             param['rxs1']['fitmin'],
+             param['rxs1']['fitmax'],
+             param['rxs2']['fitmin'], param['rxs2']['fitmax']))
+        else:
+            curve.update(get_curve_descriptors(curve['data'],
+             param['rg']['fitmin'],
+             param['rg']['fitmax'],
+             param['rxs1']['fitmin'],
+             param['rxs1']['fitmax']))
+            
         curves.append(curve)
 
     return curves
@@ -536,7 +545,7 @@ def get_curve_descriptors(curve, rg_min, rg_max, rxs1_min, rxs1_max, *args):
     result['curve_rg'] = sas_curve_fit(x[rg_mask], y_rg[rg_mask], 'rg')['r']
     result['curve_rxs1'] = sas_curve_fit(x[rxs1_mask], y_rxs[rxs1_mask], 'rxs1')['r']
     
-    if len(args) > 2:
+    if len(args) > 1:
         # Create mask to select range of q values for Rxs2 fitting
         rxs2_mask = (curve[:,0] > args[0]) & (curve[:,0] < args[1])
         result['curve_rxs2'] = sas_curve_fit(x[rxs2_mask], y_rxs[rxs2_mask], 'rxs2')['r']

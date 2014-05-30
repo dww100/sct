@@ -118,7 +118,8 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, neutron=False
                            model.
                            - curve_rxs1: Cross-section calculated from the
                            theoretical scattering curve derived from the sphere
-                           model.
+                           model. If an rxs2 range is provided in param then 
+                           a 'curve_rxs2' will also be returned.
                            - rfac: R factor comparing experimental and
                            theoretical scattering curves.
     """
@@ -135,11 +136,21 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, neutron=False
                                                 rbins = param['curve']['radbins'])
 
     # Rg and Rxs from theoretical curve
-    result.update(curve.get_curve_descriptors(result['curve'],
-                  param['rg']['fitmin'],
-                  param['rg']['fitmax'],
-                  param['rxs1']['fitmin'],
-                  param['rxs1']['fitmax']))
+    if 'rxs2' in param:
+        result.update(curve.get_curve_descriptors(result['curve'],
+                      param['rg']['fitmin'],
+                      param['rg']['fitmax'],
+                      param['rxs1']['fitmin'],
+                      param['rxs1']['fitmax'],
+                      param['rxs2']['fitmin'], 
+                      param['rxs2']['fitmax']))
+    else:
+        result.update(curve.get_curve_descriptors(result['curve'],
+                      param['rg']['fitmin'],
+                      param['rg']['fitmax'],
+                      param['rxs1']['fitmin'],
+                      param['rxs1']['fitmax']))
+
 
     # Neutron curves are usually smeared with parameters for the instrument used
     if (neutron and param['curve']['smear']):
@@ -405,10 +416,22 @@ def output_expt_summary(neut_data, xray_data, output_path, title):
     # Output summary analysis of the experimental data curves
     expt_name = os.path.join(output_path, title + '_expt.sum')
     expt_data = open(expt_name,'w')
-    expt_data.write("Filename\tRg\tRxs1\n")
     
-    for curve in neut_data + xray_data:
-        expt_data.write("{0:s}\t{1:7.4f}\t{2:7.4f}\n".format(curve['file'],
+    all_curves = neut_data + xray_data   
+    
+    if 'curve_rxs2' in all_curves[0]:
+        expt_data.write("Filename\tRg\tRxs1\tRxs2\n")
+    else:
+        expt_data.write("Filename\tRg\tRxs1\n")
+    
+    for curve in all_curves:
+        if 'curve_rxs2' in curve:
+            expt_data.write("{0:s}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\n".format(curve['file'],
+                                                             curve['curve_rg'],
+                                                             curve['curve_rxs1'],
+                                                             curve['curve_rxs2']))
+        else:                                                     
+            expt_data.write("{0:s}\t{1:7.4f}\t{2:7.4f}\n".format(curve['file'],
                                                              curve['curve_rg'],
                                                              curve['curve_rxs1']))
     expt_data.close()        
