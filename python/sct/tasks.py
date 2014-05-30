@@ -207,7 +207,7 @@ def sas_model_summary_output(theor_data, param):
 
     if len(theor_data) > 0:
         if 'rxs2' in param:
-            summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t".format(theor_data['model_rg'],
+            summ = "{0:7.4f}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}\t".format(theor_data['model_rg'],
                                                          theor_data['curve_rg'],
                                                          theor_data['curve_rxs1'],
                                                          theor_data['curve_rxs2'],
