@@ -179,8 +179,6 @@ def pdb_res_line_parse(line):
     if record in ['ATOM','HETATM']:
 
         data = parse_line(line, PDB_ATOM_RECORD)
-        print line
-        print data
         if data['res_id'] in accept_resids:
         # Split data on the line according to column definitions for PDB files
         # Ignore residues that we can't handle in SCT
