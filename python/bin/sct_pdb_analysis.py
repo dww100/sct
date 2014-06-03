@@ -125,16 +125,23 @@ def main():
     
     # Loop over input PDBs
     for pdb in pdb_files:
-    
-        # Create sphere models, compute scattering curves and compare to 
-        # experimental curves
-        # Dry models are compared to neutron data, wet to xray data.
-        dry_data, wet_data = sct.tasks.perform_sas_analysis_pdb(pdb, 
-                                                      neut_data, 
-                                                      xray_data, 
-                                                      param, 
-                                                      out_paths)
-    
+
+        try: 
+            # Create sphere models, compute scattering curves and compare to 
+            # experimental curves
+            # Dry models are compared to neutron data, wet to xray data.
+            dry_data, wet_data = sct.tasks.perform_sas_analysis_pdb(pdb, 
+                                                          neut_data, 
+                                                          xray_data, 
+                                                          param, 
+                                                          out_paths)
+
+        except IOError, e: 
+            print "Error loading PDB file name %s: %s" % (args.input_filename, e)
+            continue
+
+   
+ 
         pdb_basename = os.path.basename(pdb)
         pdb_id = os.path.splitext(pdb_basename)[0]
     
