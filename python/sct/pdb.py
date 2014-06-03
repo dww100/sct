@@ -156,7 +156,7 @@ def parse_line(line, schema):
         vals[record] = fn(line[start:end])
     return vals
 
-def pdb_res_line_parse(line):
+def pdb_res_line_parse(line, filename):
     """Parse a single line from a PDB file into a dictionary according to
     the standard PDB column definitions
 
@@ -186,6 +186,7 @@ def pdb_res_line_parse(line):
 
             data['coords'] = [data['x'], data['y'], data['z']]
         else:
+            print "File %s contains unknown residue %s" % (filename, data['res_id'])
             data = {}
     else:
         data = {}
@@ -218,7 +219,7 @@ def read_pdb_atom_data (filename):
     # ATOM and HETATM records are interpretted - others ignored
     with open(filename) as f:
         for line in f:
-            data = pdb_res_line_parse(line)
+            data = pdb_res_line_parse(line, filename)
 
             if len(data) != 0:
                 atom_coords.append(data['coords'])
@@ -323,7 +324,7 @@ def process_pdb_psf(psf_filename, pdb_filename):
     with open(pdb_filename) as f:
         for line in f:
             if line[:6].strip() in ['ATOM', 'HETATM']:
-                data = pdb_res_line_parse(line)
+                data = pdb_res_line_parse(line, pdb_filename)
                 tmp_atoms.append(data)        
         
         if len(tmp_atoms) != n_atoms:
