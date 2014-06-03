@@ -76,9 +76,13 @@ def main():
     # Process command line inputs
     args = parse_arguments()
 
-    # Read in the residues frequencies (to calculate target volume) and
-    # atomic coordinates from input PDB
-    res_freq, atom_coords = sct.pdb.read_pdb_atom_data(args.input_filename)
+    try:
+      # Read in the residues frequencies (to calculate target volume) and
+      # atomic coordinates from input PDB
+      res_freq, atom_coords = sct.pdb.read_pdb_atom_data(args.input_filename)
+    except IOError, e: # catch *all* exceptions
+      print "Error loading PDB file name %s: %s" % (args.input_filename, e)
+      sys.exit()
 
     if args.parameter_file == None:
         cutoff = args.cutoff
