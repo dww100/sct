@@ -118,7 +118,7 @@ PSFEXT_ATOM_RECORD = (
 # We will accept either standard or CHARMM residue naming
 accept_resids = seq.all_residues + charmm_residues + charmm_three_char
 
-def parse_line(line, schema):
+def parse_line(line, schema, filename):
     """
     Parse an atom record line from a PDB or PSF file via schema.
     Based on the PDB parsing code written by Alisue (lambdalisue@hashnote.net):
@@ -153,7 +153,13 @@ def parse_line(line, schema):
             end = start + 1
         if fn is None:
             fn = string.strip
-        vals[record] = fn(line[start:end])
+        try:
+            vals[record] = fn(line[start:end])
+        except ValueError, e:
+            print "Error: File %s contains a line which could not be parsed according to the schema." % filename
+            print "Python error message: %s" % e
+            print "Line contents:", line
+            raise IOError("Error parsing %s, ignoring this pdb file." % filename)
     return vals
 
 def pdb_res_line_parse(line, filename):
@@ -178,7 +184,7 @@ def pdb_res_line_parse(line, filename):
     
     if record in ['ATOM','HETATM']:
 
-        data = parse_line(line, PDB_ATOM_RECORD)
+        data = parse_line(line, PDB_ATOM_RECORD, filename)
         if data['res_id'] in accept_resids:
         # Split data on the line according to column definitions for PDB files
         # Ignore residues that we can't handle in SCT
@@ -186,7 +192,7 @@ def pdb_res_line_parse(line, filename):
 
             data['coords'] = [data['x'], data['y'], data['z']]
         else:
-            print "File %s contains unknown residue %s" % (filename, data['res_id'])
+            raise IOError("Error: File %s contains unknown residue %s" % (filename, data['res_id']))
             data = {}
     else:
         data = {}
@@ -289,7 +295,7 @@ def read_psf(filename):
     
     for ii in xrange(n_atoms):
         line = psf_file.readline()
-        atoms.append(parse_line(line, schema))
+        atoms.append(parse_line(line, schema, filename))
 
     psf_file.close()
     
