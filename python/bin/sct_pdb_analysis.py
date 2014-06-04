@@ -79,6 +79,9 @@ def parse_arguments():
 
 def main():
 
+    print "Running modern SCT workflow"
+    print "---------------------------\n"
+
     args = parse_arguments()
     
     # Read in parameters and check we have those we need for the workflow
@@ -93,7 +96,8 @@ def main():
     # Create output directory and open file for summary output
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
-
+    
+    print "> Processing experimental data"
     # Read in experimental curves and calculate Rg and Rxs
     # Setup output directories for theoretical curves and sphere models
     # Output summary analysis of the experimental data curves
@@ -123,8 +127,13 @@ def main():
         print "Error: No PDB files found to analyze"
         sys.exit(1)
     
+    print "> Analyzing input PDBs"    
+    
     # Loop over input PDBs
-    for pdb in pdb_files:
+    for count, pdb in enumerate(pdb_files):
+        
+        if (count % 20 == 0):
+            print "\tProcessing PDB number " + str(count)
 
         try: 
             # Create sphere models, compute scattering curves and compare to 
@@ -155,6 +164,8 @@ def main():
                                                         xray_summ))
     
     summary_data.close()
+    
+    print "Done"
 
 if __name__ == "__main__":
     main()
