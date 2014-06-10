@@ -45,7 +45,12 @@ def load_scatter_curve(filename, q_min, q_max):
                       intensity, I, values.
     """
 
-    scatter_data = np.loadtxt(filename)
+    try:
+        scatter_data = np.loadtxt(filename)
+    except:
+        # Maybe the file has a headerline?
+        scatter_data = np.loadtxt(filename, skiprows = 1)
+        
     qrange_mask = (scatter_data[:,0] >= q_min) & (scatter_data[:,0] <= q_max)
 
     return scatter_data[qrange_mask]
