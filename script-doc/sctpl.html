@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+  <script src="http://math.etsu.edu/LaTeXMathML/LaTeXMathML.js" type="text/javascript"></script>
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="sctpl---calculate-radii-of-gyration-from-scattering-curves">sctpl - Calculate Radii of Gyration From Scattering Curves</h1>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>sctpl</code></pre>
+<p>This will produce the following prompts, you should provide the inputs shown in <em>italics</em>. Individual values to input are surrounded by square braces. When multiple values are requires they can either be separated by a space on the same line or entered on separate lines. The meaning of the input values are explained in the <strong>Notes</strong> section.</p>
+<p>Enter data type (model [m] or exptl [x]): <em>[curve type]</em></p>
+<p>Enter title of plot: <em>[title]</em></p>
+<p>Number of curves? [1] <em>[no. curves]</em></p>
+<p>Enter name of file containing data: <em>[input file]</em></p>
+<p>Smearing (y/n)? <em>[smearing]</em></p>
+<p>Type of plot: 0 Ln(IQQ) / Q<em>Q: Thickness RG 1 Ln(IQ) / Q</em>Q: Cross-sectional RG 2 Ln(I) / Q<em>Q: Overall RG; Guinier plot 3 Ln(I) / Q: Wide Angle 4 I / Q 5 I</em>Q*Q / Q: Volume plot</p>
+<p>Choose one of the above [3]: <em>[plot type]</em> Which Q range to plot (Q1, Q2; Q1 &lt; Q2) <em>[Q min]</em> <em>[Q max]</em></p>
+<p>Which Q range to fit a line to (Q3, Q4; Q3 &lt; Q4)? <em>[fit min]</em> <em>[fit max]</em></p>
+<p>Choose a plot style: Join the dots, no symbols [0]: Symbols only [1]: Dots and symbols [2]. <em>[plot style]</em></p>
+<p>Take your pick: 1) Get another; 2) Add another; 3) Change axes' ranges; 4) Start again; 5) Manual R-factor; 6) Auto R-factor; 7) Change a given plot's attributes; 8) Save selected plots as ASCII; 9) Screen dump; 10) Redisplay a given plot; 11) Remove a plot; 12) Quit: <em>[menu choice]</em></p>
+<h2 id="notes">Notes:</h2>
+<p>The original <em>sctpl</em> performed plotting, this is not a current feature but the options remain for compatibility with old scripts. Plotting and fitting can now be performed using <em>sas_curve_analysis.py</em>.</p>
+<p><em>curve type</em> = choose of model [m] or exptl [x] curve</p>
+<p><em>title</em> = title for plot</p>
+<p><em>no. curves</em> = number of curves to analyse</p>
+<p><em>input file</em> = path to input scattering curve (with <span class="LaTeX">$I$</span> and <span class="LaTeX">$Q$</span> columns).</p>
+<p><em>smearing</em> = should the curve be smeared</p>
+<p><em>plot type</em> = choice from 'Type of plot' menu shown above. This defines the radius of gyration type to be out put:</p>
+<p>0 radius of gyration (<span class="LaTeX">$R_{g}$</span>) 1 cross sectional <span class="LaTeX">$R_{g}$</span> (usually called <span class="LaTeX">$R_{xs1}$</span>) 2 thickness <span class="LaTeX">$R_{g}$</span> (usually called <span class="LaTeX">$R_{xs2}$</span>)</p>
+<p><em>Q min</em> = minimum Q value for plot</p>
+<p><em>Q max</em> = maximum Q value for plot</p>
+<p><em>fit min</em> = minimum Q value for fit</p>
+<p><em>fit max</em> = maximum Q value for fit</p>
+<p><em>plot style</em> = type of points used in plot</p>
+<p><em>menu choice</em> = choice from 'Take your pick' menu</p>
+<h2 id="output">Output:</h2>
+<p><em>sctpl</em> produces a single output file in the current directory called 'Sctpl6_Summary'.</p>
+<p>This has the following format:</p>
+<pre><code>*input file*,*calc type* ,*title*, *fit Q range*, *fit points*, *result*, *result error*,*I0*, *I0 error*</code></pre>
+<p><em>calc type</em> = + RG = radius of gyration (<span class="LaTeX">$R_{g}$</span>) + RXS = cross sectional <span class="LaTeX">$R_{g}$</span> (usually called <span class="LaTeX">$R_{xs1}$</span>) + RTH = thickness <span class="LaTeX">$R_{g}$</span> (usually called <span class="LaTeX">$R_{xs2}$</span>)</p>
+<p><em>fit Q range</em> = <em>Q min</em> -&gt; <em>Q max</em></p>
+<p><em>fit points</em> = points on teh input curve that correspond to <em>fit Q range</em></p>
+<p><em>result</em> = result of the radius of gyration calculation in the units of the inverse of the input Q values</p>
+<p><em>result err</em> = uncertainty in the <em>result</em> from curve fitting</p>
+<p><em>I0</em> = extrapolated <span class="LaTeX">$I_{0}$</span> value</p>
+<p><em>I0 error</em> = uncertainty in the <span class="LaTeX">$I_{0}$</span> value from curve fitting</p>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

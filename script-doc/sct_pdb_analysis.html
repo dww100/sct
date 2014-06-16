@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+  <script src="http://math.etsu.edu/LaTeXMathML/LaTeXMathML.js" type="text/javascript"></script>
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="sct_pdb_analysis---run-the-full-sct-constrained-modelling-pipeline">sct_pdb_analysis - Run the Full SCT Constrained Modelling Pipeline</h1>
+<p>This script combines the functions of all of the other SCT programs to perform the full sphere modelling pipeline. This involves:</p>
+<p>Reading input experimental curves, separated into Neutron and X-ray categories.</p>
+<ol style="list-style-type: decimal">
+<li>Calculating Rg and Rxs1 from the data and writing to a file</li>
+<li>Creating unhydrated sphere models</li>
+<li><strong>IF</strong> we have Neutron data:
+<ul>
+<li>Calculating theoretical scattering curves</li>
+<li>Comparing theoretical and experimental curves - R factor or <span class="LaTeX">$\chi^{2}$</span></li>
+</ul></li>
+<li><strong>IF</strong> we have X-ray data:
+<ul>
+<li>Creating hydrated sphere model</li>
+<li>Calculating theoretical scattering curve</li>
+<li>Comparing theoretical and experimental curves - R factor or <span class="LaTeX">$\chi^{2}$</span></li>
+</ul></li>
+<li>Writing Rg, Rxs1 and comparison data to a file</li>
+</ol>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>sct_pdb_analysis.py [-h] -i [INPUT_PATH] [-o [OUTPUT_PATH]]
+                    -p [PARAMETER_FILE] [-x XRAY [XRAY ...]]
+                    [-n NEUTRON [NEUTRON ...]] [-t [TITLE]]
+                    [-xu {nm,a}] [-nu {nm,a}] [-ou {nm,a}]
+                    [--chi2]</code></pre>
+<h2 id="arguments">Arguments:</h2>
+<pre><code>-i [INPUT_PATH], --input_path [INPUT_PATH]
+                        Path to the input PDB files
+-o [OUTPUT_PATH], --output_path [OUTPUT_PATH]
+                        Path in which to save output files
+-p [PARAMETER_FILE], --parameter_file [PARAMETER_FILE]
+                        Path to a file containing input parameters
+-x XRAY [XRAY ...], --xray XRAY [XRAY ...]
+                        Paths to files containing experimental x-ray
+                        scattering curve
+-n NEUTRON [NEUTRON ...], --neutron NEUTRON [NEUTRON ...]
+                        Paths to files containing experimental neutron
+                        scattering curve
+-t [TITLE], --title [TITLE]
+                        Title to use for summary output file
+-xu {nm,a}, --xray_unit {nm,a}
+                        Unit for Q in input x-ray data
+-nu {nm,a}, --neutron_unit {nm,a}
+                        Unit for Q in input neutron data
+-ou {nm,a}, --output_unit {nm,a}
+                        Unit for Q in output data
+--chi2
+                        Chose to use Chi squared rather than R factor</code></pre>
+<h2 id="notes">Notes:</h2>
+<p>Default TITLE = sct_output</p>
+<h2 id="output">Output:</h2>
+<p>Summary file (named <em>TITLE_expt.sum</em>) of the input experimental curves with the following columns:</p>
+<pre><code>Filename        Rg      Rxs1</code></pre>
+<p>Summary file (named <em>TITLE.sum</em>) of the model data and comparison with experiment with the following header and columns:</p>
+<pre><code>Input PDB path: name_edited_pdbs/
+       Neutron                                                 X-ray
+                                               neutron_file                                            xray_file
+Model  Rg_model  Rg_curve  Rxs1_curve  Volume  Rfactor  scale  Rg_model  Rg_curve  Rxs1_curve  Volume  Rfactor  scale</code></pre>
+<p>The Model column contains the name of the input PDB file. The headings Rg_model, Rg_curve, Rxs1_curve and Volume are repeated twice. The first set is for the unhydrated model used for comparison to the neutron data, the second for the hydrated model used for x-ray comparisons. After each are the comparisons for each experimental data file (Rfactor/Chi2 and scale). These headings are repeated for each input experimental curve. The scale factor provided is the I(0) value that can be used to match the I(Q)/I(0) theoretical curve to the experimental data.</p>
+<p>In the OUTPUT_PATH two sets of directories are created: <em>xray/{curve,models}</em> <em>neutron/{curve,models}</em></p>
+<p>These contain the sphere models and the theoretical curves.</p>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

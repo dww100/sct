@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="sluv---calculate-volume-and-other-properties-from-sequence">sluv - Calculate Volume and Other Properties from Sequence</h1>
+<p>Calculate molecular weight the partial specific volume and the molecular extinction coefficient of proteins (and glycoproteins) from their residue composition.</p>
+<p>Key references and sources of data are:</p>
+<ul>
+<li><p>S. J. Perkins (1986). Protein volumes and hydration effects: The calculations of partial specific volumes, neutron scattering matchpoints and 280-nm absorption coefficients for proteins and glycoproteins from amino acid sequences. Eur. J. Biochem. 157, 169-180</p></li>
+<li><p>S. J. Perkins (2001). X-ray and neutron scattering analyses of hydration shells: a molecular interpretation based on sequence predictions and model fits. Biophysical Chemistry 93, 129-139</p></li>
+</ul>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>sluv &lt; INPUT_FILE</code></pre>
+<p>INPUT_FILE is a specifically formated file containing residue frequencies (see <strong>Notes</strong>).</p>
+<h2 id="notes">Notes:</h2>
+<p>The input file for sluv contains residue frequencies in a particular order and should be generated from the <a href="sluv_input_template">input template</a>, all lines must be retained but edited as follows:</p>
+<ul>
+<li>&quot;Template 0&quot; can be replaced with any title</li>
+<li>Delete each 3-letter code amino acid/glycan code and replace it by the frequency of that residue in the sequence</li>
+</ul>
+<h2 id="output">Output:</h2>
+<p>The program spews a lot of data out to stdout (it may well be adviseable to pipe this to a file for future reference). The most important parameters are found in the secton titled:</p>
+<pre><code>************* TOTAL GLYCOPROTEIN ********************************************</code></pre>
+<p>Important values provided include:</p>
+<pre><code>MOLECULAR WEIGHT
+EXTINCTION COEFF (280 NM)</code></pre>
+<p>and the values in the CON85 columns (the consensus values from Perkins 1986) for</p>
+<pre><code>VOLUME
+SPECIFIC VOLUMES</code></pre>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

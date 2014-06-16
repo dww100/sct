@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="hypro---add-hydration-layer-to-a-sphere-model">hypro - Add Hydration Layer to a Sphere Model</h1>
+<p>Add a hydration layer to a sphere model created by <em>brktos</em> (text files consisting of four columns (column width of 10 characters, 2 decimal places for the X, Y and Z coordinates plus sphere radius, output is the same format).</p>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>hypro</code></pre>
+<p>This will produce the following prompts, you should provide the inputs shown in <em>italics</em>. Individual values to input are surrounded by square braces. When multiple values are requires they can either be separated by a space on the same line or entered on separate lines. The meaning of the input values are explained in the <strong>Notes</strong> section.</p>
+<p>Input file : <em>[input dry model]</em></p>
+<p>Output File <em>[output hydrated model]</em></p>
+<p>How many spheres [1,7,13,19,27 Recomended] <em>[hydration no]</em></p>
+<h2 id="notes">Notes:</h2>
+<ul>
+<li><em>input dry model</em> = path to the input dry sphere model file</li>
+<li><em>output hydrated model</em> = path to output hydrated sphere model file</li>
+<li><em>hydration no</em> = A number between 1 and 27 of spheres which will appear in the final model. A choice of 1 puts one sphere in the position in the original model, 27 puts one there plus one at each of the corners and interstitial sites of a cube centred on the original sphere with a dimension of double the sphere radius.</li>
+</ul>
+<p>A sensible route to a good hydrated model is to convert the hydrated sphere model to a PDB and use brktos to filter out spheres (with a low cut off) and then add back in the original file. Duplicate spheres can be removed with another run through brktos. The cut off value and number of spheres added should be altered to match the appropriate hydrated volume calculated from sluv. An equivalent method to this is employed in do_curve.sh, hydrate_spheres.py and sct_pdb_analysis.py.</p>
+<h2 id="output">Output:</h2>
+<p>Coordinates: A text file consisting of four columns (column width of 10 characters, 2 decimal places). Columns are X, Y, Z coordinates and sphere radius. The radius found in the input file is used for all spheres.</p>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

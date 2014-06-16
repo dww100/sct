@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="sct_get_sequence---convert-fasta-or-pdb-file-to-yaml-residue-frequency-file">sct_get_sequence - Convert Fasta or PDB File to YAML Residue Frequency File</h1>
+<p>Convert fasta or pdb file to yaml residue frequency file.</p>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>sct_get_sequence.py [-h] -i [INPUT_FILENAME] [-p]
+                           [-o [OUTPUT_FILENAME]]</code></pre>
+<p>Arguments:</p>
+<pre><code>  -h, --help            show this help message and exit
+  -i [INPUT_FILENAME], --input_filename [INPUT_FILENAME]
+                        Path to the input fasta/pdb file
+  -p, --pdb             Flag to indicate input is a PDB rather than fasta file
+  -o [OUTPUT_FILENAME], --output_filename [OUTPUT_FILENAME]
+                        Path to the output file</code></pre>
+<h2 id="notes">Notes:</h2>
+<h2 id="output">Output:</h2>
+<p>A YAML file with lines of the following format</p>
+<p>where resid <a href="*frequency*">Resid</a> is a three letter residue code and <em>frequency</em> is the number of occurences in the input sequence.</p>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

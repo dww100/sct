@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="aps---calculation-of-radius-of-gyration-from-sphere-models">aps - Calculation of Radius of Gyration from Sphere Models</h1>
+<p>Calculates the radius of gyration directly from the coordinates of a sphere model. Also produces some other summary data.</p>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>aps &lt; INPUT_MODEL</code></pre>
+<h2 id="notes">Notes:</h2>
+<p>INPUT_MODEL is a file containing a sphere model. This file must be a four column text file (column width of 10 characters, 2 decimal places). Columns are X, Y, Z coordinates and sphere radius. With some options brktos will produce sphere model files with additional data at the bottom, this must be removed before they are used as input to <em>aps</em>.</p>
+<h2 id="output">Output:</h2>
+<p>Text giving summary of input file (no. spheres, model volume, etc). and the radius of gyration in Angstrom. Full output contains the following lines:</p>
+<pre><code> COORDINATE READ-IN DONE : TOTAL IS  
+
+ SEMIAXES OF RECT. PRISM    =       
+ RADIUS OF GYRATION OF SINGLE RECT PRISM =  
+ VOLUME OF SINGLE BOX =             
+ TOTAL VOLUME OF ALL BOXES   =     
+
+ NO OF COORDINATES =     
+ SUM OF ALL X,Y,Z COORDS =     
+ MEAN X,Y,Z COORDS ARE       
+ RADIUS OF UNIT WEIGHT=     
+ SUM OF RADII SQ      =   
+
+ RADIUS OF GYRATION   =  </code></pre>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

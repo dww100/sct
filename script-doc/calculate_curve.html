@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+  <script src="http://math.etsu.edu/LaTeXMathML/LaTeXMathML.js" type="text/javascript"></script>
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="calculate_curve---calculate-scattering-curve-from-a-sphere-model">calculate_curve - Calculate Scattering Curve from a Sphere Model</h1>
+<p>Calculate scattering curve from sphere model</p>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>calculate_curve.py [-h] -i [INPUT_FILENAME] [-o [OUTPUT_FILENAME]]
+                   [-p [PARAMETER_FILE]] [-q [Q_MAX]] [-r [RADIUS]]
+                   [-b [N_BINS]] [-n [N_POINTS]] [-s] [-e [SPREAD]]
+                   [-w [WAVELENGTH]] [-d [DIVERGENCE]]
+</code></pre>
+<h2 id="arguments">Arguments:</h2>
+<pre><code>  -h, --help            show this help message and exit
+  -i [INPUT_FILENAME], --input_filename [INPUT_FILENAME]
+                        Path to the input PDB file
+  -o [OUTPUT_FILENAME], --output_filename [OUTPUT_FILENAME]
+                        Path to the output file
+  -p [PARAMETER_FILE],  --parameter_file [PARAMETER_FILE]
+                        Path to YAML format SCT parameter file
+  -q [Q_MAX], --q_max [Q_MAX]
+                        Maximum q value in output curve
+  -r [RADIUS], --radius [RADIUS]
+                        Sphere radius
+  -b [N_BINS], --n_bins [N_BINS]
+                        No. bins to use in histogram of sphere separation
+  -n [N_POINTS], --n_points [N_POINTS]
+                        No. points in output curve
+  -s, --smear           Apply smearing to curve
+  -e [SPREAD], --spread [SPREAD]
+                        Wavelength spread used to calculate smearing
+  -w [WAVELENGTH], --wavelength [WAVELENGTH]
+                        Wavelength used to calculate smearing
+  -d [DIVERGENCE], --divergence [DIVERGENCE]
+                        Beam divergence used to calculate smearing</code></pre>
+<h2 id="notes">Notes:</h2>
+<p>If a parameter file is used it is prioritized over any parameters passed via command line flags.</p>
+<p>Defaults:</p>
+<ul>
+<li>q_max = 0.16</li>
+<li>radius = 3.77</li>
+<li>n_bins = 400</li>
+<li>n_points = 100</li>
+<li>spread = 0.1</li>
+<li>wavelength = 6.0</li>
+<li>divergence = 0.016</li>
+</ul>
+<h2 id="output">Output:</h2>
+<p>Two column text file - with Q and I/I(0) columns (floating point numbers as strings formatted using 7.4f in Python).</p>
+<p><span class="LaTeX">$Q$</span> units are Angstrom<span class="LaTeX">$^{-1}$</span>.</p>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

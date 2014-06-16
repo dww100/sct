@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+  <script src="http://math.etsu.edu/LaTeXMathML/LaTeXMathML.js" type="text/javascript"></script>
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="sas_curve_analysis---script-to-analsye-q-and-i-data-from-sas-experiments">sas_curve_analysis - Script to analsye <span class="LaTeX">$Q$</span> and <span class="LaTeX">$I$</span> data from SAS experiments</h1>
+<p>Script to analsye <span class="LaTeX">$Q$</span> and <span class="LaTeX">$I$</span> data from SAS experiments Can produce the following plots and data: wide - Wide Angle: <span class="LaTeX">$Q$</span> vs <span class="LaTeX">$\ln(I)$</span> rg - Radius of gyration/Guinier: <span class="LaTeX">$Q^2$</span> vs <span class="LaTeX">$\ln(I)$</span> rxs1/rxs2 - Rxs1/Rsx2: <span class="LaTeX">$Q^2$</span> vs <span class="LaTeX">$\ln(I*Q)$</span></p>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>sas_curve_analysis.py [-h]
+    (-q QRANGESFILENAME | -r PLOTRANGE PLOTRANGE -f FITRANGE FITRANGE)
+    (-i INPUTFILENAME | --header)
+    [-s SKIPNO]
+    [-o [OUTPUTDIR] [-a {wide,rg,rxs1,rxs2,all}]]
+    [-y YRANGE YRANGE]</code></pre>
+<h2 id="arguments">Arguments:</h2>
+<pre><code>  -i [INPUT_FILENAME], --infile [INPUT_FILENAME]
+                        Path to the input file
+  --header              Output a header alongside output data
+  -p PARAMETER_FILE, --parameter PARAMETER_FILE
+                        Path to YAML format SCT parameter file
+  -r PLOTRANGE PLOTRANGE, --plotrange PLOTRANGE PLOTRANGE
+                        Range of Q to plot
+  -f FIT_RANGE FIT_RANGE, --fitrange FIT_RANGE FIT_RANGE
+                        Range of Q to use in fitting
+  -o [OUTPUT_DIR], --outdir [OUTPUT_DIR]
+                        Path for output files
+  -a {wide,rg,rxs1,rxs2,all}, --analysis {wide,rg,rxs1,rxs2,all}
+                        Type of analysis to run
+  -y Y_RANGE Y_RANGE, --yrange Y_RANGE Y_RANGE
+                        Range of the y-axis of plots; ln(I) for &#39;wide&#39; and
+                        &#39;rg&#39;, ln(I*Q) for &#39;rxs1&#39; and &#39;rxs2&#39;.</code></pre>
+<h2 id="notes">Notes:</h2>
+<p>If a parameter file is used it is prioritized over any parameters passed via command line flags.</p>
+<p>Input is assumed to be columns of data with no header - first column being <span class="LaTeX">$Q$</span> and the second <span class="LaTeX">$I$</span>.</p>
+<p>Output calculations will use the same length units as the input curve.</p>
+<h2 id="output">Output:</h2>
+<p>Graphs:</p>
+<p>A PDF file will be produce showing the appropriate functions of <span class="LaTeX">$Q$</span> and <span class="LaTeX">$I$</span> plotted against one another. Points used in any fitting will be shown in larger dots and with a blue line depicting the linear fit. Calculated values will also be printed to the figure.</p>
+<p>Values:</p>
+<p>For 'rg':</p>
+<p>Will produce four values: [Rg] [Rg * q_min] [Rg * q_max] [I0]</p>
+<p>For 'rxs1' or 'rxs2':</p>
+<p>Will produce four values: [Rxs?] [Rxs? * q_min] [Rxs? * q_max]</p>
+<p>A header for each column can be produced using the --header option.</p>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

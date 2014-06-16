@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="sphere2pdb---convert-a-sphere-model-to-pdb-format">sphere2pdb - Convert a Sphere Model to PDB Format</h1>
+<p>Convert sphere models created by SCT (text files consisting of four columns (for the X, Y and Z coordinates plus sphere radius) to a PDB format. Each sphere is assigned as a SERine C1 atom.</p>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>sphere2pdb.py [-h] -i [INPUT_FILENAME] -o [OUTPUT_FILENAME]</code></pre>
+<p>Arguments:</p>
+<pre><code>  -h, --help            show this help message and exit
+  -i [INPUT_FILENAME], --input_filename [INPUT_FILENAME]
+                        Path to the input file
+  -o [OUTPUT_FILENAME], --output_filename [OUTPUT_FILENAME]
+                        Path to the output file</code></pre>
+<h2 id="notes">Notes:</h2>
+<h2 id="output">Output:</h2>
+<p>A PDB file containing SERine C1 atoms located at the coordinates of the spheres passed as input (the temperature factor column is used for the sphere radius).</p>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="sluv2---calculate-volume-and-other-properties-from-sequence">sluv2 - Calculate Volume and Other Properties from Sequence</h1>
+<p>Calculate the scattering length per unit volume for a protein or glycoprotein from its amino acid and carbohydrate composition.</p>
+<p>This is a reimplementation of the sluv tool originally created by Stephen J. Perkins in 1979. Documentation of the methods used can be found in:</p>
+<ul>
+<li><p>Perkins, S. J. (1986). Protein volumes and hydration effects: The calculations of partial specific volumes, neutron scattering matchpoints and 280-nm absorption coefficients for proteins and glycoproteins from amino acid sequences. Eur. J. Biochem. 157, 169-180</p></li>
+<li><p>Perkins, S. J. (2001). X-ray and neutron scattering analyses of hydration shells: a molecular interpretation based on sequence predictions and model fits. Biophysical Chemistry 93, 129-139</p></li>
+</ul>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>sluv2.py [-h] -i [INPUT_FILE] [-t {fas,pdb,yml}] [-o [OUTPUT_FILE]]
+                [-m {classic,model,auc,project}]</code></pre>
+<p>Arguments:</p>
+<pre><code>  -h, --help            show this help message and exit
+  -i [INPUT_FILE], --input_file [INPUT_FILE]
+                        Path to the input composition file
+  -t {fas,pdb,yml}, --input_type {fas,pdb,yml}
+                        Input file format (pdb, fasta or sluv yaml)
+  -o [OUTPUT_FILE], --output_file [OUTPUT_FILE]
+                        Path to the output file
+  -m {classic,model,auc,project}, --mode {classic,model,auc,project}
+                        Type of analysis to run</code></pre>
+<h2 id="notes">Notes:</h2>
+<p>Whilst the PDB and FASTA file formats are external standards the sluv YAML format contains simple residue name and frequency pairs using the YAML format. An <a href="sluv_in.yml">input template</a> is provided with number of each residue set to 0, replace this value for your system of interest or use <em>sct</em>get_sequence.py_ to generate the YAML file.</p>
+<h2 id="output">Output:</h2>
+<p>'auc' mode selected:</p>
+<pre><code>Molecular Weight:
+Absorption Coefficient x 1.03:
+Specific Volume (Perkins 1986 - Consensus):</code></pre>
+<p>'model' mode selected:</p>
+<pre><code>
+Volume (Perkins 1986 - Amino Acid Crystals):
+Estimated Hydrated Volume:
+</code></pre>
+<p>The estimated hydrated volume comes from assuming that 0.3 g of water is added for each g of protein.</p>
+<p>'project' mode selected:</p>
+<p>The output from both 'auc' and 'model' is produced.</p>
+<p>'classic' mode selected:</p>
+<p>The program spews out a lot of data (it is adviseable to set an output file so this is stored for future reference). The most important parameters are found in the secton titled:</p>
+<pre><code>************* TOTAL GLYCOPROTEIN ********************************************</code></pre>
+<p>Important values provided include:</p>
+<pre><code>MOLECULAR WEIGHT
+EXTINCTION COEFF (280 NM)</code></pre>
+<p>and the values in the PER85 columns (the values taken from crystal structures in Perkins 1986) for</p>
+<pre><code>VOLUME
+SPECIFIC VOLUMES</code></pre>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

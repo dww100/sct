@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="calculate_rfactor---calculate-r-factor-between-two-curves">calculate_rfactor - Calculate R factor Between Two Curves</h1>
+<p>Compares pre-calculated theorerical scattering curves to experimental x-ray and neutron scattering curves.</p>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>calculate_rfactor.py [-h] -c CALC_PATHS [CALC_PATHS ...] -e EXPT_CURVES
+                     [EXPT_CURVES ...] -p [PARAMETER_FILE] -o
+                     [OUT_FILE] [-u {nm,a}]</code></pre>
+<h2 id="arguments">Arguments:</h2>
+<pre><code>
+-c CALC_PATHS [CALC_PATHS ...], --calc CALC_PATHS [CALC_PATHS ...]
+                        Path to the input calculated curve or directory
+                        containing mutiple curves (with scn, scx extensions)
+-e EXPT_CURVES [EXPT_CURVES ...], --expt EXPT_CURVES [EXPT_CURVES ...]
+                        List of input experimental curves
+-p [PARAMETER_FILE], --parameter_file [PARAMETER_FILE]
+                        Path to YAML format SCT parameter file
+-o [OUT_FILE], --outfile [OUT_FILE]
+                        Path to the output file
+-u {nm,a}, --unit {nm,a}
+                        Unit for Q in input experimental data (nanometer or Angstom)</code></pre>
+<h2 id="notes">Notes:</h2>
+<h2 id="output">Output:</h2>
+<p>A four column file, with the following data:</p>
+<p>Path to the experimental curve, path to the theoretical curve, scale factor, R factor.</p>
+<p>The scale factor provided is the I(0) value that can be used to match the I(Q)/I(0) theoretical curve to the experimental data.</p>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

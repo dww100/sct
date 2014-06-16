@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="brktos---convert-atomistic-pdb-structure-into-coarse-grained-sphere-model">brktos - Convert Atomistic PDB Structure into Coarse Grained Sphere Model</h1>
+<p>Creates a coarse grained sphere model from an input PDB. A grid is constructed surrounding the atoms in the structure with a specified box size. Boxes within this grid containing more atoms than a prescribed cutoff are assigned to be spheres in the coarse grained model.</p>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>brktos</code></pre>
+<p>This will produce the following prompts, you should provide the inputs shown in <em>italics</em>. Individual values to input are surrounded by square braces. When multiple values are requires they can either be separated by a space on the same line or entered on separate lines. The meaning of the input values are explained in the <strong>Notes</strong> section.</p>
+<p>Enter name of Brookhaven format file (PDB): <em>[path to PDB file]</em></p>
+<p>Enter side of box, cutoff, output type, grid type <em>[box length] [cut off] [output type] [grid type]</em></p>
+<p>Enter filename for output coords <em>[filename]</em></p>
+<p>Enter Number of boxes for x, y, z-axes <em>[X boxes] [Y boxes] [Z boxes]</em></p>
+<p>Enter minimum x, y, z coords for cubic grid <em>[X min] [Y min] [Z min]</em></p>
+<h2 id="notes">Notes:</h2>
+<p>The last two prompts are dependent on the choice of <em>grid type</em>.</p>
+<ul>
+<li><em>path to PDB file</em> = string containing location of the input PDB</li>
+<li><em>box length</em> = length of the side of the boxes used to create sphere model (real) - this length will be 2 * sphere radius.</li>
+<li><em>cut off</em> = cut off number of atoms per box to create a sphere (integer)</li>
+<li><em>output type</em> = integer 0 to 4 chosing the output options (see below)
+<ol start="0" style="list-style-type: decimal">
+<li>Coordinates + summary data to file</li>
+<li>Coordinates only to file</li>
+<li>Summary data to screen only</li>
+<li>Coordinates to file and summary data to screen</li>
+</ol></li>
+<li><em>grid type</em> = 0 or 1 to select if you want to input grid parameters (it is strongly suggested that you do)
+<ol start="0" style="list-style-type: decimal">
+<li>User inputs the grid parameters (see below)</li>
+<li>Let the warped mind of SCT do as it wished with your grid</li>
+</ol></li>
+<li><em>filename</em> = path to use for output file</li>
+<li><em>X boxes</em>, <em>Y boxes</em>, <em>Z boxes</em> = number of boxes to use in the X, Y and Z dimensions of the grid used to create sphere models (integer), typically 500 works well.</li>
+<li><em>X min</em>, <em>Y min</em>, <em>Z min</em> = lowest (generally most negative) position on the X, Y and Z axes of the grid (real), typically -500 works well.</li>
+</ul>
+<h2 id="output">Output:</h2>
+<p>Depending on the choice of <em>output type</em> two different outputs are possible:</p>
+<ol style="list-style-type: decimal">
+<li><p>Coordinates: A text file consisting of four columns (column width of 10 characters, 2 decimal places). Columns are X, Y, Z coordinates and sphere radius.</p></li>
+<li><p>Summary data:</p></li>
+</ol>
+<pre><code>No Of Atoms
+Total Of Amino Acid Residues
+One Side Of The Box
+Cutoff For Creating A Ball
+No Of Balls
+Volume Of Cubes
+Volume Of Protein
+Max And Min X,Y,Z Are
+Increments MX, MY, MZ Are</code></pre>
+<p>When <em>output type</em> = 0 the summary data is appended to the coordinated in output file (starts with the line &quot;brktos: This Version 1.20 from 30/10/2013.&quot;). This may cause problems when used as input for other SCT programs.</p>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

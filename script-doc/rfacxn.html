@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+  <script src="http://math.etsu.edu/LaTeXMathML/LaTeXMathML.js" type="text/javascript"></script>
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="rfacxn---calculate-r-factor-comparing-two-curves">rfacXN - Calculate R Factor Comparing Two Curves</h1>
+<p>Compare two scattering curves (usually one theoretical and one experimental) and compute the R factor. R factor is used by analogy with crystallography where: <span class="LaTeX">$R = sum (abs(F_expt - F_calc)) / sum (abs(F_expt))$</span></p>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>rfacXN</code></pre>
+<p>This will produce the following prompts, you should provide the inputs shown in <em>italics</em>. Individual values to input are surrounded by square braces. When multiple values are requires they can either be separated by a space on the same line or entered on separate lines. The meaning of the input values are explained in the <strong>Notes</strong> section.</p>
+<p>Provide the name of the file containing the calculated data: <em>[model file]</em></p>
+<p>Provide the name of the file containing the experimental data: <em>[expt file]</em></p>
+<p>Provide the output filename: <em>[output file]</em></p>
+<p>What is the maximum Q value to be used in the fit? <em>[Max Q]</em></p>
+<h2 id="notes">Notes:</h2>
+<ul>
+<li><em>model file</em> = path to file containing Q and I values computed from a sphere model</li>
+<li><em>expt file</em> = path to file containing experimental Q and I values</li>
+<li><em>output file</em> = path to file in which output will be written</li>
+<li><em>Max Q</em> = maximum Q value to include in the curve comparison</li>
+</ul>
+<p>It is assumed that the input experimental curve has been truncated at low Q if necessary.</p>
+<h2 id="output">Output:</h2>
+<p>During the run the following summary data is calculated from the input data:</p>
+<pre><code> Mean Observed=
+ Mean Calculated=
+ Initial Guess=
+ Max Xptl Q=
+ Max Calc Q=</code></pre>
+<p>The output file has the following format:</p>
+<pre><code>*[model file]* *[Max Q]* *[Scaling factor]* *[R factor]*</code></pre>
+<p>Where <em>model file</em> and <em>Max Q</em> are the values input by the user and:</p>
+<ul>
+<li><em>R factor</em> = the R factor as a percentage</li>
+<li><em>Scaling factor</em> = the multiplicative factor used to scale the model curve to match the experimental Io</li>
+</ul>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

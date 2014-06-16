@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="pdb2sphere---convert-atomistic-pdb-structure-into-coarse-grained-sphere-model">pdb2sphere - Convert Atomistic PDB Structure into Coarse Grained Sphere Model</h1>
+<p>Convert atomic pdb to sphere model</p>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>pdb2sphere.py [-h] -i [INPUT_FILENAME]
+              [-m {info,archive,model,project}] [-o [OUTPUT_FILENAME]]
+              [-c [CUTOFF]] [-b [BOX_SIDE]] [-p [PARAMETER_FILE]]
+</code></pre>
+<h2 id="arguments">Arguments:</h2>
+<pre><code>  -i [INPUT_FILENAME], --input_filename [INPUT_FILENAME]
+                        Path to the input PDB file
+  -m {info,archive,model,project}, --mode {info,archive,model,project}
+                        Type of output to be produced
+  -o [OUTPUT_FILENAME], --output_filename [OUTPUT_FILENAME]
+                        Path to the output file
+  -c [CUTOFF], --cutoff [CUTOFF]
+                        Cutoff number of atoms to create sphere in grid box
+  -b [BOX_SIDE], --box_side [BOX_SIDE]
+                        Side length of grid boxes
+  -p [PARAMETER_FILE], --parameter_file [PARAMETER_FILE]
+                        Path to YAML format SCT parameter file</code></pre>
+<h2 id="notes">Notes:</h2>
+<p>If a parameter file is used it is prioritized over any parameters passed via command line flags.</p>
+<p>An input file is required.</p>
+<p>Units of boxside are Angstrom.</p>
+<p>Options for the type of output to be produced:</p>
+<ul>
+<li>info = summary information on sphere model to stdout only</li>
+<li>archive = summary information and sphere model to file</li>
+<li>model = model to file (no summary information produced)</li>
+<li>project = model to file and summary information to stdout</li>
+</ul>
+<p>Defaults:</p>
+<ul>
+<li>mode = project</li>
+<li>cutoff = 4</li>
+<li>boxside = 5.0</li>
+</ul>
+<h2 id="output">Output:</h2>
+<p>Model: Output as four column - x, y and z coordinates and sphere radius (floating point numbers string formatted using 10.2f from Python).</p>
+<p>Summary information:</p>
+<pre><code>pdb2sphere: version 0.5 - 05 November 2013
+No. Of Atoms: 
+Total Of Amino Acid Residues 
+One Side Of The Box: 
+Cutoff For Creating A Ball: 
+No Of Balls: 
+Volume Of Cubes: 
+Volume of Protein:
+Max And Min X: 
+Max And Min Y: 
+Max And Min Z: 
+No. grid points in X, Y, Z: </code></pre>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

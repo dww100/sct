@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="get_boxside---automatic-optimization-of-box-side-used-in-sphere-model-creation">get_boxside - Automatic Optimization of Box Side Used in Sphere Model Creation</h1>
+<p>Automatic optimization of the box side used to create sphere models from atomistic PDBs in SCT tools. The opimization is designed to get the minimum deviation from the volume computer from sluv2.py.</p>
+<h2 id="useage">Useage:</h2>
+<p>Run using the command:</p>
+<pre><code>get_boxside.py [-h] -i [INPUT_PDB] [-s [INPUT_SEQ]] [-f {fas,yml}]
+               [-o [OUTPUT_FILENAME]] [-b BOX_RANGE BOX_RANGE]
+               [-t [TOLERANCE]] [-c [CUTOFF]]
+</code></pre>
+<p>Arguments:</p>
+<pre><code>  -h, --help            show this help message and exit
+  -i [INPUT_PDB], --input_pdb [INPUT_PDB]
+                        Path to the input PDB file
+  -s [INPUT_SEQ], --input_seq [INPUT_SEQ]
+                        Path to input sequence file if different from PDB
+  -f {fas,yml}, --input_format {fas,yml}
+                        Input file format (fasta or sluv yaml)
+  -o [OUTPUT_FILENAME], --output_filename [OUTPUT_FILENAME]
+                        Path to the output file
+  -b BOX_RANGE BOX_RANGE, --box_range BOX_RANGE BOX_RANGE
+                        Minimum and maximum box sides to try
+  -t [TOLERANCE], --tolerance [TOLERANCE]
+                        Tolerance for box size determination
+  -c [CUTOFF], --cutoff [CUTOFF]
+                        Atom number cutoff for sphere models</code></pre>
+<h2 id="notes">Notes:</h2>
+<p>Defaults:</p>
+<ul>
+<li>box_range = 1.1 10.0</li>
+<li>tolerance = 0.01</li>
+<li>cutoff = 4</li>
+</ul>
+<p>Unless an <em>input_seq</em> is specified then the sequence of the PDB is used.</p>
+<h2 id="output">Output:</h2>
+<pre><code># Optimized box_side for INPUT_FILENAME, using cutoff CUTOFF
+# Deviation from target volume was X
+box_side: Y</code></pre>
+<p>Where X is the deviation from the theoretical volume taken from the sequence and Y is the optimized value for the box_side.</p>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>
