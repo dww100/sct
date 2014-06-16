@@ -67,7 +67,8 @@ def parse_arguments():
     parser.add_argument('-ou','--output_unit', choices = ['nm', 'a'],
                         default = 'a', help = 'Unit for Q in output data')
                         
-    parser.add_argument('--chi2', action='store_true', default=False)
+    parser.add_argument('--chi2', action='store_true', default=False, 
+                        help = 'Select comparison metric to be Chi squared not R factor')
     
     args = parser.parse_args()
 
