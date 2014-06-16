@@ -1,0 +1,800 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>sct.curve</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="sct-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="sct-module.html">Package&nbsp;sct</a> ::
+        Module&nbsp;curve
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="sct.curve-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module curve</h1><p class="nomargin-top"><span class="codelink"><a href="sct.curve-pysrc.html">source&nbsp;code</a></span></p>
+<p>Scattering curve related functions used in the SCT suite of 
+  programs</p>
+
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">numpy array</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.curve-module.html#load_scatter_curve" class="summary-sig-name">load_scatter_curve</a>(<span class="summary-sig-arg">filename</span>,
+        <span class="summary-sig-arg">q_min</span>,
+        <span class="summary-sig-arg">q_max</span>)</span><br />
+      Load magnitude of scattering vector, q, and intensity, I, data from 
+      file and filter for values between q_min and q_max.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.curve-pysrc.html#load_scatter_curve">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.curve-module.html#read_scatter_curves" class="summary-sig-name">read_scatter_curves</a>(<span class="summary-sig-arg">curve_files</span>,
+        <span class="summary-sig-arg">units</span>,
+        <span class="summary-sig-arg">param</span>)</span><br />
+      Read in a list of scattering curve files and return a list of dictionaries
+which contain the file name ('file'), an array of Q and I(Q) vales ('data'),
+the radius of gyration ('rg') and the cross-section ('rxs1').</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.curve-pysrc.html#read_scatter_curves">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">dictionary</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.curve-module.html#process_qrange_file" class="summary-sig-name">process_qrange_file</a>(<span class="summary-sig-arg">filename</span>)</span><br />
+      Load yaml file containing the ranges for all analyses.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.curve-pysrc.html#process_qrange_file">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">numpy array</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.curve-module.html#match_scatter_curves" class="summary-sig-name">match_scatter_curves</a>(<span class="summary-sig-arg">target_data</span>,
+        <span class="summary-sig-arg">source_data</span>)</span><br />
+      Match two scatter curves.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.curve-pysrc.html#match_scatter_curves">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">float, float</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.curve-module.html#calculate_rfactor" class="summary-sig-name">calculate_rfactor</a>(<span class="summary-sig-arg">target_data</span>,
+        <span class="summary-sig-arg">source_data</span>,
+        <span class="summary-sig-arg">q_min</span>,
+        <span class="summary-sig-arg">q_max</span>)</span><br />
+      Compute R factor comparing two scattering curves.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.curve-pysrc.html#calculate_rfactor">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">float, float</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.curve-module.html#calculate_chi2" class="summary-sig-name">calculate_chi2</a>(<span class="summary-sig-arg">target_data</span>,
+        <span class="summary-sig-arg">source_data</span>,
+        <span class="summary-sig-arg">q_min</span>,
+        <span class="summary-sig-arg">q_max</span>)</span><br />
+      Compute Chi^2 comparing two scattering curves.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.curve-pysrc.html#calculate_chi2">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">dictionary</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.curve-module.html#sas_curve_fit" class="summary-sig-name">sas_curve_fit</a>(<span class="summary-sig-arg">x</span>,
+        <span class="summary-sig-arg">y</span>,
+        <span class="summary-sig-arg">calc_type</span>)</span><br />
+      Linear fit x vs y data.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.curve-pysrc.html#sas_curve_fit">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.curve-module.html#graph_sas_curve" class="summary-sig-name">graph_sas_curve</a>(<span class="summary-sig-arg">filename</span>,
+        <span class="summary-sig-arg">x</span>,
+        <span class="summary-sig-arg">y</span>,
+        <span class="summary-sig-arg">title_text</span>,
+        <span class="summary-sig-arg">x_lab</span>,
+        <span class="summary-sig-arg">y_lab</span>,
+        <span class="summary-sig-arg">x_min</span>,
+        <span class="summary-sig-arg">x_max</span>,
+        <span class="summary-sig-arg">y_min</span>,
+        <span class="summary-sig-arg">y_max</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Outputs graph of x and y to a pdf file.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.curve-pysrc.html#graph_sas_curve">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.curve-module.html#smear_sas_curve" class="summary-sig-name">smear_sas_curve</a>(<span class="summary-sig-arg">curve</span>,
+        <span class="summary-sig-arg">q_delta</span>,
+        <span class="summary-sig-arg">wavelength</span>,
+        <span class="summary-sig-arg">spread</span>,
+        <span class="summary-sig-arg">divergence</span>)</span><br />
+      Adds smearing to input theoretical  q vs I curve.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.curve-pysrc.html#smear_sas_curve">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.curve-module.html#output_sas_curve" class="summary-sig-name">output_sas_curve</a>(<span class="summary-sig-arg">curve</span>,
+        <span class="summary-sig-arg">filename</span>)</span><br />
+      Prints out formated q and I columns to output.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.curve-pysrc.html#output_sas_curve">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">float, float</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.curve-module.html#get_curve_descriptors" class="summary-sig-name">get_curve_descriptors</a>(<span class="summary-sig-arg">curve</span>,
+        <span class="summary-sig-arg">rg_min</span>,
+        <span class="summary-sig-arg">rg_max</span>,
+        <span class="summary-sig-arg">rxs1_min</span>,
+        <span class="summary-sig-arg">rxs1_max</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Calculate the Rg and Rxs1 from linear fits to the functions of the 
+      input curve values (q, I).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.curve-pysrc.html#get_curve_descriptors">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="load_scatter_curve"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">load_scatter_curve</span>(<span class="sig-arg">filename</span>,
+        <span class="sig-arg">q_min</span>,
+        <span class="sig-arg">q_max</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.curve-pysrc.html#load_scatter_curve">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Load magnitude of scattering vector, q, and intensity, I, data from 
+  file and filter for values between q_min and q_max. Note: Assuming that 
+  a/ there is no header and b/ q and I are the first two columns here.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>filename</code></strong> (string) - Path to file containing scattering curve (q, I data).</li>
+        <li><strong class="pname"><code>q_min</code></strong> (float) - Minimum value of the magnitude of the scattering vector, q, to 
+          keep in the output dataset.</li>
+        <li><strong class="pname"><code>q_max</code></strong> (float) - Minimum value of the magnitude of the scattering vector, q, to 
+          keep in the output dataset.</li>
+    </ul></dd>
+    <dt>Returns: numpy array</dt>
+        <dd>Two dimensional array of scattering vector, q, and intensity, I, 
+          values.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="read_scatter_curves"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">read_scatter_curves</span>(<span class="sig-arg">curve_files</span>,
+        <span class="sig-arg">units</span>,
+        <span class="sig-arg">param</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.curve-pysrc.html#read_scatter_curves">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+
+Read in a list of scattering curve files and return a list of dictionaries
+which contain the file name ('file'), an array of Q and I(Q) vales ('data'),
+the radius of gyration ('rg') and the cross-section ('rxs1').
+
+@type  curve_files:  list
+@param curve_files:  List of files containing scattering curves Q, I(Q)
+                     pairs
+@type  units:        string
+@param units:        String containing either 'nm' or 'a' to indicate the
+                     length units used in the scattering curve
+@type  param:        dictionary
+@param param:        Dictionary containing parameters to use when creating
+                     models and analysing curves.
+@return:             List of dictionaries containing the following key/value
+                     pairs:
+                     - data: numpy array of Q, I(Q)
+                     - rg: radius of gyration calculated from input curve
+                     - rxs1: cross-section calculated from input curve
+                     - file: input file name
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="process_qrange_file"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">process_qrange_file</span>(<span class="sig-arg">filename</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.curve-pysrc.html#process_qrange_file">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Load yaml file containing the ranges for all analyses.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>filename</code></strong> (string) - Path to file containing q_min and q_max values</li>
+    </ul></dd>
+    <dt>Returns: dictionary</dt>
+        <dd>Dictionary containing minimum and maximum values of q</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="match_scatter_curves"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">match_scatter_curves</span>(<span class="sig-arg">target_data</span>,
+        <span class="sig-arg">source_data</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.curve-pysrc.html#match_scatter_curves">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Match two scatter curves. Get intensity, I, values from one data set 
+  at the q (scaterring vector magnitude) values present in the other. Input
+  is two q vs I scattering curves. Output is I values from the source data 
+  set matched to the q values of the target set.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>target_data</code></strong> (numpy array) - Target scattering vector magnitude, q, and intensity, I, dataset.</li>
+        <li><strong class="pname"><code>source_data</code></strong> (numpy array) - Source scattering vector magnitude, q, and intensity, I, dataset.</li>
+    </ul></dd>
+    <dt>Returns: numpy array</dt>
+        <dd>Intensity, I, data from source_data matched to the scattering 
+          vector magnitudes, q, found in target_data.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="calculate_rfactor"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">calculate_rfactor</span>(<span class="sig-arg">target_data</span>,
+        <span class="sig-arg">source_data</span>,
+        <span class="sig-arg">q_min</span>,
+        <span class="sig-arg">q_max</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.curve-pysrc.html#calculate_rfactor">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Compute R factor comparing two scattering curves. Input is two q vs I 
+  scattering curves and the min/max q values to use to compare them. The 
+  target (experimental) curve is scaled to match the source (theoretical) 
+  one. This is because the theoretical curve is based on a calculation of 
+  I/Io. Output is the R factor and the scaling factor needed to match I 
+  from the target scattering curve to the source data.</p>
+  <p>R factor is used by analogy with crystallography where: R = sum 
+  (abs(F_expt - F_calc)) / sum (abs(F_expt))</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>target_data</code></strong> (numpy array) - Target scattering vector magnitude, q, and intensity, I, dataset.</li>
+        <li><strong class="pname"><code>source_data</code></strong> (numpy array) - Source scattering vector magnitude, q, and intensity, I, dataset.</li>
+        <li><strong class="pname"><code>q_min</code></strong> (float) - Minimum value of the magnitude of the scattering vector, q, to 
+          use in matching the curves.</li>
+        <li><strong class="pname"><code>q_max</code></strong> (float) - Minimum value of the magnitude of the scattering vector, q, to 
+          use in matching the curves.</li>
+    </ul></dd>
+    <dt>Returns: float, float</dt>
+        <dd>1. R factor comparing target_data and source_data.
+          <ol start="2">
+            <li>
+              Scaling factor needed to superimpose target_data and 
+              source_data.
+            </li>
+          </ol></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="calculate_chi2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">calculate_chi2</span>(<span class="sig-arg">target_data</span>,
+        <span class="sig-arg">source_data</span>,
+        <span class="sig-arg">q_min</span>,
+        <span class="sig-arg">q_max</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.curve-pysrc.html#calculate_chi2">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Compute Chi^2 comparing two scattering curves. Input is two q vs I 
+  scattering curves and the min/max q values to use to compare them. The 
+  target (experimental) curve is scaled to match the source (theoretical) 
+  one. This is because the theoretical curve is based on a calculation of 
+  I/Io. Output is the Chi^2 and the scaling factor needed to match I from 
+  the target scattering curve to the source data.</p>
+  <p>Chi^2 = sum (F_expt - F_calc)^2 / F_calc</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>target_data</code></strong> (numpy array) - Target scattering vector magnitude, q, and intensity, I, and 
+          sigma I dataset.</li>
+        <li><strong class="pname"><code>source_data</code></strong> (numpy array) - Source scattering vector magnitude, q, and intensity, I, dataset.</li>
+        <li><strong class="pname"><code>q_min</code></strong> (float) - Minimum value of the magnitude of the scattering vector, q, to 
+          use in matching the curves.</li>
+        <li><strong class="pname"><code>q_max</code></strong> (float) - Minimum value of the magnitude of the scattering vector, q, to 
+          use in matching the curves.</li>
+    </ul></dd>
+    <dt>Returns: float, float</dt>
+        <dd>1. chi^2 comparing target_data and source_data.
+          <ol start="2">
+            <li>
+              Scaling factor needed to superimpose target_data and 
+              source_data.
+            </li>
+          </ol></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="sas_curve_fit"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">sas_curve_fit</span>(<span class="sig-arg">x</span>,
+        <span class="sig-arg">y</span>,
+        <span class="sig-arg">calc_type</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.curve-pysrc.html#sas_curve_fit">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Linear fit x vs y data. calc_type (rg, rxs1, rxs2) determines value 
+  computed from gradient and intercept in Guinier and other analyses of 
+  small angle scattering curves.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>x</code></strong> (numpy array) - Function of the scattering vector magnitude, q, used for the 
+          x-axis of the plot.</li>
+        <li><strong class="pname"><code>y</code></strong> (numpy array) - Function of the scattered intensity, I, used for the y-axis of 
+          the plot.</li>
+        <li><strong class="pname"><code>calc_type</code></strong> (string) - Specification of the type of calculation to perform on the output
+          of the linear fit:
+          <p>rxs1/rxs2: r = sqrt(2 * gradient), i = None</p>
+          <p>rg/default: r = sqrt(3 * gradient), i = exp(intercept)</p></li>
+    </ul></dd>
+    <dt>Returns: dictionary</dt>
+        <dd>Dictionary containing the following keys/value pairs:
+          <ul>
+            <li>
+              fit: The output of the numpy polyfit (gradient and intercept)
+            </li>
+            <li>
+              r: The r value (Rg/Rsx?) calculated from the gradient
+            </li>
+            <li>
+              i: The Io value calculated from the intercept
+            </li>
+          </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="graph_sas_curve"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">graph_sas_curve</span>(<span class="sig-arg">filename</span>,
+        <span class="sig-arg">x</span>,
+        <span class="sig-arg">y</span>,
+        <span class="sig-arg">title_text</span>,
+        <span class="sig-arg">x_lab</span>,
+        <span class="sig-arg">y_lab</span>,
+        <span class="sig-arg">x_min</span>,
+        <span class="sig-arg">x_max</span>,
+        <span class="sig-arg">y_min</span>,
+        <span class="sig-arg">y_max</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.curve-pysrc.html#graph_sas_curve">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Outputs graph of x and y to a pdf file. x and y are intended to be 
+  functions of the magnitude of scattering vector, q, and intensity, I. 
+  Values that are computed from the graph (outputs) and range of R? * qfit 
+  written on graph</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>x</code></strong> (numpy array) - Function of the scattering vector magnitude, q, used for the 
+          x-axis of the plot.</li>
+        <li><strong class="pname"><code>y</code></strong> (numpy array) - Function of the scattered intensity, I, used for the y-axis of 
+          the plot.</li>
+        <li><strong class="pname"><code>x_lab</code></strong> (string) - Label for the x-axis of the plot.</li>
+        <li><strong class="pname"><code>y_lab</code></strong> (string) - Label for the y-axis of the plot.</li>
+        <li><strong class="pname"><code>x_min</code></strong> (float) - Minimum value to plot on x-axis.</li>
+        <li><strong class="pname"><code>x_max</code></strong> (float) - Maximum value to plot on x-axis.</li>
+        <li><strong class="pname"><code>y_min</code></strong> (float) - Minimum value to plot on x-axis.</li>
+        <li><strong class="pname"><code>y_max</code></strong> (float) - Maximum value to plot on x-axis.</li>
+        <li><strong class="pname"><code>fit_coeffs</code></strong> - Fit coefficients for a linear fit from a numpy polyfit of the 
+          input x and y values.</li>
+        <li><strong class="pname"><code>outputs</code></strong> - Text of values that should be added to plot (e.g. Rg).</li>
+        <li><strong class="pname"><code>rq_range</code></strong> - Text detailing the R*q values over the range of any fit performed
+          on the x, y values.</li>
+        <li><strong class="pname"><code>mask</code></strong> - Numpy style mask to select points used in fit so that these can 
+          be highlighted in the plot.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="smear_sas_curve"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">smear_sas_curve</span>(<span class="sig-arg">curve</span>,
+        <span class="sig-arg">q_delta</span>,
+        <span class="sig-arg">wavelength</span>,
+        <span class="sig-arg">spread</span>,
+        <span class="sig-arg">divergence</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.curve-pysrc.html#smear_sas_curve">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Adds smearing to input theoretical  q vs I curve. Based on the formula
+  published in Perkins, S. J. &amp; Weiss, H. (1983) J. Mol. Biol. 168, 
+  847&#8211;866. Note: the input I values are altered by the function in 
+  place.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>curve</code></strong> (numpy array) - Two dimensional array containing scattered vector magnitudes, q, 
+          and intensities, I.</li>
+        <li><strong class="pname"><code>q_delta</code></strong> (float) - Separation between values of q.</li>
+        <li><strong class="pname"><code>wavelength</code></strong> (float) - Wavelength of incident beam</li>
+        <li><strong class="pname"><code>spread</code></strong> (float) - Spread of beam</li>
+        <li><strong class="pname"><code>divergence</code></strong> (float) - Divergence of beam</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="output_sas_curve"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">output_sas_curve</span>(<span class="sig-arg">curve</span>,
+        <span class="sig-arg">filename</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.curve-pysrc.html#output_sas_curve">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Prints out formated q and I columns to output.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>curve</code></strong> (numpy array) - Two dimensional array containing scattered vector magnitudes, q, 
+          and intensities, I.</li>
+        <li><strong class="pname"><code>filename</code></strong> (string) - Filename for output of q/I curve.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_curve_descriptors"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_curve_descriptors</span>(<span class="sig-arg">curve</span>,
+        <span class="sig-arg">rg_min</span>,
+        <span class="sig-arg">rg_max</span>,
+        <span class="sig-arg">rxs1_min</span>,
+        <span class="sig-arg">rxs1_max</span>,
+        <span class="sig-arg">*args</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.curve-pysrc.html#get_curve_descriptors">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Calculate the Rg and Rxs1 from linear fits to the functions of the 
+  input curve values (q, I). In the case of Rg the Guinier fit is to q^2 vs
+  ln(I), for Rxs1 it is to q^2 vs ln(I*q).</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>curve</code></strong> (numpy array) - Two dimensional array containing scattered vector magnitudes, q, 
+          and intensities, I.</li>
+        <li><strong class="pname"><code>rg_min</code></strong> (float) - Minimum q value to use in Guinier fit to compute Rg</li>
+        <li><strong class="pname"><code>rg_max</code></strong> (float) - Maximum q value to use in Guinier fit to compute Rg</li>
+        <li><strong class="pname"><code>rxs1_min</code></strong> (float) - Minimum q value to use in linear fit to compute Rxs1</li>
+        <li><strong class="pname"><code>rxs1_max</code></strong> (float) - Maximum q value to use in linear fit to compute Rxs1</li>
+        <li><strong class="pname"><code>args</code></strong> (list) - List which allows the optional specification of maximum and 
+          minimum q values for a Rxs2 calculation (both should values 
+          checked should be floats)</li>
+    </ul></dd>
+    <dt>Returns: float, float</dt>
+        <dd><ul>
+            <li>
+              Rg value calculated from curve fit
+            </li>
+            <li>
+              Rxs value calculated from curve fit
+            </li>
+          </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="sct-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Mon Jun 16 11:53:31 2014
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

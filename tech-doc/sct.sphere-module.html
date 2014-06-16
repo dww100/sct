@@ -1,0 +1,1272 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>sct.sphere</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="sct-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="sct-module.html">Package&nbsp;sct</a> ::
+        Module&nbsp;sphere
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="sct.sphere-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module sphere</h1><p class="nomargin-top"><span class="codelink"><a href="sct.sphere-pysrc.html">source&nbsp;code</a></span></p>
+<p>Sphere model related functions used in the SCT suite of programs. 
+  Includes functions to calculate scattering curve from sphere models</p>
+
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">numpy array</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#create_grid" class="summary-sig-name">create_grid</a>(<span class="summary-sig-arg">atom_coords</span>,
+        <span class="summary-sig-arg">x_axis</span>,
+        <span class="summary-sig-arg">y_axis</span>,
+        <span class="summary-sig-arg">z_axis</span>)</span><br />
+      Count atoms in grid boxes defined by passed axes intervals</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#create_grid">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">numpy array, numpy array, numpy array</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#define_grid_axes" class="summary-sig-name">define_grid_axes</a>(<span class="summary-sig-arg">coords</span>,
+        <span class="summary-sig-arg">box_side</span>)</span><br />
+      Create intervals of length box_side along x, y &amp; z axes.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#define_grid_axes">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#grid_to_spheres" class="summary-sig-name">grid_to_spheres</a>(<span class="summary-sig-arg">grid</span>,
+        <span class="summary-sig-arg">radius</span>,
+        <span class="summary-sig-arg">cutoff</span>,
+        <span class="summary-sig-arg">x_axis</span>,
+        <span class="summary-sig-arg">y_axis</span>,
+        <span class="summary-sig-arg">z_axis</span>)</span><br />
+      Generate a list of sphere coordinates based on counts of atoms in the
+      passed grid.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#grid_to_spheres">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list, numpy array, numpy array, numpy array</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#create_sphere_model" class="summary-sig-name">create_sphere_model</a>(<span class="summary-sig-arg">atom_coords</span>,
+        <span class="summary-sig-arg">cutoff</span>,
+        <span class="summary-sig-arg">box_side</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Create a sphere model from the input atomic coordinates.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#create_sphere_model">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">float</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#residual2_box" class="summary-sig-name">residual2_box</a>(<span class="summary-sig-arg">box_side</span>,
+        <span class="summary-sig-arg">cutoff</span>,
+        <span class="summary-sig-arg">atom_coords</span>,
+        <span class="summary-sig-arg">targ_volume</span>)</span><br />
+      Compute squared residual of sphere model to the theroetical target 
+      volume</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#residual2_box">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">float</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#optimize_box_side" class="summary-sig-name">optimize_box_side</a>(<span class="summary-sig-arg">cutoff</span>,
+        <span class="summary-sig-arg">coords</span>,
+        <span class="summary-sig-arg">targ_vol</span>,
+        <span class="summary-sig-arg">side_min</span>,
+        <span class="summary-sig-arg">side_max</span>,
+        <span class="summary-sig-arg">tolerance</span>)</span><br />
+      Get optimal box_side to reproduce target_volume (and deviation)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#optimize_box_side">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#write_sphere_line" class="summary-sig-name">write_sphere_line</a>(<span class="summary-sig-arg">x</span>,
+        <span class="summary-sig-arg">y</span>,
+        <span class="summary-sig-arg">z</span>,
+        <span class="summary-sig-arg">radius</span>,
+        <span class="summary-sig-arg">out</span>)</span><br />
+      Write out a single sphere entry to a SCT sphere file format</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#write_sphere_line">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#write_spheres" class="summary-sig-name">write_spheres</a>(<span class="summary-sig-arg">coords</span>,
+        <span class="summary-sig-arg">radius</span>,
+        <span class="summary-sig-arg">out</span>)</span><br />
+      Write coordinates and radius to a SCT sphere file format for each 
+      sphere location in coords</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#write_spheres">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">dictionary</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#parse_sphere_line" class="summary-sig-name">parse_sphere_line</a>(<span class="summary-sig-arg">line</span>)</span><br />
+      Parse line from sphere file, return dictionary with list of 'coords' 
+      and 'radius'</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#parse_sphere_line">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list, float</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#read_mono_spheres" class="summary-sig-name">read_mono_spheres</a>(<span class="summary-sig-arg">filename</span>)</span><br />
+      Read in SCT format sphere file and return coordinates and radius 
+      Note: assumed that we have only one radius of sphere here</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#read_mono_spheres">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">float</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#sphere_model_rg" class="summary-sig-name">sphere_model_rg</a>(<span class="summary-sig-arg">coords</span>,
+        <span class="summary-sig-arg">radius</span>)</span><br />
+      Calculate the radius of gyration of a set of spheres given their 
+      position and radius</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#sphere_model_rg">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#hydrate_sphere" class="summary-sig-name">hydrate_sphere</a>(<span class="summary-sig-arg">coords</span>,
+        <span class="summary-sig-arg">hydration_pos</span>,
+        <span class="summary-sig-arg">dist</span>)</span><br />
+      Add test hydration spheres to selected positions surrounding the 
+      input sphere coordinate</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#hydrate_sphere">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#hydrate_spheres" class="summary-sig-name">hydrate_spheres</a>(<span class="summary-sig-arg">coords</span>,
+        <span class="summary-sig-arg">hydration_pos</span>,
+        <span class="summary-sig-arg">radius</span>)</span><br />
+      Add hydration layer spheres to the spheres in the input coordinate 
+      list</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#hydrate_spheres">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#hydrate_sphere_model" class="summary-sig-name">hydrate_sphere_model</a>(<span class="summary-sig-arg">dry_spheres</span>,
+        <span class="summary-sig-arg">hydration_no</span>,
+        <span class="summary-sig-arg">box_side</span>,
+        <span class="summary-sig-arg">water_cutoff</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Create hydrated sphere model in 4 steps (returning the appropriate 
+      sphere coordinates):</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#hydrate_sphere_model">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">float</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#residual2_cut" class="summary-sig-name">residual2_cut</a>(<span class="summary-sig-arg">cutoff</span>,
+        <span class="summary-sig-arg">box_side</span>,
+        <span class="summary-sig-arg">dry_spheres</span>,
+        <span class="summary-sig-arg">hydration_no</span>,
+        <span class="summary-sig-arg">targ_volume</span>)</span><br />
+      Compute squared residual of sphere model to the theroetical target 
+      volume</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#residual2_cut">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">integer, float</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#optimize_watercut" class="summary-sig-name">optimize_watercut</a>(<span class="summary-sig-arg">box_side</span>,
+        <span class="summary-sig-arg">coords</span>,
+        <span class="summary-sig-arg">hydration_no</span>,
+        <span class="summary-sig-arg">targ_vol</span>,
+        <span class="summary-sig-arg">cut_min</span>,
+        <span class="summary-sig-arg">cut_max</span>,
+        <span class="summary-sig-arg">tolerance</span>)</span><br />
+      Get optimal cutoff to use to filter hydration spheres to reproduce 
+      target_volume (and deviation)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#optimize_watercut">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">float</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#sphere_squared_form_factor" class="summary-sig-name">sphere_squared_form_factor</a>(<span class="summary-sig-arg">q</span>,
+        <span class="summary-sig-arg">r</span>)</span><br />
+      Return the squared form factor for the magnitude of scattering 
+      vector, q, and sphere with given radius, r.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#sphere_squared_form_factor">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">numpy array, numpy array, integer</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#calc_r_hist" class="summary-sig-name">calc_r_hist</a>(<span class="summary-sig-arg">coords</span>,
+        <span class="summary-sig-arg">no_bins</span>)</span><br />
+      Calculate histrogram of pair distances between the coordinates using 
+      no_bins bins.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#calc_r_hist">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">numpy array</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.sphere-module.html#spheres_to_sas_curve" class="summary-sig-name">spheres_to_sas_curve</a>(<span class="summary-sig-arg">coords</span>,
+        <span class="summary-sig-arg">radius</span>,
+        <span class="summary-sig-arg">q_max</span>,
+        <span class="summary-sig-arg">n_points</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Calculate theoretical curve given sphere coordinates and radius using
+      the Debye equation.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.sphere-pysrc.html#spheres_to_sas_curve">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="create_grid"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">create_grid</span>(<span class="sig-arg">atom_coords</span>,
+        <span class="sig-arg">x_axis</span>,
+        <span class="sig-arg">y_axis</span>,
+        <span class="sig-arg">z_axis</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#create_grid">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Count atoms in grid boxes defined by passed axes intervals</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>atom_coords</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats)</li>
+        <li><strong class="pname"><code>x_axis</code></strong> (numpy array) - Array of floats defining the intersection of grid boxes along the
+          x-axis</li>
+        <li><strong class="pname"><code>y_axis</code></strong> (numpy array) - Array of floats defining the intersection of grid boxes along the
+          y-axis</li>
+        <li><strong class="pname"><code>z_axis</code></strong> (numpy array) - Array of floats defining the intersection of grid boxes along the
+          z-axis</li>
+    </ul></dd>
+    <dt>Returns: numpy array</dt>
+        <dd>3 dimensional array representing the number of atoms in each grid
+          box defined by the input axes divisions</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="define_grid_axes"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">define_grid_axes</span>(<span class="sig-arg">coords</span>,
+        <span class="sig-arg">box_side</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#define_grid_axes">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create intervals of length box_side along x, y &amp; z axes. The axes 
+  extend to include all input atomic coordinates.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>coords</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats)</li>
+        <li><strong class="pname"><code>box_side</code></strong> (float) - Length of the sides of the cubes used to create a grid to coarse 
+          grain atomic structure into a sphere model</li>
+    </ul></dd>
+    <dt>Returns: numpy array, numpy array, numpy array</dt>
+        <dd>Intervals of length box_side along the x, y and z axes. Minimum 
+          and maximum values chosed to extend beyond the input coordinates.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="grid_to_spheres"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">grid_to_spheres</span>(<span class="sig-arg">grid</span>,
+        <span class="sig-arg">radius</span>,
+        <span class="sig-arg">cutoff</span>,
+        <span class="sig-arg">x_axis</span>,
+        <span class="sig-arg">y_axis</span>,
+        <span class="sig-arg">z_axis</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#grid_to_spheres">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Generate a list of sphere coordinates based on counts of atoms in the 
+  passed grid. A sphere is included in the model in each grid space with a 
+  content &gt;= cutoff. Coordinates are based on the passed axes defining 
+  teh grid boxes.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>grid</code></strong> (numpy array) - 3 dimensional array representing the number of atoms in each grid
+          box defined by the input axes divisions.</li>
+        <li><strong class="pname"><code>radius</code></strong> (float) - Radius of spheres within the sphere model.</li>
+        <li><strong class="pname"><code>cutoff</code></strong> (integer) - Cutoff for number of atoms within a grid square before a a sphere
+          is placed in that grid box.</li>
+        <li><strong class="pname"><code>x_axis</code></strong> (numpy array) - Array of floats defining the intersection of grid boxes along the
+          x-axis.</li>
+        <li><strong class="pname"><code>y_axis</code></strong> (numpy array) - Array of floats defining the intersection of grid boxes along the
+          y-axis.</li>
+        <li><strong class="pname"><code>z_axis</code></strong> (numpy array) - Array of floats defining the intersection of grid boxes along the
+          z-axis.</li>
+    </ul></dd>
+    <dt>Returns: list</dt>
+        <dd>A list containing lists of x, y &amp; z coordinates (3 * floats) 
+          of spheres within the sphere model.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="create_sphere_model"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">create_sphere_model</span>(<span class="sig-arg">atom_coords</span>,
+        <span class="sig-arg">cutoff</span>,
+        <span class="sig-arg">box_side</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#create_sphere_model">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a sphere model from the input atomic coordinates. First a grid 
+  is created with divisions of length box_side. Then the number of atoms in
+  each grid box is counted. A sphere is then included in the final model 
+  placed at the centre of a grid box if more that cutoff atoms are within 
+  that box.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>atom_coords</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats)</li>
+        <li><strong class="pname"><code>cutoff</code></strong> (integer) - Cutoff for number of atoms within a grid square before a a sphere
+          is placed in that grid box.</li>
+        <li><strong class="pname"><code>box_side</code></strong> (float) - Length of the sides of the cubes used to create a grid to coarse 
+          grain atomic structure into a sphere model.</li>
+        <li><strong class="pname"><code>x_axis</code></strong> - Array of floats defining the intersection of grid boxes along the
+          x-axis.</li>
+        <li><strong class="pname"><code>y_axis</code></strong> - Array of floats defining the intersection of grid boxes along the
+          y-axis.</li>
+        <li><strong class="pname"><code>z_axis</code></strong> - Array of floats defining the intersection of grid boxes along the
+          z-axis.</li>
+    </ul></dd>
+    <dt>Returns: list, numpy array, numpy array, numpy array</dt>
+        <dd><ul>
+            <li>
+              A list containing lists of x, y &amp; z coordinates (3 * 
+              floats) of spheres within the sphere model.
+            </li>
+            <li>
+              Array of floats defining the intersection of grid boxes along
+              the x-axis.
+            </li>
+            <li>
+              Array of floats defining the intersection of grid boxes along
+              the y-axis.
+            </li>
+            <li>
+              Array of floats defining the intersection of grid boxes along
+              the z-axis.
+            </li>
+          </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="residual2_box"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">residual2_box</span>(<span class="sig-arg">box_side</span>,
+        <span class="sig-arg">cutoff</span>,
+        <span class="sig-arg">atom_coords</span>,
+        <span class="sig-arg">targ_volume</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#residual2_box">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Compute squared residual of sphere model to the theroetical target 
+  volume</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>box_side</code></strong> (float) - Length of the sides of the cubes used to create a grid to coarse 
+          grain atomic structure into a sphere model.</li>
+        <li><strong class="pname"><code>cutoff</code></strong> (integer) - Cutoff for number of atoms within a grid square before a sphere 
+          is placed in that grid box.</li>
+        <li><strong class="pname"><code>atom_coords</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats)</li>
+        <li><strong class="pname"><code>targ_volume</code></strong> (float) - The target volume for the dry model calculated from the protein 
+          sequence.</li>
+    </ul></dd>
+    <dt>Returns: float</dt>
+        <dd>Squared difference between sphere model volume and target volume.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="optimize_box_side"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">optimize_box_side</span>(<span class="sig-arg">cutoff</span>,
+        <span class="sig-arg">coords</span>,
+        <span class="sig-arg">targ_vol</span>,
+        <span class="sig-arg">side_min</span>,
+        <span class="sig-arg">side_max</span>,
+        <span class="sig-arg">tolerance</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#optimize_box_side">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get optimal box_side to reproduce target_volume (and deviation)</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>cutoff</code></strong> (integer) - Cutoff for number of atoms within a grid square before a sphere 
+          is placed in that grid box.</li>
+        <li><strong class="pname"><code>coords</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats)</li>
+        <li><strong class="pname"><code>targ_vol</code></strong> (float) - The target volume for the dry model calculated from the protein 
+          sequence.</li>
+        <li><strong class="pname"><code>side_min</code></strong> (float) - Minimum side length to consider in the optimization.</li>
+        <li><strong class="pname"><code>side_min</code></strong> (float) - Maximum side length to consider in the optimization.</li>
+        <li><strong class="pname"><code>tolerance</code></strong> (float) - Percentage tolerance before optimization is said to have 
+          converged.</li>
+        <li><strong class="pname"><code>side_max</code></strong> (float)</li>
+    </ul></dd>
+    <dt>Returns: float</dt>
+        <dd>Squared difference between sphere model volume and target volume.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="write_sphere_line"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">write_sphere_line</span>(<span class="sig-arg">x</span>,
+        <span class="sig-arg">y</span>,
+        <span class="sig-arg">z</span>,
+        <span class="sig-arg">radius</span>,
+        <span class="sig-arg">out</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#write_sphere_line">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Write out a single sphere entry to a SCT sphere file format</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>x</code></strong> (float) - X coordinate of sphere</li>
+        <li><strong class="pname"><code>y</code></strong> (float) - Y coordinate of sphere</li>
+        <li><strong class="pname"><code>z</code></strong> (float) - Z coordinate of sphere</li>
+        <li><strong class="pname"><code>radius</code></strong> (float) - radius of sphere</li>
+        <li><strong class="pname"><code>out</code></strong> (file object) - The file to which the output sphere line is written</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="write_spheres"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">write_spheres</span>(<span class="sig-arg">coords</span>,
+        <span class="sig-arg">radius</span>,
+        <span class="sig-arg">out</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#write_spheres">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Write coordinates and radius to a SCT sphere file format for each 
+  sphere location in coords</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>coords</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats) 
+          of spheres within the sphere model.</li>
+        <li><strong class="pname"><code>radius</code></strong> (float) - Radius of spheres within the sphere model.</li>
+        <li><strong class="pname"><code>out</code></strong> (file object) - The file to which the output sphere line is written</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="parse_sphere_line"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">parse_sphere_line</span>(<span class="sig-arg">line</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#parse_sphere_line">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Parse line from sphere file, return dictionary with list of 'coords' 
+  and 'radius'</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>line</code></strong> (string) - Line from a saved SCT format sphere model file</li>
+    </ul></dd>
+    <dt>Returns: dictionary</dt>
+        <dd>Dictionary with:
+          <ul>
+            <li>
+              coords: A list containing x, y &amp; z coordinates (3 * 
+              floats) of a sphere within the sphere model.
+            </li>
+            <li>
+              radius: Sphere radius (float)
+            </li>
+          </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="read_mono_spheres"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">read_mono_spheres</span>(<span class="sig-arg">filename</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#read_mono_spheres">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Read in SCT format sphere file and return coordinates and radius Note:
+  assumed that we have only one radius of sphere here</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>filename</code></strong> (string) - Path to the input SCT format sphere model file</li>
+    </ul></dd>
+    <dt>Returns: list, float</dt>
+        <dd><ul>
+            <li>
+              A list containing lists of x, y &amp; z coordinates (3 * 
+              floats) of a sphere within the sphere model.
+            </li>
+            <li>
+              Sphere radius (float)
+            </li>
+          </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="sphere_model_rg"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">sphere_model_rg</span>(<span class="sig-arg">coords</span>,
+        <span class="sig-arg">radius</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#sphere_model_rg">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Calculate the radius of gyration of a set of spheres given their 
+  position and radius</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>coords</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats)</li>
+        <li><strong class="pname"><code>radius</code></strong> (float) - Sphere radius</li>
+    </ul></dd>
+    <dt>Returns: float</dt>
+        <dd>Radius of gyration of input sphere distribution</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hydrate_sphere"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">hydrate_sphere</span>(<span class="sig-arg">coords</span>,
+        <span class="sig-arg">hydration_pos</span>,
+        <span class="sig-arg">dist</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#hydrate_sphere">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add test hydration spheres to selected positions surrounding the input
+  sphere coordinate</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>coords</code></strong> (list) - List containing x, y &amp; z coordinates (3 * floats) for a 
+          sphere.</li>
+        <li><strong class="pname"><code>hydration_pos</code></strong> (list) - List of positions to include in wet sphere model: Position 1 = 
+          original sphere position, 2 to 27 positions on cube centred on 
+          original sphere.</li>
+        <li><strong class="pname"><code>dist</code></strong> (float) - Distance between sphere centres ( 2 * sphere radius)</li>
+    </ul></dd>
+    <dt>Returns: list</dt>
+        <dd>List containing coordinates of all spheres in hydrated sphere 
+          model.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hydrate_spheres"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">hydrate_spheres</span>(<span class="sig-arg">coords</span>,
+        <span class="sig-arg">hydration_pos</span>,
+        <span class="sig-arg">radius</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#hydrate_spheres">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add hydration layer spheres to the spheres in the input coordinate 
+  list</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>coords</code></strong> (list) - List of lists containing x, y &amp; z coordinates (3 * floats) 
+          for each sphere in a sphere model.</li>
+        <li><strong class="pname"><code>hydration_pos</code></strong> (list) - List of positions to include in wet sphere model: Position 1 = 
+          original sphere position, 2 to 27 positions on cube centred on 
+          original sphere.</li>
+        <li><strong class="pname"><code>radius</code></strong> (float) - Sphere radius.</li>
+    </ul></dd>
+    <dt>Returns: list</dt>
+        <dd>A list containing lists of x, y &amp; z coordinates (3 * floats) 
+          for all test spheres in hydrated model.
+          <p><b>Note</b>: This includes original spheres and overlapping 
+          hydration spheres as no filtering has yet occured.</p></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hydrate_sphere_model"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">hydrate_sphere_model</span>(<span class="sig-arg">dry_spheres</span>,
+        <span class="sig-arg">hydration_no</span>,
+        <span class="sig-arg">box_side</span>,
+        <span class="sig-arg">water_cutoff</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#hydrate_sphere_model">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create hydrated sphere model in 4 steps (returning the appropriate 
+  sphere coordinates):</p>
+  <ol start="1">
+    <li>
+      Add spheres to the dry model in positions assigned through 
+      hydration_no (Position 1 = original sphere position, 2 to 27 
+      positions on cube centred on original sphere).
+    </li>
+    <li>
+      Filter out excess spheres using create_sphere_model with water_cutoff
+      (this cutoff should be high ~ 10-12 spheres per box)
+    </li>
+    <li>
+      Add dry spheres back to the model. Some will have been removed 
+      alongside the excess water in the last step
+    </li>
+    <li>
+      Filter out overlapping spheres using create_sphere_model with cutoff 
+      set to 1.
+    </li>
+  </ol>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>dry_spheres</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats) 
+          for all spheres in an non-hydrated sphere model.</li>
+        <li><strong class="pname"><code>hydration_no</code></strong> (integer) - Number defining which positions on a cube surrounding each input 
+          sphere should be used to place test hydration spheres. Position 1
+          = original sphere position, 2 to 27 positions on cube centred on 
+          original sphere.</li>
+        <li><strong class="pname"><code>box_side</code></strong> (float) - Length of the sides of the cubes used to create a grid to coarse 
+          grain atomic structure into a sphere model (and here to place 
+          hydration spheres).</li>
+        <li><strong class="pname"><code>water_cutoff</code></strong> (integer) - Cutoff used to remove overlapping and excess test hydration 
+          spheres</li>
+        <li><strong class="pname"><code>xaxis</code></strong> - Array of floats defining the intersection of grid boxes along the
+          x-axis (from creation of the original sphere model).</li>
+        <li><strong class="pname"><code>yaxis</code></strong> - Array of floats defining the intersection of grid boxes along the
+          y-axis (from creation of the original sphere model).</li>
+        <li><strong class="pname"><code>zaxis</code></strong> - Array of floats defining the intersection of grid boxes along the
+          z-axis (from creation of the original sphere model).</li>
+    </ul></dd>
+    <dt>Returns: list</dt>
+        <dd>A list containing lists of x, y &amp; z coordinates (3 * floats) 
+          for all spheres in the hydrated sphere model.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="residual2_cut"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">residual2_cut</span>(<span class="sig-arg">cutoff</span>,
+        <span class="sig-arg">box_side</span>,
+        <span class="sig-arg">dry_spheres</span>,
+        <span class="sig-arg">hydration_no</span>,
+        <span class="sig-arg">targ_volume</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#residual2_cut">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Compute squared residual of sphere model to the theroetical target 
+  volume</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>cutoff</code></strong> (integer) - Cutoff used to remove overlapping and excess test hydration 
+          spheres</li>
+        <li><strong class="pname"><code>box_side</code></strong> (float) - Length of the sides of the cubes used to create a grid to coarse 
+          grain atomic structure into a sphere model (and place hydration 
+          spheres).</li>
+        <li><strong class="pname"><code>dry_spheres</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats) 
+          for all spheres in an non-hydrated sphere model.</li>
+        <li><strong class="pname"><code>hydration_no</code></strong> (integer) - Number defining which positions on a cube surrounding each input 
+          sphere should be used to place test hydration spheres. Position 1
+          = original sphere position, 2 to 27 positions on cube centred on 
+          original sphere.</li>
+        <li><strong class="pname"><code>targ_volume</code></strong> (float) - The target volume for the hydrated model calculated from the 
+          protein sequence.</li>
+    </ul></dd>
+    <dt>Returns: float</dt>
+        <dd>Squared difference between hydrated model volume and the target 
+          volume.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="optimize_watercut"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">optimize_watercut</span>(<span class="sig-arg">box_side</span>,
+        <span class="sig-arg">coords</span>,
+        <span class="sig-arg">hydration_no</span>,
+        <span class="sig-arg">targ_vol</span>,
+        <span class="sig-arg">cut_min</span>,
+        <span class="sig-arg">cut_max</span>,
+        <span class="sig-arg">tolerance</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#optimize_watercut">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get optimal cutoff to use to filter hydration spheres to reproduce 
+  target_volume (and deviation)</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>box_side</code></strong> (float) - Length of the sides of the cubes used to create a grid to coarse 
+          grain atomic structure into a sphere model (and place hydration 
+          spheres).</li>
+        <li><strong class="pname"><code>coords</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats) 
+          for all spheres in an non-hydrated sphere model.</li>
+        <li><strong class="pname"><code>hydration_no</code></strong> (integer) - Number defining which positions on a cube surrounding each input 
+          sphere should be used to place test hydration spheres. Position 1
+          = original sphere position, 2 to 27 positions on cube centred on 
+          original sphere.</li>
+        <li><strong class="pname"><code>targ_vol</code></strong> (float) - The target volume for the hydrated model calculated from the 
+          protein sequence.</li>
+    </ul></dd>
+    <dt>Returns: integer, float</dt>
+        <dd><ul>
+            <li>
+              Optimized cutoff value
+            </li>
+            <li>
+              Deviation of the calculated volume from the target volume
+            </li>
+          </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="sphere_squared_form_factor"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">sphere_squared_form_factor</span>(<span class="sig-arg">q</span>,
+        <span class="sig-arg">r</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#sphere_squared_form_factor">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the squared form factor for the magnitude of scattering vector,
+  q, and sphere with given radius, r.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>q</code></strong> (float) - Magnitude of scattering vector</li>
+        <li><strong class="pname"><code>r</code></strong> (float) - Sphere radius</li>
+    </ul></dd>
+    <dt>Returns: float</dt>
+        <dd>Squared form factor</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="calc_r_hist"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">calc_r_hist</span>(<span class="sig-arg">coords</span>,
+        <span class="sig-arg">no_bins</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#calc_r_hist">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Calculate histrogram of pair distances between the coordinates using 
+  no_bins bins. Return hist (counts), bin_edges and last non-zero bin 
+  no.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>coords</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats) 
+          of spheres</li>
+        <li><strong class="pname"><code>no_bins</code></strong> (integer) - Number of bins to use when creating histogram of pair distances 
+          between spheres.</li>
+    </ul></dd>
+    <dt>Returns: numpy array, numpy array, integer</dt>
+        <dd><ol start="1">
+            <li>
+              Bins containing the counts of atoms in each division of the 
+              histogram of pair distances between spheres.
+            </li>
+            <li>
+              The values at the edges of the bins in the histogram of pair 
+              distances between spheres (corresponds to the counts 
+              returned).
+            </li>
+            <li>
+              Number of the last bin with a non-zero count.
+            </li>
+          </ol></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="spheres_to_sas_curve"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">spheres_to_sas_curve</span>(<span class="sig-arg">coords</span>,
+        <span class="sig-arg">radius</span>,
+        <span class="sig-arg">q_max</span>,
+        <span class="sig-arg">n_points</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.sphere-pysrc.html#spheres_to_sas_curve">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Calculate theoretical curve given sphere coordinates and radius using 
+  the Debye equation. Assumes all spheres are identical. A curve containing
+  n_points is computed over a q range of 0 to q_max.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>coords</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats) 
+          of spheres.</li>
+        <li><strong class="pname"><code>radius</code></strong> (float) - Sphere radius</li>
+        <li><strong class="pname"><code>q_max</code></strong> (float) - Maximum magnitude of the scattering vector, q, for which to 
+          calculate the theoretical scattering intensity.</li>
+        <li><strong class="pname"><code>n_points</code></strong> (integer) - Number of points to calculate in the theoretical scattering 
+          curve.</li>
+        <li><strong class="pname"><code>rbins</code></strong> - Number of bins to use when creating histogram of pair distances 
+          between spheres (for use in the Debye equation). Default = 400.</li>
+    </ul></dd>
+    <dt>Returns: numpy array</dt>
+        <dd>Two dimensional array containing scattering vector magnitude, q, 
+          and intensity, I, value pairs forming a theoretical scattering 
+          curve.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="sct-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Mon Jun 16 11:53:31 2014
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

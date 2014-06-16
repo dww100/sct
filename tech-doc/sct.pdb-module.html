@@ -1,0 +1,803 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>sct.pdb</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="sct-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="sct-module.html">Package&nbsp;sct</a> ::
+        Module&nbsp;pdb
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="sct.pdb-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module pdb</h1><p class="nomargin-top"><span class="codelink"><a href="sct.pdb-pysrc.html">source&nbsp;code</a></span></p>
+<p>PDB related functions used in the SCT suite of programs</p>
+
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.pdb-module.html#parse_line" class="summary-sig-name">parse_line</a>(<span class="summary-sig-arg">line</span>,
+        <span class="summary-sig-arg">schema</span>,
+        <span class="summary-sig-arg">filename</span>)</span><br />
+      Parse an atom record line from a PDB or PSF file via schema.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.pdb-pysrc.html#parse_line">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">dictionary</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.pdb-module.html#pdb_res_line_parse" class="summary-sig-name">pdb_res_line_parse</a>(<span class="summary-sig-arg">line</span>,
+        <span class="summary-sig-arg">filename</span>)</span><br />
+      Parse a single line from a PDB file into a dictionary according to 
+      the standard PDB column definitions</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.pdb-pysrc.html#pdb_res_line_parse">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">dictionary, list</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.pdb-module.html#read_pdb_atom_data" class="summary-sig-name">read_pdb_atom_data</a>(<span class="summary-sig-arg">filename</span>)</span><br />
+      Read PDB file and return residue frequencies and atom coordinates</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.pdb-pysrc.html#read_pdb_atom_data">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.pdb-module.html#read_psf" class="summary-sig-name">read_psf</a>(<span class="summary-sig-arg">filename</span>)</span><br />
+      Read in a PSF file and create a list of dictionaries containing the 
+      fields defined in PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD schemas.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.pdb-pysrc.html#read_psf">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.pdb-module.html#process_pdb_psf" class="summary-sig-name">process_pdb_psf</a>(<span class="summary-sig-arg">psf_filename</span>,
+        <span class="summary-sig-arg">pdb_filename</span>)</span><br />
+      Read in a PSF/PDB pair of files and create a list of dictionaries 
+      containing the fields defined in PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD 
+      schemas plus 'coords' (from the PDB x,y,z coordinates) and 'chain' 
+      (from the PDB chain column).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.pdb-pysrc.html#process_pdb_psf">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">string</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.pdb-module.html#create_pdb_atom" class="summary-sig-name">create_pdb_atom</a>(<span class="summary-sig-arg">res_no</span>,
+        <span class="summary-sig-arg">res_id</span>,
+        <span class="summary-sig-arg">atom_no</span>,
+        <span class="summary-sig-arg">atom_type</span>,
+        <span class="summary-sig-arg">coords</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Create ATOM line for output in a PDB file (ends with a new line 
+      character)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.pdb-pysrc.html#create_pdb_atom">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.pdb-module.html#write_pdb" class="summary-sig-name">write_pdb</a>(<span class="summary-sig-arg">atoms</span>,
+        <span class="summary-sig-arg">filename</span>)</span><br />
+      Writes out a PDB file based on the values in the input atoms</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.pdb-pysrc.html#write_pdb">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.pdb-module.html#write_sphere_pdb" class="summary-sig-name">write_sphere_pdb</a>(<span class="summary-sig-arg">coords</span>,
+        <span class="summary-sig-arg">radius</span>,
+        <span class="summary-sig-arg">filename</span>)</span><br />
+      Writes out a PDB file containing entries for the spheres of a sphere 
+      model, using the beta column to store radius (all ATOMs are C1 SER)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.pdb-pysrc.html#write_sphere_pdb">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="sct.pdb-module.html#charmm_resids" class="summary-name">charmm_resids</a> = <code title="{'ANE5AC': 'SIA', 'BNE5AC': 'SIA', 'AFUC': 'FUC', 'BFUC': 'FUC', 'AGAL\
+': 'GAL', 'BGAL': 'GAL', 'AGLCNA': 'NAG', 'BGLCNA': 'NAG', 'AMAN': 'MA\
+N', 'BMAN': 'MAN', 'ASH': 'ASP', 'CYM': 'CYS', 'CYX': 'CYS', 'GLH': 'G\
+LU', 'HIP': 'HIS', 'HID': 'HIS', 'HIE': 'HIS', 'HSD': 'HIS', 'HSE': 'H\
+IS', 'LYN': 'LYS', 'TYM': 'TYR'}">{'ANE5AC': 'SIA', 'BNE5AC': 'SIA', 'AFUC': 'FU<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="charmm_residues"></a><span class="summary-name">charmm_residues</span> = <code title="charmm_resids.keys()">charmm_resids.keys()</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="sct.pdb-module.html#charmm_three_char" class="summary-name">charmm_three_char</a> = <code title="['ANE', 'BNE', 'AFU', 'BFU', 'AGA', 'BGA', 'AGL', 'BGL', 'AMA', 'BMA']">['ANE', 'BNE', 'AFU', 'BFU', 'AGA', 'BGA',<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="sct.pdb-module.html#PDB_ATOM_RECORD" class="summary-name">PDB_ATOM_RECORD</a> = <code title="'record', 0, 6, None, ('atom_no', 6, 11, int), ('atom_name', 12, 16, N\
+one), ('alt', 16, None, None), ('res_id', 17, 20, None), ('chain', 21,\
+ None, None), ('res_no', 22, 26, int), ('insert', 26, None, None), ('x\
+', 30, 38, float), ('y', 38, 46, float), ('z', 46, 54, float), ('occ',\
+ 54, 60, float), ('b', 60, 66, float), ('segid', 72, 76, None), ('elem\
+ent', 76, 78, None), ('charge', 78, 80, None),">'record', 0, 6, None, ('atom_no', 6, 11, int<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="sct.pdb-module.html#PSF_ATOM_RECORD" class="summary-name">PSF_ATOM_RECORD</a> = <code title="'atom_no', 0, 8, int, ('segid', 9, 13, None), ('res_no', 14, 18, int),\
+ ('res_id', 19, 23, None), ('atom_name', 24, 28, None), ('type', 29, 3\
+3, None), ('charge', 34, 48, float), ('mass', 48, 62, float), ('imove'\
+, 62, 70, int),">'atom_no', 0, 8, int, ('segid', 9, 13, None)<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="sct.pdb-module.html#PSFEXT_ATOM_RECORD" class="summary-name">PSFEXT_ATOM_RECORD</a> = <code title="'atom_no', 0, 10, int, ('segid', 11, 19, None), ('res_no', 20, 28, int\
+), ('res_id', 29, 37, None), ('atom_name', 38, 46, None), ('type', 47,\
+ 52, None), ('charge', 53, 68, float), ('mass', 68, 82, float), ('imov\
+e', 82, 90, int),">'atom_no', 0, 10, int, ('segid', 11, 19, <code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="sct.pdb-module.html#accept_resids" class="summary-name">accept_resids</a> = <code title="seq.all_residues+ charmm_residues+ charmm_three_char">seq.all_residues+ charmm_residues+ charmm_thre<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="parse_line"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">parse_line</span>(<span class="sig-arg">line</span>,
+        <span class="sig-arg">schema</span>,
+        <span class="sig-arg">filename</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.pdb-pysrc.html#parse_line">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+
+Parse an atom record line from a PDB or PSF file via schema.
+Based on the PDB parsing code written by Alisue (lambdalisue@hashnote.net):
+https://gist.github.com/lambdalisue/7209305
+
+Schema format:
+
+    1) record name
+    2) start index
+    3) end index or None for single character
+    4) processing function or None for `string.strip`
+
+    so a truncated (but valid) schema for a PDB ATOM record cold be:
+
+    ATOM_RECORD_SCHEMA = (
+    ...    ('record', 0,  6,   None),   # 0,  record name
+    ...    ('name', 6, 11,   int),      # 1,  serial
+    )
+
+@type  line:   string
+@param line:   Line from a text file.
+@type  schema: list
+@param schema: List of 4-tuples. The format of the tuples is given above.
+@rtype:        dictionary
+@return:       Dictionary with keys specifiec as the record name in the 
+               schema.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="pdb_res_line_parse"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">pdb_res_line_parse</span>(<span class="sig-arg">line</span>,
+        <span class="sig-arg">filename</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.pdb-pysrc.html#pdb_res_line_parse">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Parse a single line from a PDB file into a dictionary according to the
+  standard PDB column definitions</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>line</code></strong> (string) - Line from a PDB file.</li>
+    </ul></dd>
+    <dt>Returns: dictionary</dt>
+        <dd>Contains:
+          <ul>
+            <li>
+              atom_no:   integer, atom number
+            </li>
+            <li>
+              atom_name: string, atom name
+            </li>
+            <li>
+              res_id:    string, residue three letter code
+            </li>
+            <li>
+              chain:     string, chain identifier
+            </li>
+            <li>
+              res_no:    integer, residue number
+            </li>
+            <li>
+              coords:    list of floats, the x, y &amp; z coordinates
+            </li>
+          </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="read_pdb_atom_data"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">read_pdb_atom_data</span>(<span class="sig-arg">filename</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.pdb-pysrc.html#read_pdb_atom_data">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Read PDB file and return residue frequencies and atom coordinates</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>filename</code></strong> (string) - Path to a PDB file.</li>
+    </ul></dd>
+    <dt>Returns: dictionary, list</dt>
+        <dd><ul>
+            <li>
+              Dictionary for residue type frequency. Three letter residue 
+              code for the key and residue type frequency as the values.
+            </li>
+            <li>
+              A list containing lists of x, y &amp; z coordinates (3 * 
+              floats)
+            </li>
+          </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="read_psf"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">read_psf</span>(<span class="sig-arg">filename</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.pdb-pysrc.html#read_psf">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Read in a PSF file and create a list of dictionaries containing the 
+  fields defined in PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD schemas.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>filename</code></strong> (string) - Path to a PSF file.</li>
+    </ul></dd>
+    <dt>Returns: list</dt>
+        <dd>List of dictionaries with kets as defined in the 
+          PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD schemas.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="process_pdb_psf"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">process_pdb_psf</span>(<span class="sig-arg">psf_filename</span>,
+        <span class="sig-arg">pdb_filename</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.pdb-pysrc.html#process_pdb_psf">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Read in a PSF/PDB pair of files and create a list of dictionaries 
+  containing the fields defined in PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD 
+  schemas plus 'coords' (from the PDB x,y,z coordinates) and 'chain' (from 
+  the PDB chain column). Hydrogen atoms are filtered out.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>filename</code></strong> (string) - Path to a PSF file.</li>
+    </ul></dd>
+    <dt>Returns: list</dt>
+        <dd>List of dictionaries with kets as defined in the 
+          PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD schemas plus 'coords' (from 
+          the PDB x,y,z coordinates) and 'chain' (from the PDB chain 
+          column)..</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="create_pdb_atom"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">create_pdb_atom</span>(<span class="sig-arg">res_no</span>,
+        <span class="sig-arg">res_id</span>,
+        <span class="sig-arg">atom_no</span>,
+        <span class="sig-arg">atom_type</span>,
+        <span class="sig-arg">coords</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.pdb-pysrc.html#create_pdb_atom">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create ATOM line for output in a PDB file (ends with a new line 
+  character)</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>res_no</code></strong> (integer) - Residue number</li>
+        <li><strong class="pname"><code>res_id</code></strong> (string) - Residue name (3 letter code)</li>
+        <li><strong class="pname"><code>atom_no</code></strong> (integer) - Atom number</li>
+        <li><strong class="pname"><code>atom_type</code></strong> (string) - Atom type</li>
+        <li><strong class="pname"><code>coords</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats)</li>
+        <li><strong class="pname"><code>beta</code></strong> - Value to put in the temperature factor (beta) column</li>
+        <li><strong class="pname"><code>occ</code></strong> - Value to put in the occupancy (occ) column</li>
+        <li><strong class="pname"><code>chain</code></strong> - Chain identifier (a single letter)</li>
+    </ul></dd>
+    <dt>Returns: string</dt>
+        <dd>A line of text formatted as an ATOM line of a PDB</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="write_pdb"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">write_pdb</span>(<span class="sig-arg">atoms</span>,
+        <span class="sig-arg">filename</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.pdb-pysrc.html#write_pdb">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Writes out a PDB file based on the values in the input atoms</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>atoms</code></strong> (list) - A list of dictionaries containing values for the keys defined in 
+          PDB_ATOM_RECORD schema</li>
+        <li><strong class="pname"><code>filename</code></strong> (string) - Filename for the output sphere model PDB</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="write_sphere_pdb"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">write_sphere_pdb</span>(<span class="sig-arg">coords</span>,
+        <span class="sig-arg">radius</span>,
+        <span class="sig-arg">filename</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.pdb-pysrc.html#write_sphere_pdb">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Writes out a PDB file containing entries for the spheres of a sphere 
+  model, using the beta column to store radius (all ATOMs are C1 SER)</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>coords</code></strong> (list) - A list containing lists of x, y &amp; z coordinates (3 * floats)</li>
+        <li><strong class="pname"><code>radius</code></strong> (float) - Sphere radius</li>
+        <li><strong class="pname"><code>filename</code></strong> (string) - Filename for the output sphere model PDB</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="charmm_resids"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">charmm_resids</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+{'ANE5AC': 'SIA', 'BNE5AC': 'SIA', 'AFUC': 'FUC', 'BFUC': 'FUC', 'AGAL<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+': 'GAL', 'BGAL': 'GAL', 'AGLCNA': 'NAG', 'BGLCNA': 'NAG', 'AMAN': 'MA<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+N', 'BMAN': 'MAN', 'ASH': 'ASP', 'CYM': 'CYS', 'CYX': 'CYS', 'GLH': 'G<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+LU', 'HIP': 'HIS', 'HID': 'HIS', 'HIE': 'HIS', 'HSD': 'HIS', 'HSE': 'H<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+IS', 'LYN': 'LYS', 'TYM': 'TYR'}
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="charmm_three_char"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">charmm_three_char</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+['ANE', 'BNE', 'AFU', 'BFU', 'AGA', 'BGA', 'AGL', 'BGL', 'AMA', 'BMA']
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="PDB_ATOM_RECORD"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">PDB_ATOM_RECORD</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+'record', 0, 6, None, ('atom_no', 6, 11, int), ('atom_name', 12, 16, N<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+one), ('alt', 16, None, None), ('res_id', 17, 20, None), ('chain', 21,<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ None, None), ('res_no', 22, 26, int), ('insert', 26, None, None), ('x<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+', 30, 38, float), ('y', 38, 46, float), ('z', 46, 54, float), ('occ',<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 54, 60, float), ('b', 60, 66, float), ('segid', 72, 76, None), ('elem<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ent', 76, 78, None), ('charge', 78, 80, None),
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="PSF_ATOM_RECORD"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">PSF_ATOM_RECORD</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+'atom_no', 0, 8, int, ('segid', 9, 13, None), ('res_no', 14, 18, int),<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ ('res_id', 19, 23, None), ('atom_name', 24, 28, None), ('type', 29, 3<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+3, None), ('charge', 34, 48, float), ('mass', 48, 62, float), ('imove'<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+, 62, 70, int),
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="PSFEXT_ATOM_RECORD"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">PSFEXT_ATOM_RECORD</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+'atom_no', 0, 10, int, ('segid', 11, 19, None), ('res_no', 20, 28, int<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+), ('res_id', 29, 37, None), ('atom_name', 38, 46, None), ('type', 47,<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 52, None), ('charge', 53, 68, float), ('mass', 68, 82, float), ('imov<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+e', 82, 90, int),
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="accept_resids"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">accept_resids</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+seq.all_residues+ charmm_residues+ charmm_three_char
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="sct-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Mon Jun 16 11:53:31 2014
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
