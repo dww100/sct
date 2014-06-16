@@ -6,20 +6,17 @@ the full sphere modelling pipeline.
 This involves:
 
 Reading input experimental curves, separated into Neutron and X-ray categories.
-Calculate Rg and Rxs1 from the data and write to a file
-Create unhydrated sphere model
-**IF** we have Neutron data:
 
-  *  Calculate theoretical scattering curve
-  *  Compare theoretical and experimental curves - R factor
-
-**IF** we have X-ray data:
-
-  *  Create hydrated sphere model
-  *  Calculate theoretical scattering curve
-  *  Compare theoretical and experimental curves - R factor or $\chi^{2}$
-
-Write Rg, Rxs1 and comparison data to a file
+1. Calculating Rg and Rxs1 from the data and writing to a file
+2. Creating unhydrated sphere models
+3. **IF** we have Neutron data:
+    *  Calculating theoretical scattering curves
+    *  Comparing theoretical and experimental curves - R factor or $\chi^{2}$
+4. **IF** we have X-ray data:
+    *  Creating hydrated sphere model
+    *  Calculating theoretical scattering curve
+    *  Comparing theoretical and experimental curves - R factor or $\chi^{2}$
+5. Writing Rg, Rxs1 and comparison data to a file
 
 Useage:
 -------
