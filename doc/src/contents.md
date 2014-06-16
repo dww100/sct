@@ -16,7 +16,7 @@ Modern Version
 + [calculate_rfactor.py](calculate_rfactor.html)
 + [get_boxside.py](get_boxside.html)
 + [hydrate_spheres.py](hydrate_spheres.html)
-+ [optimize_model_params.py](optimize_model_params.html)
++ [optimize_model_params.py](optimize_model_parameters.html)
 + [pdb2sphere.py](pdb2sphere.html)
 + [sas_curve_analysis.py](sas_curve_analysis.html)
 + [sct_get_sequence.py](sct_get_sequence.html)
@@ -42,9 +42,5 @@ Classic Version
 + [sct](sct.html)
 + [sctpl](sctpl.html)
 + [sluv](sluv.html)
-
-
-( c ) 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
-license, [http://creativecommons.org/licenses/by/4.0/](http://creativecommons.org/licenses/by/4.0/)
 
 \newpage
