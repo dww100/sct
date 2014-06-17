@@ -266,3 +266,5 @@ A single curve of either flavour is enough.
 If your input curves do not have Q in units of Å^-1 but nm^-1 then you can use the flags _-xu_ and _-nu_ to set the units for the x-ray and neutron input respectively (specify 'nm' to have the units converted from nm to Å). 
 All curves from the same type of source are assumed to use the same units.
 
+### References
+
