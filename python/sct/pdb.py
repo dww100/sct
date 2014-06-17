@@ -32,6 +32,8 @@ charmm_resids = {
 'BGAL': 'GAL',
 'AGLCNA': 'NAG',
 'BGLCNA': 'NAG',
+'AGALNA': 'NGA',
+'BGALNA': 'NGA',
 'AMAN': 'MAN',
 'BMAN': 'MAN',
 'ASH': 'ASP',
