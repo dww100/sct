@@ -49,7 +49,12 @@ def load_scatter_curve(filename, q_min, q_max):
         scatter_data = np.loadtxt(filename)
     except:
         # Maybe the file has a headerline?
-        scatter_data = np.loadtxt(filename, skiprows = 1)
+        try:
+            scatter_data = np.loadtxt(filename, skiprows = 1)
+        except:
+            print "Unable to load " + filename
+            print "Check that the file exists, that all columns are the same length and contain numbers (one header line is permitted)\n"
+            sys.exit(1)
         
     qrange_mask = (scatter_data[:,0] >= q_min) & (scatter_data[:,0] <= q_max)
 
