@@ -11,19 +11,24 @@ Theoretical scattering curves are then generated for each model and used for tri
 From this a small family of best-fit models can be identified. 
 It is to automate this last two steps that SCT was developed.
 The original SCT software, written in Fortran, has been used in the production of 74 structures (21 antibodies, 27 complement proteins and 24 oligosaccharides) deposited in the Protein Data Bank between 1998 and 2014.
+All of the same functionality of the classic SCT is now available in an easier to use set of Python scripts.
 
-Features:
+Features
+--------
 
 * Creates low resolution sphere models from atomistic models (input in PDB format)
 * Addition of hydration layers to models for comparison to SAXS data
 * Calculation of scattering curves from sphere models (via the Debye equation)
 * Computation of R factor or Chi squared metrics of the comparison between experimental and modelled curves
 * Calculation of sequence based estimates of protein volume
+* Python package facilitating the develoment of new workflows
+
+Further information is available at the SCT website [](http://dww100.github.io/sct/)
 
 This software was developed in the Structural Immunology Group at UCL. The original developer was Professor 
 Stephen J Perkins (s.perkins@ucl.ac.uk) and the Python version was created by David W. Wright (dave.wright@ucl.ac.uk).
 
-Requirements:
+Requirements
 -------------
 
 Linux
@@ -45,7 +50,7 @@ All of these requirements should also available via standard package managers.
 However, we have found the easiest way to acquire the python packages is to use the free scientific Python distribution Anaconda.
 Download and installation instructions for Anaconda can be found [here](https://store.continuum.io/cshop/anaconda/).
 
-Installation instructions:
+Installation instructions
 --------------------------
 
 cmake -DCMAKE_INSTALL_PREFIX:PATH=/path/to/install/ . && make install
