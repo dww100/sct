@@ -23,7 +23,7 @@ Features
 * Calculation of sequence based estimates of protein volume
 * Python package facilitating the develoment of new workflows
 
-Further information is available at the SCT website [](http://dww100.github.io/sct/)
+Further information is available at the SCT website [http://dww100.github.io/sct/](http://dww100.github.io/sct/)
 
 This software was developed in the Structural Immunology Group at UCL. The original developer was Professor 
 Stephen J Perkins (s.perkins@ucl.ac.uk) and the Python version was created by David W. Wright (dave.wright@ucl.ac.uk).
