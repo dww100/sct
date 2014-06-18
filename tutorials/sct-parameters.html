@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/stylesheet.css" type="text/css" />
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="format-of-sct-parameter-files">Format of SCT Parameter Files</h1>
+<p>SCT parameter files are encoded in <a href="http://www.yaml.org/">YAML</a>. An example parameter file is provided <a href="params.yml">here</a>. In this document we will describe all of the fields which can be included in the file and what they mean. A level of familiarity with small angle scattering data and its analysis is assumed. Many tutorials and review articles on such subjects are available, one such which connects the experimental data to the modelling analysis performed by SCT can be found <a href="dx.doi.org/10.1016/j.ymeth.2011.01.004">here</a>.</p>
+<p>The first thing to note is that all distance units must be in Angstrom (Å).</p>
+<h2 id="curve-analysis">Curve Analysis</h2>
+<p>The first two sections in the example file are rg and rxs1. These sections contain parameters for the calculation of the for radius of gyration (Rg) and cross section (Rsx1) from scattering curves.</p>
+<pre><code>---
+rg:
+    qmin: 0.0
+    qmax: 0.2
+    fitmin: 0.015
+    fitmax: 0.028
+rxs1:
+    fitmin: 0.031
+    fitmax: 0.051</code></pre>
+<p>qmin and qmax are only used in plotting and represent the maximum and minimum values that will be plotted. They are ignored by all analysis scripts.</p>
+<p>fitmin and fitmax are provided for both calculations, these are the minimum and maximum Q values used in the linear fits used to calculate the two quantities. These are used to analyse both the input experimental graphs and the theoretical curve generated from sphere modelling by SCT.</p>
+<p>A third section can be added called rxs2 containing values for a second cross section at higher Q.</p>
+<h2 id="sphere-modelling">Sphere Modelling</h2>
+<p>The next section contains parameters used to generate sphere models (both dry for neutron and hydrated for x-ray comparisons)</p>
+<pre><code>sphere:
+    cutoff: 4
+    boxside: 5.4454</code></pre>
+<p>cutoff: Cut off number of atoms that must appear in a cube for a sphere to be included in the sphere model generated from an atomistic PDB model</p>
+<p>boxside: Length of the side of the boxes used in the cubic grid used to create a sphere model from an atomistic PDB model</p>
+<h2 id="hydrating-sphere-models">Hydrating Sphere Models</h2>
+<p>Parameters used in the creation of the hydration layer around a sphere model (used for comparison to x-ray data)</p>
+<pre><code>hydrate:
+    positions: 27
+    cutoff: 9</code></pre>
+<p>positions: Number of positions on a box centred on each sphere from a dry model to place a preliminary hydration sphere (max = 27)</p>
+<p>cutoff: Cut off number of spheres that must appear in a cube for a sphere to be included in the final hydration layer</p>
+<h2 id="theoretical-scattering-curve-calculation">Theoretical Scattering Curve Calculation</h2>
+<p>Specify how the theoretical curve is generated from a sphere model.</p>
+<pre><code>curve:
+    qmax: 0.16
+    npoints: 100
+    radbins: 400
+    smear: True
+    wavelength: 6.0
+    spread: 0.1
+    divergence: 0.016</code></pre>
+<p>qmax: Maximum Q value of the generated curve</p>
+<p>npoints: Number of points to include in the curve</p>
+<p>radbins: Number of bins used in creating separation histogram</p>
+<p>smear: Will smearing be used in the creation of theoretical neutron curves (True or False)</p>
+<p>wavelength: Smearing parameter</p>
+<p>spread: Smearing parameter</p>
+<p>divergence: Smearing parameter</p>
+<h2 id="curve-comparison">Curve Comparison</h2>
+<p>Range of Q values to use in the comparison of experimental and theoretical curves (i.e. to calculate the R factor or Chi^2 value).</p>
+<pre><code>rfac:
+    qmin: 0.015
+    qmax: 0.16</code></pre>
+<p>qmin: minimum Q value</p>
+<p>qmax: maximum Q value</p>
+<div class="references">
+
+</div>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

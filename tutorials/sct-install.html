@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/stylesheet.css" type="text/css" />
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="installing-sct">Installing SCT</h1>
+<p>The SCT suite contains both the modern python based and classic fortran based tools for constrained modelling. Both are installed at the same time using cmake.</p>
+<h2 id="requirements">Requirements</h2>
+<p>The following software is needed to install SCT:</p>
+<ul>
+<li>Linux</li>
+<li>Fortran compiler (gfortran verison 4.3 or newer have been tested)</li>
+<li>cmake</li>
+<li>Python - with <a href="http://www.numpy.org/">NumPy</a>, <a href="http://www.scipy.org/scipylib/index.html">SciPy</a>, <a href="http://matplotlib.org/">matplotlib</a> and <a href="http://pyyaml.org/">PyYAML</a></li>
+</ul>
+<p><a href="http://gcc.gnu.org/wiki/GFortran">Gfortran</a> is the name of the GNU Fortran compiler and is available as part of the GNU Compiler Collection (GCC) and <a href="http://www.cmake.org/">cmake</a> is a cross-platform, open-source build system. Both are available from the package repositories of most major Linux distributions (i.e. can be installed via apt-get, yum, etc.).</p>
+<p>All of the Python packages should also be available via standard package managers. However, the easiest way to acquire them is to use the free scientific Python distribution Anaconda. Download and installation instructions for Anaconda can be found <a href="https://store.continuum.io/cshop/anaconda/">here</a>.</p>
+<h2 id="getting-the-source-code">Getting the Source Code</h2>
+<p>Links to archives of the code are provided at the top of this page in two formats zip and compressed tarball. To uncompress the zip archive use the command:</p>
+<pre><code>unzip sct.zip</code></pre>
+<p>To uncompress the compressed tarball use:</p>
+<pre><code>tar xvfz sct.tar.gz</code></pre>
+<p>The code can also be cloned from the GitHub repository using git:</p>
+<pre><code>git clone https://github.com/dww100/sct.git</code></pre>
+<h2 id="compiling-the-code">Compiling the Code</h2>
+<p>The compilation and installation is handled by cmake:</p>
+<pre><code>cmake -DCMAKE_INSTALL_PREFIX:PATH=/path/to/install . &amp;&amp; make install</code></pre>
+<p>where /path/to/install is the path into which you want the classic SCT executables and modern SCT python scripts to be installed. Remember to place this directory into your PATH environment variable.</p>
+<div class="references">
+
+</div>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

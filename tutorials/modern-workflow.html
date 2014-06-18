@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/stylesheet.css" type="text/css" />
+
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/dww100/sct">View on GitHub</a>
+
+          <h1 id="project_title">SCT</h1>
+          <h2 id="project_tagline">A suite of tools for atomistic modelling of SAS data</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/dww100/sct/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/dww100/sct/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="tutorial---using-modern-sct-for-constrained-modelling">Tutorial - Using Modern SCT for Constrained Modelling</h1>
+<p>In this tutorial we will use examples based on the recent paper by Rayner <em>et al.</em> <span class="citation">(2014)</span> to illustrate how to run the SCT constrained modelling workflow. We start with six models of the IgG4 molecule and compare these to scattering curves obtained from both neutron and x-ray scattering experiments.</p>
+<p>The SCT process involves the creation of coarse grained sphere models from atomic protein structures. These are in turn used to calculate theoretical scattering curves for comparison with experimental SAS data which allows us to identify models which represent the average solution structure of the protein of interest.</p>
+<div class="figure">
+<img src="images/constrained-modelling.png" alt="Constrained modelling workflow" /><p class="caption">Constrained modelling workflow</p>
+</div>
+<p>If you have not already done so <a href="sct-install.html">install SCT</a>.</p>
+<p>The files needed for this tutorial can be found in the <em>modern-tutorial</em> folder or extracted from <a href="sct-tutorial.tgz">sct-tutorial.tgz</a>.</p>
+<p>For the rest of this tutorial we will assume that you have changed into the directory containing the tutorial files.</p>
+<h2 id="initial-structures">Initial Structures</h2>
+<p>The IgG4 molecule is typical of antibody structures, consisting of four chains with a particular geometry with two regions (the Fc and Fab) connected by long linker regions (illustrated in the picture below, adapted from <span class="citation">(Abe et al. 2010)</span>). The two larger chains are called the heavy chains and constitute the Fab domain, the linkers and part of each Fab domain. The light chains are confined to the Fab region.</p>
+<div class="figure">
+<img src="images/igg4_structure.png" alt="Structure of the IgG4" /><p class="caption">Structure of the IgG4</p>
+</div>
+<p>The first thing to do is to inspect the six structures in the <em>pdbs</em> directory. Use either your favourite molecular viewer (such as <a href="http://www.pymol.org/">pymol</a> or <a href="http://www.ks.uiuc.edu/Research/vmd/">VMD</a>. You will see that three of the structures have widely separated FAB regions and in the other three both FAB sections are close together.</p>
+<p>These are all homology models, generated using the <a href="http://swissmodel.expasy.org/">SWISS-MODEL</a> software <span class="citation">(Biasini et al. 2014)</span>, based on crystal structures of IgG1 (taken from PDBs: <a href="http://www.rcsb.org/pdb/explore.do?structureId=1bbj">1BBJ</a> &amp; <a href="http://www.rcsb.org/pdb/explore.do?structureId=1hzh">1HZH</a>.</p>
+<h2 id="identify-an-extended-structure">Identify an Extended Structure</h2>
+<p>In order to correctly parametrize the creation of sphere models we require a model of the protein in which there is as little atomic overlap as possible. In this case this is likely to be an extended conformation.</p>
+<p>As you have seen <em>model1.pdb</em> is an extended model of IgG4. We will use this to help choose our sphere modelling parameters.</p>
+<h2 id="scattering-data">Scattering Data</h2>
+<p>Scattering data files are in the format of 1st column, Q, 2nd column, I(Q), and, in most cases, a 3rd column which is the error in I(Q).</p>
+<p>At some instruments, for example BM29, the data is automatically monitored for radiation damage and the frames summed accordingly. If the data was generated from an instrument without this software, single timeframes must be compared to the overall merged file and checked for deviations at low Q. Radiation damage will present itself as an upturn at the low Q portion of the curve. Only scattering curves free from radiation damage should be analysed.</p>
+<p>Viewing the entire scattering curve can be achieved by viewing the ‘wide-angle’ plot, to view the whole scattering curve and looking at its overall shape. This is given by plotting Q vs Ln(I(Q)). From this, you can identify anomalous scattering at low Q (possibly from the beam stop, aggregation or radiation damage) and also the maximum useable range of the data (cut off before the data becomes too noisy).</p>
+<h2 id="identify-suitable-ranges-for-guinier-fits">Identify Suitable Ranges for Guinier Fits</h2>
+<p>The scattering curve can be analysed by Guinier analysis to give Rg (radius of gyration) and RXS (cross-sectional radius). Immunoglobulins have two distinct Rxs ranges (termed Rxs1 and Rxs2), with Rxs1 thought to correspond to the overall cross-section of the molecule, and RXS-2 to the cross-section of the individual Fc and Fab domains.</p>
+<p>Rg can be determined by the Guinier approximation. To do this, the scattering curve is visualised by plotting Q^2 vs Ln(I(Q)) to show the beginning portion of the scattering curve as linear. Fitting to this region will give Rg. Selection of the portion of the scattering curve to fit to is determined by choosing two Q values. In an ideal case, the first Q value (Qmin) would be the first scattering point at low Q (i.e. as close to zero as the instrument measures). The Qmax value is determined by Q*Rg range. For globular proteins this is limited at around Q*Rg of 1.5.</p>
+<p>This is repeated for Rxs1 and Rxs2 by visual inspection of the curves. To visualise the linear portions, the scattering curve is viewed as Q^2 vs ln(I(Q)*Q)</p>
+<h2 id="parameter-file">Parameter File</h2>
+<p>In the new version of SCT the parameters used to create sphere models and to analyse the experimental and theoretical scattering curve are combine in a single input file. The file is in the <a href="http://www.yaml.org/">YAML</a> format which is nicely human readable and uses indentation to express data structure hierarchy. Note that all distance measures must be entered in Å.</p>
+<p>The initial version of this file for use in this tutorial is in <em>params.yml</em>. At the beginning of this tutorial the values are set to defaults which are plausible but unlikely to be valid for any specific target system. We will edit various sections of this file as we proceed.</p>
+<p>A full description of all possible sections that can be included in this file can be found <a href="sct-parameters.html">here</a>.</p>
+<p>The range of values used in the calculation of the Rg and Rxs1 are given by the 'fitmin' and 'fitmax' values in the 'rg' and 'rxs1' sections of the parameter file. The ranges used (0.015 to 0.028 Å for Rg and 0.031 to 0.051 Å for Rxs1) were taken directly from the study by Rayner <em>et al.</em> <span class="citation">(2014)</span>.</p>
+<h2 id="optimize-the-parameters-used-in-sphere-modelling">Optimize the Parameters Used in Sphere Modelling</h2>
+<p>An important consideration in the constrained modelling process is how to create coarse grained models which represent the input atomic models. The procedure used in SCT is to construct a grid around the protein and to place spheres in the sphere model only for grid boxes containing more than a threshold number of atoms. An illustration of this process in two dimensions is shown in the figure below. This coarse graining will obviously lose some detail but we wish to retain as much information about the shape of the protein as possible and to replicate accurately the proteins volume. Usually the threshold (which we term the cut-off here) is set to 4 atoms and the resolution of the grid is varied to reproduce the correct volume.</p>
+<div class="figure">
+<img src="images/atom2sphere_2d.png" alt="Coarse graining of atomic structure" /><p class="caption">Coarse graining of atomic structure</p>
+</div>
+<p>In SCT the target volume is calculated from the protein sequence <span class="citation">(Perkins 1986)</span>. If the atomistic model being used contains the full sequence then this is the only input required for this stage of the modelling. If however, like in this instance, the model has missing residues then a second file specifying the sequence should be provided. This file can either be a YAML file containing key/value pairs of the residue names (three letter codes) and frequencies or a <a href="http://en.wikipedia.org/wiki/FASTA_format">FASTA</a> format file of the sequence. In either instance all chains in the model must be explicitly included in the sequence input file.</p>
+<p>Here we use the FASTA file <em>migg4.fas</em>. Open this file in a text editor to see both the format at the repetition necessary to provide the information needed for all 4 chains.</p>
+<p>To run the optimization code enter the following command:</p>
+<pre><code>optimize_model_params.py -p params.yml -i pdbs/model1.pdb -s migg4.fas -f fas</code></pre>
+<p>Here the command line flag <em>-p</em> indicates the path to the parameter file to be read, <em>-i</em> the path to the input PDB model, <em>-s</em> the path to the sequence file and <em>-f</em> the format of the sequence files ('fas' = FASTA, 'yml' = YAML). Only two values are used from the <em>params.yml</em>, they are the 'cutoff' specified under the 'sphere' section and 'positions' under the 'hydrate' section. The 'cutoff' value determines the minimum number of atoms within a grid box at which a sphere is created in the coarse gained model. The value, 4, used in <em>params.yml</em> has been found to work well for a range of proteins. The 'positions' value should always be 27.</p>
+<p>The running of <em>optimize</em>model_params.py_ will create a file called <em>optimized</em>params.txt_. Open this file in a text editor, we will now extract the parameter values we need to create consistent sphere models of the unhydrated and hydrated models.</p>
+<h2 id="parameters-for-unhydrated-models">Parameters for Unhydrated Models</h2>
+<p>The important parameter for the unhydrated (dry) models is the size of the grid boxes used to create the sphere models. The size of the grid box determines the radius of the spheres in the model. The optimized radius is given in the <em>optimized</em>params.txt_ file after the text 'Sphere model box side'.</p>
+<p>The size of the box is optimized to recreate the correct protein volume. To check that the procedure has worked compare the values given for 'Target dry volume' which was calculated from the protein sequences and 'Model dry volume' which is computed directly from the sphere model.</p>
+<p>Open the file <em>params.yml</em> and edit the 'boxside' value in the 'sphere' section to agree with the 'Sphere model box side' entry in the <em>optimized</em>params.txt_ file (this should be 5.3968).</p>
+<h2 id="parameters-for-hydrated-models">Parameters for Hydrated Models</h2>
+<p>The hydration routine initially adds an excess of spheres to the unhydrated sphere model which are then filtered out using a second cutoff. This is the 'cutoff' listed in the 'hydrate' section of the parameter file.</p>
+<p>The optimization routine for the hydration cutoff is experimental and whilst a recommended value ('Suggested hydration cutoff') is available in <em>optimized</em>params.txt_ in most cases you will need to manually compare the 'Target hydrated volume' value to the 'Hydrated volume' for each cutoff to determine the optimal value. Once you have selected this enter as the 'cutoff' listed in the 'hydrate' section of the <em>params.yml</em> (the best value should be 9).</p>
+<h2 id="create-a-sphere-model">Create a Sphere Model</h2>
+<p>Now that we have updated the parameter file to create optimal models for our system we should create a sphere model and see how well it reproduces the original atomic model.</p>
+<p>Run the following command:</p>
+<pre><code>pdb2sphere.py -p params.yml -i pdbs/model1.pdb -m project -o model1.sph</code></pre>
+<p>The <em>-p</em> and <em>-i</em> flags have the same meaning as for the optimize_model_params.py command. The <em>-m</em> flag decides on the type of output (here a sphere model is output to file and summary information to stdout, i.e. the command line) and <em>-o</em> specifies the output file path.</p>
+<p>The resultant file <em>model1.sph</em> contains three columns; x, y, z and radius. This file cannot be opened by conventional structure viewing programs. In order to view the structure we will convert it into PDB format using:</p>
+<pre><code>sphere2pdb.py -i model1.sph -o model1_sphere.pdb</code></pre>
+<p>Here <em>-i</em> is the input sphere file and <em>-o</em> the output PDB file.</p>
+<p>You can now load the original atomic model (<em>pdbs/model1.pdb</em>) and the sphere model (<em>model1</em>sphere.pdb_) into a viewer to compare them. In both pymol and VMD it is possible to view the sphere model as spheres with the radius used in the modelling process (boxside / 2).</p>
+<h2 id="hydrate-the-sphere-model">Hydrate the Sphere Model</h2>
+<p>In order to create a hydrated model of the IgG4 we run the command:</p>
+<pre><code>hydrate_spheres.py -p params.yml -i model1.sph -o model1_hyd.sph</code></pre>
+<p>This again results in a three column file which cannot be easily viewed as a structure. It is left as an exercise for the user to convert the hydrated sphere model into a PDB for viewing.</p>
+<h2 id="calculate-theoretical-scattering-curve">Calculate Theoretical Scattering Curve</h2>
+<p>Now we will create a theoretical scattering curve from the hydrated sphere model. The command to do this is:</p>
+<pre><code>calculate_curve.py -p params.yml -i model1_hyd.sph -f sph -x -o hyd_curve.scx</code></pre>
+<p>The <em>-i</em> flag here can accept either a sphere file or a PDB, it is assumed to be a PDB unless you set <em>-f</em> to 'sph' to indicate it is a sphere file. The <em>-x</em> flag indicates that we want to output a curve for comparison with x-ray data and no smearing should be applied. Otherwise a smearing correction would be applied to the curve using the values specified in the <em>params.yml</em> file as 'smear' in the 'curve' section in that file is set to 'True'. The resultant curve is saved in the file specified by <em>-o</em>.</p>
+<p>The output file is a simple two column file. The two columns being the magnitude of the scattering vector (Q) and the intensity (I).</p>
+<p>The parameters used to control the creation of the curve in the <em>params.yml</em> file are all in the 'curve' subsection:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Key</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">qmax</td>
+<td align="left">Maximum Q value for which to compute an intensity value</td>
+</tr>
+<tr class="even">
+<td align="left">npoints</td>
+<td align="left">Number of Q values to compute the intensity value at</td>
+</tr>
+<tr class="odd">
+<td align="left">radbins</td>
+<td align="left">Number of bins used in the Debye equation histogram (In all likelihood you will never need to alter this)</td>
+</tr>
+<tr class="even">
+<td align="left">smear</td>
+<td align="left">Should Neutron curves be smeared - True or False</td>
+</tr>
+<tr class="odd">
+<td align="left">wavelength</td>
+<td align="left">Neutron smearing parameter - the wavelength of the incident beam</td>
+</tr>
+<tr class="even">
+<td align="left">spread</td>
+<td align="left">Neutron smearing parameter - spread of the incident beam</td>
+</tr>
+<tr class="odd">
+<td align="left">divergence</td>
+<td align="left">Neutron smearing parameter - divergence of the incident beam</td>
+</tr>
+</tbody>
+</table>
+<h2 id="compare-theoretical-and-experimental-curves">Compare Theoretical and Experimental Curves</h2>
+<p>In order to compare the calculated curve with experimental results we use a measure known as the <a href="http://en.wikipedia.org/wiki/R-factor_%28crystallography%29">R factor</a> by analogy with crystallography. The R factor is a percentage with a value of less than 5 % representing a good match between the two curves.</p>
+<pre><code>calculate_rfactor.py -p params.yml -c hyd_curve.scx -e expt/x_1.dat -o rfac_model1.dat</code></pre>
+<p>The <em>-c</em> flag specifies the input calculated (theoretical) curve, <em>-e</em> the experimental curve and <em>-o</em> the output file. The output file contains four columns; the experimental data file, the theoretical curve file, then the scaling factor used to match the curves and the R factor. The scaling factor provided is the value needed to multiply the theoretical curve intensity to match its experimental counterpart.</p>
+<p>In the <em>params.yml</em> file the range over which the comparison takes place is defined by the 'qmin' and 'qmax' values in the 'rfac' section.</p>
+<p>The R factor here is &gt; 35 % indicating a very poor fit between out theoretical model and the experimental result. You should now plot the experimental and theoretical curves to see just how bad the fit is. Remember to use the scaling factor to multiply the intensity.</p>
+<p>An example command to do this in <a href="http://www.gnuplot.info/">gnuplot</a> would be:</p>
+<pre><code>plot &#39;expt/x_1.dat&#39; u 1:2, &#39;hyd_curve.scx&#39; u 1:(0.0215 * $2)</code></pre>
+<p>In this example 0.0215 is the scaling factor.</p>
+<h2 id="run-sct-workflow">Run SCT Workflow</h2>
+<p>In real constrained modelling applications you would want to run the steps above (from sphere model creation to curve comparison) many thousands of times and perhaps to compare the results to several curves. This can easily be achieved using the SCT workflow tool.</p>
+<p>In this tutorial we will run the work flow on a limit selection of 6 models and three experimental curves (two x-ray and one neutron) but this will illustrate how to do larger data sets. The basic command you need to run is:</p>
+<pre><code>sct_pdb_analysis.py -p params.yml -i pdbs/ -o igg4 -x expt/x_1.dat expt/x_2.dat -n expt/n.dat -t igg4</code></pre>
+<p>In this case <em>-i</em> is the path to the directory containing the PDBs we wish to analyse, <em>-o</em> is the path to a directory in which all of the output will be stored, <em>-x</em> is a list of all of the experimental x-ray curves to be compared against and <em>-n</em> a list of all of the neutron curves to be used in comparisons. The <em>-t</em> flag provides the title prefix for the output summary files.</p>
+<p>Running this command will create the following hierarchy of files and folders:</p>
+<p>igg4/neutron/models/*.pdb</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Files</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">igg4/igg4_expt.sum</td>
+<td align="left">Summary of the Rg and Rxs1 values for all experimental curves</td>
+</tr>
+<tr class="even">
+<td align="left">igg4/igg4.sum</td>
+<td align="left">Summary data for all of the models compared to all of the experimental curves</td>
+</tr>
+<tr class="odd">
+<td align="left">igg4/xray/curves/*.scx</td>
+<td align="left">Model x-ray scattering curves</td>
+</tr>
+<tr class="even">
+<td align="left">igg4/xray/models/*.pdb</td>
+<td align="left">Unhydrated sphere model PDBs</td>
+</tr>
+<tr class="odd">
+<td align="left">igg4/neutron/curves/*.scn</td>
+<td align="left">Model x-ray scattering curves</td>
+</tr>
+<tr class="even">
+<td align="left">igg4/neutron/models/*.pdb</td>
+<td align="left">Hydrated sphere model PDBs</td>
+</tr>
+</tbody>
+</table>
+<p>The * is replaced by the name of the original PDB files for the model and curve files.</p>
+<p>The summary files are output as tab separated columns. The easiest way to see the table correctly is to open it in Microsoft Excel or LibreOffice Calc. When you look at the output data you will see that three of the models have low R factors in comparison to all of the curves, indicating a bad fit, and three have high ones, indicating a poor fit. You can now look at the two sets of models to see how they differ from one another.</p>
+<p>You can also compare the scattering curves (again remembering to account for the scaling factor). An example command for looking at one good and one bad fit against the experimental neutron curve using gnuplot is:</p>
+<pre><code>plot &#39;./expt/n.dat&#39; u 1:2, &#39;./igg4/neutron/curves/model1.scn&#39; u 1:(0.1855*$2), &#39;./igg4/neutron/curves/model6.scn&#39; u 1:(0.1334*$2)</code></pre>
+<p><em>Notes:</em></p>
+<p>You need not provide curves for both x-ray and neutron experiments. A single curve of either flavour is enough.</p>
+<p>If your input curves do not have Q in units of Å^-1 but nm^-1 then you can use the flags <em>-xu</em> and <em>-nu</em> to set the units for the x-ray and neutron input respectively (specify 'nm' to have the units converted from nm to Å). All curves from the same type of source are assumed to use the same units.</p>
+<div class="references">
+<h3>References</h3>
+<p>Abe, Yuki, Jayesh Gor, Daniel G. Bracewell, Stephen J. Perkins, and Paul A. Dalby. 2010. “Masking of the Fc Region in Human IgG4 by Constrained X-Ray Scattering Modelling: Implications for Antibody Function and Therapy.” <em>Biochemical Journal</em> 432 (1): 101–111. doi:<a href="http://dx.doi.org/10.1042/BJ20100641">10.1042/BJ20100641</a>. <a href="http://www.biochemj.org/bj/432/bj4320101.htm">http://www.biochemj.org/bj/432/bj4320101.htm</a>.</p>
+<p>Biasini, Marco, Stefan Bienert, Andrew Waterhouse, Konstantin Arnold, Gabriel Studer, Tobias Schmidt, Florian Kiefer, et al. 2014. “SWISS-MODEL: Modelling Protein Tertiary and Quaternary Structure Using Evolutionary Information.” <em>Nucleic Acids Research</em>. doi:<a href="http://dx.doi.org/10.1093/nar/gku340">10.1093/nar/gku340</a>. <a href="http://nar.oxfordjournals.org/content/early/2014/04/29/nar.gku340.abstract">http://nar.oxfordjournals.org/content/early/2014/04/29/nar.gku340.abstract</a>.</p>
+<p>Perkins, Stephen J. 1986. “Protein Volumes and Hydration Effects.” <em>European Journal of Biochemistry</em> 157 (1): 169–180. doi:<a href="http://dx.doi.org/10.1111/j.1432-1033.1986.tb09653.x">10.1111/j.1432-1033.1986.tb09653.x</a>. <a href="http://dx.doi.org/10.1111/j.1432-1033.1986.tb09653.x">http://dx.doi.org/10.1111/j.1432-1033.1986.tb09653.x</a>.</p>
+<p>Rayner, Lucy E., Gar Kay Hui, Jayesh Gor, Richard K. Heenan, Paul A. Dalby, and Stephen J. Perkins. 2014. “The Fab Conformations in the Solution Structure of Human IgG4 Restricts Access to Its Fc Region: Implications for Functional Activity.” <em>Journal of Biological Chemistry</em>. doi:<a href="http://dx.doi.org/10.1074/jbc.M114.572404">10.1074/jbc.M114.572404</a>. <a href="http://www.jbc.org/content/early/2014/05/29/jbc.M114.572404.abstract">http://www.jbc.org/content/early/2014/05/29/jbc.M114.572404.abstract</a>.</p>
+</div>
+            <div id="footer">
+      
+      <hr>
+      
+      &copy; 2014 David W Wright. Licensed under the Creative Commons Attribution 4.0 
+      license, <a href="http://creativecommons.org/licenses/by/4.0/">http://creativecommons.org/licenses/by/4.0/</a>
+      </div>
+            </div>
+    </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>

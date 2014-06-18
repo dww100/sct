@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" type="text/css" />
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="SCT: A suite of tools for atomistic modelling of SAS data" />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Sct</title>
-  </head>
-
-  <body>
+</head>
+<body>
 
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
@@ -28,49 +26,35 @@
         </header>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-<a name="sct---analysis-and-modelling-of-small-angle-scattering-data" class="anchor" href="#sct---analysis-and-modelling-of-small-angle-scattering-data"><span class="octicon octicon-link"></span></a>SCT - Analysis and Modelling of Small Angle Scattering Data</h1>
-
-<p>This software was developed in the Structural Immunology Group at UCL. The original developer was Professor 
-Stephen J Perkins (<a href="mailto:s.perkins@ucl.ac.uk">s.perkins@ucl.ac.uk</a>) and the Python version was created by David W. Wright (<a href="mailto:dave.wright@ucl.ac.uk">dave.wright@ucl.ac.uk</a>).</p>
-
-<h2>
-<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements:</h2>
-
-<p>cmake</p>
-
-<p>gfortran (version 4.2 or greater)</p>
-
-<p>Python 2.7</p>
-
-<p>The following packages must be in the PYTHONPATH:
-distutils
-NumPy
-SciPy
-matplotlib
-yaml</p>
-
-<p>We recommend the installation of Enthought Canopy to guarantee the correct installation of python and the packages required</p>
-
-<h2>
-<a name="installation-instructions" class="anchor" href="#installation-instructions"><span class="octicon octicon-link"></span></a>Installation instructions:</h2>
-
-<p>cmake -DCMAKE_INSTALL_PREFIX:PATH=/path/to/install/ . &amp;&amp; make install</p>
-      </section>
+  <div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+    <div class="container">
+    <div class="row">
+            <div class="span12">
+            <h1 id="sct---analysis-and-modelling-of-small-angle-scattering-data">SCT - Analysis and Modelling of Small Angle Scattering Data</h1>
+<p>SCT is a suite of software tools designed to aid the comparison of molecular models of biological systems to small angle scattering data.</p>
+<div class="figure">
+<img src="tutorials/images/constrained-modelling.png" />
+</div>
+<p>Small angle X-ray and neutron-scattering techniques (known as SAXS and SANS nrespectively) are low resolution techniques that can characterize protein structure in solution. They are of particular utility when large proteins cannot be crystallized and in systems where solution conditions affect the structure adopted. Atomistic models of the average structure can be generated through constrained modelling, a technique in which known structures (such as domain or subunit crystal structures) are combined with linker models to produce candidate global conformations. Homology modelling techniques and simulation methodologies such as Monte Carlo or molecular dynamics simulations can be used to produce a library of structurally varied, atomistic, candidate models of the target macromolecule. Theoretical scattering curves are then generated for each model and used for trial-and-error fits to the experimental data. From this a small family of best-fit models can be identified. It is to automate this last two steps that SCT was developed. The original SCT software, written in Fortran, has been used in the production of 74 structures (21 antibodies, 27 complement proteins and 24 oligosaccharides) deposited in the Protein Data Bank between 1998 and 2014. All of the same functionality of the classic SCT is now available in an easier to use set of Python scripts.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Creates low resolution sphere models from atomistic models (input in PDB format)</li>
+<li>Addition of hydration layers to models for comparison to SAXS data</li>
+<li>Calculation of scattering curves from sphere models (via the Debye equation)</li>
+<li>Computation of R factor or Chi squared metrics of the comparison between experimental and modelled curves</li>
+<li>Calculation of sequence based estimates of protein volume</li>
+<li>Python package facilitating the develoment of new workflows</li>
+</ul>
+<p>This software was developed in the Structural Immunology Group at UCL. The original developer was Professor Stephen J Perkins (s.perkins@ucl.ac.uk) and the Python version was created by David W. Wright (dave.wright@ucl.ac.uk).</p>
+<h2 id="further-information">Further Information</h2>
+<p><a href="tutorials/install.html">Installation</a></p>
+<p><a href="tutorials/modern-workflow.html">Tutorial</a></p>
+<p><a href="tech-doc/index.html">API documentation for Python Package</a></p>
+            </div>
     </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Sct maintained by <a href="https://github.com/dww100">dww100</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
-  </body>
+  </div>
+  </section>
+  </div>
+</body>
 </html>
