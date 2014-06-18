@@ -1,5 +1,7 @@
 ---
 rg:
+    qmin: 0.0
+    qmax: 0.2
     fitmin: 0.015
     fitmax: 0.028
 rxs1:

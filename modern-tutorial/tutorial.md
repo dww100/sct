@@ -1,5 +1,4 @@
 ---
-title:  'Tutorial - Using Modern SCT for Constrained Modelling'
 author:
 - name: David W. Wright
   orcid: 0000-0002-5124-8044
@@ -29,7 +28,7 @@ The IgG4 molecule is typical of antibody structures, consisting of four chains w
 The two larger chains are called the heavy chains and constitute the Fab domain, the linkers and part of each Fab domain. 
 The light chains are confined to the Fab region.
 
-![Structure of the IgG4](images/igg4_structure.gif)
+![Structure of the IgG4](images/igg4_structure.png)
 
 The first thing to do is to inspect the six structures in the _pdbs_ directory. 
 Use either your favourite molecular viewer (such as [pymol](http://www.pymol.org/) or [VMD](http://www.ks.uiuc.edu/Research/vmd/). 
@@ -62,9 +61,9 @@ Immunoglobulins have two distinct Rxs ranges (termed Rxs1 and Rxs2), with Rxs1 t
 
 Rg can be determined by the Guinier approximation. 
 To do this, the scattering curve is visualised by plotting Q^2 vs Ln(I(Q)) to show the beginning portion of the scattering curve as linear. Fitting to this region will give Rg. Selection of the portion of the scattering curve to fit to is determined by choosing two Q values. 
-In an ideal case, the first Q value (Qmin) would be the first scattering point at low Q (i.e. as close to zero as the instrument measures). The Qmax value is determined by Q*Rg range. For globular proteins this is limited at around Q*Rg of 1.5.
+In an ideal case, the first Q value (Qmin) would be the first scattering point at low Q (i.e. as close to zero as the instrument measures). The Qmax value is determined by Q\*Rg range. For globular proteins this is limited at around Q\*Rg of 1.5.
 
-This is repeated for Rxs1 and Rxs2 by visual inspection of the curves. To visualise the linear portions, the scattering curve is viewed as Q^2 vs ln(I(Q)*Q)
+This is repeated for Rxs1 and Rxs2 by visual inspection of the curves. To visualise the linear portions, the scattering curve is viewed as Q^2 vs ln(I(Q)\*Q)
 
 ## Parameter File
 
@@ -85,7 +84,7 @@ The procedure used in SCT is to construct a grid around the protein and to place
 An illustration of this process in two dimensions is shown in the figure below. 
 This coarse graining will obviously lose some detail but we wish to retain as much information about the shape of the protein as possible and to replicate accurately the proteins volume. Usually the threshold (which we term the cut-off here) is set to 4 atoms and the resolution of the grid is varied to reproduce the correct volume.
 
-[Coarse graining of atomic structure](images/atom2sphere_2d.png)
+![Coarse graining of atomic structure](images/atom2sphere_2d.png)
 
 In SCT the target volume is calculated from the protein sequence [@Perkins1986].
 If the atomistic model being used contains the full sequence then this is the only input required for this stage of the modelling.
