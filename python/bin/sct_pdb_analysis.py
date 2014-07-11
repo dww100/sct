@@ -28,6 +28,7 @@ Within the Perkins lab this replaces the do_curve script
 import argparse
 import sys
 import os
+import re
 import glob
 
 import sct
@@ -78,6 +79,30 @@ def parse_arguments():
 
     return args
 
+# Human sort taken from from:
+# http://nedbatchelder.com/blog/200712/human_sorting.html
+# Provided with no formal license but site indicates that you can do with 
+# it as you wish
+
+def tryint(s):
+
+    if s.isdigit():
+        return int(s)
+    else:
+        return s
+
+def alphanum_key(s):
+    """ Turn a string into a list of string and number chunks.
+        "z23a" -> ["z", 23, "a"]
+    """
+    return [ tryint(c) for c in re.split('([0-9]+)', s.lower()) ]
+
+def sort_nicely(l):
+    """ Sort the given list in the way that humans expect.
+    """
+
+    return sorted(l, key=alphanum_key)
+
 def main():
 
     print "Running modern SCT workflow"
@@ -127,6 +152,10 @@ def main():
     if len(pdb_files) < 1:
         print "Error: No PDB files found to analyze"
         sys.exit(1)
+
+    # Sort files so that they are in human expected alpha numerical order
+    # This means that XXXX2.pdb will sort before XXXX100.pdb    
+    pdb_files = sort_nicely(pdb_files)    
     
     print "> Analyzing input PDBs"    
     
