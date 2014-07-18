@@ -174,6 +174,46 @@ def match_scatter_curves(target_data, source_data):
 
     return matched_I
 
+def compare_curves(target_data, source_data, q_min, q_max, chi2):
+    """
+    Compute comparison metric (R factor or Chi^2). Input is two
+    q vs I scattering curves and the min/max q values to use to compare them.
+    The target (experimental) curve is scaled to match the source (theoretical)
+    one. This is because the theoretical curve is based on a calculation of
+    I/Io. Output is the R factor and the scaling factor needed to match I from
+    the target scattering curve to the source data.
+
+    R factor is used by analogy with crystallography where:
+    R = sum (abs(F_expt - F_calc)) / sum (abs(F_expt))
+
+    @type  target_data:  numpy array
+    @param target_data:  Target scattering vector magnitude, q, and intensity,
+                         I, dataset.
+    @type  source_data:  numpy array
+    @param source_data:  Source scattering vector magnitude, q, and intensity,
+                         I, dataset.
+    @type  q_min:        float
+    @param q_min:        Minimum value of the magnitude of the scattering
+                         vector, q, to use in matching the curves.
+    @type  q_max:        float
+    @param q_max:        Minimum value of the magnitude of the scattering
+                         vector, q, to use in matching the curves.
+    @type  chi2:         boolean
+    @param chi2:         Are we calculating Chi^2?                         
+    @rtype:              float, float
+    @return:             1. metric comparing target_data and source_data.
+
+                         2. Scaling factor needed to superimpose target_data and
+                         source_data.
+    """    
+        
+    if chi2:
+        rfactor, scale = calculate_chi2(target_data, source_data, q_min, q_max)
+    else:
+        rfactor, scale = calculate_rfactor(target_data, source_data, q_min, q_max)
+
+    return rfactor, scale
+
 def calculate_rfactor(target_data, source_data, q_min, q_max):
     """
     Compute R factor comparing two scattering curves. Input is two

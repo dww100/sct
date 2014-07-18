@@ -166,20 +166,12 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, chi2=False, n
     # Calculate comparison metric for theoretical vs experimental curves
     result['rfac'] = []
     
-    if chi2:
-
-        for expt_curve in expt_curves:
-            result['rfac'].append(curve.calculate_chi2(expt_curve['data'],
-                                                      result['curve'],
-                                                      param['rfac']['qmin'],
-                                                      param['rfac']['qmax']))
-    else:
-        result['rfac'] = []
-        for expt_curve in expt_curves:
-            result['rfac'].append(curve.calculate_rfactor(expt_curve['data'],
-                                                          result['curve'],
-                                                          param['rfac']['qmin'],
-                                                          param['rfac']['qmax']))
+    for expt_curve in expt_curves:
+        result['rfac'].append(curve.compare_curves(expt_curve['data'],
+                                                   result['curve'],
+                                                   param['rfac']['qmin'],
+                                                   param['rfac']['qmax'],
+                                                   chi2))
 
     return result
 
