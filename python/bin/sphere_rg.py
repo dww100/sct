@@ -45,7 +45,7 @@ def main():
 
     # Read in SCT formatted sphere model file
     # -returns coordinates and sphere radius
-    coords, radius = sct.sphere.hydrate_spheres.read_mono_spheres(args.input_filename)
+    coords, radius = sct.sphere.read_mono_spheres(args.input_filename)
 
     # Calculate the radius of gyration for the sphere distribution
     r_gyr = sct.sphere.sphere_model_rg(coords, radius)
