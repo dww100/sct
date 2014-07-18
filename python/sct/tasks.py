@@ -138,6 +138,15 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, chi2=False, n
                                                 param['curve']['npoints'],
                                                 rbins = param['curve']['radbins'])
 
+    # Neutron curves are usually smeared with parameters for the instrument used
+    if (neutron and param['curve']['smear']):
+
+        curve.smear_sas_curve(result['curve'],
+                              param['curve']['q_delta'],
+                              param['curve']['wavelength'],
+                              param['curve']['spread'],
+                              param['curve']['divergence'])
+
     # Rg and Rxs from theoretical curve
     if 'rxs2' in param:
         result.update(curve.get_curve_descriptors(result['curve'],
@@ -153,16 +162,6 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, chi2=False, n
                       param['rg']['fitmax'],
                       param['rxs1']['fitmin'],
                       param['rxs1']['fitmax']))
-
-
-    # Neutron curves are usually smeared with parameters for the instrument used
-    if (neutron and param['curve']['smear']):
-
-        curve.smear_sas_curve(result['curve'],
-                              param['curve']['q_delta'],
-                              param['curve']['wavelength'],
-                              param['curve']['spread'],
-                              param['curve']['divergence'])
 
     # Calculate comparison metric for theoretical vs experimental curves
     result['rfac'] = []
