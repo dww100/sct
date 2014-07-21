@@ -88,11 +88,79 @@ def create_data_dir(basename, expt_type, data_type):
 
     return full_path
 
+def analyse_theor_curve(theor_curve,expt_curves, sphere_radius, param, chi2=False):
+    """
+    Take a theoretical curve and calculate the Rg and Rxs1 and the R factor or Chi^2
+    values for comparisons to input experimental curves.
+
+    @type  model:          list
+    @param model:          List of lists containing x, y & z coordinates
+                           (3 * floats) for each sphere in a sphere model.
+    @type  expt_curves:    list
+    @param expt_curves:    List of two dimensional numpy arrays containing
+                           scattered vector magnitudes, q, and intensities, I,
+                           from experiment.
+    @type  sphere_radius:  float
+    @param sphere_radius:  Sphere radius
+    @type  param:          dictionary
+    @param param:          Dictionary containing parameters to use when creating
+                           models and analysing curves.
+    @type  neutron:        boolean
+    @param neutron:        Flag set if aiming to create a theoretical
+                           neutron curve
+    @type  chi2:           boolean
+    @param chi2:           Flag set if using Chi^2 to compare curves
+
+    @rtype:                dictionary
+    @return:               Dictionary containing the following key/value pairs:
+                           - model_rg: Radius of gyration calculated directly
+                           from sphere model.
+                           - curve_rg: Radius of gyration calculated from the
+                           theoretical scattering curve derived from the sphere
+                           model.
+                           - curve_rxs1: Cross-section calculated from the
+                           theoretical scattering curve derived from the sphere
+                           model. If an rxs2 range is provided in param then 
+                           a 'curve_rxs2' will also be returned.
+                           - rfac: R factor comparing experimental and
+                           theoretical scattering curves.
+    """    
+    result = {}    
+    
+    # Rg and Rxs from theoretical curve
+    if 'rxs2' in param:
+        result.update(curve.get_curve_descriptors(theor_curve,
+                      param['rg']['fitmin'],
+                      param['rg']['fitmax'],
+                      param['rxs1']['fitmin'],
+                      param['rxs1']['fitmax'],
+                      param['rxs2']['fitmin'], 
+                      param['rxs2']['fitmax']))
+    else:
+        result.update(curve.get_curve_descriptors(theor_curve,
+                      param['rg']['fitmin'],
+                      param['rg']['fitmax'],
+                      param['rxs1']['fitmin'],
+                      param['rxs1']['fitmax']))
+
+    # Calculate comparison metric for theoretical vs experimental curves
+    result['rfac'] = []
+    
+    for expt_curve in expt_curves:
+        result['rfac'].append(curve.compare_curves(expt_curve['data'],
+                                                   theor_curve,
+                                                   param['rfac']['qmin'],
+                                                   param['rfac']['qmax'],
+                                                   chi2))
+
+    return result    
+
 def analyse_sphere_model(model, expt_curves, sphere_radius, param, chi2=False, neutron=False):
     """
     Take a sphere model and calculate the theoretical scattering curve. The
     Rg and Rxs1 are also calculated from the curve and returned alongside the
-    rfac comparing the theoretical curve to an experimental one.
+    R factor (or Chi^2) comparing the theoretical curve to one or more 
+    experimental curves.
 
     @type  model:          list
     @param model:          List of lists containing x, y & z coordinates
@@ -147,31 +215,10 @@ def analyse_sphere_model(model, expt_curves, sphere_radius, param, chi2=False, n
                               param['curve']['spread'],
                               param['curve']['divergence'])
 
-    # Rg and Rxs from theoretical curve
-    if 'rxs2' in param:
-        result.update(curve.get_curve_descriptors(result['curve'],
-                      param['rg']['fitmin'],
-                      param['rg']['fitmax'],
-                      param['rxs1']['fitmin'],
-                      param['rxs1']['fitmax'],
-                      param['rxs2']['fitmin'], 
-                      param['rxs2']['fitmax']))
-    else:
-        result.update(curve.get_curve_descriptors(result['curve'],
-                      param['rg']['fitmin'],
-                      param['rg']['fitmax'],
-                      param['rxs1']['fitmin'],
-                      param['rxs1']['fitmax']))
-
-    # Calculate comparison metric for theoretical vs experimental curves
-    result['rfac'] = []
-    
-    for expt_curve in expt_curves:
-        result['rfac'].append(curve.compare_curves(expt_curve['data'],
-                                                   result['curve'],
-                                                   param['rfac']['qmin'],
-                                                   param['rfac']['qmax'],
-                                                   chi2))
+    # Get curve derived metrics:
+    #   Rg and Rxs from theoretical curve    
+    #   Calculate comparison metric for theoretical vs experimental curves
+    result.update(analyse_theor_curve(result['curve'],expt_curves, sphere_radius, param, chi2=chi2))
 
     return result
 

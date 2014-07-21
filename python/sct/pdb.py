@@ -244,6 +244,32 @@ def read_pdb_atom_data (filename):
 
     return res_freq, atom_coords
 
+def read_sphere_pdb(filename):
+    """
+    Read PDB file and return residue frequencies and atom coordinates
+
+    @type  filename: string
+    @param filename: Path to a PDB file.
+    @rtype:          dictionary, list
+    @return:   
+              - A list containing lists of x, y & z coordinates (3 * floats)
+              - float of the sphere radius
+    """
+    
+    spheres = []
+    radius = 0.0
+    # Read in lines of the PDB
+    # ATOM and HETATM records are interpretted - others ignored
+    with open(filename) as f:
+        for line in f:
+            data = pdb_res_line_parse(line, filename)
+
+            if len(data) != 0:
+                spheres.append(data['coords'])
+                radius = data['b']       
+    
+    return spheres, radius
+
 def read_psf(filename):
     """
     Read in a PSF file and create a list of dictionaries containing the fields 
