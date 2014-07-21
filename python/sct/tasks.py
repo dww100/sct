@@ -518,7 +518,7 @@ def output_expt_summary(neut_data, xray_data, output_path, title):
         expt_data.write("Filename\tRg\tRxs1\n")
     
     for dat_curve in all_curves:
-        if 'curve_rxs2' in curve:
+        if 'curve_rxs2' in dat_curve:
             expt_data.write("{0:s}\t{1:7.4f}\t{2:7.4f}\t{3:7.4f}\n".format(dat_curve['file'],
                                                              dat_curve['curve_rg'],
                                                              dat_curve['curve_rxs1'],
