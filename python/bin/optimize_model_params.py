@@ -76,7 +76,7 @@ def main():
         if err != None:
             sct.param.output_error(err, args.parameter_file)        
         
-        sct.param.check_parameters(param, ['curve','sphere','rg','rxs1','rfac'])
+        err = sct.param.check_parameters(param, ['curve','sphere','rg','rxs1','rfac'])
 
         if err != None:
             sct.param.output_error(err, args.parameter_file)
