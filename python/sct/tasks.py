@@ -11,23 +11,31 @@ import sct.sphere as sphere
 import sct.pdb as pdb
 import sct.seq as seq
 
-def get_box_opt_input(pdb_filename, seq_filename, seq_type):
+def get_box_opt_input(pdb_filename, *args):
     """
     Get the target volume and atomic coordinates for box_side optimization. If 
     specified use a sequence other than that of the input PDB providing the 
     coordinates.
     @type  pdb_filename: string
     @param pdb_filename: Path to PDB file
-    @type  seq_filename: string
-    @param seq_filename: Path to sequence file (either fasta or YAML)
-    @type  file_type:    string
-    @param file_type:    Is the input a fasta ('fas') or YAML ('yml') file
-    @rtype:              float, list
-    @return:             1. Target volume from sequence
+    @type  *args:        list
+    @param *args:        Allow entry of sequence files path and format.
+                         Format is either fasta ('fas') or YAML ('yml')
+    @rtype:              float, float, list
+    @return:             1. Target unhydrated volume from sequence
+    
+                         2. Target hydrated volume from sequence
 
-                         2. A list containing lists of x, y & z coordinates 
+                         3. A list containing lists of x, y & z coordinates 
                          (3 * floats)     
     """
+
+    try:
+        seq_filename = args[0]
+        seq_type = args[1]  
+    except:
+        seq_filename = None
+        seq_type = None       
 
     # Read in the residues frequencies (to calculate target volume) and
     # atomic coordinates from input PDB
