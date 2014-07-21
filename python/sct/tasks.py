@@ -9,6 +9,43 @@ import os
 import sct.curve as curve
 import sct.sphere as sphere
 import sct.pdb as pdb
+import sct.seq as seq
+
+def get_box_opt_input(pdb_filename, seq_filename, seq_type):
+    """
+    Get the target volume and atomic coordinates for box_side optimization. If 
+    specified use a sequence other than that of the input PDB providing the 
+    coordinates.
+    @type  pdb_filename: string
+    @param pdb_filename: Path to PDB file
+    @type  seq_filename: string
+    @param seq_filename: Path to sequence file (either fasta or YAML)
+    @type  file_type:    string
+    @param file_type:    Is the input a fasta ('fas') or YAML ('yml') file
+    @rtype:              float, list
+    @return:             1. Target volume from sequence
+
+                         2. A list containing lists of x, y & z coordinates 
+                         (3 * floats)     
+    """
+
+    # Read in the residues frequencies (to calculate target volume) and
+    # atomic coordinates from input PDB
+    res_freq, atom_coords = pdb.read_pdb_atom_data(pdb_filename)
+
+    # If an additional sequence file was provided then use this as the sequence
+    # to optimize 
+    if seq_type != None:
+        res_freq = seq.seq_file_to_freq(seq_filename, seq_type)
+
+    dry_volume = seq.sum_volume(seq.all_residues, 
+                                    res_freq, 'perkins1986a')
+    # Calculate the expected volume of the hydration layer
+    # Hydration is estimated to be 0.3 g water per 1 g protein
+    # Bound water volume (< bulk volume) is given as a sluv parameter    
+    wet_volume = seq.calc_hydration_volume(res_freq) + dry_volume 
+    
+    return dry_volume, wet_volume, atom_coords
 
 def read_expt_data(neutron_files, neutron_unit, xray_files, xray_unit, output_path, param):
     """
