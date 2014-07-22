@@ -81,6 +81,25 @@
 </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">float, float, list</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.tasks-module.html#get_box_opt_input" class="summary-sig-name">get_box_opt_input</a>(<span class="summary-sig-arg">pdb_filename</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Get the target volume and atomic coordinates for box_side 
+      optimization.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.tasks-pysrc.html#get_box_opt_input">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">list, list, dictionary</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -114,6 +133,28 @@
       not exist create it.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="sct.tasks-pysrc.html#create_data_dir">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">dictionary</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="sct.tasks-module.html#analyse_theor_curve" class="summary-sig-name">analyse_theor_curve</a>(<span class="summary-sig-arg">theor_curve</span>,
+        <span class="summary-sig-arg">expt_curves</span>,
+        <span class="summary-sig-arg">sphere_radius</span>,
+        <span class="summary-sig-arg">param</span>,
+        <span class="summary-sig-arg">chi2</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Take a theoretical curve and calculate the Rg and Rxs1 and the R 
+      factor or Chi^2 values for comparisons to input experimental curves.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="sct.tasks-pysrc.html#analyse_theor_curve">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -289,6 +330,45 @@
   </td>
 </tr>
 </table>
+<a name="get_box_opt_input"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_box_opt_input</span>(<span class="sig-arg">pdb_filename</span>,
+        <span class="sig-arg">*args</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.tasks-pysrc.html#get_box_opt_input">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the target volume and atomic coordinates for box_side 
+  optimization. If specified use a sequence other than that of the input 
+  PDB providing the coordinates.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>pdb_filename</code></strong> (string) - Path to PDB file</li>
+        <li><strong class="pname"><code>*args</code></strong> (list) - Allow entry of sequence files path and format. Format is either 
+          fasta ('fas') or YAML ('yml')</li>
+    </ul></dd>
+    <dt>Returns: float, float, list</dt>
+        <dd>1. Target unhydrated volume from sequence
+          <ol start="2">
+            <li>
+              Target hydrated volume from sequence
+            </li>
+            <li>
+              A list containing lists of x, y &amp; z coordinates (3 * 
+              floats)
+            </li>
+          </ol></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="read_expt_data"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -362,6 +442,64 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="analyse_theor_curve"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">analyse_theor_curve</span>(<span class="sig-arg">theor_curve</span>,
+        <span class="sig-arg">expt_curves</span>,
+        <span class="sig-arg">sphere_radius</span>,
+        <span class="sig-arg">param</span>,
+        <span class="sig-arg">chi2</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="sct.tasks-pysrc.html#analyse_theor_curve">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Take a theoretical curve and calculate the Rg and Rxs1 and the R 
+  factor or Chi^2 values for comparisons to input experimental curves.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>model</code></strong> (list) - List of lists containing x, y &amp; z coordinates (3 * floats) 
+          for each sphere in a sphere model.</li>
+        <li><strong class="pname"><code>expt_curves</code></strong> (list) - List of two dimensional numpy arrays containing scattered vector 
+          magnitudes, q, and intensities, I, from experiment.</li>
+        <li><strong class="pname"><code>sphere_radius</code></strong> (float) - Sphere radius</li>
+        <li><strong class="pname"><code>param</code></strong> (dictionary) - Dictionary containing parameters to use when creating models and 
+          analysing curves.</li>
+        <li><strong class="pname"><code>neutron</code></strong> (boolean) - Flag set if aiming to create a theoretical neutron curve</li>
+        <li><strong class="pname"><code>chi2</code></strong> (boolean) - Flag set if using Chi^2 to compare curves</li>
+    </ul></dd>
+    <dt>Returns: dictionary</dt>
+        <dd>Dictionary containing the following key/value pairs:
+          <ul>
+            <li>
+              model_rg: Radius of gyration calculated directly from sphere 
+              model.
+            </li>
+            <li>
+              curve_rg: Radius of gyration calculated from the theoretical 
+              scattering curve derived from the sphere model.
+            </li>
+            <li>
+              curve_rxs1: Cross-section calculated from the theoretical 
+              scattering curve derived from the sphere model. If an rxs2 
+              range is provided in param then a 'curve_rxs2' will also be 
+              returned.
+            </li>
+            <li>
+              rfac: R factor comparing experimental and theoretical 
+              scattering curves.
+            </li>
+          </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="analyse_sphere_model"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -383,7 +521,8 @@
   
   <p>Take a sphere model and calculate the theoretical scattering curve. 
   The Rg and Rxs1 are also calculated from the curve and returned alongside
-  the rfac comparing the theoretical curve to an experimental one.</p>
+  the R factor (or Chi^2) comparing the theoretical curve to one or more 
+  experimental curves.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -706,7 +845,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Jun 16 11:53:31 2014
+    Generated by Epydoc 3.0.1 on Tue Jul 22 15:06:02 2014
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

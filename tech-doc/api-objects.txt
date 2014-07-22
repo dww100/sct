@@ -2,7 +2,7 @@ sct	sct-module.html
 sct.curve	sct.curve-module.html
 sct.curve.process_qrange_file	sct.curve-module.html#process_qrange_file
 sct.curve.sas_curve_fit	sct.curve-module.html#sas_curve_fit
-sct.curve.calculate_chi2	sct.curve-module.html#calculate_chi2
+sct.curve.compare_curves	sct.curve-module.html#compare_curves
 sct.curve.calculate_rfactor	sct.curve-module.html#calculate_rfactor
 sct.curve.load_scatter_curve	sct.curve-module.html#load_scatter_curve
 sct.curve.output_sas_curve	sct.curve-module.html#output_sas_curve
@@ -11,6 +11,7 @@ sct.curve.match_scatter_curves	sct.curve-module.html#match_scatter_curves
 sct.curve.read_scatter_curves	sct.curve-module.html#read_scatter_curves
 sct.curve.get_curve_descriptors	sct.curve-module.html#get_curve_descriptors
 sct.curve.graph_sas_curve	sct.curve-module.html#graph_sas_curve
+sct.curve.calculate_chi2	sct.curve-module.html#calculate_chi2
 sct.param	sct.param-module.html
 sct.param.check_rxs1_plot	sct.param-module.html#check_rxs1_plot
 sct.param.check_sphere	sct.param-module.html#check_sphere
@@ -19,6 +20,7 @@ sct.param.check_rg_plot	sct.param-module.html#check_rg_plot
 sct.param.check_rg	sct.param-module.html#check_rg
 sct.param.check_curve	sct.param-module.html#check_curve
 sct.param.output_error	sct.param-module.html#output_error
+sct.param.check_rfac	sct.param-module.html#check_rfac
 sct.param.check_parameters	sct.param-module.html#check_parameters
 sct.param.check_rxs2_plot	sct.param-module.html#check_rxs2_plot
 sct.param.check_rg_plot_variant	sct.param-module.html#check_rg_plot_variant
@@ -26,7 +28,6 @@ sct.param.check_rg_variant	sct.param-module.html#check_rg_variant
 sct.param.check_hydrate	sct.param-module.html#check_hydrate
 sct.param.check_rxs1	sct.param-module.html#check_rxs1
 sct.param.check_rxs2	sct.param-module.html#check_rxs2
-sct.param.check_rfac	sct.param-module.html#check_rfac
 sct.param.read_parameter_file	sct.param-module.html#read_parameter_file
 sct.param.check_wide_plot	sct.param-module.html#check_wide_plot
 sct.pdb	sct.pdb-module.html
@@ -42,6 +43,7 @@ sct.pdb.accept_resids	sct.pdb-module.html#accept_resids
 sct.pdb.parse_line	sct.pdb-module.html#parse_line
 sct.pdb.process_pdb_psf	sct.pdb-module.html#process_pdb_psf
 sct.pdb.write_pdb	sct.pdb-module.html#write_pdb
+sct.pdb.read_sphere_pdb	sct.pdb-module.html#read_sphere_pdb
 sct.pdb.charmm_residues	sct.pdb-module.html#charmm_residues
 sct.pdb.read_psf	sct.pdb-module.html#read_psf
 sct.pdb.read_pdb_atom_data	sct.pdb-module.html#read_pdb_atom_data
@@ -96,9 +98,11 @@ sct.tasks	sct.tasks-module.html
 sct.tasks.process_expt_data	sct.tasks-module.html#process_expt_data
 sct.tasks.output_expt_summary	sct.tasks-module.html#output_expt_summary
 sct.tasks.create_data_dir	sct.tasks-module.html#create_data_dir
-sct.tasks.sas_model_summary_output	sct.tasks-module.html#sas_model_summary_output
-sct.tasks.perform_sas_analysis_pdb	sct.tasks-module.html#perform_sas_analysis_pdb
 sct.tasks.read_expt_data	sct.tasks-module.html#read_expt_data
+sct.tasks.sas_model_summary_output	sct.tasks-module.html#sas_model_summary_output
+sct.tasks.create_comparison_header_text	sct.tasks-module.html#create_comparison_header_text
+sct.tasks.perform_sas_analysis_pdb	sct.tasks-module.html#perform_sas_analysis_pdb
+sct.tasks.get_box_opt_input	sct.tasks-module.html#get_box_opt_input
 sct.tasks.analyse_sphere_model	sct.tasks-module.html#analyse_sphere_model
 sct.tasks.write_summary_header	sct.tasks-module.html#write_summary_header
-sct.tasks.create_comparison_header_text	sct.tasks-module.html#create_comparison_header_text
+sct.tasks.analyse_theor_curve	sct.tasks-module.html#analyse_theor_curve
