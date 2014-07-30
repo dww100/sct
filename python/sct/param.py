@@ -33,7 +33,7 @@ def output_error(message, filename):
     
     print 'Error encountered whilst reading parameters from ' + filename + ':'
     print message
-    sys.exit()
+    sys.exit(1)
 
 def read_parameter_file(filename):
     """
