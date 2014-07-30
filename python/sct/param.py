@@ -97,11 +97,18 @@ def check_rg_variant(variant, params):
     err = None
 
     try:
-        float(params[variant]['fitmin'])
-        float(params[variant]['fitmax'])
+        fitmin = float(params[variant]['fitmin'])
+        fitmax = float(params[variant]['fitmax'])
     except:
         err = "Incomplete or invalid '" + variant + "' parameters provided."
         
+    if fitmin > fitmax:
+        err = variant + " fitmin must be greater than fitmax"
+    elif (fitmin < params['rfac']['qmin']) or (fitmin < params['rfac']['qmax']):
+        err = variant + " fitmin must inside the rfac calculation range (between input rfac qmin and qmax)"
+    elif (fitmax < params['rfac']['qmin']) or (fitmax < params['rfac']['qmax']):
+        err = variant + " fitmin must inside the rfac calculation range (between input rfac qmin and qmax)"
+
     return err  
     
 def check_rg(params):
