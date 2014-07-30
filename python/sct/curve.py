@@ -348,26 +348,30 @@ def sas_curve_fit(x, y, calc_type):
                        - i: The Io value calculated from the intercept
     """
 
-
-
-    # Linear fit to the input x and y values
-    fit_coeffs = np.polyfit(x, y, 1)
-
     result = {}
 
-    result['fit'] = fit_coeffs
-
-    if (calc_type == 'rxs1') or (calc_type == 'rxs2'):
-        # Cross section Rxs1/Rxs2 calculated from fits of q^2 vs ln(I*q)
-        # Rxs?^2 = 2 * gradient
-        result['r'] = np.sqrt(2 * abs(fit_coeffs[0]))
-        result['i'] = None
+    if (len(x) == 0) or (len(y) == 0):
+        err = "Error: No values to fit in " + calc_type + " calculation\n"
+        print err
+        sys.exit(1)
+        #result['error'] = err
     else:
-        # Assume a standard Guinier fit of q^2 vs ln(I):
-        # Rg^2 = 3 * gradient
-        # Io = exp(intercept)
-        result['r'] = np.sqrt(3 * abs(fit_coeffs[0]))
-        result['i'] = np.exp(fit_coeffs[1])
+        # Linear fit to the input x and y values
+        fit_coeffs = np.polyfit(x, y, 1)
+    
+        result['fit'] = fit_coeffs
+    
+        if (calc_type == 'rxs1') or (calc_type == 'rxs2'):
+            # Cross section Rxs1/Rxs2 calculated from fits of q^2 vs ln(I*q)
+            # Rxs?^2 = 2 * gradient
+            result['r'] = np.sqrt(2 * abs(fit_coeffs[0]))
+            result['i'] = None
+        else:
+            # Assume a standard Guinier fit of q^2 vs ln(I):
+            # Rg^2 = 3 * gradient
+            # Io = exp(intercept)
+            result['r'] = np.sqrt(3 * abs(fit_coeffs[0]))
+            result['i'] = np.exp(fit_coeffs[1])
 
     return result
 
