@@ -410,14 +410,14 @@ def  write_summary_header(in_pdb, in_neut, in_xray, param, output, chi2 = False)
         # Header 0
         output.write("\tNeutron\t\t\t\t" + neut_rfact_head[0] + "\t\tX-ray\n")
         # Header 1
-        output.write("\t\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
+        output.write("\t\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t\t\t" + xray_rfact_head[1] + "\n")
         # Individual column headings for header 2
         basic_head = "Rg_model\tRg_curve\tRxs1_curve\tRxs2_curve\tVolume\t"
     else:
         # Header 0
         output.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\t\tX-ray\n")
         # Header 1
-        output.write("\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t" + xray_rfact_head[1] + "\n")
+        output.write("\t\t\t\t\t" + neut_rfact_head[1] + "\t\t\t\t\t" + xray_rfact_head[1] + "\n")
         # Individual column headings for header 2
         basic_head = "Rg_model\tRg_curve\tRxs1_curve\tVolume\t"
         
