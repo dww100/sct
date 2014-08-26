@@ -329,20 +329,25 @@ def read_psf(filename):
     
     return atoms
     
-def process_pdb_psf(psf_filename, pdb_filename):
+def process_pdb_psf(psf_filename, pdb_filename, convert=True):
     """
     Read in a PSF/PDB pair of files and create a list of dictionaries 
     containing the fields defined in PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD 
     schemas plus 'coords' (from the PDB x,y,z coordinates) and 'chain' (from 
     the PDB chain column). Hydrogen atoms are filtered out.
 
-    @type  filename: string
-    @param filename: Path to a PSF file.
-    @rtype:          list
-    @return:         List of dictionaries with kets as defined in the
-                     PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD schemas plus 'coords' 
-                     (from the PDB x,y,z coordinates) and 'chain' (from the PDB
-                     chain column)..
+    @type  psf_filename: string
+    @param psf_filename: Path to a PSF file.
+    @type  pdb_filename: string
+    @param pdb_filename: Path to a PSF file.
+    @type  convert:      boolean
+    @keyword convert:    Should CHARMM residue names be changed to SCT 
+                         friendly ones?
+    @rtype:              list
+    @return:             List of dictionaries with kets as defined in the
+                         PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD schemas plus 'coords' 
+                         (from the PDB x,y,z coordinates) and 'chain' (from the PDB
+                         chain column).
     """
     
     psf_atoms = read_psf(psf_filename)
@@ -375,7 +380,7 @@ def process_pdb_psf(psf_filename, pdb_filename):
     for atom in psf_atoms:
         if atom['atom_name'][0] != 'H':
     
-            if atom['res_id'] in charmm_residues:
+            if (atom['res_id'] in charmm_residues) and convert:
                 atom['res_id'] = charmm_resids[atom['res_id']]
                 
             atoms.append(atom)                            
