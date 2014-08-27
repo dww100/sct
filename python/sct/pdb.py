@@ -329,7 +329,7 @@ def read_psf(filename):
     
     return atoms
     
-def process_pdb_psf(psf_filename, pdb_filename, convert=True):
+def process_pdb_psf(psf_filename, pdb_filename, sctify=True, removeh=True):
     """
     Read in a PSF/PDB pair of files and create a list of dictionaries 
     containing the fields defined in PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD 
@@ -340,9 +340,11 @@ def process_pdb_psf(psf_filename, pdb_filename, convert=True):
     @param psf_filename: Path to a PSF file.
     @type  pdb_filename: string
     @param pdb_filename: Path to a PSF file.
-    @type  convert:      boolean
-    @keyword convert:    Should CHARMM residue names be changed to SCT 
+    @type  sctify:       boolean
+    @keyword sctify:     Should CHARMM residue names be changed to SCT 
                          friendly ones?
+    @type  removeh:      boolean
+    @keyword removeh:    Should hydrogens be removed?
     @rtype:              list
     @return:             List of dictionaries with kets as defined in the
                          PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD schemas plus 'coords' 
@@ -378,9 +380,10 @@ def process_pdb_psf(psf_filename, pdb_filename, convert=True):
     atoms = []    
     
     for atom in psf_atoms:
-        if atom['atom_name'][0] != 'H':
+        
+        if not(removeh and (atom['atom_name'][0] == 'H')):
     
-            if (atom['res_id'] in charmm_residues) and convert:
+            if (atom['res_id'] in charmm_residues) and sctify:
                 atom['res_id'] = charmm_resids[atom['res_id']]
                 
             atoms.append(atom)                            
