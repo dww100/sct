@@ -214,7 +214,6 @@ def main():
             neut_model = files[1]            
             
         elif model_type =='xray':
-            print files
             xray_curve = files[0]
             xray_model = files[1]
             
