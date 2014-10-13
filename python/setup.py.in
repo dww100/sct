@@ -17,6 +17,6 @@ if __name__ == "__main__":
                       '${CMAKE_CURRENT_SOURCE_DIR}/bin/sas_curve_analysis.py','${CMAKE_CURRENT_SOURCE_DIR}/bin/sct_pdb_analysis.py','${CMAKE_CURRENT_SOURCE_DIR}/bin/sphere2pdb.py',
                       '${CMAKE_CURRENT_SOURCE_DIR}/bin/calculate_rfactor.py','${CMAKE_CURRENT_SOURCE_DIR}/bin/hydrate_spheres.py','${CMAKE_CURRENT_SOURCE_DIR}/bin/pdb2sphere.py',
                       '${CMAKE_CURRENT_SOURCE_DIR}/bin/sct_get_sequence.py','${CMAKE_CURRENT_SOURCE_DIR}/bin/sluv2.py', '${CMAKE_CURRENT_SOURCE_DIR}/bin/sphere_rg.py',
-                      '${CMAKE_CURRENT_SOURCE_DIR}/bin/sctify.py','${CMAKE_CURRENT_SOURCE_DIR}/bin/calculate_chi2.py']
+                      '${CMAKE_CURRENT_SOURCE_DIR}/bin/sctify.py','${CMAKE_CURRENT_SOURCE_DIR}/bin/calculate_chi2.py', '${CMAKE_CURRENT_SOURCE_DIR}/bin/sct_reanalyse.py']
           )
 
