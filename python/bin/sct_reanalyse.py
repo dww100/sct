@@ -183,7 +183,7 @@ def main():
     title = os.path.basename(args.input_path)
 
     neut_expt = sct.curve.read_scatter_curves(args.neutron, args.neutron_unit, param)
-    xray_expt = sct.curve.read_scatter_curves(args.xrays, args.xray_unit, param)
+    xray_expt = sct.curve.read_scatter_curves(args.xray, args.xray_unit, param)
     sct.tasks.output_expt_summary(neut_expt, xray_expt, args.output_path, title)
     
     print "> Processing calculated data"
