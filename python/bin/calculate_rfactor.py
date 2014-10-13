@@ -89,7 +89,7 @@ else:
     qmin = param['rfac']['qmin']
     qmax = param['rfac']['qmax']
 
-output.write("Expt\tCalc\tScale\tRfac\n")
+output.write("Expt\tCalc\tRg\tScale\tRfac\n")
 for expt_curve in args.expt_curves:
 
     # Load experimental curve and if necessary convert Q to angstrom
@@ -105,13 +105,20 @@ for expt_curve in args.expt_curves:
                                                  param['rfac']['qmin'],
                                                  param['rfac']['qmax'])
 
+        results = sct.curve.get_curve_descriptors(calc_data,
+                      param['rg']['fitmin'],
+                      param['rg']['fitmax'],
+                      param['rxs1']['fitmin'],
+                      param['rxs1']['fitmax'])
+
         # Calculate the R factor comparing the calculated and experimental curves
         rfactor, scale = sct.curve.calculate_rfactor(expt_data,
                                                      calc_data,
                                                      param['rfac']['qmin'],
                                                      param['rfac']['qmax'])
 
-        output.write("{0:s}\t{1:s}\t{2:7.4f}\t{3:7.4f}\n".format(expt_curve,
+        output.write("{0:s}\t{1:s}\t{2:7.4f}\t{3:7.4f}\t{3:7.4f}\n".format(expt_curve,
                                                                   calc_curve,
+                                                                  results['rg'],
                                                                   1.0/scale,
                                                                   rfactor))
