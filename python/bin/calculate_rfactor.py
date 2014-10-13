@@ -119,6 +119,6 @@ for expt_curve in args.expt_curves:
 
         output.write("{0:s}\t{1:s}\t{2:7.4f}\t{3:7.4f}\t{3:7.4f}\n".format(expt_curve,
                                                                   calc_curve,
-                                                                  results['rg'],
+                                                                  results['curve_rg'],
                                                                   1.0/scale,
                                                                   rfactor))
