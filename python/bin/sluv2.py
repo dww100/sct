@@ -420,7 +420,7 @@ def classic_output(res_freq, out):
     out.write("Based on SLUV written by Stephen J. Perkins shortly after the dawn of time.\n\n")
 
     # Print frequencies and parameters for all residues
-    print_basic_description(res_freq)
+    print_basic_description(res_freq, out)
 
     out.write("******************** TOTAL GLYCOPROTEIN ************************************************\n")
     print_summary_data(sct.seq.all_residues, res_freq, out)
