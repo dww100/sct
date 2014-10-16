@@ -34,47 +34,71 @@ import shutil
 
 import sct
 
+
 def parse_arguments():
     """
     Parse command line arguments and ensure correct combinations present
     """
 
     parser = argparse.ArgumentParser(
-        description= 'Compare theoretical curves generated from PDB files to experimental SAS curves\n')
+        description='Compare theoretical curves generated from PDB files to experimental SAS curves\n')
 
-    parser.add_argument('-i','--input_path', nargs='?', type=str,
-        help = 'Path to the input PDB files', required=True)
+    parser.add_argument('-i', '--input_path', nargs='?', type=str,
+                        help='Path to the input PDB files', required=True)
 
-    parser.add_argument('-o','--output_path', nargs='?', type=str,
-        default='.', help = 'Path in which to save output files')
+    parser.add_argument('-o', '--output_path', nargs='?', type=str,
+                        default='.', help='Path in which to save output files')
 
-    parser.add_argument('-p','--parameter_file', nargs='?', type=str,
-        help = 'Path to a file containing input parameters', required=True)
+    parser.add_argument(
+        '-p',
+        '--parameter_file',
+        nargs='?',
+        type=str,
+        help='Path to a file containing input parameters',
+        required=True)
 
-    parser.add_argument('-x','--xray', nargs='+', type=str,
-        help = 'Paths to files containing experimental x-ray scattering curve', default = [])
+    parser.add_argument(
+        '-x',
+        '--xray',
+        nargs='+',
+        type=str,
+        help='Paths to files containing experimental x-ray scattering curve',
+        default=[])
 
-    parser.add_argument('-n','--neutron', nargs='+', type=str,
-        help = 'Paths to files containing experimental neutron scattering curve', default = [])
+    parser.add_argument(
+        '-n',
+        '--neutron',
+        nargs='+',
+        type=str,
+        help='Paths to files containing experimental neutron scattering curve',
+        default=[])
 
-    parser.add_argument('-t','--title', nargs='?', type=str,
-        help = 'Title to use for summary output file', default = 'sct_output')
+    parser.add_argument(
+        '-t',
+        '--title',
+        nargs='?',
+        type=str,
+        help='Title to use for summary output file',
+        default='sct_output')
 
-    parser.add_argument('-xu','--xray_unit', choices = ['nm', 'a'],
-                        default = 'a', help = 'Unit for Q in input x-ray data')
+    parser.add_argument('-xu', '--xray_unit', choices=['nm', 'a'],
+                        default='a', help='Unit for Q in input x-ray data')
 
-    parser.add_argument('-nu','--neutron_unit', choices = ['nm', 'a'],
-                        default = 'a', help = 'Unit for Q in input neutron data')
+    parser.add_argument('-nu', '--neutron_unit', choices=['nm', 'a'],
+                        default='a', help='Unit for Q in input neutron data')
 
-    parser.add_argument('-ou','--output_unit', choices = ['nm', 'a'],
-                        default = 'a', help = 'Unit for Q in output data')
-                        
-    parser.add_argument('--chi2', action='store_true', default=False, 
-                        help = 'Select comparison metric to be Chi squared not R factor')
-    
+    parser.add_argument('-ou', '--output_unit', choices=['nm', 'a'],
+                        default='a', help='Unit for Q in output data')
+
+    parser.add_argument(
+        '--chi2',
+        action='store_true',
+        default=False,
+        help='Select comparison metric to be Chi squared not R factor')
+
     args = parser.parse_args()
 
-    if (args.neutron == None) and (args.xray == None):
+    if (args.neutron is None) and (args.xray is None):
         print "At least one experimental curve is required for comparison (xray, neutron or both).\n"
         sys.exit(1)
 
@@ -82,8 +106,9 @@ def parse_arguments():
 
 # Human sort taken from from:
 # http://nedbatchelder.com/blog/200712/human_sorting.html
-# Provided with no formal license but site indicates that you can do with 
+# Provided with no formal license but site indicates that you can do with
 # it as you wish
+
 
 def tryint(s):
 
@@ -92,17 +117,20 @@ def tryint(s):
     else:
         return s
 
+
 def alphanum_key(s):
     """ Turn a string into a list of string and number chunks.
         "z23a" -> ["z", 23, "a"]
     """
-    return [ tryint(c) for c in re.split('([0-9]+)', s.lower()) ]
+    return [tryint(c) for c in re.split('([0-9]+)', s.lower())]
+
 
 def sort_nicely(l):
     """ Sort the given list in the way that humans expect.
     """
 
     return sorted(l, key=alphanum_key)
+
 
 def main():
 
@@ -118,156 +146,188 @@ def main():
     else:
         model_type = 'xray'
 
-    if model_type in ['neutron','both']:
-        
+    if model_type in ['neutron', 'both']:
+
         neutron_dir = os.path.join(args.input_path, 'neutron')
-        
-        neutron_curve_filter = os.path.join(neutron_dir, 'curves','*.scn')
+
+        neutron_curve_filter = os.path.join(neutron_dir, 'curves', '*.scn')
         neut_curve_files = glob.glob(neutron_curve_filter)
-        neut_curve_files = sort_nicely(neut_curve_files)        
-        
-        neutron_model_filter = os.path.join(neutron_dir, 'models','*.pdb')
+        neut_curve_files = sort_nicely(neut_curve_files)
+
+        neutron_model_filter = os.path.join(neutron_dir, 'models', '*.pdb')
         neut_model_files = glob.glob(neutron_model_filter)
         neut_model_files = sort_nicely(neut_model_files)
-        
+
         if len(neut_curve_files) != len(neut_model_files):
             err = 'Neutron curve and model numbers do not match!'
             print(err)
             sys.ext(1)
         else:
             neut_data = zip(neut_curve_files, neut_model_files)
-        
-    if model_type in ['xray','both']:
+
+    if model_type in ['xray', 'both']:
         xray_dir = os.path.join(args.input_path, 'xray')
-        
-        xray_curve_filter = os.path.join(xray_dir, 'curves','*.scx')
+
+        xray_curve_filter = os.path.join(xray_dir, 'curves', '*.scx')
         xray_curve_files = glob.glob(xray_curve_filter)
-        xray_curve_files = sort_nicely(xray_curve_files)        
-        
-        xray_model_filter = os.path.join(xray_dir, 'models','*.pdb')
+        xray_curve_files = sort_nicely(xray_curve_files)
+
+        xray_model_filter = os.path.join(xray_dir, 'models', '*.pdb')
         xray_model_files = glob.glob(xray_model_filter)
         xray_model_files = sort_nicely(xray_model_files)
-        
+
         if len(xray_curve_files) != len(xray_model_files):
             err = 'X-ray curve and model numbers do not match!'
             print(err)
             sys.ext(1)
         else:
-            xray_data = zip(xray_curve_files, xray_model_files)    
-    
+            xray_data = zip(xray_curve_files, xray_model_files)
+
     if model_type == 'both':
-        data = zip(neut_data,xray_data)
+        data = zip(neut_data, xray_data)
     elif model_type == 'neutron':
         data = neut_data
     elif model_type == 'xray':
         data = xray_data
-        
+
     nf = len(data)
-    
+
     # Read in parameters and check we have those we need for the workflow
 
-    needed = ['curve','sphere','rg','rxs1','rfac']
-    
-    if model_type in ['xray','both']:
+    needed = ['curve', 'sphere', 'rg', 'rxs1', 'rfac']
+
+    if model_type in ['xray', 'both']:
         needed.append('hydrate')
-    
+
     param = sct.param.parse_parameter_file(args.parameter_file, needed)
-    box_side3 = param['sphere']['boxside3']        
-        
+    box_side3 = param['sphere']['boxside3']
+
     # Create output directory and open file for summary output
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
-    
+
     print "> Processing experimental data"
 
     title = os.path.basename(args.input_path)
 
-    neut_expt = sct.curve.read_scatter_curves(args.neutron, args.neutron_unit, param)
+    neut_expt = sct.curve.read_scatter_curves(
+        args.neutron,
+        args.neutron_unit,
+        param)
     xray_expt = sct.curve.read_scatter_curves(args.xray, args.xray_unit, param)
-    sct.tasks.output_expt_summary(neut_expt, xray_expt, args.output_path, title)
-    
+    sct.tasks.output_expt_summary(
+        neut_expt,
+        xray_expt,
+        args.output_path,
+        title)
+
     print "> Processing calculated data"
 
     # Create the file for model output
     summary_name = os.path.join(args.output_path, title + '.sum')
-    summary_data = open(summary_name,'w')
+    summary_data = open(summary_name, 'w')
 
     # Print the header for the summary data from sphere model analysis (Rxs2 added after Rxs1 if a range is supplied in param):
     # Path to input data
-    #       Neutron                                                              X-ray                                       
-    # Model Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * neutron curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
-    sct.tasks.write_summary_header(args.input_path, args.neutron, args.xray, param, summary_data, args.chi2)
-    
+    #       Neutron                                                              X-ray
+    # Model Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * neutron
+    # curves Rg_model Rg_curve Rxs1_curve Volume (Rfactor scale) * xray curves
+    sct.tasks.write_summary_header(
+        args.input_path,
+        args.neutron,
+        args.xray,
+        param,
+        summary_data,
+        args.chi2)
+
     out_text = 'There are %d models to process\n' % (nf)
     print out_text
-    
+
     for i, files in enumerate(data):
-                   
-        if model_type =='both':
+
+        if model_type == 'both':
             neut_curve = files[0][0]
             neut_model = files[0][1]
             xray_curve = files[1][0]
             xray_model = files[1][1]
-            
-        elif model_type =='neutron':
+
+        elif model_type == 'neutron':
             neut_curve = files[0]
-            neut_model = files[1]            
-            
-        elif model_type =='xray':
+            neut_model = files[1]
+
+        elif model_type == 'xray':
             xray_curve = files[0]
             xray_model = files[1]
-            
+
         xray_theor = {}
         neut_theor = {}
 
         if model_type in ['neutron', 'both']:
-        
+
             dry_spheres, radius = sct.pdb.read_sphere_pdb(neut_model)
             # Get Rg from sphere model
-            neut_theor['model_rg'] = sct.sphere.sphere_model_rg(dry_spheres, radius)
+            neut_theor['model_rg'] = sct.sphere.sphere_model_rg(
+                dry_spheres,
+                radius)
             # Get volume of sphere model
             neut_theor['volume'] = box_side3 * len(dry_spheres)
-            
-            theor_curve = sct.curve.load_scatter_curve(neut_curve, param['rfac']['qmin'], param['rfac']['qmax'])
-            
-            # Calculate curve metrics - Rg, Rxs? and Rfactor/Chi^2 comparing 
+
+            theor_curve = sct.curve.load_scatter_curve(
+                neut_curve,
+                param['rfac']['qmin'],
+                param['rfac']['qmax'])
+
+            # Calculate curve metrics - Rg, Rxs? and Rfactor/Chi^2 comparing
             # theoretical and experimental curves
-            neut_theor.update(sct.tasks.analyse_theor_curve(theor_curve, neut_expt, 
-                                                            radius, param, 
-                                                            chi2=args.chi2))
-                                                            
+            neut_theor.update(
+                sct.tasks.analyse_theor_curve(
+                    theor_curve,
+                    neut_expt,
+                    radius,
+                    param,
+                    chi2=args.chi2))
+
         if model_type in ['xray', 'both']:
-        
+
             wet_spheres, radius = sct.pdb.read_sphere_pdb(xray_model)
             # Get Rg from sphere model
-            xray_theor['model_rg'] = sct.sphere.sphere_model_rg(wet_spheres, radius)
+            xray_theor['model_rg'] = sct.sphere.sphere_model_rg(
+                wet_spheres,
+                radius)
             # Get volume of sphere model
             xray_theor['volume'] = box_side3 * len(wet_spheres)
-            
-            theor_curve = sct.curve.load_scatter_curve(xray_curve, param['rfac']['qmin'], param['rfac']['qmax'])
-            
-            # Calculate curve metrics - Rg, Rxs? and Rfactor/Chi^2 comparing 
+
+            theor_curve = sct.curve.load_scatter_curve(
+                xray_curve,
+                param['rfac']['qmin'],
+                param['rfac']['qmax'])
+
+            # Calculate curve metrics - Rg, Rxs? and Rfactor/Chi^2 comparing
             # theoretical and experimental curves
-            xray_theor.update(sct.tasks.analyse_theor_curve(theor_curve, xray_expt, 
-                                                            radius, param, 
-                                                            chi2=args.chi2))                                                            
- 
+            xray_theor.update(
+                sct.tasks.analyse_theor_curve(
+                    theor_curve,
+                    xray_expt,
+                    radius,
+                    param,
+                    chi2=args.chi2))
+
         file_basename = os.path.basename(files[0][0])
         file_id = os.path.splitext(file_basename)[0]
-    
+
         # Format the modelling output data for printing
         neut_summ = sct.tasks.sas_model_summary_output(neut_theor, param)
         xray_summ = sct.tasks.sas_model_summary_output(xray_theor, param)
-    
+
         # Output all summary data to file
         summary_data.write('{0:s}\t{1:s}{2:s}\n'.format(file_id,
                                                         neut_summ,
                                                         xray_summ))
-        
 
         num_proc = i + 1
-        fraction_done = (float(num_proc)/float(nf))
-        progress_string='Processed ' + str(num_proc) + ' of ' + str(nf) + ' : ' + str(fraction_done*100.0) + ' % done\n'
+        fraction_done = (float(num_proc) / float(nf))
+        progress_string = 'Processed ' + \
+            str(num_proc) + ' of ' + str(nf) + ' : ' + str(fraction_done * 100.0) + ' % done\n'
         if (num_proc % 20) == 0:
             print(progress_string)
 

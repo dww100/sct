@@ -23,24 +23,36 @@ import argparse
 import sys
 import sct
 
+
 def parse_arguments():
     """
     Parse command line arguments and ensure correct combinations present
     """
 
     parser = argparse.ArgumentParser(
-        description= 'Convert fasta or pdb file to yaml residue frequency file\n')
+        description='Convert fasta or pdb file to yaml residue frequency file\n')
 
-    parser.add_argument('-i','--input_filename', nargs='?', type=str,
-        dest='input_filename', help = 'Path to the input fasta/pdb file',
+    parser.add_argument(
+        '-i',
+        '--input_filename',
+        nargs='?',
+        type=str,
+        dest='input_filename',
+        help='Path to the input fasta/pdb file',
         required=True)
 
-    parser.add_argument('-t','--input_type', choices = ['fas','pdb'],
-        help = 'Input file format (pdb or fasta)', default = 'pdb', 
-        required=True)
+    parser.add_argument('-t', '--input_type', choices=['fas', 'pdb'],
+                        help='Input file format (pdb or fasta)', default='pdb',
+                        required=True)
 
-    parser.add_argument('-o','--output_filename', nargs='?', type=str,
-        dest='output_filename', default=None, help = 'Path to the output file')
+    parser.add_argument(
+        '-o',
+        '--output_filename',
+        nargs='?',
+        type=str,
+        dest='output_filename',
+        default=None,
+        help='Path to the output file')
 
     return parser.parse_args()
 
@@ -53,8 +65,8 @@ if args.input_type == 'pdb':
 else:
     res_freq = sct.seq.fasta_res_freq(args.input_filename)
 
-if args.output_filename != None:
-    sys.stdout = open(args.output_filename,'w')
+if args.output_filename is not None:
+    sys.stdout = open(args.output_filename, 'w')
 
 # Output pdb frequencies in a yaml style format that can be read by SLUV2
 for res_name in sct.seq.amino_acids:

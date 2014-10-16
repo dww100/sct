@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import seq as seq
-import pdb as pdb
-import sphere as sphere
-import curve as curve
-import param as param
-import tasks as tasks
+from . import seq as seq
+from . import pdb as pdb
+from . import sphere as sphere
+from . import curve as curve
+from . import param as param
+from . import tasks as tasks
 from sjp_util import sjp_util

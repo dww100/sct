@@ -23,23 +23,25 @@ import argparse
 
 import sct
 
+
 def parse_arguments():
     """
     Parse command line arguments and ensure correct combinations present
     """
 
     parser = argparse.ArgumentParser(
-        description= 'Convert atomic pdb to sphere model\n')
+        description='Convert atomic pdb to sphere model\n')
 
-    parser.add_argument('-i','--input_filename', nargs='?', type=str,
-        dest='input_filename', help = 'Path to the input file',
-        required=True)
+    parser.add_argument('-i', '--input_filename', nargs='?', type=str,
+                        dest='input_filename', help='Path to the input file',
+                        required=True)
 
-    parser.add_argument('-o','--output_filename', nargs='?', type=str,
-        dest='output_filename', default=None,
-        help = 'Path to the output file', required=True)
+    parser.add_argument('-o', '--output_filename', nargs='?', type=str,
+                        dest='output_filename', default=None,
+                        help='Path to the output file', required=True)
 
     return parser.parse_args()
+
 
 def main():
 
@@ -57,8 +59,13 @@ def main():
             sphere = sct.sphere.parse_sphere_line(line)
             # As in SJP original codes use SER residue type and C1 for atom type
             # Store the sphere radius at the temperature factor (beta)
-            pdb_line = sct.pdb.create_pdb_atom(count, 'SER', count, 'C1',
-                                      sphere['coords'], beta = sphere['radius'])
+            pdb_line = sct.pdb.create_pdb_atom(
+                count,
+                'SER',
+                count,
+                'C1',
+                sphere['coords'],
+                beta=sphere['radius'])
             out_file.write(pdb_line)
             count += 1
 

@@ -23,16 +23,27 @@ import collections
 import yaml
 import os
 
-share_dir = os.path.join(__file__.rsplit(os.sep,1)[0], 'share')
+share_dir = os.path.join(__file__.rsplit(os.sep, 1)[0], 'share')
 """Path to the input data files"""
 # Lists of the residues which are handled by SCT programs
-polar = ['ARG','ASN','ASP','GLN','GLU','HIS','LYS','SER','THR']
+polar = ['ARG', 'ASN', 'ASP', 'GLN', 'GLU', 'HIS', 'LYS', 'SER', 'THR']
 """List of polar amino acids (aa) - 3 letter codes"""
-non_polar = ['ALA','CYS','GLY','ILE','LEU','MET','PHE','PRO','TRP','TYR','VAL']
+non_polar = [
+    'ALA',
+    'CYS',
+    'GLY',
+    'ILE',
+    'LEU',
+    'MET',
+    'PHE',
+    'PRO',
+    'TRP',
+    'TYR',
+    'VAL']
 """List of non-polar aa - 3 letter codes"""
 amino_acids = polar + non_polar
 """List of all aa - 3 letter codes"""
-monosaccharides = ['FUC','GAL','GLC','MAN','NAG','NGA','SIA']
+monosaccharides = ['FUC', 'GAL', 'GLC', 'MAN', 'NAG', 'NGA', 'SIA']
 """list of monosaccharides - 3 letter codes"""
 all_residues = amino_acids + monosaccharides
 """List combining amino_acids and monosaccharides - 3 letter codes"""
@@ -41,7 +52,7 @@ all_residues = amino_acids + monosaccharides
 # Trick taken from the pymol wiki
 aa1 = list("ARNDCQEGHILKMFPSTWYV")
 """List of amino acid 1 letter codes"""
-aa1to3 = dict(zip(aa1,sorted(amino_acids)))
+aa1to3 = dict(zip(aa1, sorted(amino_acids)))
 """Dictionary providing 1 to 3 letter aa code conversion"""
 
 # Load parameters into module global variables
@@ -49,13 +60,13 @@ aa1to3 = dict(zip(aa1,sorted(amino_acids)))
 # Load scattering and mass parameters:
 # bH, bD, mass, no_electron, no_exchange_H, no_exchange_peptide_H,
 # solvent -[BDDO, BHHO, EHHO], constants -[avagadro]
-param_file = file(os.path.join(share_dir,'sluv_parameters.yml'), 'r')
+param_file = file(os.path.join(share_dir, 'sluv_parameters.yml'), 'r')
 """Path to file containing scattering and mass parameters"""
 params = yaml.load(param_file)
 """Dictionary of scattering parameters read in from file"""
 
 # Load the different volume datasets
-vol_file = file(os.path.join(share_dir,'aa_volumes.yml'), 'r')
+vol_file = file(os.path.join(share_dir, 'aa_volumes.yml'), 'r')
 """Path to file containing volumes parameters"""
 res_vols = yaml.load(vol_file)
 """Dictionary of residue volumes read in from file"""
@@ -63,6 +74,7 @@ res_vols = yaml.load(vol_file)
 # Difference in scattering length from heavy to light water
 bDH_diff = params['solvent']['BOD'] - params['solvent']['BOH']
 """Difference in scattering length for heavy and light water"""
+
 
 def residue_freq_dict():
     """
@@ -79,6 +91,7 @@ def residue_freq_dict():
         res_freq[res_name] = 0
 
     return res_freq
+
 
 def parse_fasta(filename):
     """
@@ -114,6 +127,7 @@ def parse_fasta(filename):
 
     return order, sequences
 
+
 def fasta_res_freq(filename):
     """
     Read fasta file and return dictionary of residue frequencies.
@@ -142,28 +156,30 @@ def fasta_res_freq(filename):
 
     return res_freq
 
+
 def seq_file_to_freq(seq_filename, file_type):
     """
-    Read a sequence file in either fasta or YAML format and return residue 
+    Read a sequence file in either fasta or YAML format and return residue
     frequencies.
-    
+
     @type  seq_filename: string
     @param seq_filename: Path to sequence file (either fasta or YAML)
     @type  file_type:    string
     @param file_type:    Is the input a fasta ('fas') or YAML ('yml') file
     @rtype:              dictionary
-    @return:             Dictionary for residue type frequency. Three letter 
-                         residue code for the key and residue type frequency as 
-                         the values.    
+    @return:             Dictionary for residue type frequency. Three letter
+                         residue code for the key and residue type frequency as
+                         the values.
     """
-    
+
     if file_type == 'yml':
         seq_file = file(seq_filename, 'r')
         res_freq = yaml.load(seq_file)
     elif file_type == 'fas':
         res_freq = fasta_res_freq(seq_filename)
-        
+
     return res_freq
+
 
 def calc_hydration_volume(res_freq):
     """
@@ -187,6 +203,7 @@ def calc_hydration_volume(res_freq):
 
     return water_vol
 
+
 def calc_hydration_effect(res_freq):
     """
     Calculates the effect of hydration on protein volume
@@ -207,11 +224,13 @@ def calc_hydration_effect(res_freq):
 
     volume_diff = vol_chothia - vol_consensus
 
-    water_bound_diff = params['solvent']['vol_free'] - params['solvent']['vol_bound']
+    water_bound_diff = params['solvent'][
+        'vol_free'] - params['solvent']['vol_bound']
 
     oh_diff = volume_diff / water_bound_diff
 
     return volume_diff, oh_diff
+
 
 def sum_res_no(resids, res_freq):
     """
@@ -231,6 +250,7 @@ def sum_res_no(resids, res_freq):
         no += res_freq[resid]
 
     return no
+
 
 def sum_mass(resids, res_freq):
     """
@@ -252,6 +272,7 @@ def sum_mass(resids, res_freq):
         mass += params['mass'][resid] * res_freq[resid]
 
     return mass
+
 
 def sum_volume(resids, res_freq, dataset):
     """
@@ -278,6 +299,7 @@ def sum_volume(resids, res_freq, dataset):
 
     return volume
 
+
 def spec_volume(resids, res_freq, dataset):
     """
     Calculate the specific volume of the input residue constitution
@@ -303,6 +325,7 @@ def spec_volume(resids, res_freq, dataset):
 
     return volume * params['constants']['avagadro'] / mass
 
+
 def calc_absorption_coeffs(res_freq, mass):
     """
     Calculate absorption coefficients
@@ -317,9 +340,10 @@ def calc_absorption_coeffs(res_freq, mass):
     """
 
     coeff = 10 * (150.0 * res_freq['CYS'] + 1340.0 * res_freq['TYR']
-            + 5550.0 * res_freq['TRP']) / mass
+                  + 5550.0 * res_freq['TRP']) / mass
 
     return [coeff, 1.03 * coeff, 1.06 * coeff]
+
 
 def sum_b(resids, res_freq, heavy_water):
     """
@@ -346,6 +370,7 @@ def sum_b(resids, res_freq, heavy_water):
             b_tot += params['bH'][resid] * res_freq[resid]
 
     return b_tot
+
 
 def sum_electrons(resids, res_freq):
     """

@@ -22,22 +22,29 @@ import sys
 
 import sct
 
+
 def parse_arguments():
     """
     Parse command line arguments and ensure correct combinations present
     """
 
     parser = argparse.ArgumentParser(
-        description= 'Calculate radius of gyration from a SCT sphere model file\n')
+        description='Calculate radius of gyration from a SCT sphere model file\n')
 
-    parser.add_argument('-i','--input_filename', nargs='?', type=str,
-        dest='input_filename', help = 'Path to the input sphere model',
+    parser.add_argument(
+        '-i',
+        '--input_filename',
+        nargs='?',
+        type=str,
+        dest='input_filename',
+        help='Path to the input sphere model',
         required=True)
 
-    parser.add_argument('-o','--output_filename', nargs='?', type=str,
-        default=None, help = 'Path to the output file')
+    parser.add_argument('-o', '--output_filename', nargs='?', type=str,
+                        default=None, help='Path to the output file')
 
     return parser.parse_args()
+
 
 def main():
 
@@ -50,8 +57,8 @@ def main():
     # Calculate the radius of gyration for the sphere distribution
     r_gyr = sct.sphere.sphere_model_rg(coords, radius)
 
-    if args.output_filename != None:
-        output = open(args.output_filename,'w')
+    if args.output_filename is not None:
+        output = open(args.output_filename, 'w')
     else:
         output = sys.stdout
 

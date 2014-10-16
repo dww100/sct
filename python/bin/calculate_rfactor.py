@@ -25,24 +25,41 @@ import glob
 
 import sct
 
+
 def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
 
     parser = argparse.ArgumentParser(
-        description = 'Compute R factor from a comparison of several scattering curves.')
+        description='Compute R factor from a comparison of several scattering curves.')
     parser.add_argument(
-        '-c','--calc', nargs='+', type=str, dest='calc_paths',
-        help = 'Path to the input calculated curve or directory containing mutiple curves (with scn, scx extensions)', required=True)
+        '-c',
+        '--calc',
+        nargs='+',
+        type=str,
+        dest='calc_paths',
+        help='Path to the input calculated curve or directory containing mutiple curves (with scn, scx extensions)',
+        required=True)
     parser.add_argument(
-        '-e','--expt', nargs='+', type=str, dest='expt_curves',
-        help = 'List of input experimental curves', required=True)
-    parser.add_argument('-p','--parameter_file', nargs='?', type=str,
-        help = 'Path to a file containing input parameters', required=True)
+        '-e', '--expt', nargs='+', type=str, dest='expt_curves',
+        help='List of input experimental curves', required=True)
     parser.add_argument(
-        '-o','--outfile', nargs='?', type=str, dest='out_file',
-        help = 'Path to the output file', required=True)
-    parser.add_argument('-u','--unit', choices = ['nm', 'a'],
-                        default = 'a', help = 'Unit for Q in input experimental data')
+        '-p',
+        '--parameter_file',
+        nargs='?',
+        type=str,
+        help='Path to a file containing input parameters',
+        required=True)
+    parser.add_argument(
+        '-o', '--outfile', nargs='?', type=str, dest='out_file',
+        help='Path to the output file', required=True)
+    parser.add_argument(
+        '-u',
+        '--unit',
+        choices=[
+            'nm',
+            'a'],
+        default='a',
+        help='Unit for Q in input experimental data')
 
     args = parser.parse_args()
     return args
@@ -52,16 +69,16 @@ args = parse_arguments()
 # Read in parameters
 param, err = sct.param.read_parameter_file(args.parameter_file)
 
-if err != None:
+if err is not None:
     sct.param.output_error(err, args.parameter_file)
 
 err = sct.param.check_parameters(param, ['rfac'])
 
-if err != None:
+if err is not None:
     sct.param.output_error(err, args.parameter_file)
 
 # Open file for output data
-output = open(args.out_file,'w')
+output = open(args.out_file, 'w')
 
 # Get list of scattering curves in the input directory
 
@@ -70,8 +87,8 @@ calc_curves = []
 
 for path in args.calc_paths:
     if os.path.isdir(path):
-        curve_filters.append(os.path.join(path,'*.scn'))
-        curve_filters.append(os.path.join(path,'*.scx'))
+        curve_filters.append(os.path.join(path, '*.scn'))
+        curve_filters.append(os.path.join(path, '*.scx'))
     else:
         calc_curves.append(path)
 
@@ -96,7 +113,7 @@ for expt_curve in args.expt_curves:
     expt_data = sct.curve.load_scatter_curve(expt_curve, qmin, qmax)
 
     if args.unit == 'nm':
-        expt_data[:,0] = expt_data[:,0] / 10.0
+        expt_data[:, 0] = expt_data[:, 0] / 10.0
 
     for calc_curve in calc_curves:
 
@@ -106,19 +123,22 @@ for expt_curve in args.expt_curves:
                                                  param['rfac']['qmax'])
 
         results = sct.curve.get_curve_descriptors(calc_data,
-                      param['rg']['fitmin'],
-                      param['rg']['fitmax'],
-                      param['rxs1']['fitmin'],
-                      param['rxs1']['fitmax'])
+                                                  param['rg']['fitmin'],
+                                                  param['rg']['fitmax'],
+                                                  param['rxs1']['fitmin'],
+                                                  param['rxs1']['fitmax'])
 
-        # Calculate the R factor comparing the calculated and experimental curves
+        # Calculate the R factor comparing the calculated and experimental
+        # curves
         rfactor, scale = sct.curve.calculate_rfactor(expt_data,
                                                      calc_data,
                                                      param['rfac']['qmin'],
                                                      param['rfac']['qmax'])
 
-        output.write("{0:s}\t{1:s}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}\n".format(expt_curve,
-                                                                  calc_curve,
-                                                                  results['curve_rg'],
-                                                                  1.0/scale,
-                                                                  rfactor))
+        output.write(
+            "{0:s}\t{1:s}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}\n".format(
+                expt_curve,
+                calc_curve,
+                results['curve_rg'],
+                1.0 / scale,
+                rfactor))

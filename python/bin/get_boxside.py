@@ -29,42 +29,66 @@ import sys
 
 import sct
 
+
 def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
 
     parser = argparse.ArgumentParser(
-        description= 'Optimize the box size used in creation of sphere models\n'
-        )
+        description='Optimize the box size used in creation of sphere models\n'
+    )
 
-    parser.add_argument('-i','--input_pdb', nargs='?', type=str,
-        help = 'Path to the input PDB file', required=True)
+    parser.add_argument('-i', '--input_pdb', nargs='?', type=str,
+                        help='Path to the input PDB file', required=True)
 
-    parser.add_argument('-s','--input_seq', nargs='?', type=str,
-        help = 'Path to input sequence file if different from PDB', 
-        default = None)    
+    parser.add_argument(
+        '-s',
+        '--input_seq',
+        nargs='?',
+        type=str,
+        help='Path to input sequence file if different from PDB',
+        default=None)
 
-    parser.add_argument('-f','--input_format', choices = ['fas','yml'],
-        help = 'Input file format (fasta or sluv yaml)', default = None)
+    parser.add_argument(
+        '-f',
+        '--input_format',
+        choices=[
+            'fas',
+            'yml'],
+        help='Input file format (fasta or sluv yaml)',
+        default=None)
 
-    parser.add_argument('-o','--output_filename', nargs='?', type=str,
-        dest='output_filename', default=None,
-        help = 'Path to the output file')
+    parser.add_argument('-o', '--output_filename', nargs='?', type=str,
+                        dest='output_filename', default=None,
+                        help='Path to the output file')
 
-    parser.add_argument('-b','--box_range', nargs=2, type=float,
-        default=[1.1,10.0], help = 'Minimum and maximum box sides to try')
+    parser.add_argument(
+        '-b',
+        '--box_range',
+        nargs=2,
+        type=float,
+        default=[
+            1.1,
+            10.0],
+        help='Minimum and maximum box sides to try')
 
-    parser.add_argument('-t','--tolerance', nargs='?', type=float,
-        default=0.01, help = 'Tolerance for box size determination')
+    parser.add_argument(
+        '-t',
+        '--tolerance',
+        nargs='?',
+        type=float,
+        default=0.01,
+        help='Tolerance for box size determination')
 
-    parser.add_argument('-c','--cutoff', nargs='?', type=int,
-        default=4, help = 'Atom number cutoff for sphere models')
+    parser.add_argument('-c', '--cutoff', nargs='?', type=int,
+                        default=4, help='Atom number cutoff for sphere models')
 
     return parser.parse_args()
 
+
 def get_box_opt_input(pdb_filename, seq_filename, seq_type):
     """
-    Get the target volume and atomic coordinates for box_side optimization. If 
-    specified use a sequence other than that of the input PDB providing the 
+    Get the target volume and atomic coordinates for box_side optimization. If
+    specified use a sequence other than that of the input PDB providing the
     coordinates.
     @type  pdb_filename: string
     @param pdb_filename: Path to PDB file
@@ -75,8 +99,8 @@ def get_box_opt_input(pdb_filename, seq_filename, seq_type):
     @rtype:              float, list
     @return:             1. Target volume from sequence
 
-                         2. A list containing lists of x, y & z coordinates 
-                         (3 * floats)     
+                         2. A list containing lists of x, y & z coordinates
+                         (3 * floats)
     """
 
     # Read in the residues frequencies (to calculate target volume) and
@@ -84,34 +108,34 @@ def get_box_opt_input(pdb_filename, seq_filename, seq_type):
     res_freq, atom_coords = sct.pdb.read_pdb_atom_data(pdb_filename)
 
     # If an additional sequence file was provided then use this as the sequence
-    # to optimize 
-    if seq_type != None:
+    # to optimize
+    if seq_type is not None:
         res_freq = sct.seq.seq_file_to_freq(seq_filename, seq_type)
 
-    volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986a')    
-    
-    return volume, atom_coords
-            
+    volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986a')
 
-def main ():
+    return volume, atom_coords
+
+
+def main():
 
     args = parse_arguments()
 
-    target_volume, atom_coords = get_box_opt_input(args.input_pdb, 
-                                                   args.input_seq, 
+    target_volume, atom_coords = get_box_opt_input(args.input_pdb,
+                                                   args.input_seq,
                                                    args.input_format)
 
     best_side, dev = sct.sphere.optimize_box_side(args.cutoff,
-                                                  atom_coords, 
-                                                  target_volume, 
-                                                  args.box_range[0], 
+                                                  atom_coords,
+                                                  target_volume,
+                                                  args.box_range[0],
                                                   args.box_range[1],
                                                   args.tolerance)
 
-    if args.output_filename == None:
+    if args.output_filename is None:
         output = sys.stdout
     else:
-        output = open(args.output_filename,'w')
+        output = open(args.output_filename, 'w')
 
     output.write("# Optimized box_side for {0:s}, using cutoff {1:d}\n".format(
                  args.input_pdb, args.cutoff))

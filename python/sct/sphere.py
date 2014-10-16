@@ -24,6 +24,7 @@ import scipy.optimize as optimize
 import scipy.spatial.distance as dist
 from bisect import bisect_right
 
+
 def create_grid(atom_coords, x_axis, y_axis, z_axis):
     """Count atoms in grid boxes defined by passed axes intervals
 
@@ -58,6 +59,7 @@ def create_grid(atom_coords, x_axis, y_axis, z_axis):
 
     return grid
 
+
 def define_grid_axes(coords, box_side):
     """
     Create intervals of length box_side along x, y & z axes. The axes extend to
@@ -88,6 +90,7 @@ def define_grid_axes(coords, box_side):
                        coord_maxs[2] + 2.0 * box_side, box_side)
 
     return x_axis, y_axis, z_axis
+
 
 def grid_to_spheres(grid, radius, cutoff, x_axis, y_axis, z_axis):
     """
@@ -129,9 +132,10 @@ def grid_to_spheres(grid, radius, cutoff, x_axis, y_axis, z_axis):
         x = x_axis[full[0][ndx]] + radius
         y = y_axis[full[1][ndx]] + radius
         z = z_axis[full[2][ndx]] + radius
-        sphere_coords.append([x,y,z])
+        sphere_coords.append([x, y, z])
 
     return sphere_coords
+
 
 def create_sphere_model(atom_coords, cutoff, box_side, **kwargs):
     """
@@ -156,7 +160,7 @@ def create_sphere_model(atom_coords, cutoff, box_side, **kwargs):
     @keyword z_axis:    Array of floats defining the intersection of grid boxes
                         along the z-axis.
     @rtype:             list, numpy array, numpy array, numpy array
-    @return:            
+    @return:
                         - A list containing lists of x, y & z coordinates
                         (3 * floats) of spheres within the sphere model.
 
@@ -189,10 +193,11 @@ def create_sphere_model(atom_coords, cutoff, box_side, **kwargs):
 
     # Convert grid to spheres
     # A sphere centre of a box is created if > cutoff atoms are within it
-    sphere_coords = grid_to_spheres(grid, box_side/2.0, cutoff,
+    sphere_coords = grid_to_spheres(grid, box_side / 2.0, cutoff,
                                     x_axis, y_axis, z_axis)
 
     return sphere_coords, x_axis, y_axis, z_axis
+
 
 def residual2_box(box_side, cutoff, atom_coords, targ_volume):
     """
@@ -216,13 +221,14 @@ def residual2_box(box_side, cutoff, atom_coords, targ_volume):
     """
 
     # Create sphere model
-    sphere_coords, x_axis, y_axis, z_axis = create_sphere_model(atom_coords,
-                                                               cutoff, box_side)
+    sphere_coords, x_axis, y_axis, z_axis = create_sphere_model(
+        atom_coords, cutoff, box_side)
     # Compute volume of the model
-    vol_spheres = len(sphere_coords) * box_side**3
+    vol_spheres = len(sphere_coords) * box_side ** 3
 
     # Return squared residual
-    return (vol_spheres - targ_volume)**2
+    return (vol_spheres - targ_volume) ** 2
+
 
 def optimize_box_side(cutoff, coords, targ_vol, side_min, side_max, tolerance):
     """
@@ -254,12 +260,20 @@ def optimize_box_side(cutoff, coords, targ_vol, side_min, side_max, tolerance):
 
     # Minimize the squared residuals between the sphere model ang target volume
     # Uses minimize_scalar from scipy.optimize
-    opt = optimize.minimize_scalar(residual2_box, args=(cutoff, coords, targ_vol),
-                                   bounds=side_bounds, method='bounded',
-                                   options={'xtol' : tolerance})
+    opt = optimize.minimize_scalar(
+        residual2_box,
+        args=(
+            cutoff,
+            coords,
+            targ_vol),
+        bounds=side_bounds,
+        method='bounded',
+        options={
+            'xtol': tolerance})
 
     # Return the optimized box_side and residual
-    return opt['x'], opt['fun']**0.5
+    return opt['x'], opt['fun'] ** 0.5
+
 
 def write_sphere_line(x, y, z, radius, out):
     """
@@ -283,7 +297,13 @@ def write_sphere_line(x, y, z, radius, out):
     ys = y + radius
     zs = z + radius
 
-    out.write("{0:10.2f}{1:10.2f}{2:10.2f}{3:10.2f}\n".format(xs, ys, zs, radius))
+    out.write(
+        "{0:10.2f}{1:10.2f}{2:10.2f}{3:10.2f}\n".format(
+            xs,
+            ys,
+            zs,
+            radius))
+
 
 def write_spheres(coords, radius, out):
     """
@@ -298,9 +318,10 @@ def write_spheres(coords, radius, out):
     @type  out:     file object
     @param out:     The file to which the output sphere line is written
     """
-    
+
     for coord in coords:
         write_sphere_line(coord[0], coord[1], coord[2], radius, out)
+
 
 def parse_sphere_line(line):
     """
@@ -321,10 +342,18 @@ def parse_sphere_line(line):
 
     # SCT sphere files have four columns of fixed width (3 coords + radius)
 
-    data['coords'] = [float(line[0:10]), float(line[11:20]), float(line[21:30])]
+    data['coords'] = [
+        float(
+            line[
+                0:10]), float(
+            line[
+                11:20]), float(
+            line[
+                21:30])]
     data['radius'] = float(line[31:40])
 
     return data
+
 
 def read_mono_spheres(filename):
     """
@@ -334,7 +363,7 @@ def read_mono_spheres(filename):
     @type  filename:  string
     @param filename:  Path to the input SCT format sphere model file
     @rtype:           list, float
-    @return:    
+    @return:
                     - A list containing lists of x, y & z coordinates
                     (3 * floats) of a sphere within the sphere model.
                     - Sphere radius (float)
@@ -349,6 +378,7 @@ def read_mono_spheres(filename):
             radius = sphere['radius']
 
     return spheres, radius
+
 
 def sphere_model_rg(coords, radius):
     """
@@ -366,7 +396,7 @@ def sphere_model_rg(coords, radius):
 
     # Radius of gyration of a cube = side length
     # Cube side length = 2 * radius of cube that fits inside it
-    box_rg2 = (2 * radius)**2
+    box_rg2 = (2 * radius) ** 2
 
     # R_g**2 = 1/N sum(r_k - r_mean)**2
     # where r_k is the position of each sphere and r_k their mean position
@@ -374,17 +404,21 @@ def sphere_model_rg(coords, radius):
     no_spheres = len(coords)
 
     coords = np.array(coords)
-    x_mean = np.mean(coords[ : , 0 ])
-    y_mean = np.mean(coords[ : , 1 ])
-    z_mean = np.mean(coords[ : , 2 ])
+    x_mean = np.mean(coords[:, 0])
+    y_mean = np.mean(coords[:, 1])
+    z_mean = np.mean(coords[:, 2])
 
     rad_sq = 0.0
 
     for ii in range(0, no_spheres):
-        d = (coords[ii,0] - x_mean)**2 + (coords[ii,1] - y_mean)**2 + (coords[ii,2] - z_mean)**2
+        d = (coords[ii,
+                    0] - x_mean) ** 2 + (coords[ii,
+                                                1] - y_mean) ** 2 + (coords[ii,
+                                                                            2] - z_mean) ** 2
         rad_sq += d
 
     return np.sqrt(rad_sq / no_spheres + box_rg2)
+
 
 def hydrate_sphere(coords, hydration_pos, dist):
     """
@@ -427,7 +461,6 @@ def hydrate_sphere(coords, hydration_pos, dist):
     if 6 in hydration_pos:
         hyd_coords.append([coords[0], coords[1] - dist, coords[2]])
 
-
     if 7 in hydration_pos:
         hyd_coords.append([coords[0] - dist, coords[1], coords[2] + dist])
 
@@ -445,7 +478,6 @@ def hydrate_sphere(coords, hydration_pos, dist):
 
     if 12 in hydration_pos:
         hyd_coords.append([coords[0] + dist, coords[1] - dist, coords[2]])
-
 
     if 13 in hydration_pos:
         hyd_coords.append([coords[0] - dist, coords[1], coords[2] - dist])
@@ -465,33 +497,40 @@ def hydrate_sphere(coords, hydration_pos, dist):
     if 18 in hydration_pos:
         hyd_coords.append([coords[0] + dist, coords[1] + dist, coords[2]])
 
-
     if 19 in hydration_pos:
-        hyd_coords.append([coords[0] + dist, coords[1] + dist, coords[2] + dist])
+        hyd_coords.append(
+            [coords[0] + dist, coords[1] + dist, coords[2] + dist])
 
     if 20 in hydration_pos:
-        hyd_coords.append([coords[0] + dist, coords[1] - dist, coords[2] + dist])
+        hyd_coords.append(
+            [coords[0] + dist, coords[1] - dist, coords[2] + dist])
 
     if 21 in hydration_pos:
-        hyd_coords.append([coords[0] - dist, coords[1] + dist, coords[2] - dist])
+        hyd_coords.append(
+            [coords[0] - dist, coords[1] + dist, coords[2] - dist])
 
     if 22 in hydration_pos:
-        hyd_coords.append([coords[0] - dist, coords[1] - dist, coords[2] - dist])
+        hyd_coords.append(
+            [coords[0] - dist, coords[1] - dist, coords[2] - dist])
 
     if 23 in hydration_pos:
-        hyd_coords.append([coords[0] + dist, coords[1] + dist, coords[2] - dist])
+        hyd_coords.append(
+            [coords[0] + dist, coords[1] + dist, coords[2] - dist])
 
     if 24 in hydration_pos:
-        hyd_coords.append([coords[0] - dist, coords[1] - dist, coords[2] + dist])
-
+        hyd_coords.append(
+            [coords[0] - dist, coords[1] - dist, coords[2] + dist])
 
     if 25 in hydration_pos:
-        hyd_coords.append([coords[0] - dist, coords[1] + dist, coords[2] + dist])
+        hyd_coords.append(
+            [coords[0] - dist, coords[1] + dist, coords[2] + dist])
 
     if 26 in hydration_pos:
-        hyd_coords.append([coords[0] + dist, coords[1] - dist, coords[2] - dist])
+        hyd_coords.append(
+            [coords[0] + dist, coords[1] - dist, coords[2] - dist])
 
     return hyd_coords
+
 
 def hydrate_spheres(coords, hydration_pos, radius):
     """
@@ -511,7 +550,7 @@ def hydrate_spheres(coords, hydration_pos, radius):
                            (3 * floats) for all test spheres in hydrated model.
 
                            B{Note}: This includes original spheres and
-                           overlapping hydration spheres as no filtering 
+                           overlapping hydration spheres as no filtering
                            has yet occured.
     """
 
@@ -523,17 +562,23 @@ def hydrate_spheres(coords, hydration_pos, radius):
 
     return wet_spheres
 
-def hydrate_sphere_model(dry_spheres, hydration_no, box_side, water_cutoff, **kwargs):
+
+def hydrate_sphere_model(
+        dry_spheres,
+        hydration_no,
+        box_side,
+        water_cutoff,
+        **kwargs):
     """
     Create hydrated sphere model in 4 steps (returning the appropriate sphere
     coordinates):
 
-        1. Add spheres to the dry model in positions assigned through 
-        hydration_no (Position 1 = original sphere position, 2 to 27 
+        1. Add spheres to the dry model in positions assigned through
+        hydration_no (Position 1 = original sphere position, 2 to 27
         positions on cube centred on original sphere).
         2. Filter out excess spheres using create_sphere_model with water_cutoff
         (this cutoff should be high ~ 10-12 spheres per box)
-        3. Add dry spheres back to the model. Some will have been removed 
+        3. Add dry spheres back to the model. Some will have been removed
         alongside the excess water in the last step
         4. Filter out overlapping spheres using create_sphere_model with cutoff
         set to 1.
@@ -596,9 +641,9 @@ def hydrate_sphere_model(dry_spheres, hydration_no, box_side, water_cutoff, **kw
         wet_spheres, x_axis, y_axis, z_axis = create_sphere_model(wet_spheres,
                                                                   water_cutoff,
                                                                   box_side,
-                                                                  xaxis = x_axis,
-                                                                  yaxis = y_axis,
-                                                                  zaxis = z_axis)
+                                                                  xaxis=x_axis,
+                                                                  yaxis=y_axis,
+                                                                  zaxis=z_axis)
     else:
         wet_spheres, x_axis, y_axis, z_axis = create_sphere_model(wet_spheres,
                                                                   water_cutoff,
@@ -614,9 +659,9 @@ def hydrate_sphere_model(dry_spheres, hydration_no, box_side, water_cutoff, **kw
         wet_spheres, x_axis, y_axis, z_axis = create_sphere_model(wet_spheres,
                                                                   1,
                                                                   box_side,
-                                                                  xaxis = x_axis,
-                                                                  yaxis = y_axis,
-                                                                  zaxis = z_axis)
+                                                                  xaxis=x_axis,
+                                                                  yaxis=y_axis,
+                                                                  zaxis=z_axis)
 
     else:
         wet_spheres, x_axis, y_axis, z_axis = create_sphere_model(wet_spheres,
@@ -624,6 +669,7 @@ def hydrate_sphere_model(dry_spheres, hydration_no, box_side, water_cutoff, **kw
                                                                   box_side)
 
     return wet_spheres
+
 
 def residual2_cut(cutoff, box_side, dry_spheres, hydration_no, targ_volume):
     """
@@ -655,15 +701,27 @@ def residual2_cut(cutoff, box_side, dry_spheres, hydration_no, targ_volume):
     """
 
     # Create sphere model
-    wet_model = hydrate_sphere_model(dry_spheres, hydration_no, box_side, cutoff)
+    wet_model = hydrate_sphere_model(
+        dry_spheres,
+        hydration_no,
+        box_side,
+        cutoff)
 
     # Compute volume of the model
-    vol_spheres = len(wet_model) * box_side**3
+    vol_spheres = len(wet_model) * box_side ** 3
 
     # Return squared residual
-    return (vol_spheres - targ_volume)**2
+    return (vol_spheres - targ_volume) ** 2
 
-def optimize_watercut(box_side, coords, hydration_no, targ_vol, cut_min, cut_max, tolerance):
+
+def optimize_watercut(
+        box_side,
+        coords,
+        hydration_no,
+        targ_vol,
+        cut_min,
+        cut_max,
+        tolerance):
     """
     Get optimal cutoff to use to filter hydration spheres to reproduce
     target_volume (and deviation)
@@ -686,7 +744,7 @@ def optimize_watercut(box_side, coords, hydration_no, targ_vol, cut_min, cut_max
     @param targ_vol:      The target volume for the hydrated model calculated
                           from the protein sequence.
     @rtype:               integer, float
-    @return:         
+    @return:
                           - Optimized cutoff value
                           - Deviation of the calculated volume from the target
                           volume
@@ -698,12 +756,21 @@ def optimize_watercut(box_side, coords, hydration_no, targ_vol, cut_min, cut_max
 
     # Minimize the squared residuals between the sphere model and target volumes
     # Uses minimize_scalar from scipy.optimize
-    opt = optimize.minimize_scalar(residual2_cut, args=(box_side, coords, hydration_no, targ_vol),
-                                   bounds=cut_bounds, method='bounded',
-                                   options={'xtol' : tolerance})
+    opt = optimize.minimize_scalar(
+        residual2_cut,
+        args=(
+            box_side,
+            coords,
+            hydration_no,
+            targ_vol),
+        bounds=cut_bounds,
+        method='bounded',
+        options={
+            'xtol': tolerance})
 
     # Return the optimized cutoff and residual
-    return int(opt['x']) + 1, opt['fun']**0.5
+    return int(opt['x']) + 1, opt['fun'] ** 0.5
+
 
 def sphere_squared_form_factor(q, r):
     """
@@ -721,9 +788,9 @@ def sphere_squared_form_factor(q, r):
     # Form factor^2 = (3 * [sin(q*r) - (q*r)*cos(q*r)])^2 / (q*r)^6
 
     qr = q * r
-    qr6 = qr**6
+    qr6 = qr ** 6
 
-    numerator = (3 * (np.sin(qr) - qr * np.cos(qr)))**2
+    numerator = (3 * (np.sin(qr) - qr * np.cos(qr))) ** 2
 
     return numerator / qr6
 
@@ -740,7 +807,7 @@ def calc_r_hist(coords, no_bins):
     @param no_bins:  Number of bins to use when creating histogram of pair
                      distances between spheres.
     @rtype:          numpy array, numpy array, integer
-    @return:   
+    @return:
                      1. Bins containing the counts of atoms in each division of
                      the histogram of pair distances between spheres.
 
@@ -752,10 +819,11 @@ def calc_r_hist(coords, no_bins):
     """
 
     pair_dists = dist.pdist(coords, 'euclidean')
-    hist, bin_edges = np.histogram(pair_dists, bins = no_bins)
+    hist, bin_edges = np.histogram(pair_dists, bins=no_bins)
     last_used = len([i for i in hist if i > 0])
 
     return hist, bin_edges, last_used
+
 
 def spheres_to_sas_curve(coords, radius, q_max, n_points, **kwargs):
     """
@@ -814,17 +882,17 @@ def spheres_to_sas_curve(coords, radius, q_max, n_points, **kwargs):
         sigma_tmp = 0.0
         for kk in range(0, n_bins):
             qr = q[jj] * bin_edges[kk + 1]
-            sin_term = np.sin(qr)/ qr
+            sin_term = np.sin(qr) / qr
             sigma_tmp += hist[kk] * sin_term
         sigma.append(sigma_tmp)
 
     inv_n = 1.0 / natom
-    inv_n2 = 1.0 / natom**2
+    inv_n2 = 1.0 / natom ** 2
 
     scat = []
 
     for jj in range(0, n_points):
         scat.append([q[jj], sphere_squared_form_factor(q[jj], radius)
-                    * (inv_n + 2.0 * inv_n2 * sigma[jj])])
+                     * (inv_n + 2.0 * inv_n2 * sigma[jj])])
 
     return np.array(scat)

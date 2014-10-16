@@ -21,24 +21,26 @@ Sctify: converts a CHARMM PSF/PDF pair to a SCT compatible PDB
 import argparse
 import sct
 
+
 def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
 
     parser = argparse.ArgumentParser(
-        description= 'Convert a CHARMM PSF/PDF pair to a SCT compatible PDB\n')
+        description='Convert a CHARMM PSF/PDF pair to a SCT compatible PDB\n')
 
-    parser.add_argument('-i','--input_pdb', nargs='?', type=str,
-        dest='pdb_path', help = 'Path to the input PDB file',
-        required=True)
-    parser.add_argument('-p','--input_psf', nargs='?', type=str,
-        dest='psf_path', help = 'Path to the input PSF file',
-        required=True)
-    parser.add_argument('-o','--output_pdb', nargs='?', type=str,
-        dest='pdb_out', default=None,
-        help = 'Path to the output PDB file')
+    parser.add_argument('-i', '--input_pdb', nargs='?', type=str,
+                        dest='pdb_path', help='Path to the input PDB file',
+                        required=True)
+    parser.add_argument('-p', '--input_psf', nargs='?', type=str,
+                        dest='psf_path', help='Path to the input PSF file',
+                        required=True)
+    parser.add_argument('-o', '--output_pdb', nargs='?', type=str,
+                        dest='pdb_out', default=None,
+                        help='Path to the output PDB file')
 
     return parser.parse_args()
-    
+
+
 def main():
 
     args = parse_arguments()
@@ -48,4 +50,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

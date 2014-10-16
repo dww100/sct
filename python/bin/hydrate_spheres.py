@@ -23,36 +23,47 @@ import argparse
 
 import sct
 
+
 def parse_arguments():
     """
     Parse command line arguments and ensure correct combinations present
     """
 
     parser = argparse.ArgumentParser(
-        description= 'Add hydration shell of spheres around an existing sphere model\n')
+        description='Add hydration shell of spheres around an existing sphere model\n')
 
-    parser.add_argument('-i','--input_filename', nargs='?', type=str,
+    parser.add_argument('-i', '--input_filename', nargs='?', type=str,
                         dest='input_filename', required=True,
-                        help = 'Path to the input file')
+                        help='Path to the input file')
 
-    parser.add_argument('-o','--output_filename', nargs='?', type=str,
+    parser.add_argument('-o', '--output_filename', nargs='?', type=str,
                         dest='output_filename', default=None,
-                        help = 'Path to the output file', required=True)
+                        help='Path to the output file', required=True)
 
-    parser.add_argument('-p','--parameter_file', nargs='?', type=str,
-        help = 'Path to a file containing input parameters', default=None)
+    parser.add_argument(
+        '-p',
+        '--parameter_file',
+        nargs='?',
+        type=str,
+        help='Path to a file containing input parameters',
+        default=None)
 
-    parser.add_argument('-n','--hydration_no', nargs='?', type=int,
+    parser.add_argument('-n', '--hydration_no', nargs='?', type=int,
                         default=26,
-                        help = 'No. spheres to add as a hydration shell (1-26)')
+                        help='No. spheres to add as a hydration shell (1-26)')
 
-    parser.add_argument('-c','--cutoff', nargs='?', type=int,
-                        default=5.0,
-                        help = 'Cutoff used to reduce the number of water spheres')
+    parser.add_argument(
+        '-c',
+        '--cutoff',
+        nargs='?',
+        type=int,
+        default=5.0,
+        help='Cutoff used to reduce the number of water spheres')
 
     return parser.parse_args()
 
-def main ():
+
+def main():
 
     args = parse_arguments()
 
@@ -60,24 +71,24 @@ def main ():
     # Position 0 = original sphere position,
     # Positions 1 to 26 positions on cube centred on original sphere
 
-    if args.parameter_file == None:    
+    if args.parameter_file is None:
         hydration_no = args.hydration_no + 1
         cutoff = args.cutoff
     else:
         # Read in parameters
-        print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"        
-        
+        print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"
+
         # Read in parameters
         param, err = sct.param.read_parameter_file(args.parameter_file)
-        
-        if err != None:
+
+        if err is not None:
             sct.param.output_error(err, args.parameter_file)
-            
+
         err = sct.param.check_parameters(param, ['hydrate'])
-        
-        if err != None:
+
+        if err is not None:
             sct.param.output_error(err, args.parameter_file)
-            
+
         hydration_no = param['hydrate']['positions']
         cutoff = param['hydrate']['cutoff']
 
@@ -85,7 +96,11 @@ def main ():
     dry_spheres, radius = sct.sphere.read_mono_spheres(args.input_filename)
 
     # Create hydrated model
-    wet_spheres = sct.sphere.hydrate_sphere_model(dry_spheres, hydration_no, radius, cutoff)
+    wet_spheres = sct.sphere.hydrate_sphere_model(
+        dry_spheres,
+        hydration_no,
+        radius,
+        cutoff)
 
     out = open(args.output_filename, 'w')
     sct.sphere.write_spheres(wet_spheres, radius, out)

@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 
 from sjp_util import sjp_util
 
+
 def load_scatter_curve(filename, q_min, q_max):
     """
     Load magnitude of scattering vector, q, and intensity, I, data from file and
@@ -50,15 +51,16 @@ def load_scatter_curve(filename, q_min, q_max):
     except:
         # Maybe the file has a headerline?
         try:
-            scatter_data = np.loadtxt(filename, skiprows = 1)
+            scatter_data = np.loadtxt(filename, skiprows=1)
         except:
             print "Unable to load " + filename
             print "Check that the file exists, that all columns are the same length and contain numbers (one header line is permitted)\n"
             sys.exit(1)
-        
-    qrange_mask = (scatter_data[:,0] >= q_min) & (scatter_data[:,0] <= q_max)
+
+    qrange_mask = (scatter_data[:, 0] >= q_min) & (scatter_data[:, 0] <= q_max)
 
     return scatter_data[qrange_mask]
+
 
 def read_scatter_curves(curve_files, units, param):
     """
@@ -94,33 +96,35 @@ def read_scatter_curves(curve_files, units, param):
         # Modeling is performed in angstroms so convert files in nm to a
         if units == 'nm':
             curve['data'] = load_scatter_curve(curve_file,
-                                                param['rfac']['qmin'] * 10.0,
-                                                param['rfac']['qmax'] * 10.0)
-            curve['data'][:,0] = curve['data'][:,0] / 10.0
+                                               param['rfac']['qmin'] * 10.0,
+                                               param['rfac']['qmax'] * 10.0)
+            curve['data'][:, 0] = curve['data'][:, 0] / 10.0
         else:
             curve['data'] = load_scatter_curve(curve_file,
-                                                param['rfac']['qmin'],
-                                                param['rfac']['qmax'])
-
-
+                                               param['rfac']['qmin'],
+                                               param['rfac']['qmax'])
 
         if 'rxs2' in param:
-             curve.update(get_curve_descriptors(curve['data'],
-             param['rg']['fitmin'],
-             param['rg']['fitmax'],
-             param['rxs1']['fitmin'],
-             param['rxs1']['fitmax'],
-             param['rxs2']['fitmin'], param['rxs2']['fitmax']))
+            curve.update(
+                get_curve_descriptors(
+                    curve['data'],
+                    param['rg']['fitmin'],
+                    param['rg']['fitmax'],
+                    param['rxs1']['fitmin'],
+                    param['rxs1']['fitmax'],
+                    param['rxs2']['fitmin'],
+                    param['rxs2']['fitmax']))
         else:
             curve.update(get_curve_descriptors(curve['data'],
-             param['rg']['fitmin'],
-             param['rg']['fitmax'],
-             param['rxs1']['fitmin'],
-             param['rxs1']['fitmax']))
-            
+                                               param['rg']['fitmin'],
+                                               param['rg']['fitmax'],
+                                               param['rxs1']['fitmin'],
+                                               param['rxs1']['fitmax']))
+
         curves.append(curve)
 
     return curves
+
 
 def process_qrange_file(filename):
     """
@@ -132,10 +136,11 @@ def process_qrange_file(filename):
     @return:          Dictionary containing minimum and maximum values of q
     """
 
-    f = file(filename,'r')
+    f = file(filename, 'r')
     q_ranges = yaml.load(f)
 
     return q_ranges
+
 
 def match_scatter_curves(target_data, source_data):
     """
@@ -166,13 +171,14 @@ def match_scatter_curves(target_data, source_data):
 
     # Use the old fortran routine to match the data sets by q value
     # matched_no is the number of datapoints which contain matched data
-    matched_no = sjp_util.qrange_match(target_data[:,0], source_data[:,0],
-                                       source_data[:,1], last_target,
+    matched_no = sjp_util.qrange_match(target_data[:, 0], source_data[:, 0],
+                                       source_data[:, 1], last_target,
                                        last_source, matched_I)
 
     matched_I.resize(matched_no)
 
     return matched_I
+
 
 def compare_curves(target_data, source_data, q_min, q_max, chi2):
     """
@@ -199,20 +205,22 @@ def compare_curves(target_data, source_data, q_min, q_max, chi2):
     @param q_max:        Minimum value of the magnitude of the scattering
                          vector, q, to use in matching the curves.
     @type  chi2:         boolean
-    @param chi2:         Are we calculating Chi^2?                         
+    @param chi2:         Are we calculating Chi^2?
     @rtype:              float, float
     @return:             1. metric comparing target_data and source_data.
 
                          2. Scaling factor needed to superimpose target_data and
                          source_data.
-    """    
-        
+    """
+
     if chi2:
         rfactor, scale = calculate_chi2(target_data, source_data, q_min, q_max)
     else:
-        rfactor, scale = calculate_rfactor(target_data, source_data, q_min, q_max)
+        rfactor, scale = calculate_rfactor(
+            target_data, source_data, q_min, q_max)
 
     return rfactor, scale
+
 
 def calculate_rfactor(target_data, source_data, q_min, q_max):
     """
@@ -249,20 +257,32 @@ def calculate_rfactor(target_data, source_data, q_min, q_max):
 
     # Get average I for experimental and calculated values over matched q range
     matched_no = len(matched_source_I)
-    expt_avg = np.mean( target_data[0:matched_no, 1] )
-    calc_avg = np.mean( matched_source_I )
+    expt_avg = np.mean(target_data[0:matched_no, 1])
+    calc_avg = np.mean(matched_source_I)
 
     # Initial guess of the concentration:
     # ratio of experimental and calculated average intensities
     con = expt_avg / calc_avg
 
     # Call fortran code to calculate the R factor
-    rfactor = sjp_util.calc_rfactor( target_data[:,0], target_data[:,1],
-        matched_source_I, matched_no, q_min, q_max, con, False)
+    rfactor = sjp_util.calc_rfactor(
+        target_data[
+            :,
+            0],
+        target_data[
+            :,
+            1],
+        matched_source_I,
+        matched_no,
+        q_min,
+        q_max,
+        con,
+        False)
 
     # 1/con is the scaling factor needed to multiply experimental I values
     # to compare with calculated data
-    return rfactor, 1.0/con
+    return rfactor, 1.0 / con
+
 
 def calculate_chi2(target_data, source_data, q_min, q_max):
     """
@@ -294,22 +314,27 @@ def calculate_chi2(target_data, source_data, q_min, q_max):
                          source_data.
     """
 
-    if (target_data.shape[1] > 2) and (np.count_nonzero(target_data[:,2]) != 0):
+    if (target_data.shape[1] > 2) and (
+            np.count_nonzero(target_data[:, 2]) != 0):
 
         matched_source_I = match_scatter_curves(target_data, source_data)
 
-        # Get average I for experimental and calculated values over matched q range
+        # Get average I for experimental and calculated values over matched q
+        # range
         matched_no = len(matched_source_I)
-        expt_avg = np.mean( target_data[0:matched_no, 1] )
-        calc_avg = np.mean( matched_source_I )    
+        expt_avg = np.mean(target_data[0:matched_no, 1])
+        calc_avg = np.mean(matched_source_I)
 
         # Initial guess of the concentration:
         # ratio of experimental and calculated average intensities
         con = expt_avg / calc_avg
 
         # Call fortran code to calculate the R factor
-        chi2 = sjp_util.calc_chi2( target_data[:,0], target_data[:,1], target_data[:,2],
-                                  matched_source_I, matched_no, q_min, q_max, con, False)
+        chi2 = sjp_util.calc_chi2(
+            target_data[
+                :, 0], target_data[
+                :, 1], target_data[
+                :, 2], matched_source_I, matched_no, q_min, q_max, con, False)
 
     else:
         print "For Chi^2 calculations an error column must be present"
@@ -317,13 +342,13 @@ def calculate_chi2(target_data, source_data, q_min, q_max):
 
     # 1/con is the scaling factor needed to multiply experimental I values
     # to compare with calculated data
-    return chi2, 1.0/con
+    return chi2, 1.0 / con
 
 
 def sas_curve_fit(x, y, calc_type):
     """
-    Linear fit x vs y data. 
-    calc_type (rg, rxs1, rxs2) determines value computed from gradient and 
+    Linear fit x vs y data.
+    calc_type (rg, rxs1, rxs2) determines value computed from gradient and
     intercept in Guinier and other analyses of small angle scattering curves.
 
     @type  x:          numpy array
@@ -358,9 +383,9 @@ def sas_curve_fit(x, y, calc_type):
     else:
         # Linear fit to the input x and y values
         fit_coeffs = np.polyfit(x, y, 1)
-    
+
         result['fit'] = fit_coeffs
-    
+
         if (calc_type == 'rxs1') or (calc_type == 'rxs2'):
             # Cross section Rxs1/Rxs2 calculated from fits of q^2 vs ln(I*q)
             # Rxs?^2 = 2 * gradient
@@ -375,8 +400,9 @@ def sas_curve_fit(x, y, calc_type):
 
     return result
 
+
 def graph_sas_curve(filename, x, y, title_text, x_lab, y_lab,
-                  x_min, x_max, y_min, y_max, **kwargs):
+                    x_min, x_max, y_min, y_max, **kwargs):
     """
     Outputs graph of x and y to a pdf file. x and y are intended to be functions
     of the magnitude of scattering vector, q, and intensity, I. Values that are
@@ -422,7 +448,7 @@ def graph_sas_curve(filename, x, y, title_text, x_lab, y_lab,
     plt.figure(figsize=(8, 6), dpi=300)
 
     ax = plt.subplot(111, xlabel=x_lab, ylabel=y_lab, title=title_text,
-                xlim=(x_min, x_max), ylim=(y_min,y_max))
+                     xlim=(x_min, x_max), ylim=(y_min, y_max))
 
     plt.scatter(x, y, s=5)
 
@@ -432,7 +458,7 @@ def graph_sas_curve(filename, x, y, title_text, x_lab, y_lab,
     ax.tick_params(axis='both', which='major', labelsize=12)
 
     # Plot linear fit and highlight points used in its construction
-    if fit_coeffs != None:
+    if fit_coeffs is not None:
 
         # Plot the fit line along the whole x range shown in teh plot
         fitLine = np.poly1d(fit_coeffs)
@@ -440,7 +466,7 @@ def graph_sas_curve(filename, x, y, title_text, x_lab, y_lab,
         plt.plot(x_points, fitLine(x_points))
 
         # Highlight points used in the fit
-        if mask == None:
+        if mask is None:
             plt.scatter(x, y, s=30)
         else:
             plt.scatter(x[mask], y[mask], s=30)
@@ -449,6 +475,7 @@ def graph_sas_curve(filename, x, y, title_text, x_lab, y_lab,
                      xycoords='axes fraction')
 
     plt.savefig(filename)
+
 
 def smear_sas_curve(curve, q_delta, wavelength, spread, divergence):
     """
@@ -474,8 +501,8 @@ def smear_sas_curve(curve, q_delta, wavelength, spread, divergence):
     # spread and alpha taken from Cusack JMB 1981 145, 539-541
 
     inv_wave_no = wavelength / (2.0 * np.pi)
-    con = 4.0 * ((spread * inv_wave_no)**2 )
-    bon = divergence**2
+    con = 4.0 * ((spread * inv_wave_no) ** 2)
+    bon = divergence ** 2
     aon = inv_wave_no * np.sqrt(8.0 * np.log(2.0))
 
     n_q = len(curve)
@@ -498,19 +525,19 @@ def smear_sas_curve(curve, q_delta, wavelength, spread, divergence):
         pos_ndx = mid_qq + ndx
         qq[neg_ndx] = -ndx * q_delta
         qq[pos_ndx] = ndx * q_delta
-        sigma[pos_ndx] = np.sqrt(con * qq[pos_ndx]**2 + bon) / aon
+        sigma[pos_ndx] = np.sqrt(con * qq[pos_ndx] ** 2 + bon) / aon
         sigma[neg_ndx] = sigma[pos_ndx]
         if ndx <= n_q:
-            f[pos_ndx] = curve[:,1][ndx - 1]
-            f[neg_ndx] = curve[:,1][ndx - 1]
+            f[pos_ndx] = curve[:, 1][ndx - 1]
+            f[neg_ndx] = curve[:, 1][ndx - 1]
         else:
-            f[pos_ndx] = curve[:,1][-1]
-            f[neg_ndx] = curve[:,1][-1]
+            f[pos_ndx] = curve[:, 1][-1]
+            f[neg_ndx] = curve[:, 1][-1]
 
     sigma[mid_qq] = 2.0 * sigma[mid_qq + 1] - sigma[mid_qq + 2]
 
     g = np.empty(n_qq)
-    asum  = np.zeros(n_qq)
+    asum = np.zeros(n_qq)
 
     sqrt2pi = np.sqrt(2.0 * np.pi)
 
@@ -518,11 +545,12 @@ def smear_sas_curve(curve, q_delta, wavelength, spread, divergence):
     for ndx1 in range(0, n_qq):
         # Calculation of Gaussian, g
         for ndx2 in range(0, n_qq):
-            # Note: difference from Chauvin and Cusack - ndx1 not ndx2 for aa, vv
+            # Note: difference from Chauvin and Cusack - ndx1 not ndx2 for aa,
+            # vv
             aa = 1.0 / (sigma[ndx1] * sqrt2pi)
             g[ndx2] = 0.0
             vv = (qq[ndx1] - qq[ndx2]) / sigma[ndx1]
-            vv = vv**2
+            vv = vv ** 2
             if vv < vv_break:
                 g[ndx2] = aa * np.exp(-vv / 2.0)
 
@@ -533,7 +561,8 @@ def smear_sas_curve(curve, q_delta, wavelength, spread, divergence):
 
     for ndx in range(mid_qq + 1, mid_qq + n_q + 1):
         ndx2 = ndx - mid_qq - 1
-        curve[:,1][ndx2] = asum[ndx]
+        curve[:, 1][ndx2] = asum[ndx]
+
 
 def output_sas_curve(curve, filename):
     """
@@ -545,15 +574,16 @@ def output_sas_curve(curve, filename):
     @type  filename:  string
     @param filename:  Filename for output of q/I curve.
     """
-    
+
     if filename is not None:
-        output = open(filename,'w')
+        output = open(filename, 'w')
     else:
         output = sys.stdout
 
     for qi_pair in curve:
         output.write("{0:7.4f} {1:7.4f}\n".format(qi_pair[0], qi_pair[1]))
     output.close()
+
 
 def get_curve_descriptors(curve, rg_min, rg_max, rxs1_min, rxs1_max, *args):
     """
@@ -572,12 +602,12 @@ def get_curve_descriptors(curve, rg_min, rg_max, rxs1_min, rxs1_max, *args):
     @param rxs1_min:  Minimum q value to use in linear fit to compute Rxs1
     @type  rxs1_max:  float
     @param rxs1_max:  Maximum q value to use in linear fit to compute Rxs1
-    @type  args:      list  
-    @param args:      List which allows the optional specification of maximum 
-                      and minimum q values for a Rxs2 calculation (both should 
+    @type  args:      list
+    @param args:      List which allows the optional specification of maximum
+                      and minimum q values for a Rxs2 calculation (both should
                       values checked should be floats)
     @rtype:           float, float
-    @return:         
+    @return:
                      - Rg value calculated from curve fit
                      - Rxs value calculated from curve fit
     """
@@ -585,23 +615,29 @@ def get_curve_descriptors(curve, rg_min, rg_max, rxs1_min, rxs1_max, *args):
     # Fitting is performed on:
     # q^2 vs ln(I) for Rg
     # q^2 vs ln(I*q) for Rxs
-    x = curve[:,0]**2
-    y_rg = np.log(curve[:,1])
-    y_rxs = np.log(curve[:,1] * curve[:,0])
+    x = curve[:, 0] ** 2
+    y_rg = np.log(curve[:, 1])
+    y_rxs = np.log(curve[:, 1] * curve[:, 0])
 
     # Create mask to select range of q values for Rg fitting
-    rg_mask = (curve[:,0] > rg_min) & (curve[:,0] < rg_max)
+    rg_mask = (curve[:, 0] > rg_min) & (curve[:, 0] < rg_max)
     # Create mask to select range of q values for Rxs1 fitting
-    rxs1_mask = (curve[:,0] > rxs1_min) & (curve[:,0] < rxs1_max)
+    rxs1_mask = (curve[:, 0] > rxs1_min) & (curve[:, 0] < rxs1_max)
 
     result = {}
 
     result['curve_rg'] = sas_curve_fit(x[rg_mask], y_rg[rg_mask], 'rg')['r']
-    result['curve_rxs1'] = sas_curve_fit(x[rxs1_mask], y_rxs[rxs1_mask], 'rxs1')['r']
-    
+    result['curve_rxs1'] = sas_curve_fit(
+        x[rxs1_mask],
+        y_rxs[rxs1_mask],
+        'rxs1')['r']
+
     if len(args) > 1:
         # Create mask to select range of q values for Rxs2 fitting
-        rxs2_mask = (curve[:,0] > args[0]) & (curve[:,0] < args[1])
-        result['curve_rxs2'] = sas_curve_fit(x[rxs2_mask], y_rxs[rxs2_mask], 'rxs2')['r']
+        rxs2_mask = (curve[:, 0] > args[0]) & (curve[:, 0] < args[1])
+        result['curve_rxs2'] = sas_curve_fit(
+            x[rxs2_mask],
+            y_rxs[rxs2_mask],
+            'rxs2')['r']
 
     return result
