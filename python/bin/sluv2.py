@@ -36,31 +36,53 @@ import argparse
 
 import sct
 
+
 def parse_arguments():
     """
     Parse command line arguments and ensure correct combinations present
     """
 
     parser = argparse.ArgumentParser(
-        description = 'Calculate the scattering length per unit volume for a '
+        description='Calculate the scattering length per unit volume for a '
         'protein or glycoprotein from its amino acid and carbohydrate '
         'composition.'
-        )
+    )
 
-    parser.add_argument('-i','--input_file', nargs='?', type=str,
-        help = 'Path to the input composition file', required=True)
+    parser.add_argument(
+        '-i',
+        '--input_file',
+        nargs='?',
+        type=str,
+        help='Path to the input composition file',
+        required=True)
 
-    parser.add_argument('-t','--input_type', choices = ['fas','pdb', 'yml'],
-        help = 'Input file format (pdb, fasta or sluv yaml)', default = 'yml')
+    parser.add_argument(
+        '-t',
+        '--input_type',
+        choices=[
+            'fas',
+            'pdb',
+            'yml'],
+        help='Input file format (pdb, fasta or sluv yaml)',
+        default='yml')
 
-    parser.add_argument('-o','--output_file', nargs='?', type=str,
-        help = 'Path to the output file', default=None)
+    parser.add_argument('-o', '--output_file', nargs='?', type=str,
+                        help='Path to the output file', default=None)
 
-    parser.add_argument('-m','--mode', choices = ['classic', 'model', 'auc', 'project'],
-        default = 'classic', help = 'Type of analysis to run')
+    parser.add_argument(
+        '-m',
+        '--mode',
+        choices=[
+            'classic',
+            'model',
+            'auc',
+            'project'],
+        default='classic',
+        help='Type of analysis to run')
 
     args = parser.parse_args()
     return args
+
 
 def print_resid_data(resid_list, res_freq, vol_methods, out):
     """
@@ -89,16 +111,19 @@ def print_resid_data(resid_list, res_freq, vol_methods, out):
 
         for dataset in vol_methods:
 
-            line = line + ' {0:5.1f}'.format(sct.seq.res_vols[dataset]['residue'][resid])
+            line = line + \
+                ' {0:5.1f}'.format(sct.seq.res_vols[dataset]['residue'][resid])
 
-        line += '   {0:>3.3g} {1:>4.3g}'.format(sct.seq.params['no_electron'][resid],
-                                                sct.seq.params['mass'][resid])
+        line += '   {0:>3.3g} {1:>4.3g}'.format(
+            sct.seq.params['no_electron'][resid],
+            sct.seq.params['mass'][resid])
 
         # Add scattering lengths (normal and deuterated) to line
         line += ' {0:>6.3f} {1:>6.3f}'.format(sct.seq.params['bH'][resid],
                                               sct.seq.params['bD'][resid])
 
         out.write(line + '\n')
+
 
 def print_basic_description(res_freq, out):
     """
@@ -141,6 +166,7 @@ def print_basic_description(res_freq, out):
     # Total number of residues
     out.write("Total " + str(sum(res_freq.itervalues())) + "\n\n")
 
+
 def create_volume_title(start_string, deliminator, vol_datasets, res_type):
     """
     Create a title line for table including all chosen volume dataset names
@@ -166,7 +192,8 @@ def create_volume_title(start_string, deliminator, vol_datasets, res_type):
 
     title = start_string
     for dataset in vol_datasets:
-        title = deliminator.join([title, sct.seq.res_vols[dataset]['title'][res_type]])
+        title = deliminator.join(
+            [title, sct.seq.res_vols[dataset]['title'][res_type]])
 
     title = title + "\n"
 
@@ -206,10 +233,13 @@ def print_summary_data(resids, res_freq, out):
 
         total_mass = sct.seq.sum_mass(sct.seq.all_residues, res_freq)
 
-        frac_mass = 100 * mass/total_mass
+        frac_mass = 100 * mass / total_mass
 
-        out.write("Molecular Weight:  {0:5.0f}  Fraction of Total:  {1:3.2f}  Residues:  {2:4d}\n".format(
-            mass, frac_mass, no_res))
+        out.write(
+            "Molecular Weight:  {0:5.0f}  Fraction of Total:  {1:3.2f}  Residues:  {2:4d}\n".format(
+                mass,
+                frac_mass,
+                no_res))
 
     else:
 
@@ -219,9 +249,15 @@ def print_summary_data(resids, res_freq, out):
 
         abs_coeffs = sct.seq.calc_absorption_coeffs(res_freq, mass)
 
-        out.write("Absorption coefficient (280 nM):  {0:7.3f}\n".format(abs_coeffs[0]))
-        out.write("Absorption coefficient x 1.03:    {0:7.3f}\n".format(abs_coeffs[1]))
-        out.write("Absorption coefficient x 1.06:    {0:7.3f}\n".format(abs_coeffs[2]))
+        out.write(
+            "Absorption coefficient (280 nM):  {0:7.3f}\n".format(
+                abs_coeffs[0]))
+        out.write(
+            "Absorption coefficient x 1.03:    {0:7.3f}\n".format(
+                abs_coeffs[1]))
+        out.write(
+            "Absorption coefficient x 1.06:    {0:7.3f}\n".format(
+                abs_coeffs[2]))
 
         # Calculate the contribution of the hydration layer to the
         # scattering length (b)
@@ -235,29 +271,38 @@ def print_summary_data(resids, res_freq, out):
         bH_tot_hydr = bH_tot + (sct.seq.params['solvent']['BOH'] * oh_diff)
         bD_tot_hydr = bD_tot + (sct.seq.params['solvent']['BOD'] * oh_diff)
 
-
-    out.write("Total b in      H2O:  {0:8.3f}  D2O:  {1:8.3f}\n".format(bH_tot, bD_tot))
+    out.write(
+        "Total b in      H2O:  {0:8.3f}  D2O:  {1:8.3f}\n".format(
+            bH_tot,
+            bD_tot))
     out.write("Total b on M in H2O:  {0:8.6f}  D2O:  {1:8.6f}\n".format(
-                bH_tot/mass, bD_tot/mass))
+        bH_tot / mass, bD_tot / mass))
 
-    out.write("Scattering density of water H2O:  {0:7.6f}  D2O:  {1:7.6f}\n".format(
-                sct.seq.params['solvent']['BHHO'], sct.seq.params['solvent']['BDDO']))
+    out.write(
+        "Scattering density of water H2O:  {0:7.6f}  D2O:  {1:7.6f}\n".format(
+            sct.seq.params['solvent']['BHHO'],
+            sct.seq.params['solvent']['BDDO']))
 
     total_electrons = sct.seq.sum_electrons(resids, res_freq)
     out.write("Total no. electrons:\t\t{0:10.0f}\n".format(total_electrons))
 
     out.write("Electron density of water:\t{0:10.6f}\n".format(
-                sct.seq.params['solvent']['EHHO']))
+        sct.seq.params['solvent']['EHHO']))
 
     # Sort the names of the volume datasets for output
     vol_datasets = sorted(sct.seq.res_vols.iterkeys())
 
-    out.write(create_volume_title("                             ","   ",vol_datasets,'aa'))
-    vol_line =    "Volume                       "
+    out.write(
+        create_volume_title(
+            "                             ",
+            "   ",
+            vol_datasets,
+            'aa'))
+    vol_line = "Volume                       "
     spec_v_line = "Specific Volume              "
-    match_line =  "Match Point                  "
-    scat_line =   "Scattering Density at MPt    "
-    elect_line =  "Electron Density             "
+    match_line = "Match Point                  "
+    scat_line = "Scattering Density at MPt    "
+    elect_line = "Electron Density             "
 
     if whole:
         hyd_vol_line = "Volume                       "
@@ -271,22 +316,24 @@ def print_summary_data(resids, res_freq, out):
         specific_volume = sct.seq.spec_volume(resids, res_freq, dataset)
         spec_v_line += ' {0:7.4f}'.format(specific_volume)
 
-        match_point =  calc_match_point(tot_volume, bH_tot, bD_tot)
+        match_point = calc_match_point(tot_volume, bH_tot, bD_tot)
         match_line += ' {0:7.2f}'.format(match_point)
 
         scat_density = calc_mpt_scattering_density(match_point)
         scat_line += ' {0:7.5f}'.format(scat_density)
 
         elect_density = sct.seq.sum_electrons(resids, res_freq) / tot_volume
-        elect_line  += ' {0:7.5f}'.format(elect_density)
+        elect_line += ' {0:7.5f}'.format(elect_density)
 
         # Additional lines about protein hydration for the full protein
         if whole:
             hydr_vol = tot_volume + hydra_delta
             hyd_vol_line += ' {0:7.0f}'.format(hydr_vol)
-            hydr_match_point = calc_match_point(hydr_vol, bH_tot_hydr,bD_tot_hydr)
+            hydr_match_point = calc_match_point(
+                hydr_vol,
+                bH_tot_hydr,
+                bD_tot_hydr)
             hyd_match_line += ' {0:7.2f}'.format(hydr_match_point)
-
 
     out.write(vol_line + '\n')
     out.write(spec_v_line + '\n')
@@ -295,13 +342,27 @@ def print_summary_data(resids, res_freq, out):
     out.write(elect_line + '\n')
 
     if whole:
-        out.write("********* HYDRATION OF TOTAL GLYCOPROTEIN BY OH GROUPS *********************************\n")
-        out.write("Difference in CHO75 and CON85 Volumes:  {0:7.0f}  Total of equivalent bound H2O: {1:7.0f}\n".format(vol_diff, oh_diff))
-        out.write("Average H20 per AA Residue:  {0:7.2f}\n".format(hydra_per_res))
-        out.write("Total b in      H2O:  {0:8.3f}  D2O:  {1:8.3f}\n".format(bH_tot_hydr, bD_tot_hydr))
-        out.write(create_volume_title("                             ","   ",vol_datasets,'aa'))
+        out.write(
+            "********* HYDRATION OF TOTAL GLYCOPROTEIN BY OH GROUPS *********************************\n")
+        out.write(
+            "Difference in CHO75 and CON85 Volumes:  {0:7.0f}  Total of equivalent bound H2O: {1:7.0f}\n".format(
+                vol_diff,
+                oh_diff))
+        out.write(
+            "Average H20 per AA Residue:  {0:7.2f}\n".format(hydra_per_res))
+        out.write(
+            "Total b in      H2O:  {0:8.3f}  D2O:  {1:8.3f}\n".format(
+                bH_tot_hydr,
+                bD_tot_hydr))
+        out.write(
+            create_volume_title(
+                "                             ",
+                "   ",
+                vol_datasets,
+                'aa'))
         out.write(hyd_vol_line + '\n')
         out.write(hyd_match_line + '\n')
+
 
 def print_exchange_data(res_freq, peptide_only, out):
     """
@@ -320,20 +381,19 @@ def print_exchange_data(res_freq, peptide_only, out):
 
     # Print a section title for the output table
     vol_datasets = sorted(sct.seq.res_vols.iterkeys())
-    out.write( create_volume_title("                            ", "   ",
-                              vol_datasets, 'aa'))
+    out.write(create_volume_title("                            ", "   ",
+                                  vol_datasets, 'aa'))
 
     # H scattering length is a constant
     bH_tot = sct.seq.sum_b(sct.seq.all_residues, res_freq, False)
 
     # Increase the D exchanged percentage
     # Recalculate the D scattering length for each different percentage
-    for ii in [x/10.0 for x in range(1, 11)]:
+    for ii in [x / 10.0 for x in range(1, 11)]:
 
         bD_tot = 0.0
 
         for resid in sct.seq.all_residues:
-
 
             # bD_tot = sum over all residues:
             # bD(all D) - (diff in b for D to H * fraction exchanged * no exchangable sites)
@@ -341,14 +401,17 @@ def print_exchange_data(res_freq, peptide_only, out):
             if peptide_only:
 
                 bD_tot += sct.seq.params['bD'][resid] * res_freq[resid] - (
-                    sct.seq.params['no_exchange_peptide_H'][resid] * sct.seq.bDH_diff  * ii * res_freq[resid])
+                    sct.seq.params['no_exchange_peptide_H'][resid] * sct.seq.bDH_diff * ii * res_freq[resid])
 
             else:
 
                 bD_tot += sct.seq.params['bD'][resid] * res_freq[resid] - (
-                    sct.seq.params['no_exchange_H'][resid] * sct.seq.bDH_diff  * ii * res_freq[resid])
+                    sct.seq.params['no_exchange_H'][resid] * sct.seq.bDH_diff * ii * res_freq[resid])
 
-            line = "Exc {0:3.1f}  Tot b: {1:5.0f}  {2:5.0f}".format(ii, bH_tot, bD_tot)
+            line = "Exc {0:3.1f}  Tot b: {1:5.0f}  {2:5.0f}".format(
+                ii,
+                bH_tot,
+                bD_tot)
 
             for dataset in vol_datasets:
 
@@ -360,7 +423,6 @@ def print_exchange_data(res_freq, peptide_only, out):
                 line += ' {0:7.2f}'.format(match_point)
 
         out.write(line + '\n')
-
 
 
 def calc_match_point(volume, bH_tot, bD_tot):
@@ -383,10 +445,11 @@ def calc_match_point(volume, bH_tot, bD_tot):
 
     match_point = (spec_bH - sct.seq.params['solvent']['BHHO'])
 
-    match_point = match_point / (
-        sct.seq.params['solvent']['BDDO'] - sct.seq.params['solvent']['BHHO'] - spec_bD + spec_bH)
+    match_point = match_point / \
+        (sct.seq.params['solvent']['BDDO'] - sct.seq.params['solvent']['BHHO'] - spec_bD + spec_bH)
 
     return match_point * 100
+
 
 def calc_mpt_scattering_density(match_point):
     """
@@ -400,9 +463,10 @@ def calc_mpt_scattering_density(match_point):
 
     scat_den = (match_point * (
         sct.seq.params['solvent']['BDDO'] - sct.seq.params['solvent']['BHHO']
-        ) / 100.0) + sct.seq.params['solvent']['BHHO']
+    ) / 100.0) + sct.seq.params['solvent']['BHHO']
 
     return scat_den
+
 
 def classic_output(res_freq, out):
     """
@@ -417,26 +481,35 @@ def classic_output(res_freq, out):
     """
 
     out.write("SLUV2 2013 by David W. Wright and Stephen J. Perkins\n")
-    out.write("Based on SLUV written by Stephen J. Perkins shortly after the dawn of time.\n\n")
+    out.write(
+        "Based on SLUV written by Stephen J. Perkins shortly after the dawn of time.\n\n")
 
     # Print frequencies and parameters for all residues
     print_basic_description(res_freq, out)
 
-    out.write("******************** TOTAL GLYCOPROTEIN ************************************************\n")
+    out.write(
+        "******************** TOTAL GLYCOPROTEIN ************************************************\n")
     print_summary_data(sct.seq.all_residues, res_freq, out)
-    out.write("******************** AA RESIDUES ONLY **************************************************\n")
+    out.write(
+        "******************** AA RESIDUES ONLY **************************************************\n")
     print_summary_data(sct.seq.amino_acids, res_freq, out)
-    out.write("******************** NONPOLAR AA RESIDUES **********************************************\n")
+    out.write(
+        "******************** NONPOLAR AA RESIDUES **********************************************\n")
     print_summary_data(sct.seq.non_polar, res_freq, out)
-    out.write("******************** POLAR AA RESIDUES *************************************************\n")
+    out.write(
+        "******************** POLAR AA RESIDUES *************************************************\n")
     print_summary_data(sct.seq.polar, res_freq, out)
-    out.write("******************** CARBOHYDRATE RESIDUES *********************************************\n")
+    out.write(
+        "******************** CARBOHYDRATE RESIDUES *********************************************\n")
     print_summary_data(sct.seq.monosaccharides, res_freq, out)
 
-    out.write("******************** EXCHANGEABLE PEPTIDE HYDROGENS ************************************\n")
+    out.write(
+        "******************** EXCHANGEABLE PEPTIDE HYDROGENS ************************************\n")
     print_exchange_data(res_freq, True, out)
-    out.write("******************** TOTAL OF EXCHANGEABLE HYDROGENS ***********************************\n")
+    out.write(
+        "******************** TOTAL OF EXCHANGEABLE HYDROGENS ***********************************\n")
     print_exchange_data(res_freq, False, out)
+
 
 def auc_output(res_freq, out):
     """
@@ -451,13 +524,20 @@ def auc_output(res_freq, out):
     """
 
     mass = sct.seq.sum_mass(sct.seq.all_residues, res_freq)
-    out.write( "Molecular Weight: {0:7.0f}\n".format(mass))
+    out.write("Molecular Weight: {0:7.0f}\n".format(mass))
 
     abs_coeffs = sct.seq.calc_absorption_coeffs(res_freq, mass)
-    out.write( "Absorption Coefficient x 1.03: {0:7.3f}\n".format(abs_coeffs[1]))
+    out.write(
+        "Absorption Coefficient x 1.03: {0:7.3f}\n".format(
+            abs_coeffs[1]))
 
-    specific_vol = sct.seq.spec_volume(sct.seq.all_residues, res_freq, 'perkins1986a')
-    out.write( "Specific Volume (Perkins 1986 - Amino Acid Crystals): {0:7.4f}\n".format(specific_vol))
+    specific_vol = sct.seq.spec_volume(
+        sct.seq.all_residues,
+        res_freq,
+        'perkins1986a')
+    out.write(
+        "Specific Volume (Perkins 1986 - Amino Acid Crystals): {0:7.4f}\n".format(specific_vol))
+
 
 def modelling_output(res_freq, out):
     """
@@ -473,8 +553,10 @@ def modelling_output(res_freq, out):
 
     volume = sct.seq.sum_volume(sct.seq.all_residues, res_freq, 'perkins1986a')
     wet_volume = sct.seq.calc_hydration_volume(res_freq) + volume
-    out.write("Volume (Perkins 1986 - Amino Acid Crystals): {0:7.0f}\n".format(volume))
+    out.write(
+        "Volume (Perkins 1986 - Amino Acid Crystals): {0:7.0f}\n".format(volume))
     out.write("Estimated Hydrated Volume: {0:7.0f}\n".format(wet_volume))
+
 
 def main():
 
@@ -490,17 +572,17 @@ def main():
     elif args.input_type == 'fas':
         protein_res_freq = sct.seq.fasta_res_freq(args.input_file)
 
-    if args.output_file != None:
-        out = open(args.output_file,'w')
+    if args.output_file is not None:
+        out = open(args.output_file, 'w')
     else:
         out = sys.stdout
 
     # Print out the data in a format chosenfrom the command line arguments
     if args.mode == 'classic':
         classic_output(protein_res_freq, out)
-    if args.mode in ('project','auc'):
+    if args.mode in ('project', 'auc'):
         auc_output(protein_res_freq, out)
-    if args.mode in ('project','model'):
+    if args.mode in ('project', 'model'):
         modelling_output(protein_res_freq, out)
 
 
