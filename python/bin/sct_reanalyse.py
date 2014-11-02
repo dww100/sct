@@ -44,7 +44,7 @@ def parse_arguments():
         description='Compare theoretical curves generated from PDB files to experimental SAS curves\n')
 
     parser.add_argument('-i', '--input_path', nargs='?', type=str,
-                        help='Path to the input PDB files', required=True)
+                        help='Path to the input files (should be level above xray/neuton directories)', required=True)
 
     parser.add_argument('-o', '--output_path', nargs='?', type=str,
                         default='.', help='Path in which to save output files')
