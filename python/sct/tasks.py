@@ -388,8 +388,8 @@ def create_comparison_header_text(data_files, metric):
                         headings required for the three lines described above.
     """
 
-    if data_files is not None:
-
+    #if data_files is not None:
+    if data_files:
         no_files = len(data_files)
         comparison_head = ['\t'.join(['\t'] * no_files),
                            '\t\t'.join(data_files),
@@ -448,24 +448,24 @@ def write_summary_header(in_pdb, in_neut, in_xray, param, output, chi2=False):
 
     if 'rxs2' in param:
         # Header 0
-        output.write("\tNeutron\t\t\t\t" + neut_rfact_head[0] + "\t\tX-ray\n")
+        output.write("\tNeutron\t\t\t\t" + neut_rfact_head[0] + "\tX-ray\n")
         # Header 1
         output.write(
             "\t\t\t\t\t\t" +
             neut_rfact_head[1] +
-            "\t\t\t\t\t\t\t" +
+            "\t\t\t\t\t" +
             xray_rfact_head[1] +
             "\n")
         # Individual column headings for header 2
         basic_head = "Rg_model\tRg_curve\tRxs1_curve\tRxs2_curve\tVolume\t"
     else:
         # Header 0
-        output.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\t\tX-ray\n")
+        output.write("\tNeutron\t\t\t" + neut_rfact_head[0] + "\tX-ray\n")
         # Header 1
         output.write(
             "\t\t\t\t\t" +
             neut_rfact_head[1] +
-            "\t\t\t\t\t\t" +
+            "\t\t\t\t" +
             xray_rfact_head[1] +
             "\n")
         # Individual column headings for header 2
