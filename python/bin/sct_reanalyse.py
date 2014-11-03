@@ -146,51 +146,49 @@ def main():
     else:
         model_type = 'xray'
 
-    if model_type in ['neutron', 'both']:
+    data = {}
 
+    if model_type in ['neutron','both']:
+        
         neutron_dir = os.path.join(args.input_path, 'neutron')
-
-        neutron_curve_filter = os.path.join(neutron_dir, 'curves', '*.scn')
+        
+        neutron_curve_filter = os.path.join(neutron_dir, 'curves','*.scn')
         neut_curve_files = glob.glob(neutron_curve_filter)
-        neut_curve_files = sort_nicely(neut_curve_files)
-
-        neutron_model_filter = os.path.join(neutron_dir, 'models', '*.pdb')
+        neut_curve_files = sort_nicely(neut_curve_files)        
+        
+        neutron_model_filter = os.path.join(neutron_dir, 'models','*.pdb')
         neut_model_files = glob.glob(neutron_model_filter)
         neut_model_files = sort_nicely(neut_model_files)
-
+        
         if len(neut_curve_files) != len(neut_model_files):
             err = 'Neutron curve and model numbers do not match!'
             print(err)
             sys.ext(1)
         else:
-            neut_data = zip(neut_curve_files, neut_model_files)
-
-    if model_type in ['xray', 'both']:
+            data['neut'] = zip(neut_curve_files, neut_model_files)
+            
+    if model_type in ['xray','both']:
         xray_dir = os.path.join(args.input_path, 'xray')
-
-        xray_curve_filter = os.path.join(xray_dir, 'curves', '*.scx')
+        
+        xray_curve_filter = os.path.join(xray_dir, 'curves','*.scx')
         xray_curve_files = glob.glob(xray_curve_filter)
-        xray_curve_files = sort_nicely(xray_curve_files)
-
-        xray_model_filter = os.path.join(xray_dir, 'models', '*.pdb')
+        xray_curve_files = sort_nicely(xray_curve_files)        
+        
+        xray_model_filter = os.path.join(xray_dir, 'models','*.pdb')
         xray_model_files = glob.glob(xray_model_filter)
         xray_model_files = sort_nicely(xray_model_files)
-
+        
         if len(xray_curve_files) != len(xray_model_files):
             err = 'X-ray curve and model numbers do not match!'
             print(err)
             sys.ext(1)
         else:
-            xray_data = zip(xray_curve_files, xray_model_files)
-
-    if model_type == 'both':
-        data = zip(neut_data, xray_data)
-    elif model_type == 'neutron':
-        data = neut_data
-    elif model_type == 'xray':
-        data = xray_data
-
-    nf = len(data)
+            data['xray'] = zip(xray_curve_files, xray_model_files)    
+    
+    if model_type in 'neutron':
+        nf = len(data['neut'])
+    else:
+        nf = len(data['xray'])
 
     # Read in parameters and check we have those we need for the workflow
 
@@ -243,21 +241,14 @@ def main():
     out_text = 'There are %d models to process\n' % (nf)
     print out_text
 
-    for i, files in enumerate(data):
-
-        if model_type == 'both':
-            neut_curve = files[0][0]
-            neut_model = files[0][1]
-            xray_curve = files[1][0]
-            xray_model = files[1][1]
-
-        elif model_type == 'neutron':
-            neut_curve = files[0]
-            neut_model = files[1]
-
-        elif model_type == 'xray':
-            xray_curve = files[0]
-            xray_model = files[1]
+    for i in xrange(0,nf):
+    
+        if model_type in ['neutron','both']:
+            neut_curve = data['neut'][i][0]
+            neut_model = data['neut'][i][1]
+        if model_type in ['xray','both']:
+            xray_curve = data['xray'][i][0]
+            xray_model = data['xray'][i][1]
 
         xray_theor = {}
         neut_theor = {}
@@ -312,7 +303,7 @@ def main():
                     param,
                     chi2=args.chi2))
 
-        file_basename = os.path.basename(files[0][0])
+        file_basename = os.path.basename(data.itervalues().next()[i][0])
         file_id = os.path.splitext(file_basename)[0]
 
         # Format the modelling output data for printing
