@@ -206,7 +206,7 @@ def main():
 
     print "> Processing experimental data"
 
-    title = os.path.basename(args.input_path)
+    title = args.title
 
     neut_expt = sct.curve.read_scatter_curves(
         args.neutron,
