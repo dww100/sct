@@ -150,7 +150,7 @@ def main():
     if args.add_res:
         res_file = file(args.add_res, 'r')
         add_res = yaml.load(res_file)
-        for res, data in add_res.iteritems:
+        for res, data in add_res.iteritems():
             sct.seq.all_residues.append(res)
             sct.seq.res_vols['perkins1986a']['residue'][res] = data['vol']
             sct.seq.params['mass'][res] = data['mass']
