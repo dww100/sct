@@ -154,6 +154,7 @@ def main():
             sct.seq.all_residues.append(res)
             sct.seq.res_vols['perkins1986a']['residue'][res] = data['vol']
             sct.seq.params['mass'][res] = data['mass']
+            sct.pdb.accept_resids.append(res)
 
     # Read in parameters and check we have those we need for the workflow
 

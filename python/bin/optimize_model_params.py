@@ -141,6 +141,7 @@ def main():
             sct.seq.all_residues.append(res)
             sct.seq.res_vols['perkins1986a']['residue'][res] = data['vol']
             sct.seq.params['mass'][res] = data['mass']
+            sct.pdb.accept_resids.append(res)
             
 
     # Get target volumes for the dry and hydrated protein based on the sequence
