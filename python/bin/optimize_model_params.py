@@ -25,9 +25,8 @@ analyse_pdb_models.py script to run on a series of models.
 # limitations under the License.
 
 import argparse
-
 import sct
-
+import yaml
 
 def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
@@ -99,6 +98,14 @@ def parse_arguments():
             20],
         help='Minimum and maximum values of water cutoff')
 
+    parser.add_argument(
+        '-a',
+        '--add_res',
+        nargs='?',
+        type=str,
+        default=None,
+        help='Path to YAML file containing mass and volume for residues not originally used by sluv/SCT')
+
     return parser.parse_args()
 
 
@@ -126,6 +133,15 @@ def main():
         cutoff = param['sphere']['cutoff']
     else:
         cutoff = args.cutoff
+
+    if args.add_res:
+        res_file = file(args.add_res, 'r')
+        add_res = yaml.load(res_file)
+        for res, data in add_res.iteritems:
+            sct.seq.all_residues.append(res)
+            sct.seq.res_vols['perkins1986a']['residue'][res] = data['vol']
+            sct.seq.params['mass'][res] = data['mass']
+            
 
     # Get target volumes for the dry and hydrated protein based on the sequence
     # from input PDB or separate sequence file if provided and coordinates from

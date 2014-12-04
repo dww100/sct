@@ -30,6 +30,7 @@ import sys
 import os
 import re
 import glob
+import yaml
 
 import sct
 
@@ -79,6 +80,14 @@ def parse_arguments():
         type=str,
         help='Title to use for summary output file',
         default='sct_output')
+
+    parser.add_argument(
+        '-a',
+        '--add_res',
+        nargs='?',
+        type=str,
+        default=None,
+        help='Path to YAML file containing mass and volume for residues not originally used by sluv/SCT')
 
     parser.add_argument('-xu', '--xray_unit', choices=['nm', 'a'],
                         default='a', help='Unit for Q in input x-ray data')
@@ -137,6 +146,14 @@ def main():
     print "---------------------------\n"
 
     args = parse_arguments()
+
+    if args.add_res:
+        res_file = file(args.add_res, 'r')
+        add_res = yaml.load(res_file)
+        for res, data in add_res.iteritems:
+            sct.seq.all_residues.append(res)
+            sct.seq.res_vols['perkins1986a']['residue'][res] = data['vol']
+            sct.seq.params['mass'][res] = data['mass']
 
     # Read in parameters and check we have those we need for the workflow
 
