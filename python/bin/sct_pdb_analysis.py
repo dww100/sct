@@ -223,7 +223,7 @@ def main():
                                                                     out_paths)
 
         except IOError as e:
-            print "Error loading PDB file name %s: %s" % (args.input_filename, e)
+            print "Error loading PDB file name %s: %s" % (pdb, e)
             continue
 
         pdb_basename = os.path.basename(pdb)
