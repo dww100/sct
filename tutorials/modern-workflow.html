@@ -189,7 +189,7 @@
 </tbody>
 </table>
 <p>The * is replaced by the name of the original PDB files for the model and curve files.</p>
-<p>The summary files are output as tab separated columns. The easiest way to see the table correctly is to open it in Microsoft Excel or LibreOffice Calc. When you look at the output data you will see that three of the models have low R factors in comparison to all of the curves, indicating a bad fit, and three have high ones, indicating a poor fit. You can now look at the two sets of models to see how they differ from one another.</p>
+<p>The summary files are output as tab separated columns. The easiest way to see the table correctly is to open it in Microsoft Excel or LibreOffice Calc. When you look at the output data you will see that three of the models have low R factors in comparison to all of the curves, indicating a good fit, and three have high ones, indicating a poor fit. You can now look at the two sets of models to see how they differ from one another.</p>
 <p>You can also compare the scattering curves (again remembering to account for the scaling factor). An example command for looking at one good and one bad fit against the experimental neutron curve using gnuplot is:</p>
 <pre><code>plot &#39;./expt/n.dat&#39; u 1:2, &#39;./igg4/neutron/curves/model1.scn&#39; u 1:(0.1855*$2), &#39;./igg4/neutron/curves/model6.scn&#39; u 1:(0.1334*$2)</code></pre>
 <p><em>Notes:</em></p>
