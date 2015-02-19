@@ -64,7 +64,7 @@ def parse_arguments():
             'pdb',
             'yml'],
         help='Input file format (pdb, fasta or sluv yaml)',
-        default='yml')
+        default='pdb')
 
     parser.add_argument('-o', '--output_file', nargs='?', type=str,
                         help='Path to the output file', default=None)
@@ -534,9 +534,9 @@ def auc_output(res_freq, out):
     specific_vol = sct.seq.spec_volume(
         sct.seq.all_residues,
         res_freq,
-        'perkins1986a')
+        'perkins1986b')
     out.write(
-        "Specific Volume (Perkins 1986 - Amino Acid Crystals): {0:7.4f}\n".format(specific_vol))
+        "Specific Volume (Perkins 1986): {0:7.4f}\n".format(specific_vol))
 
 
 def modelling_output(res_freq, out):
@@ -568,7 +568,10 @@ def main():
         protein_file = file(args.input_file, 'r')
         protein_res_freq = yaml.load(protein_file)
     elif args.input_type == 'pdb':
-        protein_res_freq, coords = sct.pdb.read_pdb_atom_data(args.input_file)
+        try:
+            protein_res_freq, coords = sct.pdb.read_pdb_atom_data(args.input_file)
+        except:
+            print "Input does not appear to be a valid PDB."
     elif args.input_type == 'fas':
         protein_res_freq = sct.seq.fasta_res_freq(args.input_file)
 
