@@ -108,10 +108,10 @@ def check_rg_variant(variant, params):
 
     if fitmin > fitmax:
         err = variant + " fitmin must be greater than fitmax"
-    elif (fitmin < params['rfac']['qmin']) or (fitmin < params['rfac']['qmax']):
+    elif (fitmin < params['rfac']['qmin']) or (fitmin > params['rfac']['qmax']):
         err = variant + \
             " fitmin must inside the rfac calculation range (between input rfac qmin and qmax)"
-    elif (fitmax < params['rfac']['qmin']) or (fitmax < params['rfac']['qmax']):
+    elif (fitmax < params['rfac']['qmin']) or (fitmax > params['rfac']['qmax']):
         err = variant + \
             " fitmin must inside the rfac calculation range (between input rfac qmin and qmax)"
 
