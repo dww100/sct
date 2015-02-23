@@ -137,6 +137,12 @@ def check_args(args):
         # Read in parameters
         q_ranges, err = sct.param.read_parameter_file(args.parameter_file)
 
+        if 'rxs2' not in q_ranges:
+            analyses = [i for i in analyses if i != 'rxs2']
+
+        if 'rxs1' not in q_ranges:
+            analyses = [i for i in analyses if i != 'rxs1']
+
         anal_types = []
         for analysis in analyses:
             anal_types.append(analysis + '_plot')
@@ -144,6 +150,7 @@ def check_args(args):
         err = sct.param.check_parameters(q_ranges, anal_types)
 
         if err is not None:
+            
             sct.param.output_error(err, args.parameter_file)
 
         if 'wide' in analyses:
@@ -219,7 +226,14 @@ def main():
             y = np.log(input_data[:, 1] * input_data[:, 0])
 
         # Range of the y-axes to plot
-        if args.y_range is None:
+        if ('ymin' in q_ranges[cur_anal]) and ('ymax' in q_ranges[cur_anal]):
+            try:
+                y_max = float(q_ranges[cur_anal]['ymax'])
+                y_min = float(q_ranges[cur_anal]['ymin'])
+            except:
+                y_max = round(max(y) + 1, 0)
+                y_min = round(min(y) - 1, 0)
+        elif args.y_range is None:
             y_max = round(max(y) + 1, 0)
             y_min = round(min(y) - 1, 0)
         else:
@@ -235,6 +249,7 @@ def main():
 
             fname = create_output_name(out_prefix, cur_anal,
                                        q_min, q_max, None, None)
+                                       
             out_file = os.path.join(args.output_dir, fname)
 
             sct.curve.graph_sas_curve(
@@ -288,7 +303,7 @@ def main():
                 title_graph = 'Rg ' + fit_text
                 data_graph = 'Rg: {0:0.2f}\tIo: {1:0.2f}'.format(
                     results['r'],
-                    results['i'])
+                    results['i'])            
                 rq_range = 'Rg*Qmin: {0:0.2f}\tRg*Qmax: {1:0.2f}'.format(
                     rq_min, rq_max)
             else:
