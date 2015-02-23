@@ -35,9 +35,9 @@ def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
 
     use_message = """%(prog)s [-h]
-    (-q QRANGESFILENAME | -r PLOTRANGE PLOTRANGE -f FITRANGE FITRANGE)
+    (-p PARAMETERFILENAME | -r PLOTRANGE PLOTRANGE -f FITRANGE FITRANGE)
     (-i INPUTFILENAME | --header)
-    [-s SKIPNO]
+    [-qu QUNITS]
     [-o [OUTPUTDIR] [-a {wide,rg,rxs1,rxs2,all}]]
     [-y YRANGE YRANGE]
     """
@@ -48,8 +48,13 @@ def parse_arguments():
         """, usage=use_message)
 
     group = parser.add_mutually_exclusive_group(required=True)
+
     group.add_argument('-i', '--infile', nargs='?', type=str,
                        dest='input_filename', help='Path to the input file')
+                       
+    parser.add_argument('-qu', '--q_unit', choices=['nm', 'a'],
+                        default='a', help='Unit for Q in input data')
+                                              
     group.add_argument('--header', action='store_true',
                        help='Output a header alongside output data')
 
@@ -203,6 +208,9 @@ def main():
     out_values = ''
 
     input_data = sct.curve.load_scatter_curve(in_full_path, 0.0, 100.0)
+
+    if args.q_unit == 'nm':    
+        input_data[:, 0] = input_data[:, 0] / 10.0
 
     for cur_anal in analyses:
 
