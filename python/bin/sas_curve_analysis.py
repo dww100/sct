@@ -35,8 +35,9 @@ def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
 
     use_message = """%(prog)s [-h]
+    [-i INPUTFILENAME]
+    (--header)
     (-p PARAMETERFILENAME | -r PLOTRANGE PLOTRANGE -f FITRANGE FITRANGE)
-    (-i INPUTFILENAME | --header)
     [-qu QUNITS]
     [-o [OUTPUTDIR] [-a {wide,rg,rxs1,rxs2,all}]]
     [-y YRANGE YRANGE]
@@ -47,21 +48,19 @@ def parse_arguments():
         Produces Rg, Io, Rxs1 and Rxs2 estimates and associated plots.
         """, usage=use_message)
 
-    group = parser.add_mutually_exclusive_group(required=True)
-
-    group.add_argument('-i', '--infile', nargs='?', type=str,
+    parser.add_argument('-i', '--infile', nargs='?', type=str,
                        dest='input_filename', help='Path to the input file')
                        
     parser.add_argument('-qu', '--q_unit', choices=['nm', 'a'],
                         default='a', help='Unit for Q in input data')
                                               
-    group.add_argument('--header', action='store_true',
+    parser.add_argument('--header', action='store_true',
                        help='Output a header alongside output data')
 
-    group2 = parser.add_mutually_exclusive_group(required=True)
-    group2.add_argument('-p', '--parameter', type=str, dest='parameter_file',
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('-p', '--parameter', type=str, dest='parameter_file',
                         help='Path to YAML file containing input parameters')
-    group2.add_argument('-r', '--plotrange', nargs=2, type=float,
+    group.add_argument('-r', '--plotrange', nargs=2, type=float,
                         help='Range of Q to plot')
 
     parser.add_argument('-f', '--fitrange', nargs=2, type=float,
