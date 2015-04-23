@@ -366,7 +366,7 @@ def process_pdb_psf(psf_filename, pdb_filename, sctify=True, removeh=True):
     @type  removeh:      boolean
     @keyword removeh:    Should hydrogens be removed?
     @rtype:              list
-    @return:             List of dictionaries with kets as defined in the
+    @return:             List of dictionaries with keys as defined in the
                          PSF_ATOM_RECORD/PSFEXT_ATOM_RECORD schemas plus 'coords'
                          (from the PDB x,y,z coordinates) and 'chain' (from the PDB
                          chain column).
@@ -376,7 +376,7 @@ def process_pdb_psf(psf_filename, pdb_filename, sctify=True, removeh=True):
     n_atoms = len(psf_atoms)
 
     if n_atoms == 0:
-        print "No atoms foud in the PSF, expect pain"
+        print "No atoms found in the PSF, expect pain"
     else:
         tmp_atoms = []
 
@@ -438,11 +438,13 @@ def create_pdb_atom(res_no, res_id, atom_no, atom_type, coords, **kwargs):
     beta = kwargs.get('beta', 0.0)
     occ = kwargs.get('occ', 0.0)
     chain = kwargs.get('chain', 'A')
+    segid = kwargs.get('segid', '    ')
 
     line = "ATOM  {0:5d} {1:4s} {2:3s}".format(atom_no, atom_type, res_id)
     line += " {0:1s}{1:4d}    ".format(chain, res_no)
     line += "{0:8.3f}{1:8.3f}{2:8.3f}".format(coords[0], coords[1], coords[2])
-    line += "{0:6.2f}{1:6.2f}\n".format(occ, beta)
+    line += "{0:6.2f}{1:6.2f}".format(occ, beta)
+    line += "      {0:s}\n".format(segid)
 
     return line
 
@@ -461,12 +463,17 @@ def write_pdb(atoms, filename):
     out_file = open(filename, 'w')
 
     for atom in atoms:
+        if 'segid' in atom.keys():
+            segid = atom['segid']
+        else:
+            segid = ''
         pdb_line = create_pdb_atom(atom['res_no'],
                                    atom['res_id'],
                                    atom['atom_no'],
                                    atom['atom_name'],
                                    atom['coords'],
-                                   chain=atom['chain'])
+                                   chain=atom['chain'],
+                                   segid=segid)
 
         out_file.write(pdb_line)
 
