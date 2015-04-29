@@ -218,7 +218,7 @@ END FUNCTION AVERAGE_DATA
 DOUBLE PRECISION FUNCTION CALC_RFACTOR (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, VERBOSE)
 
     ! Calculate the R factor comparing IOBS (experiment) to
-    ! IMATCH (calculated curve)
+    ! ICALC (calculated curve)
     ! R factor is used by analogy with crystallography where:
     ! R = sum (abs(F_obs - F_calc)) / sum (abs(F_obs))
 
@@ -274,10 +274,10 @@ END FUNCTION CALC_RFACTOR
 
 DOUBLE PRECISION FUNCTION CALC_CHI2 (QOBS, IOBS, OBSERR, ICALC, N, QMIN, QMAX, CON, VERBOSE)
 
-    ! Calculate the R factor comparing IOBS (experiment) to
-    ! IMATCH (calculated curve)
+    ! Calculate the reduced chi-squared statistic comparing IOBS (experiment) to
+    ! ICALC (calculated curve)
     !
-    ! Chi^2 = sum ((F_obs - F_calc)^2 / F_calc)
+    ! Chi^2 = 1/N * sum ((F_obs - F_calc)^2 / OBSERR^2)
 
     DOUBLE PRECISION, DIMENSION(*), INTENT(IN) :: QOBS, OBSERR, IOBS, ICALC
     INTEGER, INTENT(IN) :: N
