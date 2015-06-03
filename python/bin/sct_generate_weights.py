@@ -43,49 +43,21 @@ def parse_arguments():
         '--min',
         nargs='?',
         type=float,
-        default=None,
-        help='Minimum acceptable value (no value = no lower bound)')
+        default=0,
+        help='Minimum acceptable value (default = 0)')
 
     parser.add_argument(
         '-x',
         '--max',
         nargs='?',
         type=float,
-        default=None,
-        help='Maximum acceptable value (no value = no upper bound)')
+        default=100000,
+        help='Maximum acceptable value (default = 100000)')
 
     parser.add_argument('-o', '--outfile', nargs='?', type=str,
                         help='Filename for the output weights file', required=True)
 
     return parser.parse_args()
-
-
-def accept_value(val, min, max):
-    
-    if min is not None and max is not None:
-        accept = min <= val <= max
-    elif min is not None:
-        accept = val >= min
-    elif max is not None:
-        accept = val <= max
-    else:
-        accept = False
-    
-    return accept
-
-def create_title(filename, filter_col, min, max):
-
-    if filter_min is None:
-        title = "#Weight file for {0:s} column {1:d}, max filter: {2:f}\n".format(
-            filename, filter_col, max)
-    elif filter_max is None:
-        title = "#Weight file for {0:s} column {1:d}, min filter: {2:f}\n".format(
-            filename, filter_col, min)
-    else:
-        title = "#Weight file for {0:s} column {1:d}, min-max filter: {2:f}-{3:f}\n".format(
-            filename, filter_col, min, max)
-    
-    return title
 
 args = parse_arguments()
 
@@ -106,7 +78,10 @@ if not filter_min and not filter_max:
 
 output = open(outfile, 'w')
 
-output.write(create_title(infile, filter_col, filter_min, filter_max))
+title = "#Weight file for {0:s} column {1:d}, min-max filter: {2:f}-{3:f}\n".format(
+            filename, filter_col, filter_min, filter_max)
+
+output.write(title)
 
 output.write("# Frame, Value, Weight\n")
 
@@ -132,7 +107,7 @@ try:
             
             col_value = float(cols[filter_col])     
             
-            if accept_value(col_value, filter_min, filter_max):
+            if  filter_min <= col_value <= filter_max:
                         
                 output.write(
                     "{0:d}\t{1:f}\t{2:f}\n".format(stucture_count, col_value, 1.0))

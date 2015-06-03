@@ -286,6 +286,7 @@ DOUBLE PRECISION FUNCTION CALC_PEARSON (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, V
     LOGICAL, INTENT(IN) :: VERBOSE
 
     DOUBLE PRECISION :: DELTAC, OC2, C2NUM, CHI2
+    DOUBLE PRECISION :: SCALEDOBS
     INTEGER :: NDX
 
     ! Initialize the update and R factor
@@ -300,8 +301,12 @@ DOUBLE PRECISION FUNCTION CALC_PEARSON (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, V
 
         DO NDX = 1, N
             IF ( ( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
-                C2NUM = ( (CON * ICALC(NDX)) - IOBS(NDX) )**2
-                CHI2 = CHI2 + (C2NUM / IOBS(NDX))
+
+                ! Looking to compare I/I(0) to make comparisons between 
+                ! different datasets make sense
+                SCALEDOBS = IOBS(NDX) / (CON * ICALC(1))
+                C2NUM = ( (ICALC(NDX)/ICALC(1)) - SCALEDOBS )**2
+                CHI2 = CHI2 + (C2NUM / SCALEDOBS)
             END IF
         END DO
 
@@ -365,6 +370,8 @@ DOUBLE PRECISION FUNCTION CALC_CHI2 (QOBS, IOBS, OBSERR, ICALC, N, QMIN, QMAX, C
             END IF
         END DO
 
+        CHI2 = CHI2 / (NDX - 1)
+
         IF (VERBOSE) THEN
             WRITE(*,*) 'BEST YET:', DELTAC, CON, CHI2
         END IF
@@ -382,7 +389,7 @@ DOUBLE PRECISION FUNCTION CALC_CHI2 (QOBS, IOBS, OBSERR, ICALC, N, QMIN, QMAX, C
         WRITE(*,*) 'FINISHED WITH:', DELTAC, CON, CHI2
     END IF
 
-    CALC_CHI2 = CHI2 / (NDX - 1)
+    CALC_CHI2 = CHI2
 
 END FUNCTION CALC_CHI2
 

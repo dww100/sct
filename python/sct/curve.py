@@ -25,13 +25,72 @@ import matplotlib.pyplot as plt
 
 from sjp_util import sjp_util
 
+def parse_sas_data_line(line):
+    """
+    Parse lines from a file containing scattering data.
+    Assume that lines without two or three numerical columns are not scattering
+    data and are header or junk. An empty array is returned if these criteria 
+    are not met.
 
-def load_scatter_curve(filename, q_min, q_max):
+    @type  line:  string
+    @param line:  Line from an input scattering file.
+    @rtype:       numpy array
+    @return:      Array of scattering vector, q, and
+                  intensity, I, values (with I error if available).
+    """
+    cols = line.split()
+
+    ncols = len(cols)    
+    
+    if ncols < 2:
+        data = np.array([],dtype=np.float)
+    else:
+        if ncols > 3:
+            ncols = 3
+
+        try:
+            data = np.array(cols[0:ncols], dtype=np.float)
+        except:
+            data = np.array([],dtype=np.float)
+                        
+    return data
+    
+def read_sas_file(filename):
     """
     Load magnitude of scattering vector, q, and intensity, I, data from file and
     filter for values between q_min and q_max.
-    Note: Assuming that a/ there is no header and b/ q and I are the first two
-    columns here.
+
+    @type  filename:  string
+    @param filename:  Path to file containing scattering curve (q, I data).
+    @rtype:           numpy array
+    @return:          Array of scattering vector, q, and
+                      intensity, I, values (with I error if available).
+    """
+    
+    data = np.array([],dtype=np.float)
+    
+    with open(filename,'r') as f:
+        
+        for line in f:
+
+            # Only the first 2 or 3 columns are parsed            
+            cols = parse_sas_data_line(line)
+            
+            if cols.any():
+
+                if data.any():
+                    data = np.vstack((data,parse_sas_data_line(line)))
+                else:
+                    data = parse_sas_data_line(line)
+    
+    return data
+
+def load_scatter_curve(filename, q_min, q_max):
+    """
+    Load magnitude of scattering vector, q, and intensity, I, data 
+    (and potentially error in I) from file and filter for values 
+    between q_min and q_max.
+    Note: Assumed column order = q I [I error]
 
     @type  filename:  string
     @param filename:  Path to file containing scattering curve (q, I data).
@@ -42,24 +101,55 @@ def load_scatter_curve(filename, q_min, q_max):
     @param q_max:     Minimum value of the magnitude of the scattering vector,
                       q, to keep in the output dataset.
     @rtype:           numpy array
-    @return:          Two dimensional array of scattering vector, q, and
-                      intensity, I, values.
+    @return:          Array of scattering vector, q, and
+                      intensity, I, values (with I error if available).
     """
-
+    
     try:
-        scatter_data = np.loadtxt(filename)
+        scatter_data = read_sas_file(filename)
     except:
-        # Maybe the file has a headerline?
-        try:
-            scatter_data = np.loadtxt(filename, skiprows=1)
-        except:
-            print "Unable to load " + filename
-            print "Check that the file exists, that all columns are the same length and contain numbers (one header line is permitted)\n"
-            sys.exit(1)
+        print "Unable to load " + filename
+        print "Check that the file exists, and contains lines with at least two columns of numberical data\n"
+        sys.exit(1)
 
     qrange_mask = (scatter_data[:, 0] >= q_min) & (scatter_data[:, 0] <= q_max)
 
     return scatter_data[qrange_mask]
+
+#def load_scatter_curve(filename, q_min, q_max):
+#    """
+#    Load magnitude of scattering vector, q, and intensity, I, data from file and
+#    filter for values between q_min and q_max.
+#    Note: Assuming that a/ there is no header and b/ q and I are the first two
+#    columns here.
+#
+#    @type  filename:  string
+#    @param filename:  Path to file containing scattering curve (q, I data).
+#    @type  q_min:     float
+#    @param q_min:     Minimum value of the magnitude of the scattering vector,
+#                      q, to keep in the output dataset.
+#    @type  q_max:     float
+#    @param q_max:     Minimum value of the magnitude of the scattering vector,
+#                      q, to keep in the output dataset.
+#    @rtype:           numpy array
+#    @return:          Two dimensional array of scattering vector, q, and
+#                      intensity, I, values.
+#    """
+#
+#    try:
+#        scatter_data = np.loadtxt(filename)
+#    except:
+#        # Maybe the file has a headerline?
+#        try:
+#            scatter_data = np.loadtxt(filename, skiprows=1)
+#        except:
+#            print "Unable to load " + filename
+#            print "Check that the file exists, that all columns are the same length and contain numbers (one header line is permitted)\n"
+#            sys.exit(1)
+#
+#    qrange_mask = (scatter_data[:, 0] >= q_min) & (scatter_data[:, 0] <= q_max)
+#
+#    return scatter_data[qrange_mask]
 
 
 def read_scatter_curves(curve_files, units, param):
@@ -314,32 +404,46 @@ def calculate_chi2(target_data, source_data, q_min, q_max):
                          source_data.
     """
 
-    if (target_data.shape[1] > 2) and (
-            np.count_nonzero(target_data[:, 2]) != 0):
+    matched_source_I = match_scatter_curves(target_data, source_data)
 
-        matched_source_I = match_scatter_curves(target_data, source_data)
+    # Get average I for experimental and calculated values over matched q
+    # range
+    matched_no = len(matched_source_I)
+    expt_avg = np.mean(target_data[0:matched_no, 1])
+    calc_avg = np.mean(matched_source_I)
 
-        # Get average I for experimental and calculated values over matched q
-        # range
-        matched_no = len(matched_source_I)
-        expt_avg = np.mean(target_data[0:matched_no, 1])
-        calc_avg = np.mean(matched_source_I)
+    # Initial guess of the concentration:
+    # ratio of experimental and calculated average intensities
+    con = expt_avg / calc_avg
 
-        # Initial guess of the concentration:
-        # ratio of experimental and calculated average intensities
-        con = expt_avg / calc_avg
-
-        # Call fortran code to calculate the R factor
-        chi2 = sjp_util.calc_chi2(
-            target_data[
-                :, 0], target_data[
-                :, 1], target_data[
-                :, 2], matched_source_I, matched_no, q_min, q_max, con, False)
-
-    else:
-        print "For Chi^2 calculations an error column must be present"
+    if np.count_nonzero(target_data[:, 1]) == 0:
+        print "Chi^2 calculations cannot proceed without target data"
         sys.exit()
-
+    else:
+    
+        if (target_data.shape[1] > 2) and (
+                np.count_nonzero(target_data[:, 2]) != 0):
+    
+            # Call fortran code to calculate the reduced Chi2
+            chi2 = sjp_util.calc_chi2(
+                target_data[
+                    :, 0], target_data[
+                    :, 1], target_data[
+                    :, 2], matched_source_I, matched_no, q_min, q_max, con, False)
+    
+        else:
+            #print "For Chi^2 calculations an error column must be present"
+            #sys.exit()
+            # Call fortran code to calculate the Pearson Chi2
+            chi2 = sjp_util.calc_pearson(target_data[:,0],
+                                         target_data[:,1],
+                                         matched_source_I,
+                                         matched_no,
+                                         q_min,
+                                         q_max,
+                                         con,
+                                         False)
+                                         
     # 1/con is the scaling factor needed to multiply experimental I values
     # to compare with calculated data
     return chi2, 1.0 / con
