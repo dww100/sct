@@ -61,6 +61,12 @@ def parse_arguments():
         default='a',
         help='Unit for Q in input experimental data')
 
+    parser.add_argument(
+        '--chi2',
+        action='store_true',
+        default=False,
+        help='Select comparison metric to be Chi squared not R factor')
+
     args = parser.parse_args()
     return args
 
@@ -130,10 +136,12 @@ for expt_curve in args.expt_curves:
 
         # Calculate the R factor comparing the calculated and experimental
         # curves
-        rfactor, scale = sct.curve.calculate_rfactor(expt_data,
-                                                     calc_data,
-                                                     param['rfac']['qmin'],
-                                                     param['rfac']['qmax'])
+        rfactor, scale = sct.curve.compare_curves(expt_data, 
+                                        calc_data, 
+                                        param['rfac']['qmin'], 
+                                        param['rfac']['qmax'], 
+                                        args.chi2)
+
 
         output.write(
             "{0:s}\t{1:s}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}\n".format(

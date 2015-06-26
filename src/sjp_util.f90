@@ -218,7 +218,7 @@ END FUNCTION AVERAGE_DATA
 DOUBLE PRECISION FUNCTION CALC_RFACTOR (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, VERBOSE)
 
     ! Calculate the R factor comparing IOBS (experiment) to
-    ! IMATCH (calculated curve)
+    ! ICALC (calculated curve)
     ! R factor is used by analogy with crystallography where:
     ! R = sum (abs(F_obs - F_calc)) / sum (abs(F_obs))
 
@@ -272,12 +272,72 @@ DOUBLE PRECISION FUNCTION CALC_RFACTOR (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, V
 
 END FUNCTION CALC_RFACTOR
 
+DOUBLE PRECISION FUNCTION CALC_PEARSON (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, VERBOSE)
+
+    ! Calculate the Pearson Chi squared comparing IOBS (experiment) to
+    ! ICALC (calculated curve)
+    !
+    ! X^2 = sum ((F_calc - F_obs)^2) / F_obs)
+
+    DOUBLE PRECISION, DIMENSION(*), INTENT(IN) :: QOBS, IOBS, ICALC
+    INTEGER, INTENT(IN) :: N
+    DOUBLE PRECISION, INTENT(IN) :: QMIN, QMAX
+    DOUBLE PRECISION, INTENT(INOUT) :: CON
+    LOGICAL, INTENT(IN) :: VERBOSE
+
+    DOUBLE PRECISION :: DELTAC, OC2, C2NUM, CHI2
+    DOUBLE PRECISION :: SCALEDOBS
+    INTEGER :: NDX
+
+    ! Initialize the update and R factor
+    DELTAC = CON / 10.
+    CHI2 = 1000000.
+
+    DO WHILE ( ( ABS(DELTAC) ) .GT. ( CON / 10000. ) )
+
+        OC2 = CHI2
+        CHI2 = 0.
+        C2NUM = 0.
+
+        DO NDX = 1, N
+            IF ( ( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
+
+                ! Looking to compare I/I(0) to make comparisons between 
+                ! different datasets make sense
+                SCALEDOBS = IOBS(NDX) / (CON * ICALC(1))
+                C2NUM = ( (ICALC(NDX)/ICALC(1)) - SCALEDOBS )**2
+                CHI2 = CHI2 + (C2NUM / SCALEDOBS)
+            END IF
+        END DO
+
+        IF (VERBOSE) THEN
+            WRITE(*,*) 'BEST YET:', DELTAC, CON, CHI2
+        END IF
+
+        IF (CHI2 .LT. OC2) THEN
+            CON = CON + DELTAC
+        ELSE
+            DELTAC = DELTAC * (-0.5)
+            CON = CON + DELTAC
+        ENDIF
+
+    END DO
+
+    IF (VERBOSE) THEN
+        WRITE(*,*) 'FINISHED WITH:', DELTAC, CON, CHI2
+    END IF
+
+    CALC_PEARSON = CHI2
+
+END FUNCTION CALC_PEARSON
+
 DOUBLE PRECISION FUNCTION CALC_CHI2 (QOBS, IOBS, OBSERR, ICALC, N, QMIN, QMAX, CON, VERBOSE)
 
-    ! Calculate the R factor comparing IOBS (experiment) to
-    ! IMATCH (calculated curve)
+    ! Calculate the reduced chi-squared statistic comparing IOBS (experiment) to
+    ! ICALC (calculated curve)
     !
-    ! Chi^2 = sum ((F_obs - F_calc)^2 / F_calc)
+    ! Chi^2 = 1/(N-1) * sum ((F_obs - F_calc)^2 / OBSERR^2)
+    ! Where N = number of observations
 
     DOUBLE PRECISION, DIMENSION(*), INTENT(IN) :: QOBS, OBSERR, IOBS, ICALC
     INTEGER, INTENT(IN) :: N
@@ -304,11 +364,13 @@ DOUBLE PRECISION FUNCTION CALC_CHI2 (QOBS, IOBS, OBSERR, ICALC, N, QMIN, QMAX, C
 
         DO NDX = 1, N
             IF ( ( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
-                TMPCHI2 = ( IOBS(NDX) - (CON * ICALC(NDX)) )**2
+                TMPCHI2 = ( (CON * ICALC(NDX)) - IOBS(NDX) )**2
                 TMPCHI2 = TMPCHI2 / OBSERR2(NDX)
                 CHI2 = CHI2 + TMPCHI2
             END IF
         END DO
+
+        CHI2 = CHI2 / (NDX - 1)
 
         IF (VERBOSE) THEN
             WRITE(*,*) 'BEST YET:', DELTAC, CON, CHI2
@@ -327,7 +389,7 @@ DOUBLE PRECISION FUNCTION CALC_CHI2 (QOBS, IOBS, OBSERR, ICALC, N, QMIN, QMAX, C
         WRITE(*,*) 'FINISHED WITH:', DELTAC, CON, CHI2
     END IF
 
-    CALC_CHI2 = CHI2 / NDX
+    CALC_CHI2 = CHI2
 
 END FUNCTION CALC_CHI2
 
