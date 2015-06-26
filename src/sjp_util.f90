@@ -310,6 +310,8 @@ DOUBLE PRECISION FUNCTION CALC_PEARSON (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, V
             END IF
         END DO
 
+        CHI2 = CHI2 * N
+
         IF (VERBOSE) THEN
             WRITE(*,*) 'BEST YET:', DELTAC, CON, CHI2
         END IF
