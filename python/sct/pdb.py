@@ -439,7 +439,7 @@ def create_pdb_atom(res_no, res_id, atom_no, atom_type, coords, **kwargs):
     occ = kwargs.get('occ', 0.0)
     chain = kwargs.get('chain', 'A')
 
-    line = "ATOM  {0:5d} {1:4s} {2:3s}".format(atom_no, atom_type, res_id)
+    line = "ATOM  {0:5d}  {1:3s} {2:3s}".format(atom_no, atom_type, res_id)
     line += " {0:1s}{1:4d}    ".format(chain, res_no)
     line += "{0:8.3f}{1:8.3f}{2:8.3f}".format(coords[0], coords[1], coords[2])
     line += "{0:6.2f}{1:6.2f}\n".format(occ, beta)
