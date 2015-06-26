@@ -142,10 +142,6 @@ for expt_curve in args.expt_curves:
                                         param['rfac']['qmax'], 
                                         args.chi2)
 
-
-        print scale
-        print 1.0/scale
-
         output.write(
             "{0:s}\t{1:s}\t{2:7.4f}\t{3:7.4f}\t{4:7.4f}\n".format(
                 expt_curve,
