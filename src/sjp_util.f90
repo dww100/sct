@@ -302,15 +302,13 @@ DOUBLE PRECISION FUNCTION CALC_PEARSON (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, V
         DO NDX = 1, N
             IF ( ( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
 
-                ! Looking to compare I/I(0) to make comparisons between 
-                ! different datasets make sense
-                SCALEDOBS = IOBS(NDX) / (CON * ICALC(1))
-                C2NUM = ( (ICALC(NDX)/ICALC(1)) - SCALEDOBS )**2
-                CHI2 = CHI2 + (C2NUM / SCALEDOBS)
+                C2NUM = ( (CON * ICALC(NDX)) -  IOBS(NDX) )**2
+                CHI2 = CHI2 + (C2NUM / IOBS(NDX))
+
             END IF
         END DO
-
-        CHI2 = CHI2 * N * CON
+        
+        CHI2 = CHI2 * N
 
         IF (VERBOSE) THEN
             WRITE(*,*) 'BEST YET:', DELTAC, CON, CHI2
