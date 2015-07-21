@@ -286,12 +286,28 @@ DOUBLE PRECISION FUNCTION CALC_PEARSON (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, V
     LOGICAL, INTENT(IN) :: VERBOSE
 
     DOUBLE PRECISION :: DELTAC, OC2, C2NUM, CHI2
-    DOUBLE PRECISION :: SCALEDOBS
+    DOUBLE PRECISION :: SUMOBS
+    DOUBLE PRECISION, DIMENSION(N) :: SCALEDOBS
     INTEGER :: NDX
 
     ! Initialize the update and R factor
     DELTAC = CON / 10.
     CHI2 = 1000000.
+
+
+    SUMOBS = 0.
+
+    DO NDX = 1, N
+
+        SUMOBS = SUMOBS + IOBS(NDX)
+
+    END DO
+
+    DO NDX = 1, N
+
+        SCALEDOBS(NDX) = IOBS(NDX) / SUMOBS
+
+    END DO
 
     DO WHILE ( ( ABS(DELTAC) ) .GT. ( CON / 10000. ) )
 
@@ -301,9 +317,8 @@ DOUBLE PRECISION FUNCTION CALC_PEARSON (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, V
 
         DO NDX = 1, N
             IF ( ( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
-
-                C2NUM = ( (CON * ICALC(NDX)) -  IOBS(NDX) )**2
-                CHI2 = CHI2 + (C2NUM / IOBS(NDX))
+                C2NUM = ( ((CON * ICALC(NDX))/SUMOBS) -  SCALEDOBS(NDX) )**2
+                CHI2 = CHI2 + (C2NUM / (SCALEDOBS(NDX)))
 
             END IF
         END DO
@@ -320,7 +335,7 @@ DOUBLE PRECISION FUNCTION CALC_PEARSON (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, V
             DELTAC = DELTAC * (-0.5)
             CON = CON + DELTAC
         ENDIF
-
+            
     END DO
     
     IF (VERBOSE) THEN
