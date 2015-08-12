@@ -218,7 +218,23 @@ def pdb_res_line_parse(line, filename):
     return data
 
 
-def read_pdb_atom_data(filename):
+def is_hydrogen(atom_name):
+    
+    flag = False
+    test_char = 0
+
+    try:
+        int(atom_name[test_char])
+        test_char = 1
+    except:
+        pass
+    
+    if atom_name[test_char] == 'H':
+        flag = True
+    
+    return flag
+
+def read_pdb_atom_data(filename, filter_h = True):
     """
     Read PDB file and return residue frequencies and atom coordinates
 
@@ -247,6 +263,10 @@ def read_pdb_atom_data(filename):
             data = pdb_res_line_parse(line, filename)
 
             if len(data) != 0:
+                
+                if filter_h and is_hydrogen(data['atom_name']):
+                    continue
+                
                 atom_coords.append(data['coords'])
                 # If residue number has changed increment res_id tally
 
@@ -401,7 +421,8 @@ def process_pdb_psf(psf_filename, pdb_filename, sctify=True, removeh=True):
 
     for atom in psf_atoms:
 
-        if not(removeh and (atom['atom_name'][0] == 'H')):
+        #if not(removeh and (atom['atom_name'][0] == 'H')):
+        if not(removeh and is_hydrogen(atom['atom_name'])):
 
             if (atom['res_id'] in charmm_residues) and sctify:
                 atom['res_id'] = charmm_resids[atom['res_id']]

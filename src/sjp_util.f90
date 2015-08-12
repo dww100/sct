@@ -287,7 +287,6 @@ DOUBLE PRECISION FUNCTION CALC_PEARSON (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, V
 
     DOUBLE PRECISION :: DELTAC, OC2, C2NUM, CHI2
     DOUBLE PRECISION :: SUMOBS
-    DOUBLE PRECISION, DIMENSION(N) :: SCALEDOBS
     INTEGER :: NDX
 
     ! Initialize the update and R factor
@@ -303,12 +302,6 @@ DOUBLE PRECISION FUNCTION CALC_PEARSON (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, V
 
     END DO
 
-    DO NDX = 1, N
-
-        SCALEDOBS(NDX) = IOBS(NDX) / SUMOBS
-
-    END DO
-
     DO WHILE ( ( ABS(DELTAC) ) .GT. ( CON / 10000. ) )
 
         OC2 = CHI2
@@ -317,13 +310,14 @@ DOUBLE PRECISION FUNCTION CALC_PEARSON (QOBS, IOBS, ICALC, N, QMIN, QMAX, CON, V
 
         DO NDX = 1, N
             IF ( ( QOBS(NDX) .LE. QMAX ) .AND. ( QOBS(NDX) .GT. QMIN ) ) THEN
-                C2NUM = ( ((CON * ICALC(NDX))/SUMOBS) -  SCALEDOBS(NDX) )**2
-                CHI2 = CHI2 + (C2NUM / (SCALEDOBS(NDX)))
+
+                C2NUM = ( ((CON * ICALC(NDX))) -  IOBS(NDX) )**2
+                CHI2 = CHI2 + (C2NUM / (IOBS(NDX)))
 
             END IF
         END DO
         
-        CHI2 = CHI2 * N
+        CHI2 = (CHI2 * N) / SUMOBS
 
         IF (VERBOSE) THEN
             WRITE(*,*) 'BEST YET:', DELTAC, CON, CHI2

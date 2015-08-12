@@ -194,8 +194,11 @@ def main():
         args.chi2)
 
     # Get list of PDBs in the input directory
-    pdb_filter = os.path.join(args.input_path, '*.pdb')
-    pdb_files = glob.glob(pdb_filter)
+    if args.input_path[-4:] == '.pdb':
+        pdb_files = [args.input_path]
+    else:
+        pdb_filter = os.path.join(args.input_path, '*.pdb')
+        pdb_files = glob.glob(pdb_filter)
 
     if len(pdb_files) < 1:
         print "Error: No PDB files found to analyze"
