@@ -391,8 +391,11 @@ def create_comparison_header_text(data_files, metric):
     #if data_files is not None:
     if data_files:
         no_files = len(data_files)
-        comparison_head = ['\t'.join(['\t'] * no_files),
-                           '\t\t'.join(data_files),
+#        comparison_head = ['\t'.join(['\t'] * no_files),
+#                           '\t\t'.join(data_files),
+#                           '\t'.join([metric + '\tscale'] * no_files)]
+        comparison_head = ['\t'*(2*no_files),
+                           '\t\t'.join(data_files) + '\t\t',
                            '\t'.join([metric + '\tscale'] * no_files)]
     else:
         comparison_head = ['\t\t', '\t\t', metric + '\tscale']
