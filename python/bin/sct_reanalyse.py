@@ -91,6 +91,14 @@ def parse_arguments():
                         default='a', help='Unit for Q in output data')
 
     parser.add_argument(
+        '-in',
+        '--incoherent',
+        nargs='?',
+        type=float,
+        help='Incoherent scattering contribution as fraction of I(Q)',
+        default=0.0)
+
+    parser.add_argument(
         '--chi2',
         action='store_true',
         default=False,
@@ -267,6 +275,9 @@ def main():
                 neut_curve,
                 param['rfac']['qmin'],
                 param['rfac']['qmax'])
+                
+            if args.incoherent:
+                theor_curve[:,1] = (1.0 + args.incoherent) * theor_curve[:,1]
 
             # Calculate curve metrics - Rg, Rxs? and Rfactor/Chi^2 comparing
             # theoretical and experimental curves
