@@ -21,7 +21,9 @@ Scattering curve related functions used in the SCT suite of programs
 import sys
 import yaml
 import numpy as np
+import scipy.stats as sps
 import matplotlib.pyplot as plt
+from datetime import date
 
 from sjp_util import sjp_util
 
@@ -491,7 +493,7 @@ def sas_curve_fit(x, y, calc_type):
     else:
         # Linear fit to the input x and y values
         #fit_coeffs = np.polyfit(x, y, 1)
-        fit_coeffs = np.stats.linregress(x, y)
+        fit_coeffs = sps.linregress(x, y)
         
         result['fit'] = fit_coeffs
 
@@ -500,19 +502,21 @@ def sas_curve_fit(x, y, calc_type):
             # Rxs?^2 = 2 * gradient
             result['r'] = np.sqrt(2 * abs(fit_coeffs[0]))
             #result['rerr'] = np.abs(np.sqrt(2 * abs(fit_coeffs[4]))-result['r'])
-            result['rerr'] = np.sqrt(2 * abs(fit_coeffs[4]))
+            result['rerr'] = np.abs(np.sqrt(2 * abs(fit_coeffs[0] + fit_coeffs[4])) - result['r'])
             result['i'] = None
         else:
             # Assume a standard Guinier fit of q^2 vs ln(I):
             # Rg^2 = 3 * gradient
             # Io = exp(intercept)
             std_err_fit = fit_coeffs[4]
+            # Analysis below on the basis that scipt.stats.linregress
+            # gives the std error on the slope rather than of the regression
+            # This gives result inline with old SJP code - needs chacking as 
+            # seems odd
             result['r'] = np.sqrt(3 * abs(fit_coeffs[0]))
-            #result['rerr'] = np.abs(np.sqrt(3 * abs(std_err_fit)-result['r']))
-            result['rerr'] = np.sqrt(3 * abs(std_err_fit))
+            result['rerr'] = np.abs(np.sqrt(3 * abs(fit_coeffs[0] + std_err_fit)) - result['r'])
             result['i'] = np.exp(fit_coeffs[1])
-            tmp_ierr = np.sqrt((np.sum(x**2))/(n*np.sum((x-np.mean(x))**2)))
-            result['ierr'] = std_err_fit * tmp_ierr
+            result['ierr'] = np.exp(fit_coeffs[1] + (std_err_fit * np.sqrt(np.sum(x**2))/np.sqrt(n))) - result['i']
 
     return result
 
@@ -587,7 +591,12 @@ def graph_sas_curve(filename, x, y, title_text, x_lab, y_lab,
         else:
             plt.scatter(x[mask], y[mask], s=30)
 
-        plt.annotate(outputs + '\n' + rq_range, xy=(0.45, 0.85),
+        plt.annotate(outputs + '\n' + rq_range, xy=(0.45, 0.9),
+                     xycoords='axes fraction')
+                     
+    
+    d = date.today()
+    plt.annotate(d.strftime('%d %B %Y'), xy=(0.01, 0.02),
                      xycoords='axes fraction')
 
     plt.savefig(filename)

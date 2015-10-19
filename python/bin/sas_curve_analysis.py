@@ -219,10 +219,10 @@ def main():
         # Rxs1/Rxs2: Q^2 vs ln(I*Q)
 
         if cur_anal == 'wide':
-            xlabel = 'Q'
+            xlabel = 'Q (Angstrom$^{-1}$)'
             x = input_data[:, 0]
         else:
-            xlabel = 'Q^2'
+            xlabel = 'Q$^2$ (Angstrom$^{-2}$)'
             x = input_data[:, 0] ** 2
 
         if (cur_anal == 'wide') or (cur_anal == 'rg'):
@@ -311,10 +311,12 @@ def main():
 
                 # Format data for output on graph for Rg
                 title_graph = 'Rg ' + fit_text
-                data_graph = 'Rg: {0:0.2f}\tIo: {1:0.2f}'.format(
+                data_graph = 'Rg: {0:0.2f} ({1:0.2f})\tIo: {2:0.2f} ({3:0.2f})'.format(
                     results['r'],
-                    results['i'])            
-                rq_range = 'Rg*Qmin: {0:0.2f}\tRg*Qmax: {1:0.2f}'.format(
+                    results['rerr'],
+                    results['i'],
+                    results['ierr'])            
+                rq_range = 'Q*Rg range: {0:0.2f} - {1:0.2f}'.format(
                     rq_min, rq_max)
             else:
                 # Format data for text output
@@ -325,14 +327,14 @@ def main():
                     # Format data for output on graph for Rxs1
                     title_graph = 'Rxs1 ' + fit_text
                     data_graph = 'Rxs1: {0:0.2f}'.format(results['r'])
-                    rq_range = 'Rxs1*Qmin: {0:0.2f}\tRxs1*Qmax: {1:0.2f}'.format(
+                    rq_range = 'Q * Rxs1 range: {0:0.2f} - {1:0.2f}'.format(
                         rq_min,
                         rq_max)
                 else:
                     # Format data for output on graph for Rxs2
                     title_graph = 'Rxs2 ' + fit_text
                     data_graph = 'Rxs2: {0:0.2f}'.format(results['r'])
-                    rq_range = 'Rxs2*Qmin: {0:0.2f}\tRxs2*Qmax: {1:0.2f}'.format(
+                    rq_range = 'Q * Rxs2: {0:0.2f} - {1:0.2f}'.format(
                         rq_min,
                         rq_max)
 
