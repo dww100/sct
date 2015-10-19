@@ -474,33 +474,45 @@ def sas_curve_fit(x, y, calc_type):
                        - fit: The output of the numpy polyfit (gradient and
                          intercept)
                        - r: The r value (Rg/Rsx?) calculated from the gradient
+                       - rerr: Statistical error for valuue given for 'r'
                        - i: The Io value calculated from the intercept
+                       - ierr: Statistical error for valuue given for 'i'
     """
 
     result = {}
 
-    if (len(x) == 0) or (len(y) == 0):
+    n = len(x)
+
+    if (n == 0) or (len(y) == 0):
         err = "Error: No values to fit in " + calc_type + " calculation\n"
         print err
         sys.exit(1)
         #result['error'] = err
     else:
         # Linear fit to the input x and y values
-        fit_coeffs = np.polyfit(x, y, 1)
-
+        #fit_coeffs = np.polyfit(x, y, 1)
+        fit_coeffs = np.stats.linregress(x, y)
+        
         result['fit'] = fit_coeffs
 
         if (calc_type == 'rxs1') or (calc_type == 'rxs2'):
             # Cross section Rxs1/Rxs2 calculated from fits of q^2 vs ln(I*q)
             # Rxs?^2 = 2 * gradient
             result['r'] = np.sqrt(2 * abs(fit_coeffs[0]))
+            #result['rerr'] = np.abs(np.sqrt(2 * abs(fit_coeffs[4]))-result['r'])
+            result['rerr'] = np.sqrt(2 * abs(fit_coeffs[4]))
             result['i'] = None
         else:
             # Assume a standard Guinier fit of q^2 vs ln(I):
             # Rg^2 = 3 * gradient
             # Io = exp(intercept)
+            std_err_fit = fit_coeffs[4]
             result['r'] = np.sqrt(3 * abs(fit_coeffs[0]))
+            #result['rerr'] = np.abs(np.sqrt(3 * abs(std_err_fit)-result['r']))
+            result['rerr'] = np.sqrt(3 * abs(std_err_fit))
             result['i'] = np.exp(fit_coeffs[1])
+            tmp_ierr = np.sqrt((np.sum(x**2))/(n*np.sum((x-np.mean(x))**2)))
+            result['ierr'] = std_err_fit * tmp_ierr
 
     return result
 

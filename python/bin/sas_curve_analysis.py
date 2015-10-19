@@ -86,7 +86,7 @@ def parse_arguments():
         print (
             "If you require all analyses to be run a parameter file containing the relevant Q ranges must be provided.\n")
         sys.exit(1)
-    elif (not args.parameter_file) and ((not args.fit_range) or (args.anal_type == 'wide')):
+    elif (not args.parameter_file) and ((not args.fit_range) and (not args.anal_type == 'wide')):
         print (
             "For all analyses except wide angle plotting ('wide') a fit range is needed in addition to the plot range.\n")
         sys.exit(1)
@@ -173,8 +173,8 @@ def check_args(args):
         else:
             q_ranges[analyses[0]] = {'qmin': args.plotrange[0],
                                      'qmax': args.plotrange[1],
-                                     'fitmin': args.fitrange[0],
-                                     'fitmax': args.fitrange[0]}
+                                     'fitmin': args.fit_range[0],
+                                     'fitmax': args.fit_range[1]}
 
     return analyses, q_ranges
 
@@ -252,7 +252,8 @@ def main():
         if cur_anal == 'wide':
 
             # We don't perform any fitting on Wide Angle plots
-            title_graph = 'Wide Angle ' + out_prefix
+            #title_graph = 'Wide Angle ' + out_prefix
+            title_graph = 'Wide Angle ' + args.input_filename
 
             fname = create_output_name(out_prefix, cur_anal,
                                        q_min, q_max, None, None)
@@ -287,9 +288,11 @@ def main():
             q2_min = q_min ** 2
             q2_max = q_max ** 2
 
+            #fit_text = '{0:s} (Q fit range = {1:5.4}-{2:5.4})'.format(
+            #    out_prefix, fit_min, fit_max)
             fit_text = '{0:s} (Q fit range = {1:5.4}-{2:5.4})'.format(
-                out_prefix, fit_min, fit_max)
-
+                 args.input_filename, fit_min, fit_max)
+            
             # Perform linear fit over the fit range selected by mask
             results = sct.curve.sas_curve_fit(x[mask], y[mask], cur_anal)
 
