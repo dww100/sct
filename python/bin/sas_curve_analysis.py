@@ -88,7 +88,7 @@ def parse_arguments():
         print (
             "If you require all analyses to be run a parameter file containing the relevant Q ranges must be provided.\n")
         sys.exit(1)
-    elif (not args.parameter_file) and ((not args.fit_range) or (args.anal_type == 'wide')):
+    elif (not args.parameter_file) and ((not args.fit_range) and (not args.anal_type == 'wide')):
         print (
             "For all analyses except wide angle plotting ('wide') a fit range is needed in addition to the plot range.\n")
         sys.exit(1)
@@ -175,8 +175,8 @@ def check_args(args):
         else:
             q_ranges[analyses[0]] = {'qmin': args.plotrange[0],
                                      'qmax': args.plotrange[1],
-                                     'fitmin': args.fitrange[0],
-                                     'fitmax': args.fitrange[0]}
+                                     'fitmin': args.fit_range[0],
+                                     'fitmax': args.fit_range[1]}
 
     return analyses, q_ranges
 
@@ -221,10 +221,10 @@ def main():
         # Rxs1/Rxs2: Q^2 vs ln(I*Q)
 
         if cur_anal == 'wide':
-            xlabel = 'Q'
+            xlabel = 'Q (Angstrom$^{-1}$)'
             x = input_data[:, 0]
         else:
-            xlabel = 'Q^2'
+            xlabel = 'Q$^2$ (Angstrom$^{-2}$)'
             x = input_data[:, 0] ** 2
 
         if (cur_anal == 'wide') or (cur_anal == 'rg'):
@@ -254,7 +254,8 @@ def main():
         if cur_anal == 'wide':
 
             # We don't perform any fitting on Wide Angle plots
-            title_graph = 'Wide Angle ' + out_prefix
+            #title_graph = 'Wide Angle ' + out_prefix
+            title_graph = 'Wide Angle ' + args.input_filename
 
             fname = create_output_name(out_prefix, cur_anal,
                                        q_min, q_max, None, None)
@@ -289,9 +290,11 @@ def main():
             q2_min = q_min ** 2
             q2_max = q_max ** 2
 
+            #fit_text = '{0:s} (Q fit range = {1:5.4}-{2:5.4})'.format(
+            #    out_prefix, fit_min, fit_max)
             fit_text = '{0:s} (Q fit range = {1:5.4}-{2:5.4})'.format(
-                out_prefix, fit_min, fit_max)
-
+                 args.input_filename, fit_min, fit_max)
+            
             # Perform linear fit over the fit range selected by mask
             results = sct.curve.sas_curve_fit(x[mask], y[mask], cur_anal)
 
@@ -310,10 +313,12 @@ def main():
 
                 # Format data for output on graph for Rg
                 title_graph = 'Rg ' + fit_text
-                data_graph = 'Rg: {0:0.2f}\tIo: {1:0.2f}'.format(
+                data_graph = 'Rg: {0:0.2f} ({1:0.2f})\tIo: {2:0.2f} ({3:0.2f})'.format(
                     results['r'],
-                    results['i'])            
-                rq_range = 'Rg*Qmin: {0:0.2f}\tRg*Qmax: {1:0.2f}'.format(
+                    results['rerr'],
+                    results['i'],
+                    results['ierr'])            
+                rq_range = 'Q*Rg range: {0:0.2f} - {1:0.2f}'.format(
                     rq_min, rq_max)
             else:
                 # Format data for text output
@@ -324,14 +329,14 @@ def main():
                     # Format data for output on graph for Rxs1
                     title_graph = 'Rxs1 ' + fit_text
                     data_graph = 'Rxs1: {0:0.2f}'.format(results['r'])
-                    rq_range = 'Rxs1*Qmin: {0:0.2f}\tRxs1*Qmax: {1:0.2f}'.format(
+                    rq_range = 'Q * Rxs1 range: {0:0.2f} - {1:0.2f}'.format(
                         rq_min,
                         rq_max)
                 else:
                     # Format data for output on graph for Rxs2
                     title_graph = 'Rxs2 ' + fit_text
                     data_graph = 'Rxs2: {0:0.2f}'.format(results['r'])
-                    rq_range = 'Rxs2*Qmin: {0:0.2f}\tRxs2*Qmax: {1:0.2f}'.format(
+                    rq_range = 'Q * Rxs2: {0:0.2f} - {1:0.2f}'.format(
                         rq_min,
                         rq_max)
 
