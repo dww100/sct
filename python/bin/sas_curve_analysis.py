@@ -5,8 +5,10 @@ Can produce the following plots and data:
 wide - Wide Angle: Q vs ln(I)
 rg - Radius of gyration/Guinier: Q^2 vs ln(I)
 rxs1/rxs2 - Rxs1/Rsx2: Q^2 vs ln(I*Q)
-Presently input is assumed to be columns of data with no header - first column
-being q and the second I.
+
+Input is assumed to contain (at least) three columns of data (Q, I & error 
+on I). An attempt is made to skip headers but if you encounter problems 
+with data not being read correctly try removing any header from the file. 
 """
 
 # Copyright 2014 University College London
@@ -54,8 +56,8 @@ def parse_arguments():
     parser.add_argument('-qu', '--q_unit', choices=['nm', 'a'],
                         default='a', help='Unit for Q in input data')
                                               
-    parser.add_argument('--header', action='store_true',
-                       help='Output a header alongside output data')
+    parser.add_argument('--noheader', action='store_true',
+                       help='Supress output of header alongside output data')
 
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-p', '--parameter', type=str, dest='parameter_file',
@@ -125,9 +127,9 @@ def create_output_name(prefix, analysis, q_min, q_max, fit_min, fit_max):
 
 def check_args(args):
 
-    if args.header:
+    if not args.noheader:
         print ('Filename\t' + create_header(args.anal_type))
-        sys.exit(0)
+        #sys.exit(0)
 
     if not os.path.isdir(args.output_dir):
         os.makedirs(args.output_dir)
