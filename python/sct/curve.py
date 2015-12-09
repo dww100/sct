@@ -580,8 +580,8 @@ def graph_sas_curve(filename, x, y, title_text, x_lab, y_lab,
     # Plot linear fit and highlight points used in its construction
     if fit_coeffs is not None:
 
-        # Plot the fit line along the whole x range shown in teh plot
-        fitLine = np.poly1d(fit_coeffs)
+        # Plot the fit line along the whole x range shown in the plot
+        fitLine = np.poly1d(fit_coeffs[0:2])
         x_points = np.linspace(x_min, x_max, 300)
         plt.plot(x_points, fitLine(x_points))
 
