@@ -56,7 +56,7 @@ def read_parameter_file(filename):
         param_file = file(filename)
         params = yaml.load(param_file)
     except IOError:
-        err = 'Unable to read file.'
+        err = 'Unable to read file {0:s}.'.format(filename)
         params = None
 
     return params, err
@@ -392,7 +392,7 @@ def check_parameters(params, needed):
 
 def parse_parameter_file(parameter_file, needed):
     """
-    Load the parameter file abd check that all the parameters needed to perform
+    Load the parameter file and check that all the parameters needed to perform
     the calculations specified in the input list (needed) are in the parameter
     dictionary (params).
     Possible calculations are:

@@ -141,6 +141,10 @@ def check_args(args):
         # Read in parameters
         q_ranges, err = sct.param.read_parameter_file(args.parameter_file)
 
+        if err is not None:
+            print err
+            sys.exit(0)
+
         if 'rxs2' not in q_ranges:
             analyses = [i for i in analyses if i != 'rxs2']
 
