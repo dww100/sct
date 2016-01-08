@@ -247,7 +247,7 @@ igg4/neutron/models/*.pdb
 The * is replaced by the name of the original PDB files for the model and curve files.
 
 The summary files are output as tab separated columns. The easiest way to see the table correctly is to open it in Microsoft Excel or LibreOffice Calc. 
-When you look at the output data you will see that three of the models have low R factors in comparison to all of the curves, indicating a bad fit, and three have high ones, indicating a poor fit. 
+When you look at the output data you will see that three of the models have low R factors in comparison to all of the curves, indicating a good fit, and three have high ones, indicating a poor fit. 
 You can now look at the two sets of models to see how they differ from one another.
 
 You can also compare the scattering curves (again remembering to account for the scaling factor). 

@@ -315,7 +315,7 @@ def spec_volume(resids, res_freq, dataset):
                      perkins1986a, richards1974 & perkins1986b.
     @rtype:          float
     @return:         Specific volume of the input residue constitution -
-                     sum(mass of residue type * frequency) * avagadros number /
+                     sum(volume of residue type * frequency) * avagadros number /
                      sum(mass of residue type * frequency). Where sums are over
                      all input residue types.
     """
