@@ -39,6 +39,7 @@ def parse_arguments():
     use_message = """%(prog)s [-h]
     [-i INPUTFILENAME]
     (--header)
+    (--no_header)
     (-p PARAMETERFILENAME | -r PLOTRANGE PLOTRANGE -f FITRANGE FITRANGE)
     [-qu QUNITS]
     [-o [OUTPUTDIR] [-a {wide,rg,rxs1,rxs2,all}]]
@@ -55,6 +56,9 @@ def parse_arguments():
                        
     parser.add_argument('-qu', '--q_unit', choices=['nm', 'a'],
                         default='a', help='Unit for Q in input data')
+
+    parser.add_argument('--header', action='store_true',
+                       help='Print header only')
                                               
     parser.add_argument('--noheader', action='store_true',
                        help='Supress output of header alongside output data')
@@ -85,12 +89,16 @@ def parse_arguments():
     args = parser.parse_args()
 
     if (args.anal_type == 'all') and (not args.parameter_file):
-        print (
+        sys.stderr.write(
             "If you require all analyses to be run a parameter file containing the relevant Q ranges must be provided.\n")
         sys.exit(1)
     elif (not args.parameter_file) and ((not args.fit_range) and (not args.anal_type == 'wide')):
-        print (
+        sys.stderr.write(
             "For all analyses except wide angle plotting ('wide') a fit range is needed in addition to the plot range.\n")
+        sys.exit(1)
+
+    if args.header and args.noheader:
+        sys.stderr.write("Check you command line options - can't print header only and no header!")
         sys.exit(1)
 
     return args
@@ -130,6 +138,9 @@ def check_args(args):
     if not args.noheader:
         print ('Filename\t' + create_header(args.anal_type))
         #sys.exit(0)
+        
+    if args.header:
+        sys.exit(0)
 
     if not os.path.isdir(args.output_dir):
         os.makedirs(args.output_dir)
