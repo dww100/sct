@@ -58,6 +58,10 @@ def read_parameter_file(filename):
     except IOError:
         err = 'Unable to read file {0:s}.'.format(filename)
         params = None
+    except yaml.YAMLError, exc:
+        mark = exc.problem_mark
+        print "Error in parameter file, line {0:d}, column {1:d}".format(mark.line+1, mark.column+1)
+        params = None
 
     return params, err
 
