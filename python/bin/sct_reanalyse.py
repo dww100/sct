@@ -1,4 +1,4 @@
-#!/usr0/usr3/people/davidw/linux_apps/anaconda/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Compares theorerical scattering curves generated from PDB structure files to
 experimental x-ray and neutron scattering curves.
