@@ -343,14 +343,14 @@ def main():
                 if cur_anal == 'rxs1':
                     # Format data for output on graph for Rxs1
                     title_graph = 'Rxs1 ' + fit_text
-                    data_graph = 'Rxs1: {0:0.2f}'.format(results['r'])
+                    data_graph = 'Rxs1: {0:0.2f} ({1:0.2f})'.format(results['r'], results['rerr'])
                     rq_range = 'Q * Rxs1 range: {0:0.2f} - {1:0.2f}'.format(
                         rq_min,
                         rq_max)
                 else:
                     # Format data for output on graph for Rxs2
                     title_graph = 'Rxs2 ' + fit_text
-                    data_graph = 'Rxs2: {0:0.2f}'.format(results['r'])
+                    data_graph = 'Rxs2: {0:0.2f} ({1:0.2f})'.format(results['r'],results['rerr'])
                     rq_range = 'Q * Rxs2: {0:0.2f} - {1:0.2f}'.format(
                         rq_min,
                         rq_max)
