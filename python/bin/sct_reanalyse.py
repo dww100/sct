@@ -277,7 +277,8 @@ def main():
                 param['rfac']['qmax'])
                 
             if args.incoherent:
-                theor_curve[:,1] = (1.0 + args.incoherent) * theor_curve[:,1]
+                inc_scat = theor_curve[0,1] * args.incoherent
+                theor_curve[:,1] = theor_curve[:,1] + inc_scat
 
             # Calculate curve metrics - Rg, Rxs? and Rfactor/Chi^2 comparing
             # theoretical and experimental curves
