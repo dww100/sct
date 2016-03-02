@@ -487,8 +487,7 @@ def sas_curve_fit(x, y, calc_type):
 
     if (n == 0) or (len(y) == 0):
         err = "Error: No values to fit in " + calc_type + " calculation\n"
-        print err
-        sys.exit(1)
+        raise Exception(err)
         #result['error'] = err
     else:
         # Linear fit to the input x and y values
