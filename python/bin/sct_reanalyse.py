@@ -216,11 +216,19 @@ def main():
 
     title = args.title
 
-    neut_expt = sct.curve.read_scatter_curves(
-        args.neutron,
-        args.neutron_unit,
-        param)
-    xray_expt = sct.curve.read_scatter_curves(args.xray, args.xray_unit, param)
+    try:
+
+        neut_expt = sct.curve.read_scatter_curves(
+            args.neutron,
+            args.neutron_unit,
+            param)
+        
+        xray_expt = sct.curve.read_scatter_curves(args.xray, args.xray_unit, param)
+        
+    except Exception as e:
+        print str(e)
+        sys.exit(1)
+    
     sct.tasks.output_expt_summary(
         neut_expt,
         xray_expt,

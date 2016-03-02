@@ -311,7 +311,11 @@ def main():
                  args.input_filename, fit_min, fit_max)
             
             # Perform linear fit over the fit range selected by mask
-            results = sct.curve.sas_curve_fit(x[mask], y[mask], cur_anal)
+            try:
+                results = sct.curve.sas_curve_fit(x[mask], y[mask], cur_anal)
+            except Exception as e:
+                print str(e)
+                sys.exit(1)
 
             # calculate R? * Q for the ends of the range of Q used in fit
             rq_min = results['r'] * fit_min
@@ -343,14 +347,14 @@ def main():
                 if cur_anal == 'rxs1':
                     # Format data for output on graph for Rxs1
                     title_graph = 'Rxs1 ' + fit_text
-                    data_graph = 'Rxs1: {0:0.2f} ({1:0.2f})'.format(results['r'], results['rerr'])
+                    data_graph = 'Rxs1: {0:0.2f}'.format(results['r'])
                     rq_range = 'Q * Rxs1 range: {0:0.2f} - {1:0.2f}'.format(
                         rq_min,
                         rq_max)
                 else:
                     # Format data for output on graph for Rxs2
                     title_graph = 'Rxs2 ' + fit_text
-                    data_graph = 'Rxs2: {0:0.2f} ({1:0.2f})'.format(results['r'],results['rerr'])
+                    data_graph = 'Rxs2: {0:0.2f}'.format(results['r'])
                     rq_range = 'Q * Rxs2: {0:0.2f} - {1:0.2f}'.format(
                         rq_min,
                         rq_max)
