@@ -10,6 +10,7 @@ import sct.curve as curve
 import sct.sphere as sphere
 import sct.pdb as pdb
 import sct.seq as seq
+import numpy as np
 
 
 def get_box_opt_input(pdb_filename, *args):
@@ -655,6 +656,28 @@ def output_expt_summary(neut_data, xray_data, output_path, title):
 
     return
 
+def valid_analyses(data):
+    """
+    Check that all Rg and Rxs for input experimental data are valid
+
+    @type  data:    list
+    @param data:    List of curves read in and analysed by SCT to produce
+                    scattering curve dictionaries.
+    @rtype:         boolean
+    @return         Were all specified metrics correctly calculated
+    """
+
+    valid = True
+
+    for data_curve in data:
+
+        for metric in ['curve_rg','curve_rxs1','curve_rxs2']:
+            if metric in data_curve:
+                if np.isnan(data_curve[metric]):
+                    valid = False
+                    break
+
+    return valid
 
 def process_expt_data(
         neutron_files,

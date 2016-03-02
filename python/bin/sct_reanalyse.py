@@ -227,6 +227,14 @@ def main():
         args.output_path,
         title)
 
+    if not sct.tasks.valid_analyses(neut_expt):
+        print 'ERROR: Invalid neutron data file entered, check the summary file'
+        sys.exit(1)
+    
+    if not sct.tasks.valid_analyses(xray_expt):
+        print 'ERROR: Invalid X-ray data file entered, check the summary file'
+        sys.exit(1)
+
     print "> Processing calculated data"
 
     # Create the file for model output
@@ -277,8 +285,7 @@ def main():
                 param['rfac']['qmax'])
                 
             if args.incoherent:
-                inc_scat = theor_curve[0,1] * args.incoherent
-                theor_curve[:,1] = theor_curve[:,1] + inc_scat
+                theor_curve[:,1] = (1.0 + args.incoherent) * theor_curve[:,1]
 
             # Calculate curve metrics - Rg, Rxs? and Rfactor/Chi^2 comparing
             # theoretical and experimental curves
@@ -305,6 +312,8 @@ def main():
                 param['rfac']['qmin'],
                 param['rfac']['qmax'])
 
+
+            print "Here"
             # Calculate curve metrics - Rg, Rxs? and Rfactor/Chi^2 comparing
             # theoretical and experimental curves
             xray_theor.update(
