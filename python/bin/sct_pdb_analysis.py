@@ -173,8 +173,12 @@ def main():
     # Read in experimental curves and calculate Rg and Rxs
     # Setup output directories for theoretical curves and sphere models
     # Output summary analysis of the experimental data curves
-    neut_data, xray_data, out_paths = sct.tasks.process_expt_data(
+    try:
+        neut_data, xray_data, out_paths = sct.tasks.process_expt_data(
         args.neutron, args.neutron_unit, args.xray, args.xray_unit, args.output_path, args.title, param)
+    except Exception as e:
+        print str(e)
+        sys.exit(1)
 
     # Create the file for model output
     summary_name = os.path.join(args.output_path, args.title + '.sum')
