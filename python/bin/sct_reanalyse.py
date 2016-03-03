@@ -167,11 +167,21 @@ def main():
         neutron_model_filter = os.path.join(neutron_dir, 'models','*.pdb')
         neut_model_files = glob.glob(neutron_model_filter)
         neut_model_files = sort_nicely(neut_model_files)
-        
-        if len(neut_curve_files) != len(neut_model_files):
+
+        n_neut_curves = len(neut_curve_files)
+        n_neut_models = len(neut_model_files)
+
+        if n_neut_models == 0 and n_neut_curves != 0:
+
+            tmp_models = ['']*n_neut_curves
+            data['neut'] = zip(neut_curve_files, tmp_models)
+
+        elif n_neut_curves != n_neut_models:
+
             err = 'Neutron curve and model numbers do not match!'
             print(err)
             sys.ext(1)
+
         else:
             data['neut'] = zip(neut_curve_files, neut_model_files)
             
@@ -185,8 +195,16 @@ def main():
         xray_model_filter = os.path.join(xray_dir, 'models','*.pdb')
         xray_model_files = glob.glob(xray_model_filter)
         xray_model_files = sort_nicely(xray_model_files)
-        
-        if len(xray_curve_files) != len(xray_model_files):
+
+        n_xray_curves = len(xray_curve_files)
+        n_xray_models = len(xray_model_files)
+
+        if n_xray_models == 0 and n_xray_curves != 0:
+
+            tmp_models = ['']*n_xray_curves
+            data['xray'] = zip(xray_curve_files, tmp_models)
+
+        elif n_xray_curves != n_xray_models:
             err = 'X-ray curve and model numbers do not match!'
             print(err)
             sys.ext(1)
@@ -279,13 +297,17 @@ def main():
 
         if model_type in ['neutron', 'both']:
 
-            dry_spheres, radius = sct.pdb.read_sphere_pdb(neut_model)
-            # Get Rg from sphere model
-            neut_theor['model_rg'] = sct.sphere.sphere_model_rg(
-                dry_spheres,
-                radius)
-            # Get volume of sphere model
-            neut_theor['volume'] = box_side3 * len(dry_spheres)
+            if neut_model:
+                dry_spheres, radius = sct.pdb.read_sphere_pdb(neut_model)
+                # Get Rg from sphere model
+                neut_theor['model_rg'] = sct.sphere.sphere_model_rg(
+                    dry_spheres,
+                    radius)
+                # Get volume of sphere model
+                neut_theor['volume'] = box_side3 * len(dry_spheres)
+            else:
+                neut_theor['model_rg'] = 0
+                neut_theor['volume'] = 0
 
             theor_curve = sct.curve.load_scatter_curve(
                 neut_curve,
@@ -307,13 +329,17 @@ def main():
 
         if model_type in ['xray', 'both']:
 
-            wet_spheres, radius = sct.pdb.read_sphere_pdb(xray_model)
-            # Get Rg from sphere model
-            xray_theor['model_rg'] = sct.sphere.sphere_model_rg(
-                wet_spheres,
-                radius)
-            # Get volume of sphere model
-            xray_theor['volume'] = box_side3 * len(wet_spheres)
+            if xray_model:
+                wet_spheres, radius = sct.pdb.read_sphere_pdb(xray_model)
+                # Get Rg from sphere model
+                xray_theor['model_rg'] = sct.sphere.sphere_model_rg(
+                    wet_spheres,
+                    radius)
+                # Get volume of sphere model
+                xray_theor['volume'] = box_side3 * len(wet_spheres)
+            else:
+                xray_theor['model_rg'] = 0
+                xray_theor['volume'] = 0
 
             theor_curve = sct.curve.load_scatter_curve(
                 xray_curve,
