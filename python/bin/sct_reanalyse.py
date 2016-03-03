@@ -323,7 +323,6 @@ def main():
                 sct.tasks.analyse_theor_curve(
                     theor_curve,
                     neut_expt,
-                    radius,
                     param,
                     chi2=args.chi2))
 
@@ -346,15 +345,12 @@ def main():
                 param['rfac']['qmin'],
                 param['rfac']['qmax'])
 
-
-            print "Here"
             # Calculate curve metrics - Rg, Rxs? and Rfactor/Chi^2 comparing
             # theoretical and experimental curves
             xray_theor.update(
                 sct.tasks.analyse_theor_curve(
                     theor_curve,
                     xray_expt,
-                    radius,
                     param,
                     chi2=args.chi2))
 

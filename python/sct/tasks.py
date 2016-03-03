@@ -153,7 +153,6 @@ def create_data_dir(basename, expt_type, data_type):
 def analyse_theor_curve(
         theor_curve,
         expt_curves,
-        sphere_radius,
         param,
         chi2=False):
     """
@@ -167,8 +166,6 @@ def analyse_theor_curve(
     @param expt_curves:    List of two dimensional numpy arrays containing
                            scattered vector magnitudes, q, and intensities, I,
                            from experiment.
-    @type  sphere_radius:  float
-    @param sphere_radius:  Sphere radius
     @type  param:          dictionary
     @param param:          Dictionary containing parameters to use when creating
                            models and analysing curves.
@@ -298,7 +295,6 @@ def analyse_sphere_model(
         analyse_theor_curve(
             result['curve'],
             expt_curves,
-            sphere_radius,
             param,
             chi2=chi2))
 
