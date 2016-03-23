@@ -43,9 +43,19 @@ The code can also be cloned from the GitHub repository using git:
 
 ## Compiling the Code
 
-The compilation and installation is handled by cmake:
+The compilation and installation is handled by cmake.
+To install in user space:
 
-    cmake -DCMAKE_INSTALL_PREFIX:PATH=/path/to/install . && make install
+```
+cmake -DCMAKE_INSTALL_PREFIX:PATH=/path/to/install . && make install
+```
 
 where /path/to/install is the path into which you want the classic SCT executables and modern SCT python scripts to be installed.
+NOTE: You must have permission to write to this directory.
 Remember to place this directory into your PATH environment variable.
+
+System wide installation is achieved using:
+
+```
+sudo cmake -DCMAKE_INSTALL_PREFIX:PATH=/path/to/install . && sudo make install
+```
