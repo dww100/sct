@@ -51,9 +51,13 @@
 <p>The code can also be cloned from the GitHub repository using git:</p>
 <pre><code>git clone https://github.com/dww100/sct.git</code></pre>
 <h2 id="compiling-the-code">Compiling the Code</h2>
-<p>The compilation and installation is handled by cmake:</p>
+<p>The compilation and installation is handled by cmake. To install in user space:</p>
 <pre><code>cmake -DCMAKE_INSTALL_PREFIX:PATH=/path/to/install . &amp;&amp; make install</code></pre>
-<p>where /path/to/install is the path into which you want the classic SCT executables and modern SCT python scripts to be installed. Remember to place this directory into your PATH environment variable.</p>
+<p>where /path/to/install is the path into which you want the classic SCT executables and modern SCT python scripts to be installed. NOTE: You must have permission to write to this directory. Remember to place this directory into your PATH environment variable.</p>
+<p>System wide installation is achieved using:</p>
+<pre><code>sudo cmake -DCMAKE_INSTALL_PREFIX:PATH=/path/to/install . &amp;&amp; sudo make install</code></pre>
+
+
 <div class="references">
 
 </div>
