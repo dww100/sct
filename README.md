@@ -47,7 +47,7 @@ matplotlib
 yaml
 
 All of these requirements should also available via standard package managers.
-However, we have found the easiest way to acquire the python packages is to use the free scientific Python distribution Anaconda.
+However, we have found the easiest way to acquire the Python packages is to use the free scientific Python distribution Anaconda.
 Download and installation instructions for Anaconda can be found [here](https://store.continuum.io/cshop/anaconda/).
 
 Installation instructions
