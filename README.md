@@ -37,7 +37,7 @@ cmake
 
 gfortran (version 4.2 or greater)
 
-Python 2.7
+Python 2.7 (may work with Python 3.x but this is new and under tested)
 
 The following packages must be in the PYTHONPATH:
 distutils
