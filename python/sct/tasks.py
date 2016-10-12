@@ -5,6 +5,7 @@ Created on Mon May 12 12:13:28 2014
 @author: dave
 """
 
+from __future__ import absolute_import
 import os
 import sct.curve as curve
 import sct.sphere as sphere

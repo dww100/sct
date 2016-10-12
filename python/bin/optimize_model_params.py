@@ -24,9 +24,13 @@ analyse_pdb_models.py script to run on a series of models.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import argparse
 import sct
 import yaml
+import sct.six as six
+from sct.six.moves import range
 
 def parse_arguments():
     """Parse command line arguments and ensure correct combinations present"""
@@ -115,7 +119,7 @@ def main():
 
     if args.parameter_file is not None:
 
-        print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"
+        print("WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!")
 
         # Read in parameters and check we have those we need
         param, err = sct.param.read_parameter_file(args.parameter_file)
@@ -135,9 +139,9 @@ def main():
         cutoff = args.cutoff
 
     if args.add_res:
-        res_file = file(args.add_res, 'r')
+        res_file = open(args.add_res, 'r')
         add_res = yaml.load(res_file)
-        for res, data in add_res.iteritems():
+        for res, data in six.iteritems(add_res):
             sct.seq.all_residues.append(res)
             sct.seq.res_vols['perkins1986a']['residue'][res] = data['vol']
             sct.seq.params['mass'][res] = data['mass']

@@ -25,6 +25,8 @@ Within the Perkins lab this replaces the do_curve script
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import argparse
 import sys
 import os
@@ -33,6 +35,9 @@ import glob
 import shutil
 
 import sct
+import sct.six as six
+from sct.six.moves import range
+from sct.six.moves import zip
 
 
 def parse_arguments():
@@ -107,7 +112,7 @@ def parse_arguments():
     args = parser.parse_args()
 
     if (args.neutron is None) and (args.xray is None):
-        print "At least one experimental curve is required for comparison (xray, neutron or both).\n"
+        print("At least one experimental curve is required for comparison (xray, neutron or both).\n")
         sys.exit(1)
 
     return args
@@ -142,8 +147,8 @@ def sort_nicely(l):
 
 def main():
 
-    print "Running modern SCT workflow"
-    print "---------------------------\n"
+    print("Running modern SCT workflow")
+    print("---------------------------\n")
 
     args = parse_arguments()
 
@@ -174,7 +179,7 @@ def main():
         if n_neut_models == 0 and n_neut_curves != 0:
 
             tmp_models = ['']*n_neut_curves
-            data['neut'] = zip(neut_curve_files, tmp_models)
+            data['neut'] = list(zip(neut_curve_files, tmp_models))
 
         elif n_neut_curves != n_neut_models:
 
@@ -183,7 +188,7 @@ def main():
             sys.ext(1)
 
         else:
-            data['neut'] = zip(neut_curve_files, neut_model_files)
+            data['neut'] = list(zip(neut_curve_files, neut_model_files))
             
     if model_type in ['xray','both']:
         xray_dir = os.path.join(args.input_path, 'xray')
@@ -202,14 +207,14 @@ def main():
         if n_xray_models == 0 and n_xray_curves != 0:
 
             tmp_models = ['']*n_xray_curves
-            data['xray'] = zip(xray_curve_files, tmp_models)
+            data['xray'] = list(zip(xray_curve_files, tmp_models))
 
         elif n_xray_curves != n_xray_models:
             err = 'X-ray curve and model numbers do not match!'
             print(err)
             sys.ext(1)
         else:
-            data['xray'] = zip(xray_curve_files, xray_model_files)    
+            data['xray'] = list(zip(xray_curve_files, xray_model_files))    
     
     if model_type in 'neutron':
         nf = len(data['neut'])
@@ -230,7 +235,7 @@ def main():
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
 
-    print "> Processing experimental data"
+    print("> Processing experimental data")
 
     title = args.title
 
@@ -244,7 +249,7 @@ def main():
         xray_expt = sct.curve.read_scatter_curves(args.xray, args.xray_unit, param)
         
     except Exception as e:
-        print str(e)
+        print(str(e))
         sys.exit(1)
     
     sct.tasks.output_expt_summary(
@@ -254,14 +259,14 @@ def main():
         title)
 
     if not sct.tasks.valid_analyses(neut_expt):
-        print 'ERROR: Invalid neutron data file entered, check the summary file'
+        print('ERROR: Invalid neutron data file entered, check the summary file')
         sys.exit(1)
     
     if not sct.tasks.valid_analyses(xray_expt):
-        print 'ERROR: Invalid X-ray data file entered, check the summary file'
+        print('ERROR: Invalid X-ray data file entered, check the summary file')
         sys.exit(1)
 
-    print "> Processing calculated data"
+    print("> Processing calculated data")
 
     # Create the file for model output
     summary_name = os.path.join(args.output_path, title + '.sum')
@@ -281,9 +286,9 @@ def main():
         args.chi2)
 
     out_text = 'There are %d models to process\n' % (nf)
-    print out_text
+    print(out_text)
 
-    for i in xrange(0,nf):
+    for i in range(0,nf):
     
         if model_type in ['neutron','both']:
             neut_curve = data['neut'][i][0]
@@ -354,7 +359,7 @@ def main():
                     param,
                     chi2=args.chi2))
 
-        file_basename = os.path.basename(data.itervalues().next()[i][0])
+        file_basename = os.path.basename(six.itervalues(data))
         file_id = os.path.splitext(file_basename)[0]
 
         # Format the modelling output data for printing

@@ -19,9 +19,11 @@ Loads in yaml files containing scattering parameters and residue volumes
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
 import collections
 import yaml
 import os
+from sct.six.moves import zip
 
 share_dir = os.path.join(__file__.rsplit(os.sep, 1)[0], 'share')
 """Path to the input data files"""
@@ -52,7 +54,7 @@ all_residues = amino_acids + monosaccharides
 # Trick taken from the pymol wiki
 aa1 = list("ARNDCQEGHILKMFPSTWYV")
 """List of amino acid 1 letter codes"""
-aa1to3 = dict(zip(aa1, sorted(amino_acids)))
+aa1to3 = dict(list(zip(aa1, sorted(amino_acids))))
 """Dictionary providing 1 to 3 letter aa code conversion"""
 
 # Load parameters into module global variables
@@ -60,13 +62,13 @@ aa1to3 = dict(zip(aa1, sorted(amino_acids)))
 # Load scattering and mass parameters:
 # bH, bD, mass, no_electron, no_exchange_H, no_exchange_peptide_H,
 # solvent -[BDDO, BHHO, EHHO], constants -[avagadro]
-param_file = file(os.path.join(share_dir, 'sluv_parameters.yml'), 'r')
+param_file = open(os.path.join(share_dir, 'sluv_parameters.yml'), 'r')
 """Path to file containing scattering and mass parameters"""
 params = yaml.load(param_file)
 """Dictionary of scattering parameters read in from file"""
 
 # Load the different volume datasets
-vol_file = file(os.path.join(share_dir, 'aa_volumes.yml'), 'r')
+vol_file = open(os.path.join(share_dir, 'aa_volumes.yml'), 'r')
 """Path to file containing volumes parameters"""
 res_vols = yaml.load(vol_file)
 """Dictionary of residue volumes read in from file"""
@@ -173,7 +175,7 @@ def seq_file_to_freq(seq_filename, file_type):
     """
 
     if file_type == 'yml':
-        seq_file = file(seq_filename, 'r')
+        seq_file = open(seq_filename, 'r')
         res_freq = yaml.load(seq_file)
     elif file_type == 'fas':
         res_freq = fasta_res_freq(seq_filename)

@@ -25,6 +25,8 @@ Within the Perkins lab this replaces the do_curve script
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import argparse
 import sys
 import os
@@ -33,6 +35,7 @@ import glob
 import yaml
 
 import sct
+import sct.six as six
 
 
 def parse_arguments():
@@ -107,7 +110,7 @@ def parse_arguments():
     args = parser.parse_args()
 
     if (args.neutron is None) and (args.xray is None):
-        print "At least one experimental curve is required for comparison (xray, neutron or both).\n"
+        print("At least one experimental curve is required for comparison (xray, neutron or both).\n")
         sys.exit(1)
 
     return args
@@ -142,15 +145,15 @@ def sort_nicely(l):
 
 def main():
 
-    print "Running modern SCT workflow"
-    print "---------------------------\n"
+    print("Running modern SCT workflow")
+    print("---------------------------\n")
 
     args = parse_arguments()
 
     if args.add_res:
-        res_file = file(args.add_res, 'r')
+        res_file = open(args.add_res, 'r')
         add_res = yaml.load(res_file)
-        for res, data in add_res.iteritems():
+        for res, data in six.iteritems(add_res):
             sct.seq.all_residues.append(res)
             sct.seq.res_vols['perkins1986a']['residue'][res] = data['vol']
             sct.seq.params['mass'][res] = data['mass']
@@ -169,7 +172,7 @@ def main():
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
 
-    print "> Processing experimental data"
+    print("> Processing experimental data")
     # Read in experimental curves and calculate Rg and Rxs
     # Setup output directories for theoretical curves and sphere models
     # Output summary analysis of the experimental data curves
@@ -177,7 +180,7 @@ def main():
         neut_data, xray_data, out_paths = sct.tasks.process_expt_data(
         args.neutron, args.neutron_unit, args.xray, args.xray_unit, args.output_path, args.title, param)
     except Exception as e:
-        print str(e)
+        print(str(e))
         sys.exit(1)
 
     # Create the file for model output
@@ -205,20 +208,20 @@ def main():
         pdb_files = glob.glob(pdb_filter)
 
     if len(pdb_files) < 1:
-        print "Error: No PDB files found to analyze"
+        print("Error: No PDB files found to analyze")
         sys.exit(1)
 
     # Sort files so that they are in human expected alpha numerical order
     # This means that XXXX2.pdb will sort before XXXX100.pdb
     pdb_files = sort_nicely(pdb_files)
 
-    print "> Analyzing input PDBs"
+    print("> Analyzing input PDBs")
 
     # Loop over input PDBs
     for count, pdb in enumerate(pdb_files):
 
         if (count % 20 == 0):
-            print "\tProcessing PDB number " + str(count)
+            print("\tProcessing PDB number " + str(count))
 
         try:
             # Create sphere models, compute scattering curves and compare to
@@ -231,7 +234,7 @@ def main():
                                                                     out_paths)
 
         except IOError as e:
-            print "Error loading PDB file name %s: %s" % (pdb, e)
+            print("Error loading PDB file name %s: %s" % (pdb, e))
             continue
 
         pdb_basename = os.path.basename(pdb)
@@ -248,7 +251,7 @@ def main():
 
     summary_data.close()
 
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     main()

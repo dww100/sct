@@ -25,6 +25,8 @@ with data not being read correctly try removing any header from the file.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import sys
 import argparse
@@ -136,7 +138,7 @@ def create_output_name(prefix, analysis, q_min, q_max, fit_min, fit_max):
 def check_args(args):
 
     if not args.noheader:
-        print ('Filename\t' + create_header(args.anal_type))
+        print(('Filename\t' + create_header(args.anal_type)))
         #sys.exit(0)
         
     if args.header:
@@ -155,7 +157,7 @@ def check_args(args):
         q_ranges, err = sct.param.read_parameter_file(args.parameter_file)
 
         if err is not None:
-            print err
+            print(err)
             sys.exit(0)
 
         if 'rxs2' not in q_ranges:
@@ -314,7 +316,7 @@ def main():
             try:
                 results = sct.curve.sas_curve_fit(x[mask], y[mask], cur_anal)
             except Exception as e:
-                print str(e)
+                print(str(e))
                 sys.exit(1)
 
             # calculate R? * Q for the ends of the range of Q used in fit
@@ -376,7 +378,7 @@ def main():
                 rqrange=rq_range,
                 mask=mask)
 
-    print (in_full_path + '\t' + out_values)
+    print((in_full_path + '\t' + out_values))
 
 if __name__ == "__main__":
     main()

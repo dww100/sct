@@ -18,6 +18,8 @@ Scattering curve related functions used in the SCT suite of programs
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 import yaml
 import numpy as np
@@ -25,7 +27,8 @@ import scipy.stats as sps
 import matplotlib.pyplot as plt
 from datetime import date
 
-from sjp_util import sjp_util
+from sct.sjp_util import sjp_util
+from sct.six.moves import range
 
 def parse_sas_data_line(line):
     """
@@ -110,8 +113,8 @@ def load_scatter_curve(filename, q_min, q_max):
     try:
         scatter_data = read_sas_file(filename)
     except:
-        print "Unable to load " + filename
-        print "Check that the file exists, and contains lines with at least two columns of numberical data\n"
+        print("Unable to load " + filename)
+        print("Check that the file exists, and contains lines with at least two columns of numberical data\n")
         sys.exit(1)
 
     qrange_mask = (scatter_data[:, 0] >= q_min) & (scatter_data[:, 0] <= q_max)
@@ -228,7 +231,7 @@ def process_qrange_file(filename):
     @return:          Dictionary containing minimum and maximum values of q
     """
 
-    f = file(filename, 'r')
+    f = open(filename, 'r')
     q_ranges = yaml.load(f)
 
     return q_ranges
@@ -419,7 +422,7 @@ def calculate_chi2(target_data, source_data, q_min, q_max):
     con = expt_avg / calc_avg
 
     if np.count_nonzero(target_data[:, 1]) == 0:
-        print "Chi^2 calculations cannot proceed without target data"
+        print("Chi^2 calculations cannot proceed without target data")
         sys.exit()
     else:
     

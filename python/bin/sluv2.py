@@ -30,11 +30,15 @@ and model fits. Biophysical Chemistry 93, 129–139
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 import yaml
 import argparse
 
 import sct
+import sct.six as six
+from sct.six.moves import range
 
 
 def parse_arguments():
@@ -140,7 +144,7 @@ def print_basic_description(res_freq, out):
 
     # Sort the names of the volume datasets for output
     # res_vols data read in by sct.seq
-    vol_datasets = sorted(sct.seq.res_vols.iterkeys())
+    vol_datasets = sorted(six.iterkeys(sct.seq.res_vols))
 
     # Title contains column headings (including sorted volume dataset names)
     title = create_volume_title("RESID  TOT", " ", vol_datasets, 'aa')
@@ -164,7 +168,7 @@ def print_basic_description(res_freq, out):
     out.write("\n\n")
 
     # Total number of residues
-    out.write("Total " + str(sum(res_freq.itervalues())) + "\n\n")
+    out.write("Total " + str(sum(six.itervalues(res_freq))) + "\n\n")
 
 
 def create_volume_title(start_string, deliminator, vol_datasets, res_type):
@@ -290,7 +294,7 @@ def print_summary_data(resids, res_freq, out):
         sct.seq.params['solvent']['EHHO']))
 
     # Sort the names of the volume datasets for output
-    vol_datasets = sorted(sct.seq.res_vols.iterkeys())
+    vol_datasets = sorted(six.iterkeys(sct.seq.res_vols))
 
     out.write(
         create_volume_title(
@@ -380,7 +384,7 @@ def print_exchange_data(res_freq, peptide_only, out):
     """
 
     # Print a section title for the output table
-    vol_datasets = sorted(sct.seq.res_vols.iterkeys())
+    vol_datasets = sorted(six.iterkeys(sct.seq.res_vols))
     out.write(create_volume_title("                            ", "   ",
                                   vol_datasets, 'aa'))
 
@@ -565,13 +569,13 @@ def main():
     # Get amino acid/carbohydrate occurence frequencies from file
     # Can be sluv yaml file, pdb or a fasta file
     if args.input_type == 'yml':
-        protein_file = file(args.input_file, 'r')
+        protein_file = open(args.input_file, 'r')
         protein_res_freq = yaml.load(protein_file)
     elif args.input_type == 'pdb':
         try:
             protein_res_freq, coords = sct.pdb.read_pdb_atom_data(args.input_file)
         except:
-            print "Input does not appear to be a valid PDB."
+            print("Input does not appear to be a valid PDB.")
     elif args.input_type == 'fas':
         protein_res_freq = sct.seq.fasta_res_freq(args.input_file)
 

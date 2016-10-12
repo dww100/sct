@@ -19,6 +19,7 @@ Each sphere is set to be a C1 atom.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
 import argparse
 
 import sct

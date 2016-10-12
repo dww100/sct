@@ -18,6 +18,8 @@ Create SASSIE style weights file from SCT output files
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys, os
 import argparse
 
@@ -64,7 +66,7 @@ args = parse_arguments()
 infile = args.infile
 filename, fileext = os.path.splitext(infile)
 if fileext != '.sum':
-    print "WARNING: Input does not use the standard SCT extension"
+    print("WARNING: Input does not use the standard SCT extension")
 
 filter_col = args.column
 outfile = args.outfile
@@ -73,7 +75,7 @@ filter_min = args.min
 filter_max = args.max
 
 if not filter_min and not filter_max:
-    print "ERROR: No filter range selected\n"
+    print("ERROR: No filter range selected\n")
     sys.exit()    
 
 output = open(outfile, 'w')
@@ -95,9 +97,9 @@ try:
         if header_count == 4:
             col_head = line.split()[filter_col]
             if col_head not in ['Rg_model','Rg_curve','Rfactor']:
-                print "ERROR: Selected column unsuitable for filtering: " + col_head 
-                print "ERROR: Column heading must be: Rg_model,Rg_curve or Rfactor"
-                print "ERROR: Column heading must be: Rg_model,Rg_curve or Rfactor\n"
+                print("ERROR: Selected column unsuitable for filtering: " + col_head) 
+                print("ERROR: Column heading must be: Rg_model,Rg_curve or Rfactor")
+                print("ERROR: Column heading must be: Rg_model,Rg_curve or Rfactor\n")
                 sys.exit()
         if header_count > 4:
             
@@ -118,5 +120,5 @@ try:
     output.close()
     
 except:
-    print "ERROR: Unable to process file\n"
+    print("ERROR: Unable to process file\n")
     

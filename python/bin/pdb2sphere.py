@@ -19,6 +19,8 @@ spheres for small angle scattering calculations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import argparse
 import sys
 import yaml
@@ -81,7 +83,7 @@ def parse_arguments():
 
     if args.mode != 'info':
         if args.output_filename is None:
-            print "For mode {0:s} an output file must be specified!".format(args.mode)
+            print("For mode {0:s} an output file must be specified!".format(args.mode))
             sys.exit(1)
 
     return args
@@ -97,7 +99,7 @@ def main():
         # atomic coordinates from input PDB
         res_freq, atom_coords = sct.pdb.read_pdb_atom_data(args.input_filename)
     except IOError as e:  # catch *all* exceptions
-        print "Error loading PDB file name %s: %s" % (args.input_filename, e)
+        print("Error loading PDB file name %s: %s" % (args.input_filename, e))
         sys.exit()
 
     if args.parameter_file is None:
@@ -109,7 +111,7 @@ def main():
 
     else:
 
-        print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"
+        print("WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!")
 
         # Read in parameters
         param = sct.param.parse_parameter_file(args.parameter_file, ['sphere'])

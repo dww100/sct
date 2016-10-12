@@ -18,6 +18,7 @@ Sctify: converts a CHARMM PSF/PDF pair to a SCT compatible PDB
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
 import argparse
 import sct
 

@@ -18,6 +18,8 @@ experimental x-ray and neutron scattering curves.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import argparse
 import sys
 import os
@@ -96,7 +98,7 @@ for curve_filter in curve_filters:
     calc_curves.extend(glob.glob(curve_filter))
 
 if len(calc_curves) < 1:
-    print "No calculated curve files found to analyze"
+    print("No calculated curve files found to analyze")
     sys.exit(1)
 
 if args.unit == 'nm':

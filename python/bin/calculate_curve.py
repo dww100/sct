@@ -21,6 +21,8 @@ file is passed.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import argparse
 
 import sct
@@ -133,7 +135,7 @@ def main():
 
     else:
 
-        print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"
+        print("WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!")
 
         # Read in parameters
         param = sct.param.parse_parameter_file(

@@ -18,9 +18,12 @@ PDB related functions used in the SCT suite of programs
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 from . import seq
 import string
 import sys
+from sct.six.moves import range
 
 # Dictionary of CHARMM residue names to standard naming
 charmm_resids = {
@@ -49,7 +52,7 @@ charmm_resids = {
     'TYM': 'TYR'
 }
 
-charmm_residues = charmm_resids.keys()
+charmm_residues = list(charmm_resids.keys())
 
 # In the PDBs the CHARMM resids get truncated to three characters.
 charmm_three_char = [
@@ -169,9 +172,9 @@ def parse_line(line, schema, filename):
         try:
             vals[record] = fn(line[start:end])
         except ValueError as e:
-            print "Error: File %s contains a line which could not be parsed according to the schema." % filename
-            print "Python error message: %s" % e
-            print "Line contents:", line
+            print("Error: File %s contains a line which could not be parsed according to the schema." % filename)
+            print("Python error message: %s" % e)
+            print("Line contents:", line)
             raise IOError(
                 "Error parsing %s, ignoring this pdb file." %
                 filename)
@@ -329,7 +332,7 @@ def read_psf(filename):
     header = psf_file.readline().split()
     if header[0] != 'PSF':
         # This should be a proper exception! As should the other errors!
-        print 'Boo not a PSF!'
+        print('Boo not a PSF!')
         sys.exit()
 
     if 'EXT' in header:
@@ -341,7 +344,7 @@ def read_psf(filename):
 
     title = psf_file.readline().split()
     if title[1] != '!NTITLE':
-        print 'Not a valid PSF (NTITLE) - sad times'
+        print('Not a valid PSF (NTITLE) - sad times')
         sys.exit()
 
     # Skip remark lines (number given as the first entry on the NTITLE line)
@@ -353,14 +356,14 @@ def read_psf(filename):
 
     atom_title = psf_file.readline().split()
     if atom_title[1] != '!NATOM':
-        print 'Not a valid PSF (NATOM) - sad times'
+        print('Not a valid PSF (NATOM) - sad times')
         sys.exit()
 
     n_atoms = int(atom_title[0])
 
     atoms = []
 
-    for ii in xrange(n_atoms):
+    for ii in range(n_atoms):
         line = psf_file.readline()
         atoms.append(parse_line(line, schema, filename))
 
@@ -396,7 +399,7 @@ def process_pdb_psf(psf_filename, pdb_filename, sctify=True, removeh=True):
     n_atoms = len(psf_atoms)
 
     if n_atoms == 0:
-        print "No atoms found in the PSF, expect pain"
+        print("No atoms found in the PSF, expect pain")
     else:
         tmp_atoms = []
 
@@ -409,7 +412,7 @@ def process_pdb_psf(psf_filename, pdb_filename, sctify=True, removeh=True):
                 tmp_atoms.append(data)
 
         if len(tmp_atoms) != n_atoms:
-            print "Number of atoms in the PDB do not match the PSF"
+            print("Number of atoms in the PDB do not match the PSF")
         else:
             for ii in range(0, n_atoms):
                 # print psf_atoms[ii]['atom_name'] + '\t' +
@@ -484,7 +487,7 @@ def write_pdb(atoms, filename):
     out_file = open(filename, 'w')
 
     for atom in atoms:
-        if 'segid' in atom.keys():
+        if 'segid' in list(atom.keys()):
             segid = atom['segid']
         else:
             segid = ''

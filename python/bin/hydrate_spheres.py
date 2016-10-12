@@ -19,6 +19,8 @@ format sphere file.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import argparse
 
 import sct
@@ -76,7 +78,7 @@ def main():
         cutoff = args.cutoff
     else:
         # Read in parameters
-        print "WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!"
+        print("WARNING: A SCT parameter file was specified, so the modelling parameters from the command line flags will be ignored!")
 
         # Read in parameters
         param, err = sct.param.read_parameter_file(args.parameter_file)

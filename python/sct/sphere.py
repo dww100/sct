@@ -19,10 +19,12 @@ Includes functions to calculate scattering curve from sphere models
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
 import numpy as np
 import scipy.optimize as optimize
 import scipy.spatial.distance as dist
 from bisect import bisect_right
+from sct.six.moves import range
 
 
 def create_grid(atom_coords, x_axis, y_axis, z_axis):
@@ -128,7 +130,7 @@ def grid_to_spheres(grid, radius, cutoff, x_axis, y_axis, z_axis):
 
     no_spheres = len(full[0])
 
-    for ndx in xrange(0, no_spheres):
+    for ndx in range(0, no_spheres):
         x = x_axis[full[0][ndx]] + radius
         y = y_axis[full[1][ndx]] + radius
         z = z_axis[full[2][ndx]] + radius
@@ -632,7 +634,7 @@ def hydrate_sphere_model(
     # List of positions to include in wet sphere model:
     # Position 0 = original sphere position,
     # Positions 1 to 26 positions on cube centred on original sphere
-    hydration_pos = xrange(0, hydration_no + 1)
+    hydration_pos = range(0, hydration_no + 1)
 
     # Create hydrated model
     wet_spheres = hydrate_spheres(dry_spheres, hydration_pos, radius)

@@ -19,6 +19,8 @@ containing the frequencies of all residue types.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import argparse
 import sys
 import sct
@@ -70,6 +72,6 @@ if args.output_filename is not None:
 
 # Output pdb frequencies in a yaml style format that can be read by SLUV2
 for res_name in sct.seq.amino_acids:
-    print res_name + ': ' + str(res_freq[res_name])
+    print(res_name + ': ' + str(res_freq[res_name]))
 for res_name in sct.seq.monosaccharides:
-    print res_name + ': ' + str(res_freq[res_name])
+    print(res_name + ': ' + str(res_freq[res_name]))

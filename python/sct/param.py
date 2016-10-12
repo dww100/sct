@@ -18,6 +18,8 @@ Functions to parse and check the SCT parameter YAML file
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import yaml
 import sys
 
@@ -32,8 +34,8 @@ def output_error(message, filename):
     @param filename:  Path to the input file
     """
 
-    print 'Error encountered whilst reading parameters from ' + filename + ':'
-    print message
+    print('Error encountered whilst reading parameters from ' + filename + ':')
+    print(message)
     sys.exit(1)
 
 
@@ -53,14 +55,14 @@ def read_parameter_file(filename):
     err = None
 
     try:
-        param_file = file(filename)
+        param_file = open(filename)
         params = yaml.load(param_file)
     except IOError:
         err = 'Unable to read file {0:s}.'.format(filename)
         params = None
-    except yaml.YAMLError, exc:
+    except yaml.YAMLError as exc:
         mark = exc.problem_mark
-        print "Error in parameter file, line {0:d}, column {1:d}".format(mark.line+1, mark.column+1)
+        print("Error in parameter file, line {0:d}, column {1:d}".format(mark.line+1, mark.column+1))
         params = None
 
     return params, err
