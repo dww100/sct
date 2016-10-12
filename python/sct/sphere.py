@@ -271,7 +271,7 @@ def optimize_box_side(cutoff, coords, targ_vol, side_min, side_max, tolerance):
         bounds=side_bounds,
         method='bounded',
         options={
-            'xtol': tolerance})
+            'xatol': tolerance})
 
     # Return the optimized box_side and residual
     return opt['x'], opt['fun'] ** 0.5
@@ -768,7 +768,7 @@ def optimize_watercut(
         bounds=cut_bounds,
         method='bounded',
         options={
-            'xtol': tolerance})
+            'xatol': tolerance})
 
     # Return the optimized cutoff and residual
     return int(opt['x']) + 1, opt['fun'] ** 0.5
