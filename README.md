@@ -62,5 +62,5 @@ cmake -DCMAKE_INSTALL_PREFIX:PATH=/path/to/install/ . && make install
 To install system wide:
 
 ```
-sudo cmake . && make install
+sudo cmake . && sudo make install
 ```
