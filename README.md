@@ -59,8 +59,3 @@ To install in user space (user must have persissions to write to /path/to/instal
 cmake -DCMAKE_INSTALL_PREFIX:PATH=/path/to/install/ . && make install
 ```
 
-To install system wide:
-
-```
-sudo cmake . && make install
-```
