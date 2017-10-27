@@ -117,7 +117,7 @@ def parse_fasta(filename):
         for line in f:
             # Title line for sequences in fasta files start with >
             if line.startswith('>'):
-                name = line[1:].rstrip('\n')
+                name = line[1:].rstrip('\r\n')
                 name = name.replace('_', ' ')
                 order.append(name)
                 sequences[name] = ''
@@ -125,7 +125,7 @@ def parse_fasta(filename):
                 # If we have seen a title but not in this line
                 # add the contents of the line to the currently named sequence
                 # Note: * = chain ending character in fasta so is removed
-                sequences[name] += line.rstrip('\n').rstrip('*')
+                sequences[name] += line.rstrip('\r\n').rstrip('*')
 
     return order, sequences
 
